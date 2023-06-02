@@ -1,22 +1,25 @@
 import React from 'react';
+import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import styles from './styles.module.css';
 
-interface Props {
+interface Props extends SSRConfig {
     className?: string;
 }
 
-function Home(props: Props) {
+function Navbar(props: Props) {
     const {
         className,
     } = props;
 
+    const { t } = useTranslation('common');
+
     return (
         <div
-            className={_cs(styles.home, className)}
+            className={_cs(styles.navbar, className)}
         >
             <Image
                 className={styles.logo}
@@ -30,23 +33,23 @@ function Home(props: Props) {
                     href="/"
                     passHref
                 >
-                    Home
+                    {t('home-link')}
                 </Link>
                 <Link
                     href="/get-involved"
                     passHref
                 >
-                    Get Involved
+                    {t('get-involved-link')}
                 </Link>
                 <Link
                     href="/data"
                     passHref
                 >
-                    Data
+                    {t('data-link')}
                 </Link>
             </div>
         </div>
     );
 }
 
-export default Home;
+export default Navbar;

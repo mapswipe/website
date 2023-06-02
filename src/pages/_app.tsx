@@ -1,3 +1,5 @@
+import { appWithTranslation } from 'next-i18next';
+
 import 'styles/globals.css';
 import 'styles/variables.css';
 
@@ -13,4 +15,4 @@ function MyApp(props: AppProps) {
     return <Component {...pageProps} />;
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

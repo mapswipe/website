@@ -8,6 +8,7 @@
         "start": "next start",
         "export": "next build && next export && next-export-optimize-images",
         "generate": "graphql-codegen --config codegen.yml && eslint --fix src/generated/types.ts",
+        "generate:i18n": "i18next 'src/**/*.{jsx,tsx}' -o 'public/locales/$LOCALE/$NAMESPACE.json'",
         "lint": "next lint",
         "css-lint": "stylelint 'src/**/*.css'",
         "typecheck": "tsc",
@@ -15,9 +16,12 @@
     },
     "dependencies": {
         "@togglecorp/fujs": "^2.0.0",
+        "i18next": "^22.5.0",
         "next": "^13.0.2",
+        "next-i18next": "^13.2.2",
         "react": "18.2.0",
-        "react-dom": "18.2.0"
+        "react-dom": "18.2.0",
+        "react-i18next": "^12.3.1"
     },
     "devDependencies": {
         "@graphql-codegen/cli": "^2.16.4",
@@ -36,6 +40,7 @@
         "eslint-plugin-postcss-modules": "^2.0.0",
         "eslint-plugin-react": "^7.31.11",
         "eslint-plugin-react-hooks": "^4.6.0",
+        "i18next-parser": "^8.0.0",
         "next-export-optimize-images": "^2.0.0",
         "postcss-flexbugs-fixes": "^5.0.2",
         "postcss-nested": "^6.0.0",
