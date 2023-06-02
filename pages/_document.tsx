@@ -20,10 +20,10 @@ function Document() {
                 <link
                     rel="preconnect"
                     href="https://fonts.gstatic.com"
-                    crossOrigin="true"
+                    // crossorigin
                 />
                 <link
-                    href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;600&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Poppins:wght@300;400;700&display=swap"
                     rel="stylesheet"
                 />
             </Head>
