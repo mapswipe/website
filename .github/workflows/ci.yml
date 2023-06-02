@@ -37,3 +37,6 @@ jobs:
 
       - name: Check
         run: pre-commit run -vvv --all-files
+
+      - name: Build
+        run: yarn export

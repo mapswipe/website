@@ -12,6 +12,7 @@
     "plugins": [
         "postcss-modules"
     ],
+    "ignorePatterns": ["./server/"],
     "rules": {
         "strict": 1,
 
