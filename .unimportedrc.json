@@ -1,5 +1,5 @@
 {
-    "entry": ["./pages/**/*.{jsx,tsx,js,ts}"],
+    "entry": ["./src/pages/**/*.{jsx,tsx,js,ts}"],
     "extensions": [".ts", ".js", ".tsx", ".jsx"],
     "ignorePatterns": ["**/node_modules/**", "out/**", ".next/"],
     "ignoreUnresolved": [],
