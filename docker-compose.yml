@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  next:
+    command: sh -c 'yarn install && yarn dev'
+    ports:
+      - '3020:3020'
+
+  checks:
+    <<: *base_next_setup
+    command: sh -c 'pre-commit run -vvv --all-files'
+    profiles:
+      - test

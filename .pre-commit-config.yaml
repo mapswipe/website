@@ -1,0 +1,26 @@
+repos:
+  - repo: local
+    hooks:
+      - id: check-unused
+        name: check-unused
+        language: system
+        pass_filenames: false
+        entry: yarn check-unused
+
+      - id: lint
+        name: lint
+        language: system
+        pass_filenames: false
+        entry: yarn lint
+
+      - id: css-lint
+        name: CSS Lint
+        language: system
+        pass_filenames: false
+        entry: yarn css-lint
+
+      - id: type-check
+        name: Typecheck
+        language: system
+        pass_filenames: false
+        entry: yarn typecheck

@@ -1,0 +1,14 @@
+.home {
+    .logo {
+        display: flex;
+        margin: auto;
+    }
+
+    .routes {
+        display: flex;
+        align-content: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+}
