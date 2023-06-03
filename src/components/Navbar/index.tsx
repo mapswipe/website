@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'components/Link';
 import LanguageSwitcher from 'components/LanguageSwitcher';
 
+import i18nextConfig from '../../../next-i18next.config';
+
 import styles from './styles.module.css';
 
 interface Props extends SSRConfig {
@@ -23,12 +25,12 @@ function Navbar(props: Props) {
         <div
             className={_cs(styles.navbar, className)}
         >
-            <LanguageSwitcher
-                locale="en"
-            />
-            <LanguageSwitcher
-                locale="de"
-            />
+            {i18nextConfig.i18n.locales.map((locale) => (
+                <LanguageSwitcher
+                    key={locale}
+                    locale={locale}
+                />
+            ))}
             <Image
                 className={styles.logo}
                 src="/logo.svg"

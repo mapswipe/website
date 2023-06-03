@@ -28,6 +28,7 @@ function Home(props: Props) {
             <Navbar />
             <div>
                 {t('page-content')}
+                {t('page-description')}
             </div>
         </div>
     );
