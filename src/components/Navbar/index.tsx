@@ -1,8 +1,10 @@
 import React from 'react';
 import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
-import Link from 'next/link';
 import Image from 'next/image';
+
+import Link from 'components/Link';
+import LanguageSwitcher from 'components/LanguageSwitcher';
 
 import styles from './styles.module.css';
 
@@ -21,6 +23,12 @@ function Navbar(props: Props) {
         <div
             className={_cs(styles.navbar, className)}
         >
+            <LanguageSwitcher
+                locale="en"
+            />
+            <LanguageSwitcher
+                locale="de"
+            />
             <Image
                 className={styles.logo}
                 src="/logo.svg"
@@ -30,20 +38,17 @@ function Navbar(props: Props) {
             />
             <div className={styles.routes}>
                 <Link
-                    href="/"
-                    passHref
+                    href="/[locale]"
                 >
                     {t('home-link')}
                 </Link>
                 <Link
-                    href="/get-involved"
-                    passHref
+                    href="/[locale]/get-involved"
                 >
                     {t('get-involved-link')}
                 </Link>
                 <Link
-                    href="/data"
-                    passHref
+                    href="/[locale]/data"
                 >
                     {t('data-link')}
                 </Link>
