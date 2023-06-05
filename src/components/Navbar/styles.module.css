@@ -1,14 +1,35 @@
 .navbar {
-    .logo {
+    background-color: var(--color-background);
+    color: var(--color-text-on-dark);
+
+    .navbarContent {
         display: flex;
         margin: auto;
-    }
+        padding: var(--spacing-medium);
+        max-width: var(--width-page-max);
+        gap: var(--spacing-medium);
 
-    .routes {
-        display: flex;
-        align-content: center;
-        flex-direction: column;
-        flex-wrap: wrap;
-        text-align: center;
+        .logo {
+            position: relative;
+            flex-shrink: 0;
+            width: 10rem;
+            height: 2rem;
+            object-fit: contain;
+            object-position: center left;
+        }
+
+        .routes {
+            display: flex;
+            align-content: center;
+            flex-grow: 1;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            text-align: center;
+            gap: var(--spacing-medium);
+
+            .link {
+                font-weight: var(--font-weight-semi-bold);
+            }
+        }
     }
 }

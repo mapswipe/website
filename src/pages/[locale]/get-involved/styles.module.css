@@ -1,0 +1,4 @@
+.getInvolved {
+    display: flex;
+    flex-direction: column;
+}
