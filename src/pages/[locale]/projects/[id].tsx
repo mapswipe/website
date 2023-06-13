@@ -4,6 +4,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import getProjectCentroids, { ProjectStatus } from 'utils/requests/projectCentroids';
+import getProjectGeometries from 'utils/requests/projectGeometries';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 // import Link from 'components/Link';
@@ -21,7 +22,7 @@ interface Props extends SSRConfig {
     name: string;
     description: string;
     status: ProjectStatus;
-    projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
+    projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
 }
 
 function Project(props: Props) {
@@ -54,10 +55,12 @@ function Project(props: Props) {
                 <div>{t('project-total-area-text', { area: totalArea })}</div>
                 <div>{t('project-contributors-text', { contributors: totalContributors })}</div>
             </div>
-            <DynamicProjectMap
-                className={styles.projectsMap}
-                geoJSON={projectGeoJSON}
-            />
+            {projectGeoJSON && (
+                <DynamicProjectMap
+                    className={styles.projectsMap}
+                    geoJSON={projectGeoJSON}
+                />
+            )}
         </div>
     );
 }
@@ -106,8 +109,10 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         throw new Error(`Could not get project ${projectId}`);
     }
 
-    const geojsonResponse = await fetch(`https://apps.mapswipe.org/api/project_geometries/project_geom_${projectId}.geojson`);
-    const geojson = await geojsonResponse.json() as GeoJSON.FeatureCollection<GeoJSON.Polygon>;
+    const geojsons = await getProjectGeometries();
+    const geojson = geojsons.features.find(
+        (feature) => feature.properties.project_id === projectId,
+    )?.geometry;
 
     const historyRequest = await fetch(`https://apps.mapswipe.org/api/history/history_${projectId}.csv`);
     const history = await historyRequest.text();
@@ -149,7 +154,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             name: project.properties.name,
             description: project.properties.project_details,
             status: project.properties.status,
-            projectGeoJSON: geojson,
+            projectGeoJSON: geojson ?? null,
             history,
             urls: urlResponsesFinal,
         },
