@@ -16,17 +16,20 @@
     },
     "dependencies": {
         "@togglecorp/fujs": "^2.0.0",
-        "i18next": "^22.5.0",
+        "gray-matter": "^4.0.3",
+        "i18next": "^22.5.1",
         "leaflet": "^1.9.4",
-        "next": "^13.0.2",
-        "next-i18next": "^13.2.2",
+        "next": "^13.4.5",
+        "next-i18next": "^13.3.0",
         "next-language-detector": "^1.0.2",
         "papaparse": "^5.4.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-i18next": "^12.3.1",
         "react-icons": "^4.9.0",
-        "react-leaflet": "^4.2.1"
+        "react-leaflet": "^4.2.1",
+        "remark": "^14.0.3",
+        "remark-html": "^15.0.2"
     },
     "devDependencies": {
         "@graphql-codegen/cli": "^2.16.4",
@@ -48,7 +51,7 @@
         "eslint-plugin-react": "^7.31.11",
         "eslint-plugin-react-hooks": "^4.6.0",
         "i18next-parser": "^8.0.0",
-        "next-export-optimize-images": "^2.0.0",
+        "next-export-optimize-images": "^2.1.0",
         "postcss-flexbugs-fixes": "^5.0.2",
         "postcss-nested": "^6.0.0",
         "postcss-normalize": "^10.0.1",
@@ -57,7 +60,7 @@
         "stylelint-config-concentric": "^2.0.2",
         "stylelint-config-recommended": "^9.0.0",
         "ts-node": "^10.9.1",
-        "typescript": "^4.8.4",
-        "unimported": "^1.24.0"
+        "typescript": "^5.1.3",
+        "unimported": "^1.29.1"
     }
 }

@@ -6,12 +6,12 @@ import {
     Popup,
     CircleMarker,
 } from 'react-leaflet';
+import { useTranslation } from 'next-i18next';
 import { CircleMarkerOptions, LatLngTuple } from 'leaflet';
 
-import Link from 'components/Link';
+import { ProjectStatus } from 'utils/requests/projectCentroids';
 
-// FIXME: confirm these
-type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
+import Link from 'components/Link';
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
@@ -79,6 +79,8 @@ function ProjectMap(props: Props) {
         projects,
     } = props;
 
+    const { t } = useTranslation('data');
+
     const sanitizedProjects = projects
         .map((project) => (isDefined(project.coordinates) ? {
             ...project,
@@ -110,6 +112,9 @@ function ProjectMap(props: Props) {
                             {project.name}
                             {project.status}
                         </Link>
+                        <div>{t('project-card-status-text', { status: project.status })}</div>
+                        <div>{t('project-card-progress-text', { progress: project.progress })}</div>
+                        <div>{t('project-card-contributors-text', { contributors: project.number_of_users })}</div>
                     </Popup>
                 </CircleMarker>
             ))}

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import {
     MapContainer,
     TileLayer,
@@ -21,13 +21,15 @@ function ProjectMap(props: Props) {
 
     const mapRef = useRef<Map>(null);
 
-    // FIXME: use useCallback
-    const handleGeoJSONAdd = (layer: LayerEvent) => {
-        const bounds = layer.target?.getBounds();
-        if (bounds) {
-            mapRef.current?.fitBounds(bounds, { padding: [20, 20] });
-        }
-    };
+    const handleGeoJSONAdd = useCallback(
+        (layer: LayerEvent) => {
+            const bounds = layer.target?.getBounds();
+            if (bounds) {
+                mapRef.current?.fitBounds(bounds, { padding: [20, 20] });
+            }
+        },
+        [],
+    );
 
     return (
         <MapContainer

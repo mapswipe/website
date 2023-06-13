@@ -7,8 +7,10 @@ import getProjectCentroids, { ProjectStatus } from 'utils/requests/projectCentro
 import getProjectGeometries from 'utils/requests/projectGeometries';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Papa from 'papaparse';
+import { remark } from 'remark';
+import matter from 'gray-matter';
+import html from 'remark-html';
 
-// import Link from 'components/Link';
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
@@ -47,9 +49,7 @@ function Project(props: Props) {
             <h1>
                 {name}
             </h1>
-            <p>
-                {description}
-            </p>
+            <div dangerouslySetInnerHTML={{ __html: description }} />
             <div className={styles.stats}>
                 <div>{t('project-status-text', { status })}</div>
                 <div>{t('project-progress-text', { progress: totalProgress })}</div>
@@ -132,7 +132,15 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         });
     });
 
+    const matterResult = matter(project.properties.project_details);
+
+    const processedContent = await remark()
+        .use(html)
+        .process(matterResult.content.replace(/\\n/g, '\n'));
+    const contentHtml = processedContent.toString();
+
     /*
+    // TODO: do we need to do this?
     const urls = [
         `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}.csv.gz`,
         `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
@@ -169,7 +177,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             totalArea: Math.round(project.properties.area_sqkm ?? 0),
             totalContributors: project.properties.number_of_users ?? null,
             name: project.properties.name,
-            description: project.properties.project_details,
+            description: contentHtml,
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
             history: historyJSON,
