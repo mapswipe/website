@@ -5,11 +5,13 @@ import languageDetector from 'utils/languageDetector';
 
 interface LinkProps extends Omit<NextLinkProps, 'href' | 'locale'> {
     locale: string;
+    active: boolean;
 }
 
 function LanguageSwitchLink(props: LinkProps) {
     const {
         locale,
+        active,
         ...rest
     } = props;
 
@@ -39,7 +41,7 @@ function LanguageSwitchLink(props: LinkProps) {
                 }
             }}
         >
-            {locale}
+            {`${locale}${active ? '*' : ''}`}
         </NextLink>
     );
 }

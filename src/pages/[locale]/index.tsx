@@ -55,7 +55,7 @@ function Home(props: Props) {
                                 {t('download-app-label')}
                             </Link>
                             <Link
-                                href="https://togglecorp.com"
+                                href="/[locale]/get-involved"
                                 variant="buttonTransparent"
                                 target="_blank"
                             >

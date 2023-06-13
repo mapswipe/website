@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation, SSRConfig } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
 import Image from 'next/image';
 
@@ -20,6 +21,12 @@ function Navbar(props: Props) {
     } = props;
 
     const { t } = useTranslation('common');
+    const router = useRouter();
+
+    let currentLocale = router.query.locale ?? i18nextConfig.i18n.defaultLocale;
+    if (Array.isArray(currentLocale)) {
+        [currentLocale] = currentLocale;
+    }
 
     return (
         <div
@@ -52,6 +59,7 @@ function Navbar(props: Props) {
                         <LanguageSwitcher
                             key={locale}
                             locale={locale}
+                            active={locale === currentLocale}
                         />
                     ))}
                 </div>

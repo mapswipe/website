@@ -1,12 +1,12 @@
 {
-  "get-involved-link": "Get Involved",
   "footer-about-us-title": "About Us",
+  "footer-about-us-description": "MapSwipe is a versatile mobile app that harnesses the collective strength of volunteers to actively contribute to geospatial data projects.",
   "footer-quick-links": "Quick Links",
   "home-link": "Home",
-  "footer-about-us-description": "MapSwipe is a versatile mobile app that harnesses the collective strength of volunteers to actively contribute to geospatial data projects.",
+  "get-involved-link": "Get Involved",
   "data-link": "Data",
-  "privacy": "Privacy",
-  "cookies": "Cookies",
   "footer-follow-us-title": "Follow Us On",
-  "copyright": "Copyright © 2023 MapSwipe"
+  "copyright": "Copyright © 2023 MapSwipe",
+  "privacy": "Privacy",
+  "cookies": "Cookies"
 }

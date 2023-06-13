@@ -17,7 +17,7 @@ function GetInvolved(props: Props) {
         className,
     } = props;
 
-    const { t } = useTranslation('home');
+    const { t } = useTranslation('get-involved');
 
     return (
         <div
@@ -47,7 +47,7 @@ export const getStaticPaths = () => ({
 export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const locale = context?.params?.locale;
     const translations = await serverSideTranslations(locale as string, [
-        'home',
+        'get-involved',
         'common',
     ]);
     return {

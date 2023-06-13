@@ -1,5 +1,6 @@
 import { appWithTranslation } from 'next-i18next';
 
+import 'leaflet/dist/leaflet.css';
 import 'styles/globals.css';
 import 'styles/variables.css';
 

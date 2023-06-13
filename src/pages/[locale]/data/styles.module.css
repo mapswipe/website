@@ -1,0 +1,32 @@
+.data {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-medium);
+    gap: var(--spacing-medium);
+
+    .stats {
+        display: flex;
+        gap: var(--spacing-medium);
+        font-size: var(--font-size-extra-large);
+    }
+
+    .projectsMap {
+        width: 100%;
+        height: 32rem;
+    }
+
+    .projectList {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-medium);
+
+        .project {
+            padding: var(--spacing-small);
+            border: var(--width-separator-thin) solid var(--color-accent);
+
+            .projectName {
+                font-size: var(--font-size-large);
+            }
+        }
+    }
+}
