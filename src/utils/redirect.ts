@@ -19,17 +19,15 @@ export function useRedirect(toFromProps?: string) {
                 languageDetector.cache(detectedLng);
             }
 
-            const matchedLocale = i18nextConfig.i18n.locales.find(
-                (locale) => to.startsWith(`/${locale}\b`),
-            );
+            const regex = new RegExp(`^/(${i18nextConfig.i18n.locales.join('|')})\\b`);
 
-            if (matchedLocale) {
-                const newTo = to.replace(matchedLocale, detectedLng);
-                console.warn(matchedLocale, to, newTo);
+            if (to.match(regex)) {
+                const newTo = to.replace(regex, `/${detectedLng}`);
+                console.info('Redirecting (A)', detectedLng, to, newTo);
                 router.replace(newTo);
             } else {
                 const newTo = `/${detectedLng}${to}`;
-                console.warn(undefined, to, newTo);
+                console.info('Redirecting (B)', detectedLng, to, newTo);
                 router.replace(newTo);
             }
         },

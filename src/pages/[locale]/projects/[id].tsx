@@ -6,6 +6,7 @@ import { _cs } from '@togglecorp/fujs';
 import getProjectCentroids, { ProjectStatus } from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Papa from 'papaparse';
 
 // import Link from 'components/Link';
 import i18nextConfig from '../../../../next-i18next.config';
@@ -117,6 +118,21 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const historyRequest = await fetch(`https://apps.mapswipe.org/api/history/history_${projectId}.csv`);
     const history = await historyRequest.text();
 
+    const historyJSON = await new Promise((resolve, reject) => {
+        Papa.parse(history, {
+            delimiter: ',',
+            newline: '\n',
+            header: true,
+            complete: (results: any) => {
+                resolve(results);
+            },
+            error: (error: any) => {
+                reject(error);
+            },
+        });
+    });
+
+    /*
     const urls = [
         `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}.csv.gz`,
         `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
@@ -139,6 +155,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     });
 
     const urlResponsesFinal = await Promise.all(urlResponses);
+    */
 
     return {
         props: {
@@ -155,8 +172,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             description: project.properties.project_details,
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
-            history,
-            urls: urlResponsesFinal,
+            history: historyJSON,
+            // urls: urlResponsesFinal,
         },
     };
 };
