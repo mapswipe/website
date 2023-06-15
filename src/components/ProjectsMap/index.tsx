@@ -15,6 +15,7 @@ import {
     ProjectType,
 } from 'utils/common';
 
+import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
 
 const pathOptions: {
@@ -118,6 +119,7 @@ function ProjectMap(props: Props) {
                     </Popup>
                 </CircleMarker>
             ))}
+            <GestureHandler />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"

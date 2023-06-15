@@ -19,6 +19,7 @@
         "gray-matter": "^4.0.3",
         "i18next": "^22.5.1",
         "leaflet": "^1.9.4",
+        "leaflet-gesture-handling": "^1.2.2",
         "next": "^13.4.5",
         "next-i18next": "^13.3.0",
         "next-language-detector": "^1.0.2",

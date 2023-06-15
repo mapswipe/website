@@ -6,6 +6,8 @@ import {
 } from 'react-leaflet';
 import { Map, LayerEvent } from 'leaflet';
 
+import GestureHandler from 'components/LeafletGestureHandler';
+
 interface Props {
     className?: string;
     children?: React.ReactNode;
@@ -47,6 +49,7 @@ function ProjectMap(props: Props) {
                     add: handleGeoJSONAdd,
                 }}
             />
+            <GestureHandler />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
