@@ -25,7 +25,6 @@ import getProjectCentroids from 'utils/requests/projectCentroids';
 import RawInput from 'components/RawInput';
 import SelectInput from 'components/SelectInput';
 import Section from 'components/Section';
-import Heading from 'components/Heading';
 import ImageWrapper from 'components/ImageWrapper';
 import Hero from 'components/Hero';
 import useDebouncedValue from 'hooks/useDebouncedValue';
@@ -67,30 +66,58 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             ? Math.round(feature.properties.progress * 100)
             : null,
         number_of_users: feature.properties.number_of_users ?? null,
+        area_sqkm: feature.properties.area_sqkm ?? null,
         coordinates: feature.geometry?.coordinates ?? null,
         day: feature.properties?.day
             ? new Date(feature.properties.day).getTime()
             : null,
     })).sort((foo, bar) => ((bar.day ?? 0) - (foo.day ?? 0)));
 
-    const completedProjects = projects.features.filter(
-        (feature) => feature.properties.status === 'finished',
-    );
+    /*
+    const contributors = miniProjects.map((proj) => proj.number_of_users).filter(isDefined);
 
-    const totalFinishedProjects = completedProjects.length;
+    const min = Math.min(...contributors);
+    const max = Math.max(...contributors);
+    const avg = sum(contributors) / contributors.length;
+    const median = contributors[Math.round(contributors.length / 2)];
 
-    const totalArea = sum(
-        completedProjects.map(
-            (feature) => feature.properties.area_sqkm,
-        ).filter(isDefined),
-    );
+    console.warn(min, max, avg, median);
+    */
+
+    const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
+        {
+            name: 'projects_overview',
+            url: 'https://apps.mapswipe.org/api/projects/projects.csv',
+            type: 'csv',
+        },
+        {
+            name: 'projects_with_geometry',
+            url: 'https://apps.mapswipe.org/api/projects/projects_geom.geojson',
+            type: 'geojson',
+        },
+        {
+            name: 'projects_with_centroid',
+            url: 'https://apps.mapswipe.org/api/projects/projects_centroid.geojson',
+            type: 'geojson',
+        },
+    ];
+
+    const urlResponsePromises = urls.map(async (url) => {
+        const res = await fetch(url.url, { method: 'HEAD' });
+        return {
+            ...url,
+            ok: res.ok,
+            size: Number(res.headers.get('content-length') ?? '0'),
+        };
+    });
+
+    const urlResponses = await Promise.all(urlResponsePromises);
 
     return {
         props: {
             ...translations,
             projects: miniProjects,
-            totalArea: Math.round((totalArea / 1000)) * 1000,
-            totalFinishedProjects,
+            urls: urlResponses,
         },
     };
 };
@@ -104,6 +131,17 @@ function labelSelector<K extends { label: string }>(option: K) {
 
 const PAGE_SIZE = 9;
 
+type DownloadType = 'projects_overview' | 'projects_with_geometry' | 'projects_with_centroid';
+type DownloadFileType = 'geojson' | 'csv';
+
+interface UrlInfo {
+    name: DownloadType;
+    type: DownloadFileType;
+    url: string;
+    ok: boolean;
+    size: number;
+}
+
 interface Props extends SSRConfig {
     className?: string;
     projects: {
@@ -114,18 +152,16 @@ interface Props extends SSRConfig {
         progress: number | null;
         number_of_users: number | null;
         coordinates: [number, number] | null;
+        area_sqkm: number | null;
         day: number | null;
     }[];
-    totalArea: number;
-    totalFinishedProjects: number;
+    urls: UrlInfo[];
 }
 
 function Data(props: Props) {
     const {
         className,
         projects,
-        totalArea,
-        totalFinishedProjects,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
@@ -168,6 +204,17 @@ function Data(props: Props) {
         },
         [projects, projectStatus, projectType, debouncedSearchText],
     );
+
+    const completedProjects = visibleProjects.filter(
+        (feature) => feature.status === 'finished',
+    );
+    const totalFinishedProjects = completedProjects.length;
+    const totalArea = sum(
+        completedProjects.map(
+            (feature) => feature.area_sqkm,
+        ).filter(isDefined),
+    );
+    const roundedTotalArea = Math.round((totalArea / 1000)) * 1000;
 
     const tableProjects = visibleProjects.slice(0, items);
 
@@ -226,7 +273,7 @@ function Data(props: Props) {
                 </div>
                 <div className={styles.stats}>
                     <div>
-                        {t('total-area-card-text', { area: totalArea })}
+                        {t('total-area-card-text', { area: roundedTotalArea })}
                     </div>
                     <div>
                         {t('finished-project-card-text', { projects: totalFinishedProjects })}
