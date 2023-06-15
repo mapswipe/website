@@ -1,0 +1,21 @@
+.infoBox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border: var(--width-separator-thin) solid var(--color-accent-light);
+    padding: var(--spacing-medium) var(--spacing-extra-large);
+    max-width: 15rem;
+    gap: var(--spacing-extra-small);
+
+    .topContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-super-small);
+
+        .icon {
+            color: var(--color-accent);
+        }
+    }
+}

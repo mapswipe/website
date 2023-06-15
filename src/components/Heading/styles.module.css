@@ -1,0 +1,44 @@
+.heading {
+    margin: 0;
+    font-weight: var(--font-weight-semi-bold);
+
+    &.normal {
+        font-family: 'Poppins', sans-serif;
+        font-weight: var(--font-weight-normal);
+    }
+
+    &.superLarge {
+        font-size: var(--font-size-gigantic);
+    }
+
+    &.extraLarge {
+        font-size: var(--font-size-mega-large);
+    }
+
+    &.large {
+        font-size: var(--font-size-super-large);
+    }
+
+    &.medium {
+        font-size: var(--font-size-extra-large);
+    }
+
+    &.small {
+        font-size: var(--font-size-large);
+    }
+
+    &.extraSmall {
+        font-size: var(--font-size-medium);
+    }
+
+    &.ellipsize {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.ellipsizeContainer {
+    width: 100%;
+    overflow: auto;
+}

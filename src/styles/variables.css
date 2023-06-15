@@ -1,10 +1,50 @@
 :root {
-    --color-text: #ffffff;
-    --color-background: #0F193F;
+    --multiplier: 1.2599; /* Major third scale */
 
-    --font-size-medium: 1rem;
+    --font-size-base: 1rem;
+    --spacing-base: 1.25rem;
+
+    --color-text: #000000;
+    --color-text-on-dark: #ffffff;
+    --color-brand: #0F193F;
+    --color-accent: rgba(170, 190, 93, 1);
+    --color-accent-light: rgba(170, 190, 93, 0.48);
+    --color-brand-dark: #020e3b;
+
+    --color-background: var(--color-brand);
+
+    --width-page-max: 72rem;
+    --width-heading-max: 40rem;
+    --width-separator-thin: 1px;
 
     --font-weight-light: 300;
     --font-weight-medium: 400;
+    --font-weight-semi-bold: 500;
     --font-weight-bold: 600;
+
+    --border-radius-small: 0.2rem;
+    --border-radius-medium: 0.5rem;
+    --border-radius-large: 1rem;
+
+    /* Font size */
+    --font-size-super-small: calc(var(--font-size-base) / (var(--multiplier) * var(--multiplier) * var(--multiplier)));
+    --font-size-extra-small: calc(var(--font-size-base) / (var(--multiplier) * var(--multiplier)));
+    --font-size-small: calc(var(--font-size-base) / var(--multiplier));
+    --font-size-medium: var(--font-size-base);
+    --font-size-large: calc(var(--font-size-base) * var(--multiplier));
+    --font-size-extra-large: calc(var(--font-size-base) * var(--multiplier) * var(--multiplier));
+    --font-size-super-large: calc(var(--font-size-base) * var(--multiplier) * var(--multiplier) * var(--multiplier));
+    --font-size-mega-large: calc(var(--font-size-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
+    --font-size-gigantic: calc(var(--font-size-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
+
+    /* Spacing */
+    --spacing-super-small: calc(var(--spacing-base) / (var(--multiplier) * var(--multiplier) * var(--multiplier)));
+    --spacing-extra-small: calc(var(--spacing-base) / (var(--multiplier) * var(--multiplier)));
+    --spacing-small: calc(var(--spacing-base) / var(--multiplier));
+    --spacing-medium: var(--spacing-base);
+    --spacing-large: calc(var(--spacing-base) * var(--multiplier));
+    --spacing-extra-large: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier));
+    --spacing-super-large: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier));
+    --spacing-mega-large: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
+    --spacing-gigantic: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
 }

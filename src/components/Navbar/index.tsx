@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation, SSRConfig } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
 import Image from 'next/image';
 
@@ -20,40 +21,48 @@ function Navbar(props: Props) {
     } = props;
 
     const { t } = useTranslation('common');
+    const router = useRouter();
+
+    let currentLocale = router.query.locale ?? i18nextConfig.i18n.defaultLocale;
+    if (Array.isArray(currentLocale)) {
+        [currentLocale] = currentLocale;
+    }
 
     return (
         <div
             className={_cs(styles.navbar, className)}
         >
-            {i18nextConfig.i18n.locales.map((locale) => (
-                <LanguageSwitcher
-                    key={locale}
-                    locale={locale}
-                />
-            ))}
-            <Image
-                className={styles.logo}
-                src="/logo.svg"
-                alt="Mapswipe"
-                width={200}
-                height={200}
-            />
-            <div className={styles.routes}>
-                <Link
-                    href="/[locale]"
-                >
-                    {t('home-link')}
-                </Link>
-                <Link
-                    href="/[locale]/get-involved"
-                >
-                    {t('get-involved-link')}
-                </Link>
-                <Link
-                    href="/[locale]/data"
-                >
-                    {t('data-link')}
-                </Link>
+            <div className={styles.navbarContent}>
+                <div className={styles.logo}>
+                    <Image
+                        src="/logo.svg"
+                        alt="Mapswipe"
+                        layout="fill"
+                    />
+                </div>
+                <div className={styles.routes}>
+                    <Link
+                        className={styles.link}
+                        href="/[locale]/get-involved"
+                    >
+                        {t('get-involved-link')}
+                    </Link>
+                    <Link
+                        className={styles.link}
+                        href="/[locale]/data"
+                    >
+                        {t('data-link')}
+                    </Link>
+                </div>
+                <div className={styles.languageSwitcher}>
+                    {i18nextConfig.i18n.locales.map((locale) => (
+                        <LanguageSwitcher
+                            key={locale}
+                            locale={locale}
+                            active={locale === currentLocale}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
