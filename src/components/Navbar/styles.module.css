@@ -40,6 +40,13 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-medium);
+
+            .languageSwitcherList {
+                display: flex;
+                gap: var(--spacing-medium);
+                background-color: black;
+                padding: var(--spacing-super-small) var(--spacing-medium);
+            }
         }
 
         .menu {

@@ -68,9 +68,10 @@ function Navbar(props: Props) {
                     </Link>
                 </div>
                 <div className={styles.rightContainer}>
-                    <div className={styles.languageSwitcher}>
+                    <div className={styles.languageSwitcherList}>
                         {i18nextConfig.i18n.locales.map((locale) => (
                             <LanguageSwitcher
+                                className={styles.languageSwitcher}
                                 key={locale}
                                 locale={locale}
                                 active={locale === currentLocale}

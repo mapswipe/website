@@ -1,17 +1,23 @@
+import { _cs } from '@togglecorp/fujs';
 import { useRouter } from 'next/router';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 
 import languageDetector from 'utils/languageDetector';
+import styles from './styles.module.css';
 
-interface LinkProps extends Omit<NextLinkProps, 'href' | 'locale'> {
+interface Props extends Omit<NextLinkProps, 'href' | 'locale'> {
+    className?: string;
+    activeClassName?: string;
     locale: string;
     active: boolean;
 }
 
-function LanguageSwitchLink(props: LinkProps) {
+function LanguageSwitcher(props: Props) {
     const {
+        className,
         locale,
         active,
+        activeClassName,
         ...rest
     } = props;
 
@@ -35,6 +41,12 @@ function LanguageSwitchLink(props: LinkProps) {
                     locale,
                 },
             }}
+            className={_cs(
+                styles.languageSwitcher,
+                active && styles.active,
+                active && activeClassName,
+                className,
+            )}
             onClick={() => {
                 if (languageDetector.cache) {
                     languageDetector.cache(locale);
@@ -46,4 +58,4 @@ function LanguageSwitchLink(props: LinkProps) {
     );
 }
 
-export default LanguageSwitchLink;
+export default LanguageSwitcher;

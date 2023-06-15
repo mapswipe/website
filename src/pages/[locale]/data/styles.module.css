@@ -1,43 +1,100 @@
 .data {
-    display: flex;
-    flex-direction: column;
-    padding: var(--spacing-medium);
-    gap: var(--spacing-medium);
+    background-color: var(--color-foreground);
 
-    .filters {
-        display: flex;
-        gap: var(--spacing-medium);
-
-        .filter {
-            border: var(--width-separator-thin) solid var(--color-accent);
-            border-radius: var(--border-radius-small);
-            padding: var(--spacing-super-small);
-        }
-    }
-
-    .stats {
-        display: flex;
-        gap: var(--spacing-medium);
-        font-size: var(--font-size-extra-large);
-    }
-
-    .projectsMap {
-        width: 100%;
-        height: 32rem;
-    }
-
-    .projectList {
+    .pageContainer {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-medium);
+        max-width: var(--width-page-max);
+        flex-shrink: 0;
+        margin: 0 auto;
 
-        .project {
-            padding: var(--spacing-small);
-            border: var(--width-separator-thin) solid var(--color-accent);
+        .topSection {
+            position: relative;
+            min-height: 50vh;
+            color: var(--color-text-on-dark);
+            z-index: 0;
 
-            .projectName {
-                font-size: var(--font-size-large);
+            .background {
+                position: absolute; z-index: -1;
+                background-color: var(--color-background);
+                width: 100%;
+                height: 100%;
+                clip-path: polygon(0 0, 100% 0, 100% 87%, 0 69%);
             }
+
+            .container {
+                display: flex;
+                gap: var(--spacing-large);
+                padding: var(--spacing-large);
+
+                .illustration {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+
+        .section {
+            padding: var(--spacing-large);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-large);
+        }
+
+        .filters {
+            display: grid;
+            grid-gap: var(--spacing-medium);
+            grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+
+            .filter {
+                border: var(--width-separator-thin) solid var(--color-accent);
+                border-radius: var(--border-radius-small);
+                padding: var(--spacing-super-small);
+            }
+        }
+
+        .mapContainer {
+            /* NOTE: this is background tile color of leaflet */
+            background-color: #d4dadc;
+            height: 32rem;
+
+            .projectsMap {
+                background-color: #d6dcda;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .stats {
+            display: flex;
+            gap: var(--spacing-large);
+            font-size: var(--font-size-extra-large);
+            justify-content: center;
+        }
+
+
+        .projectList {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+            .project {
+                padding: var(--spacing-small) var(--spacing-large);
+                background-color: var(--color-background-accent-light);
+                box-shadow: 0 2pt 10pt -4pt rgba(0, 0, 0, 0.3);
+                border: var(--width-separator-thin) solid var(--color-separator);
+                border-radius: 0.5rem;
+
+                .projectName {
+                    font-size: var(--font-size-large);
+                }
+            }
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
         }
     }
 }
