@@ -4,9 +4,9 @@ import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import Heading from 'components/Heading';
+import Hero from 'components/Hero';
+import Section from 'components/Section';
 import ImageWrapper from 'components/ImageWrapper';
-import Link from 'components/Link';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
@@ -27,35 +27,26 @@ function GetInvolved(props: Props) {
         <div
             className={_cs(styles.getInvolved, className)}
         >
-            <div className={styles.hero}>
-                <div className={styles.background} />
-                <section className={styles.section}>
-                    <div className={styles.left}>
-                        <Heading size="extraLarge">
-                            {t('hero-title')}
-                        </Heading>
-                        <Heading
-                            size="medium"
-                            font="normal"
-                        >
-                            {t('hero-description')}
-                        </Heading>
-                    </div>
-                    <div className={styles.right}>
-                        <ImageWrapper
-                            className={styles.screenshot}
-                            imageClassName={styles.image}
-                            src="/screenshot.png"
-                            alt="Mapswipe"
-                            layout="fill"
-                        />
-                    </div>
-                </section>
-            </div>
-            <div>
-                {t('page-content')}
-                {t('page-description')}
-            </div>
+            <Hero
+                className={styles.hero}
+                title={t('hero-title')}
+                description={t('hero-description')}
+                rightContent={(
+                    <ImageWrapper
+                        className={styles.screenshot}
+                        imageClassName={styles.image}
+                        src="/img/placeholder.png"
+                        alt="Placeholder"
+                    />
+                )}
+            />
+            <Section
+                title={t('mobilizing-volunteer')}
+            >
+                <div className={styles.leftContainer}>
+                    Individual
+                </div>
+            </Section>
         </div>
     );
 }

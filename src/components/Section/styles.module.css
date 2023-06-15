@@ -1,0 +1,27 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: var(--spacing-medium);
+    width: 100%;
+    max-width: var(--width-page-max);
+    gap: var(--spacing-super-large);
+
+    .heading {
+        align-self: center;
+        max-width: var(--width-heading-max);
+        text-align: center;
+    }
+
+    .subHeading {
+        align-self: center;
+        max-width: var(--width-heading-max);
+    }
+
+    .headingContainer {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-medium);
+    }
+}
+

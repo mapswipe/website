@@ -24,6 +24,7 @@ function ImageWrapper(props: Props) {
             <Image
                 src={src}
                 className={_cs(imageClassName, styles.image)}
+                fill
                 // eslint-disable-next-line
                 {...otherProps}
             />
