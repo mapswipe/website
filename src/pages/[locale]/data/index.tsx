@@ -9,6 +9,7 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { IoDownload } from 'react-icons/io5';
 
 import Card from 'components/Card';
 import Link from 'components/Link';
@@ -162,6 +163,7 @@ function Data(props: Props) {
     const {
         className,
         projects,
+        urls,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
@@ -217,12 +219,22 @@ function Data(props: Props) {
     const roundedTotalArea = Math.round((totalArea / 1000)) * 1000;
 
     const tableProjects = visibleProjects.slice(0, items);
+    const downloadHeadingMap: Record<DownloadType, string> = {
+        projects_overview: t('download-projects-overview-heading'),
+        projects_with_geometry: t('download-projects-with-geometry-heading'),
+        projects_with_centroid: t('download-projects-with-centroid-heading'),
+    };
+    const downloadDescriptionMap: Record<DownloadType, string> = {
+        projects_overview: t('download-projects-overview-description'),
+        projects_with_geometry: t('download-projects-with-geometry-description'),
+        projects_with_centroid: t('download-projects-with-centroid-description'),
+    };
 
     return (
         <div className={_cs(styles.data, className)}>
             <Hero
-                title="A whole world of data"
-                description="Or at least that's what we're aiming for. Take a look at everything we have so far."
+                title={t('data-page-heading')}
+                description={t('data-page-description')}
                 rightContent={(
                     <ImageWrapper
                         className={styles.illustration}
@@ -232,9 +244,17 @@ function Data(props: Props) {
                 )}
             />
             <Section
-                title="Explore the data"
-                className={styles.explore}
+                title={t('explore-section-heading')}
+                className={styles.exploreSection}
                 contentClassName={styles.content}
+                actions={tableProjects.length !== visibleProjects.length && (
+                    <Button
+                        variant="border"
+                        onClick={handleSeeMore}
+                    >
+                        {t('see-more-button')}
+                    </Button>
+                )}
             >
                 <div className={styles.filters}>
                     <RawInput
@@ -322,20 +342,46 @@ function Data(props: Props) {
                         </Card>
                     ))}
                 </div>
-                <div className={styles.actions}>
-                    {tableProjects.length !== visibleProjects.length && (
-                        <Button
-                            variant="border"
-                            onClick={handleSeeMore}
-                        >
-                            {t('see-more-button')}
-                        </Button>
-                    )}
-                </div>
             </Section>
-            <Section title="Download all projects">
-                Download
+            <Section
+                title={t('download-section-heading')}
+                className={styles.downloadSection}
+                contentClassName={styles.urlList}
+            >
+                {urls.map((url) => (
+                    <Card
+                        key={url.name}
+                        heading={downloadHeadingMap[url.name]}
+                        description={downloadDescriptionMap[url.name]}
+                        footerActions={(
+                            <a href={url.url}>
+                                <IoDownload className={styles.downloadIcon} />
+                            </a>
+                        )}
+                    >
+                        <div>
+                            {t('download-type', { type: url.type })}
+                        </div>
+                        <div>
+                            {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                        </div>
+                    </Card>
+                ))}
             </Section>
+            <Section
+                title={t('license-section-heading')}
+                description={t('license-section-description')}
+                withAlternativeBackground
+            />
+            <Section
+                title={t('contact-section-heading')}
+                description={t('contact-section-description')}
+                actions={(
+                    <Button>
+                        {t('contact-link-label')}
+                    </Button>
+                )}
+            />
         </div>
     );
 }

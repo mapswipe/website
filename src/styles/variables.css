@@ -21,7 +21,7 @@
     --color-separator: rgba(0, 0, 0, 0.05);
 
     --width-page-max: 90rem;
-    --width-heading-max: 40rem;
+    --width-heading-max: 50rem;
     --width-separator-thin: 1pt;
 
     --font-weight-light: 300;
@@ -56,4 +56,5 @@
     --spacing-super-large: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier));
     --spacing-mega-large: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
     --spacing-gigantic: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
+    --spacing-enourmous: calc(var(--spacing-gigantic) * var(--multiplier));
 }

@@ -11,6 +11,8 @@ interface Props {
     title?: React.ReactNode;
     description?: React.ReactNode;
     children?: React.ReactNode;
+    actions?: React.ReactNode;
+    withAlternativeBackground?: boolean;
 }
 
 function Section(props: Props) {
@@ -20,31 +22,44 @@ function Section(props: Props) {
         title,
         description,
         children,
+        actions,
+        withAlternativeBackground,
     } = props;
 
     return (
-        <section className={_cs(className, styles.section)}>
-            <div className={styles.headingContainer}>
-                {title && (
-                    <Heading
-                        className={styles.heading}
-                        size="large"
-                    >
-                        {title}
-                    </Heading>
+        <section
+            className={_cs(
+                styles.section,
+                withAlternativeBackground && styles.withAlternativeBackground,
+                className,
+            )}
+        >
+            <div className={styles.container}>
+                <div className={styles.headingContainer}>
+                    {title && (
+                        <Heading
+                            className={styles.heading}
+                            size="large"
+                        >
+                            {title}
+                        </Heading>
+                    )}
+                    {description && (
+                        <div className={styles.description}>
+                            {description}
+                        </div>
+                    )}
+                </div>
+                {children && (
+                    <div className={contentClassName}>
+                        {children}
+                    </div>
                 )}
-                {description && (
-                    <Heading
-                        font="normal"
-                        className={styles.subHeading}
-                        size="small"
-                    >
-                        {description}
-                    </Heading>
+                {actions && (
+                    <div className={styles.actions}>
+                        {actions}
+                    </div>
                 )}
-            </div>
-            <div className={contentClassName}>
-                {children}
             </div>
         </section>
     );

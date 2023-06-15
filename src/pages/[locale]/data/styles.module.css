@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: var(--spacing-gigantic);
     background-color: var(--color-foreground);
+    padding-bottom: var(--spacing-mega-large);
 
     .illustration {
         position: relative;
@@ -10,7 +11,7 @@
         height: 40rem;
     }
 
-    .explore {
+    .exploreSection {
         .content {
             display: flex;
             flex-direction: column;
@@ -61,14 +62,14 @@
                         align-self: flex-start;
                     }
                     .track {
-                        height: 0.5rem;
-                        background-color: var(--color-separator);
                         border-radius: 0.25rem;
+                        background-color: var(--color-separator);
+                        height: 0.5rem;
 
                         .progress {
-                            height: 100%;
-                            background-color: var(--color-accent);
                             border-radius: 0.25rem;
+                            background-color: var(--color-accent);
+                            height: 100%;
                         }
                     }
                 }
@@ -81,9 +82,22 @@
             }
 
             .actions {
-                padding: var(--spacing-large);
                 display: flex;
                 justify-content: center;
+                padding: var(--spacing-large);
+            }
+        }
+    }
+
+    .downloadSection {
+        .urlList {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+            .downloadIcon {
+                color: var(--color-accent);
+                font-size: var(--font-size-super-large);
             }
         }
     }

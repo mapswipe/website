@@ -8,6 +8,7 @@ import styles from './styles.module.css';
 interface Props {
     className?: string;
     heading?: React.ReactNode;
+    description?: React.ReactNode;
     children?: React.ReactNode;
     childrenContainerClassName?: string;
     icons?: React.ReactNode;
@@ -21,6 +22,7 @@ function Card(props: Props) {
     const {
         className,
         heading,
+        description,
         childrenContainerClassName,
         icons,
         actions,
@@ -42,7 +44,10 @@ function Card(props: Props) {
                             {icons}
                         </div>
                     )}
-                    <Heading className={styles.heading}>
+                    <Heading
+                        className={styles.heading}
+                        size="small"
+                    >
                         {heading}
                     </Heading>
                     {actions && (
@@ -50,6 +55,11 @@ function Card(props: Props) {
                             {actions}
                         </div>
                     )}
+                </div>
+            )}
+            {description && (
+                <div className={styles.description}>
+                    {description}
                 </div>
             )}
             <div className={_cs(styles.childrenContainer, childrenContainerClassName)}>
