@@ -3,7 +3,7 @@
     font-weight: var(--font-weight-semi-bold);
 
     &.normal {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Lato', sans-serif;
         font-weight: var(--font-weight-normal);
     }
 

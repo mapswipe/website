@@ -5,7 +5,6 @@
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-text-on-dark);
         font-size: var(--font-size-large);
-        font-weight: var(--font-weight-semi-bold);
     }
 
     &.buttonTransparent {
@@ -14,7 +13,6 @@
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-accent);
         font-size: var(--font-size-large);
-        font-weight: var(--font-weight-semi-bold);
     }
 
     &.icon {

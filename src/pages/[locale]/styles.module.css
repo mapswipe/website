@@ -1,6 +1,7 @@
 .home {
     display: flex;
     flex-direction: column;
+    padding-bottom: var(--spacing-gigantic);
     gap: var(--spacing-gigantic);
 
     .section {
@@ -13,17 +14,20 @@
         gap: var(--spacing-super-large);
 
         .heading {
-            display: flex;
             align-self: center;
-            flex-direction: column;
             max-width: var(--width-heading-max);
             text-align: center;
-            gap: var(--spacing-medium);
+        }
 
-            .subHeading {
-                max-width: var(--width-heading-max);
-                font-weight: var(--font-weight-medium);
-            }
+        .subHeading {
+            align-self: center;
+            max-width: var(--width-heading-max);
+        }
+
+        .headingContainer {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-medium);
         }
     }
 
@@ -95,17 +99,17 @@
         .content {
             display: flex;
             align-items: center;
-            justify-content: center;
             flex-wrap: wrap;
+            justify-content: center;
             gap: var(--spacing-mega-large);
 
             .pictures {
                 display: flex;
                 align-items: center;
-                justify-content: flex-end;
-                flex-wrap: wrap;
-                gap: var(--spacing-medium);
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: var(--spacing-medium);
 
                 .imageContainer {
                     position: relative;
@@ -142,9 +146,13 @@
 
             .descriptionContainer {
                 display: flex;
-                flex-direction: column;
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                flex-direction: column;
                 gap: var(--spacing-medium);
+
+                .description {
+                    font-size: var(--font-size-large);
+                }
 
                 .infoBoxContainer {
                     display: flex;
@@ -164,6 +172,140 @@
                     .infoBoxContainer {
                         justify-content: center;
                     }
+                }
+            }
+        }
+    }
+
+    .missionTypes {
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--spacing-large);
+
+            .missionType {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                box-shadow: var(--box-shadow-medium);
+                padding: var(--spacing-large);
+                max-width: 20rem;
+                gap: var(--spacing-medium);
+
+                .icon {
+                    color: var(--color-accent);
+                    font-size: var(--font-size-mega-large);
+                }
+
+                .missionTypeDescription {
+                    text-align: center;
+                    font-size: var(--font-size-large);
+                }
+            }
+        }
+    }
+
+    .startMapswiping {
+        .content {
+            display: flex;
+            gap: var(--spacing-large);
+
+            .description {
+                font-size: var(--font-size-extra-large);
+            }
+
+            .download {
+                display: flex;
+                flex-direction: column;
+                flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                justify-content: center;
+                border-radius: var(--border-radius-small);
+                background-color: var(--color-background-brand-light);
+                padding: var(--spacing-extra-large);
+                gap: var(--spacing-extra-large);
+                text-align: center;
+
+                .linksContainer {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: var(--spacing-small);
+
+                    .buttonsContainer {
+                        display: flex;
+                        justify-content: center;
+                        flex-wrap: wrap;
+                        gap: var(--spacing-large);
+
+                        .buttonImageContainer {
+                            position: relative;
+                            width: 12rem;
+                            height: 4rem;
+
+                            .image {
+                                object-position: center center;
+                                object-fit: contain;
+                                border-radius: var(--border-radius-medium);
+                            }
+                        }
+                    }
+
+                    .downloadLink {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            .getInvolved {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                border-radius: var(--border-radius-small);
+                background-color: var(--color-background-accent-light);
+                padding: var(--spacing-extra-large);
+                gap: var(--spacing-extra-large);
+                text-align: center;
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-direction: column;
+            }
+        }
+    }
+
+    .partners {
+        display: flex;
+        flex-direction: column;
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-large);
+            align-items: center;
+
+            .missingMapsLogo {
+                width: 12rem;
+                height: 4rem;
+            }
+
+            .description {
+                max-width: var(--width-heading-max);
+                font-size: var(--font-size-large);
+            }
+
+            .partnerLogos {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: var(--spacing-large);
+
+                .partnerLogo {
+                    width: 8rem;
+                    height: 4rem;
                 }
             }
         }

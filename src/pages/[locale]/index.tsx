@@ -8,12 +8,46 @@ import Head from 'next/head';
 import { IoSearch } from 'react-icons/io5';
 
 import Link from 'components/Link';
+import ImageWrapper from 'components/ImageWrapper';
 import InfoBox from 'components/InfoBox';
 import Heading from 'components/Heading';
 
 import i18nextConfig from '../../../next-i18next.config';
 
 import styles from './styles.module.css';
+
+const partners = [
+    {
+        altText: 'American Red Cross Logo',
+        imageSrc: 'img/arc.png',
+        link: 'https://www.redcross.org/',
+    },
+    {
+        altText: 'British Red Cross Logo',
+        imageSrc: 'img/brc.svg',
+        link: 'https://www.redcross.org.uk/',
+    },
+    {
+        altText: 'HeiGIT logo',
+        imageSrc: 'img/heigit.png',
+        link: 'https://heigit.org/',
+    },
+    {
+        altText: 'HOT logo',
+        imageSrc: 'img/hot.png',
+        link: 'https://www.hotosm.org/',
+    },
+    {
+        altText: 'MSF logo',
+        imageSrc: 'img/msf.png',
+        link: 'https://msf.org.uk/',
+    },
+    {
+        altText: 'Togglecorp logo',
+        imageSrc: 'img/tc.png',
+        link: 'https://togglecorp.com',
+    },
+];
 
 interface Props extends SSRConfig {
     className?: string;
@@ -55,11 +89,11 @@ function Home(props: Props) {
                                 {t('download-app-label')}
                             </Link>
                             <Link
-                                href="/[locale]/get-involved"
+                                href="/[locale]/data"
                                 variant="buttonTransparent"
                                 target="_blank"
                             >
-                                {t('get-involved-link')}
+                                {t('data-link')}
                             </Link>
                         </div>
                     </div>
@@ -112,10 +146,10 @@ function Home(props: Props) {
                         </div>
                     </div>
                     <div className={styles.descriptionContainer}>
-                        <div>
+                        <div className={styles.description}>
                             {t('mobilizing-volunteer-description-paragraph-1')}
                         </div>
-                        <div>
+                        <div className={styles.description}>
                             {t('mobilizing-volunteer-description-paragraph-2')}
                         </div>
                         <div className={styles.infoBoxContainer}>
@@ -142,31 +176,53 @@ function Home(props: Props) {
             </section>
             */}
             <section className={_cs(styles.missionTypes, styles.section)}>
-                <Heading
-                    className={styles.heading}
-                    size="large"
-                >
-                    {t('explore-mission-types')}
+                <div className={styles.headingContainer}>
+                    <Heading
+                        className={styles.heading}
+                        size="large"
+                    >
+                        {t('explore-mission-types')}
+                    </Heading>
                     <Heading
                         font="normal"
                         className={styles.subHeading}
-                        size="extraSmall"
+                        size="small"
                     >
                         {t('explore-mission-types-description')}
                     </Heading>
-                </Heading>
+                </div>
                 <div className={styles.content}>
-                    <div className={styles.missonType}>
+                    <div className={styles.missionType}>
                         <IoSearch
                             className={styles.icon}
                         />
-                        <Heading
-                            size="extraSmall"
-                        >
+                        <Heading>
                             {t('find-mission-type-heading')}
                         </Heading>
                         <div className={styles.missionTypeDescription}>
                             {t('find-mission-type-description')}
+                        </div>
+                    </div>
+                    <div className={styles.missionType}>
+                        <IoSearch
+                            className={styles.icon}
+                        />
+                        <Heading>
+                            {t('compare-mission-type-heading')}
+                        </Heading>
+                        <div className={styles.missionTypeDescription}>
+                            {t('compare-mission-type-description')}
+                        </div>
+                    </div>
+                    <div className={styles.missionType}>
+                        <IoSearch
+                            className={styles.icon}
+                        />
+                        <Heading>
+                            {t('validate-mission-type-heading')}
+                        </Heading>
+                        <div className={styles.missionTypeDescription}>
+                            {t('validate-mission-type-description')}
                         </div>
                     </div>
                 </div>
@@ -179,9 +235,60 @@ function Home(props: Props) {
                     {t('start-mapswiping-title')}
                 </Heading>
                 <div className={styles.content}>
-                    Pictures go here
+                    <div className={styles.download}>
+                        <div className={styles.description}>
+                            {t('download-description')}
+                        </div>
+                        <div className={styles.linksContainer}>
+                            <div className={styles.buttonsContainer}>
+                                <Link
+                                    className={styles.buttonImageContainer}
+                                    href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
+                                    target="_blank"
+                                >
+                                    <Image
+                                        className={styles.image}
+                                        src="img/playstore.png"
+                                        alt="Download on playstore"
+                                        layout="fill"
+                                    />
+                                </Link>
+                                <Link
+                                    className={styles.buttonImageContainer}
+                                    href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
+                                    target="_blank"
+                                >
+                                    <Image
+                                        className={styles.image}
+                                        src="img/apple.png"
+                                        alt="Download on Apple Store"
+                                        layout="fill"
+                                    />
+                                </Link>
+                            </div>
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://togglecorp.com"
+                                target="_blank"
+                            >
+                                {t('download-apk-label')}
+                            </Link>
+                        </div>
+                    </div>
+                    <div className={styles.getInvolved}>
+                        <div className={styles.description}>
+                            {t('get-involved-description')}
+                        </div>
+                        <Link
+                            variant="button"
+                            href="/[locale]/get-involved"
+                        >
+                            {t('get-involved-link')}
+                        </Link>
+                    </div>
                 </div>
             </section>
+            {/*
             <section className={_cs(styles.recentNewsUpdates, styles.section)}>
                 <Heading
                     className={styles.heading}
@@ -193,22 +300,45 @@ function Home(props: Props) {
                     Pictures go here
                 </div>
             </section>
+            */}
             <section className={_cs(styles.partners, styles.section)}>
                 <Heading
                     className={styles.heading}
                     size="large"
                 >
                     {t('partners')}
-                    <Heading
-                        font="normal"
-                        className={styles.subHeading}
-                        size="small"
-                    >
-                        {t('partners-description')}
-                    </Heading>
                 </Heading>
                 <div className={styles.content}>
-                    Pictures go here
+                    <Link
+                        href="https://www.missingmaps.org/"
+                        target="_blank"
+                    >
+                        <ImageWrapper
+                            className={styles.missingMapsLogo}
+                            src="img/missingmaps.png"
+                            alt="Missing Maps Logo"
+                            layout="fill"
+                        />
+                    </Link>
+                    <div className={styles.description}>
+                        {t('missing-map-description')}
+                    </div>
+                    <div className={styles.partnerLogos}>
+                        {partners.map((partner) => (
+                            <Link
+                                key={partner.link}
+                                href={partner.link}
+                                target="_blank"
+                            >
+                                <ImageWrapper
+                                    className={styles.partnerLogo}
+                                    src={partner.imageSrc}
+                                    alt={partner.altText}
+                                    layout="fill"
+                                />
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </section>
         </div>

@@ -1,8 +1,8 @@
 {
-  "total-area-card-text": "{{area, number}} km2 mapped",
-  "finished-project-card-text": "{{projects, number}} completed",
   "project-card-status-text": "Status: {{status}}",
   "project-card-progress-text": "Progress: {{progress}}",
   "project-card-contributors-text": "Contributors: {{contributors}}",
+  "total-area-card-text": "{{area, number}} km2 mapped",
+  "finished-project-card-text": "{{projects, number}} completed",
   "project-pagination-text": "{{remainingProjects}} projects hidden"
 }

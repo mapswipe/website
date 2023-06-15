@@ -1,0 +1,7 @@
+.imageWrapper {
+    position: relative;
+
+    .image {
+        object-fit: contain;
+    }
+}
