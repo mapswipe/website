@@ -1,6 +1,7 @@
 .heading {
     margin: 0;
-    font-weight: var(--font-weight-semi-bold);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading);
 
     &.normal {
         font-family: 'Lato', sans-serif;

@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    line-height: 150%;
+    line-height: 1.5;
 }
 
 html {
@@ -14,7 +14,6 @@ body {
     min-height: 100vh;
     color: var(--color-text);
     font-family: var(--font-family-lato), sans-serif;
-    font-size: var(--font-size-medium);
     font-weight: var(--font-weight-medium);
 }
 

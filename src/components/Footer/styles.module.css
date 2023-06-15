@@ -6,6 +6,7 @@
     color: var(--color-text-on-dark);
 
     .heading {
+        color: var(--color-heading-on-dark);
         font-weight: var(--font-weight-semi-bold);
     }
 

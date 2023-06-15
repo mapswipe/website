@@ -27,15 +27,17 @@ function Hero(props: Props) {
             <div className={styles.background} />
             <section className={styles.section}>
                 <div className={styles.left}>
-                    <Heading size="extraLarge">
+                    <Heading
+                        size="extraLarge"
+                        className={styles.heading}
+                    >
                         {title}
                     </Heading>
-                    <Heading
-                        size="medium"
-                        font="normal"
+                    <div
+                        className={styles.description}
                     >
                         {description}
-                    </Heading>
+                    </div>
                     {actions && (
                         <div className={styles.buttonsContainer}>
                             {actions}

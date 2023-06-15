@@ -1,100 +1,90 @@
 .data {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-gigantic);
     background-color: var(--color-foreground);
 
-    .pageContainer {
-        display: flex;
-        flex-direction: column;
-        max-width: var(--width-page-max);
-        flex-shrink: 0;
-        margin: 0 auto;
+    .illustration {
+        position: relative;
+        width: 20rem;
+        height: 40rem;
+    }
 
-        .topSection {
-            position: relative;
-            min-height: 50vh;
-            color: var(--color-text-on-dark);
-            z-index: 0;
-
-            .background {
-                position: absolute; z-index: -1;
-                background-color: var(--color-background);
-                width: 100%;
-                height: 100%;
-                clip-path: polygon(0 0, 100% 0, 100% 87%, 0 69%);
-            }
-
-            .container {
-                display: flex;
-                gap: var(--spacing-large);
-                padding: var(--spacing-large);
-
-                .illustration {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-            }
-        }
-
-        .section {
-            padding: var(--spacing-large);
+    .explore {
+        .content {
             display: flex;
             flex-direction: column;
-            gap: var(--spacing-large);
-        }
+            gap: var(--spacing-super-large);
 
-        .filters {
-            display: grid;
-            grid-gap: var(--spacing-medium);
-            grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            .filters {
+                display: grid;
+                grid-gap: var(--spacing-medium);
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 
-            .filter {
-                border: var(--width-separator-thin) solid var(--color-accent);
-                border-radius: var(--border-radius-small);
-                padding: var(--spacing-super-small);
-            }
-        }
-
-        .mapContainer {
-            /* NOTE: this is background tile color of leaflet */
-            background-color: #d4dadc;
-            height: 32rem;
-
-            .projectsMap {
-                background-color: #d6dcda;
-                width: 100%;
-                height: 100%;
-            }
-        }
-
-        .stats {
-            display: flex;
-            gap: var(--spacing-large);
-            font-size: var(--font-size-extra-large);
-            justify-content: center;
-        }
-
-
-        .projectList {
-            display: grid;
-            grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
-
-            .project {
-                padding: var(--spacing-small) var(--spacing-large);
-                background-color: var(--color-background-accent-light);
-                box-shadow: 0 2pt 10pt -4pt rgba(0, 0, 0, 0.3);
-                border: var(--width-separator-thin) solid var(--color-separator);
-                border-radius: 0.5rem;
-
-                .projectName {
-                    font-size: var(--font-size-large);
+                .filter {
+                    border: var(--width-separator-thin) solid var(--color-accent);
+                    border-radius: var(--border-radius-small);
+                    padding: var(--spacing-super-small);
                 }
             }
-        }
 
-        .actions {
-            display: flex;
-            justify-content: center;
+            .mapContainer {
+                /* NOTE: this is background tile color of leaflet */
+                background-color: #d4dadc;
+                height: 32rem;
+
+                .projectsMap {
+                    background-color: #d6dcda;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            .stats {
+                display: flex;
+                gap: var(--spacing-large);
+                font-size: var(--font-size-extra-large);
+            }
+
+
+            .projectList {
+                display: grid;
+                grid-gap: var(--spacing-extra-large);
+                grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+                .progressBar {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--spacing-super-small);
+
+                    .progressLabel {
+                        align-self: flex-start;
+                    }
+                    .track {
+                        height: 0.5rem;
+                        background-color: var(--color-separator);
+                        border-radius: 0.25rem;
+
+                        .progress {
+                            height: 100%;
+                            background-color: var(--color-accent);
+                            border-radius: 0.25rem;
+                        }
+                    }
+                }
+
+                .projectStats {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+                    grid-gap: var(--spacing-extra-small);
+                }
+            }
+
+            .actions {
+                padding: var(--spacing-large);
+                display: flex;
+                justify-content: center;
+            }
         }
     }
 }

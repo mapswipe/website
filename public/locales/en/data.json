@@ -1,7 +1,7 @@
 {
   "project-card-status-text": "Status: {{status}}",
   "project-card-type": "Type: {{type}}",
-  "project-card-progress-text": "Progress: {{progress}}",
+  "project-card-progress-text": "{{progress, number}}% completed",
   "project-card-contributors-text": "Contributors: {{contributors}}",
   "project-card-last-update": "Last Update: {{date, datetime}}",
   "total-area-card-text": "{{area, number}} km2 mapped",

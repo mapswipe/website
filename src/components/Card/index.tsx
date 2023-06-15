@@ -7,41 +7,72 @@ import styles from './styles.module.css';
 
 interface Props {
     className?: string;
-    actionsClassName?: string;
-    title?: React.ReactNode;
-    description?: React.ReactNode;
+    heading?: React.ReactNode;
+    children?: React.ReactNode;
+    childrenContainerClassName?: string;
+    icons?: React.ReactNode;
     actions?: React.ReactNode;
+    footerContent?: React.ReactNode;
+    footerIcons?: React.ReactNode;
+    footerActions?: React.ReactNode;
 }
 
 function Card(props: Props) {
     const {
         className,
-        actionsClassName,
-        title,
-        description,
+        heading,
+        childrenContainerClassName,
+        icons,
         actions,
+        footerContent,
+        footerActions,
+        footerIcons,
+        children,
     } = props;
 
+    const showHeader = icons || heading || actions;
+    const showFooter = footerIcons || footerContent || footerActions;
+
     return (
-        <section className={_cs(className, styles.card)}>
-            {title && (
-                <Heading
-                    size="small"
-                >
-                    {title}
-                </Heading>
-            )}
-            {description && (
-                <div>
-                    {description}
+        <div className={_cs(styles.card, className)}>
+            {showHeader && (
+                <div className={styles.header}>
+                    {icons && (
+                        <div className={styles.icons}>
+                            {icons}
+                        </div>
+                    )}
+                    <Heading className={styles.heading}>
+                        {heading}
+                    </Heading>
+                    {actions && (
+                        <div className={styles.actions}>
+                            {actions}
+                        </div>
+                    )}
                 </div>
             )}
-            {actions && (
-                <div className={actionsClassName}>
-                    {actions}
+            <div className={_cs(styles.childrenContainer, childrenContainerClassName)}>
+                {children}
+            </div>
+            {showFooter && (
+                <div className={styles.footer}>
+                    {footerIcons && (
+                        <div className={styles.footerIcons}>
+                            {footerIcons}
+                        </div>
+                    )}
+                    <div className={styles.footerContent}>
+                        {footerContent}
+                    </div>
+                    {footerActions && (
+                        <div className={styles.footerActions}>
+                            {footerActions}
+                        </div>
+                    )}
                 </div>
             )}
-        </section>
+        </div>
     );
 }
 

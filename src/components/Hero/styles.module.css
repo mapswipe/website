@@ -1,7 +1,8 @@
 .hero {
     position: relative;
-    min-height: 70vh;
+    min-height: 40rem;
     color: var(--color-text-on-dark);
+    z-index: 0;
 
     .background {
         position: absolute;
@@ -27,6 +28,14 @@
             gap: var(--spacing-extra-large);
             padding-top: var(--spacing-mega-large);
             max-width: 40rem;
+
+            .heading {
+                color: var(--color-heading-on-dark);
+            }
+
+            .description {
+                font-size: var(--font-size-extra-large);
+            }
 
             .buttonsContainer {
                 display: flex;
