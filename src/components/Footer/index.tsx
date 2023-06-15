@@ -33,8 +33,7 @@ function Footer(props: Props) {
                 <div className={styles.section}>
                     <Heading
                         className={styles.heading}
-                        size="extraSmall"
-                        font="normal"
+                        size="small"
                     >
                         {t('footer-about-us-title')}
                     </Heading>
@@ -45,8 +44,7 @@ function Footer(props: Props) {
                 <div className={styles.section}>
                     <Heading
                         className={styles.heading}
-                        size="extraSmall"
-                        font="normal"
+                        size="small"
                     >
                         {t('footer-quick-links')}
                     </Heading>
@@ -66,13 +64,17 @@ function Footer(props: Props) {
                         >
                             {t('data-link')}
                         </Link>
+                        <Link
+                            href="https://community.mapswipe.org/"
+                        >
+                            {t('community-dashboard-link')}
+                        </Link>
                     </div>
                 </div>
                 <div className={styles.section}>
                     <Heading
                         className={styles.heading}
-                        size="extraSmall"
-                        font="normal"
+                        size="small"
                     >
                         {t('footer-follow-us-title')}
                     </Heading>

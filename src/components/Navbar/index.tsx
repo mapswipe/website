@@ -3,9 +3,12 @@ import { useTranslation, SSRConfig } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
 import Image from 'next/image';
+import { MdMenu } from 'react-icons/md';
 
 import Link from 'components/Link';
+import Button from 'components/Button';
 import LanguageSwitcher from 'components/LanguageSwitcher';
+import useBooleanState from 'hooks/useBooleanState';
 
 import i18nextConfig from '../../../next-i18next.config';
 
@@ -22,6 +25,7 @@ function Navbar(props: Props) {
 
     const { t } = useTranslation('common');
     const router = useRouter();
+    const [isNavShown, , , , toggleNavVisibility] = useBooleanState(false);
 
     let currentLocale = router.query.locale ?? i18nextConfig.i18n.defaultLocale;
     if (Array.isArray(currentLocale)) {
@@ -29,9 +33,7 @@ function Navbar(props: Props) {
     }
 
     return (
-        <div
-            className={_cs(styles.navbar, className)}
-        >
+        <div className={_cs(styles.navbar, className)}>
             <div className={styles.navbarContent}>
                 <div className={styles.logo}>
                     <Image
@@ -40,7 +42,12 @@ function Navbar(props: Props) {
                         layout="fill"
                     />
                 </div>
-                <div className={styles.routes}>
+                <div
+                    className={_cs(
+                        styles.routes,
+                        isNavShown && styles.navShown,
+                    )}
+                >
                     <Link
                         className={styles.link}
                         href="/[locale]/get-involved"
@@ -53,15 +60,33 @@ function Navbar(props: Props) {
                     >
                         {t('data-link')}
                     </Link>
+                    <Link
+                        className={styles.link}
+                        href="https://community.mapswipe.org/"
+                    >
+                        {t('community-dashboard-link')}
+                    </Link>
                 </div>
-                <div className={styles.languageSwitcher}>
-                    {i18nextConfig.i18n.locales.map((locale) => (
-                        <LanguageSwitcher
-                            key={locale}
-                            locale={locale}
-                            active={locale === currentLocale}
-                        />
-                    ))}
+                <div className={styles.rightContainer}>
+                    <div className={styles.languageSwitcher}>
+                        {i18nextConfig.i18n.locales.map((locale) => (
+                            <LanguageSwitcher
+                                key={locale}
+                                locale={locale}
+                                active={locale === currentLocale}
+                            />
+                        ))}
+                    </div>
+                    <Button
+                        className={_cs(
+                            styles.menu,
+                        )}
+                        name="toggle"
+                        variant="transparent"
+                        onClick={toggleNavVisibility}
+                    >
+                        <MdMenu />
+                    </Button>
                 </div>
             </div>
         </div>
