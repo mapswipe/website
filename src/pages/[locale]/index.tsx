@@ -4,11 +4,11 @@ import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
+import Head from 'next/head';
+import { IoSearch } from 'react-icons/io5';
 
 import Link from 'components/Link';
 import InfoBox from 'components/InfoBox';
-import Navbar from 'components/Navbar';
-import Footer from 'components/Footer';
 import Heading from 'components/Heading';
 
 import i18nextConfig from '../../../next-i18next.config';
@@ -30,10 +30,10 @@ function Home(props: Props) {
         <div
             className={_cs(styles.home, className)}
         >
-            <Navbar />
-            <div
-                className={styles.hero}
-            >
+            <Head>
+                <title>{`MapSwipe ${t('home')}`}</title>
+            </Head>
+            <div className={styles.hero}>
                 <div className={styles.background} />
                 <section className={styles.section}>
                     <div className={styles.left}>
@@ -76,12 +76,40 @@ function Home(props: Props) {
                 </section>
             </div>
             <section className={_cs(styles.mobilize, styles.section)}>
-                <Heading className={styles.heading}>
+                <Heading
+                    className={styles.heading}
+                    size="large"
+                >
                     {t('mobilizing-volunteer')}
                 </Heading>
                 <div className={styles.content}>
                     <div className={styles.pictures}>
-                        Pictures go here
+                        <div className={_cs(styles.imageContainer, styles.single)}>
+                            <Image
+                                className={styles.image}
+                                src="img/msf_mapping.jpg"
+                                alt="Mapswipe"
+                                layout="fill"
+                            />
+                        </div>
+                        <div className={styles.images}>
+                            <div className={_cs(styles.imageContainer, styles.double)}>
+                                <Image
+                                    className={styles.image}
+                                    src="img/mapswipe_mapathon.jpg"
+                                    alt="Mapswipe"
+                                    layout="fill"
+                                />
+                            </div>
+                            <div className={_cs(styles.imageContainer, styles.double)}>
+                                <Image
+                                    className={styles.image}
+                                    src="img/field_mapping.jpg"
+                                    alt="Mapswipe"
+                                    layout="fill"
+                                />
+                            </div>
+                        </div>
                     </div>
                     <div className={styles.descriptionContainer}>
                         <div>
@@ -92,12 +120,10 @@ function Home(props: Props) {
                         </div>
                         <div className={styles.infoBoxContainer}>
                             <InfoBox
-                                className={styles.infoBox}
                                 value="100M"
                                 label="Total Swipes"
                             />
                             <InfoBox
-                                className={styles.infoBox}
                                 value="70K"
                                 label="Total Contributors"
                             />
@@ -116,22 +142,40 @@ function Home(props: Props) {
             </section>
             */}
             <section className={_cs(styles.missionTypes, styles.section)}>
-                <Heading className={styles.heading}>
+                <Heading
+                    className={styles.heading}
+                    size="large"
+                >
                     {t('explore-mission-types')}
                     <Heading
                         font="normal"
                         className={styles.subHeading}
-                        size="small"
+                        size="extraSmall"
                     >
                         {t('explore-mission-types-description')}
                     </Heading>
                 </Heading>
                 <div className={styles.content}>
-                    Pictures go here
+                    <div className={styles.missonType}>
+                        <IoSearch
+                            className={styles.icon}
+                        />
+                        <Heading
+                            size="extraSmall"
+                        >
+                            {t('find-mission-type-heading')}
+                        </Heading>
+                        <div className={styles.missionTypeDescription}>
+                            {t('find-mission-type-description')}
+                        </div>
+                    </div>
                 </div>
             </section>
             <section className={_cs(styles.startMapswiping, styles.section)}>
-                <Heading className={styles.heading}>
+                <Heading
+                    className={styles.heading}
+                    size="large"
+                >
                     {t('start-mapswiping-title')}
                 </Heading>
                 <div className={styles.content}>
@@ -139,7 +183,10 @@ function Home(props: Props) {
                 </div>
             </section>
             <section className={_cs(styles.recentNewsUpdates, styles.section)}>
-                <Heading className={styles.heading}>
+                <Heading
+                    className={styles.heading}
+                    size="large"
+                >
                     {t('recent-news-updates-title')}
                 </Heading>
                 <div className={styles.content}>
@@ -147,7 +194,10 @@ function Home(props: Props) {
                 </div>
             </section>
             <section className={_cs(styles.partners, styles.section)}>
-                <Heading className={styles.heading}>
+                <Heading
+                    className={styles.heading}
+                    size="large"
+                >
                     {t('partners')}
                     <Heading
                         font="normal"
@@ -161,7 +211,6 @@ function Home(props: Props) {
                     Pictures go here
                 </div>
             </section>
-            <Footer />
         </div>
     );
 }

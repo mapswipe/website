@@ -7,13 +7,14 @@
     --color-text: #000000;
     --color-text-on-dark: #ffffff;
     --color-brand: #0F193F;
-    --color-accent: #aabe5d;
+    --color-accent: rgba(170, 190, 93, 1);
+    --color-accent-light: rgba(170, 190, 93, 0.48);
     --color-brand-dark: #020e3b;
 
     --color-background: var(--color-brand);
 
     --width-page-max: 72rem;
-    --width-heading-max: 60rem;
+    --width-heading-max: 40rem;
     --width-separator-thin: 1px;
 
     --font-weight-light: 300;

@@ -1,5 +1,7 @@
 import { appWithTranslation } from 'next-i18next';
 import { Poppins, DM_Sans } from 'next/font/google';
+import Navbar from 'components/Navbar';
+import Footer from 'components/Footer';
 
 import 'leaflet/dist/leaflet.css';
 import 'styles/globals.css';
@@ -13,7 +15,7 @@ const poppins = Poppins({
     display: 'swap',
 });
 const dmSans = DM_Sans({
-    weight: ['400', '700'],
+    weight: ['400', '500', '700'],
     subsets: ['latin'],
     display: 'swap',
 });
@@ -39,8 +41,10 @@ function MyApp(props: AppProps) {
                 }
                 `}
             </style>
+            <Navbar />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />
+            <Footer />
         </>
     );
 }

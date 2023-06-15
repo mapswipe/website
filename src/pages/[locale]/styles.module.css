@@ -1,6 +1,7 @@
 .home {
     display: flex;
     flex-direction: column;
+    gap: var(--spacing-gigantic);
 
     .section {
         display: flex;
@@ -9,10 +10,11 @@
         padding: var(--spacing-medium);
         width: 100%;
         max-width: var(--width-page-max);
-        gap: var(--spacing-extra-large);
+        gap: var(--spacing-super-large);
 
         .heading {
             display: flex;
+            align-self: center;
             flex-direction: column;
             max-width: var(--width-heading-max);
             text-align: center;
@@ -71,26 +73,96 @@
                 }
             }
         }
+
+        @media screen and (max-width: 860px) {
+            min-height: 80vh;
+        }
+
+        @media screen and (max-width: 720px) {
+            min-height: unset;
+
+            .section {
+                flex-direction: column;
+
+                .right {
+                    align-self: center;
+                }
+            }
+        }
     }
 
     .mobilize {
         .content {
             display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
             gap: var(--spacing-mega-large);
 
             .pictures {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+                gap: var(--spacing-medium);
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+
+                .imageContainer {
+                    position: relative;
+
+                    .image {
+                        object-position: center right;
+                        object-fit: cover;
+                        border-radius: var(--border-radius-medium);
+                    }
+                }
+
+                .single {
+                    width: 12rem;
+                    height: 16rem;
+                }
+
+                .double {
+                    width: 12rem;
+                    height: 12rem;
+
+                    .image {
+                        object-position: center center;
+                        object-fit: cover;
+                        border-radius: var(--border-radius-medium);
+                    }
+                }
+
+                .images {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--spacing-medium);
+                }
             }
 
             .descriptionContainer {
+                display: flex;
+                flex-direction: column;
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                gap: var(--spacing-medium);
 
                 .infoBoxContainer {
                     display: flex;
+                    flex-wrap: wrap;
                     gap: var(--spacing-super-large);
+                }
+            }
 
-                    .infoBox {
-                        flex-grow: 1;
+            @media screen and (max-width: 720px) {
+                flex-direction: column;
+
+                .pictures {
+                    justify-content: center;
+                }
+
+                .descriptionContainer {
+                    .infoBoxContainer {
+                        justify-content: center;
                     }
                 }
             }

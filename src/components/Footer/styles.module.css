@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-brand);
-    height: 20rem;
+    min-height: 20rem;
     color: var(--color-text-on-dark);
 
     .heading {
@@ -12,9 +12,10 @@
     .topContainer {
         display: flex;
         flex-grow: 1;
+        flex-wrap: wrap;
         justify-content: space-between;
         margin: 0 auto;
-        padding: var(--spacing-mega-large) 0;
+        padding: var(--spacing-mega-large) var(--spacing-large);
         max-width: var(--width-page-max);
 
         .section {
@@ -32,16 +33,19 @@
 
         .socialLinks {
             display: flex;
+            flex-wrap: wrap;
             gap: var(--spacing-extra-small);
         }
     }
 
     .bottomContainer {
         background-color: var(--color-brand-dark);
+        padding: 0 var(--spacing-large);
 
         .content {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
             justify-content: space-between;
             margin: 0 auto;
             max-width: var(--width-page-max);

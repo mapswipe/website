@@ -38,7 +38,7 @@ function Footer(props: Props) {
                     >
                         {t('footer-about-us-title')}
                     </Heading>
-                    <div className={styles.description}>
+                    <div>
                         {t('footer-about-us-description')}
                     </div>
                 </div>
@@ -52,19 +52,16 @@ function Footer(props: Props) {
                     </Heading>
                     <div className={styles.links}>
                         <Link
-                            className={styles.link}
                             href="/[locale]/"
                         >
                             {t('home-link')}
                         </Link>
                         <Link
-                            className={styles.link}
                             href="/[locale]/get-involved"
                         >
                             {t('get-involved-link')}
                         </Link>
                         <Link
-                            className={styles.link}
                             href="/[locale]/data"
                         >
                             {t('data-link')}
@@ -83,30 +80,35 @@ function Footer(props: Props) {
                         <Link
                             href="https://www.facebook.com/TheMissingMaps"
                             variant="icon"
+                            target="_blank"
                         >
                             <IoLogoFacebook />
                         </Link>
                         <Link
                             href="https://twitter.com/TheMissingMaps"
                             variant="icon"
+                            target="_blank"
                         >
                             <IoLogoTwitter />
                         </Link>
                         <Link
                             href="https://www.instagram.com/themissingmaps/"
                             variant="icon"
+                            target="_blank"
                         >
                             <IoLogoInstagram />
                         </Link>
                         <Link
                             href="https://github.com/mapswipe"
                             variant="icon"
+                            target="_blank"
                         >
                             <IoLogoGithub />
                         </Link>
                         <Link
                             href="mailto:info@mapswipe.org"
                             variant="icon"
+                            target="_blank"
                         >
                             <IoMail />
                         </Link>
@@ -121,11 +123,13 @@ function Footer(props: Props) {
                     <div className={styles.rightContainer}>
                         <Link
                             href="/[locale]/privacy"
+                            target="_blank"
                         >
                             {t('privacy')}
                         </Link>
                         <Link
                             href="/[locale]/cookies"
+                            target="_blank"
                         >
                             {t('cookies')}
                         </Link>
