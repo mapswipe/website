@@ -5,7 +5,10 @@ import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Hero from 'components/Hero';
+import Heading from 'components/Heading';
+import Link from 'components/Link';
 import Section from 'components/Section';
+import Card from 'components/Card';
 import ImageWrapper from 'components/ImageWrapper';
 
 import i18nextConfig from '../../../../next-i18next.config';
@@ -41,11 +44,147 @@ function GetInvolved(props: Props) {
                 )}
             />
             <Section
-                title={t('mobilizing-volunteer')}
+                title={t('contribute-now')}
+                description={t('contribute-now-description')}
+                className={styles.individual}
+                contentClassName={styles.content}
             >
                 <div className={styles.leftContainer}>
-                    Individual
+                    <Heading
+                        size="small"
+                    >
+                        {t('individual-heading')}
+                    </Heading>
+                    <ImageWrapper
+                        className={styles.placeholder}
+                        src="/img/placeholder.png"
+                        alt="Placeholder"
+                    />
                 </div>
+                <Card
+                    title={t('looking-to-make-impact')}
+                    description={t('looking-to-make-impact-description')}
+                    actionsClassName={styles.linksContainer}
+                    actions={(
+                        <>
+                            <div className={styles.buttonsContainer}>
+                                <Link
+                                    className={styles.buttonImageContainer}
+                                    href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
+                                    target="_blank"
+                                >
+                                    <ImageWrapper
+                                        imageClassName={styles.image}
+                                        src="/img/playstore.png"
+                                        alt="Download on playstore"
+                                    />
+                                </Link>
+                                <Link
+                                    className={styles.buttonImageContainer}
+                                    href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
+                                    target="_blank"
+                                >
+                                    <ImageWrapper
+                                        imageClassName={styles.image}
+                                        src="/img/apple.png"
+                                        alt="Download on Apple Store"
+                                    />
+                                </Link>
+                            </div>
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://togglecorp.com"
+                                target="_blank"
+                            >
+                                {t('download-apk-label')}
+                            </Link>
+                        </>
+                    )}
+                />
+                <Card
+                    title={t('possess-technical-skills')}
+                    description={t('possess-techincal-skills-description')}
+                    actions={(
+                        <Link
+                            href="https://togglecorp.com"
+                            variant="buttonTransparent"
+                            target="_blank"
+                        >
+                            {t('volunteer-tech-suppport')}
+                        </Link>
+                    )}
+                />
+                <Card
+                    title={t('possess-language-skills')}
+                    description={t('possess-language-skills-description')}
+                    actions={(
+                        <Link
+                            href="https://togglecorp.com"
+                            variant="buttonTransparent"
+                            target="_blank"
+                        >
+                            {t('volunteer-tech-suppport')}
+                        </Link>
+                    )}
+                />
+                <Card
+                    title={t('part-of-community')}
+                    description={t('part-of-community-description')}
+                    actions={(
+                        <Link
+                            href="https://togglecorp.com"
+                            variant="buttonTransparent"
+                            target="_blank"
+                        >
+                            {t('join-slack-workspace')}
+                        </Link>
+                    )}
+                />
+            </Section>
+            <Section
+                className={styles.group}
+                contentClassName={styles.content}
+            >
+                <Card
+                    className={styles.card}
+                    title={t('want-to-host-mapswipe-events')}
+                    description={t('want-to-host-mapswipe-events-description')}
+                    actions={(
+                        <Link
+                            className={styles.downloadLink}
+                            href="https://togglecorp.com"
+                            target="_blank"
+                        >
+                            {t('download-toolkit')}
+                        </Link>
+                    )}
+                />
+                <div className={styles.imageContainer}>
+                    <Heading
+                        size="small"
+                    >
+                        {t('group-heading')}
+                    </Heading>
+                    <ImageWrapper
+                        className={styles.placeholder}
+                        src="/img/placeholder.png"
+                        alt="Placeholder"
+                    />
+                </div>
+                <Card
+                    className={styles.card}
+                    title={t('engage-your-csr')}
+                    description={t('engage-your-csr-description')}
+                    actions={(
+                        <Link
+                            className={styles.downloadLink}
+                            href="https://togglecorp.com"
+                            target="_blank"
+                        >
+                            {t('register-your-interest')}
+                        </Link>
+                    )}
+                />
             </Section>
         </div>
     );

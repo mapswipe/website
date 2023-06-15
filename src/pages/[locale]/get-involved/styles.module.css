@@ -17,4 +17,88 @@
         }
     }
 
+    .individual {
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-gap: var(--spacing-large);
+
+            .leftContainer {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                grid-row: auto / span 2;
+                gap: var(--spacing-medium);
+
+                .placeholder {
+                    width: 16rem;
+                    height: 20rem;
+                }
+            }
+
+            .linksContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: var(--spacing-small);
+
+                .buttonsContainer {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: var(--spacing-large);
+
+                    .buttonImageContainer {
+                        position: relative;
+                        width: 12rem;
+                        height: 4rem;
+
+                        .image {
+                            object-position: center center;
+                            object-fit: contain;
+                            border-radius: var(--border-radius-medium);
+                        }
+                    }
+                }
+
+                .downloadLink {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    .group {
+        background-color: var(--color-background-brand-light);
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-gap: var(--spacing-large);
+
+            .imageContainer {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                grid-row: auto / span 2;
+                gap: var(--spacing-medium);
+
+                .placeholder {
+                    width: 16rem;
+                    height: 20rem;
+                }
+            }
+
+            .card {
+                background-color: #fff;
+                grid-column: auto / span 2;
+            }
+        }
+    }
 }
