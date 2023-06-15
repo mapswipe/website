@@ -4,6 +4,17 @@
     padding: var(--spacing-medium);
     gap: var(--spacing-medium);
 
+    .filters {
+        display: flex;
+        gap: var(--spacing-medium);
+
+        .filter {
+            border: var(--width-separator-thin) solid var(--color-accent);
+            border-radius: var(--border-radius-small);
+            padding: var(--spacing-super-small);
+        }
+    }
+
     .stats {
         display: flex;
         gap: var(--spacing-medium);

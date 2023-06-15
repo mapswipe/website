@@ -9,7 +9,11 @@ import {
 import { useTranslation } from 'next-i18next';
 import { CircleMarkerOptions, LatLngTuple } from 'leaflet';
 
-import { ProjectStatus } from 'utils/requests/projectCentroids';
+import {
+    projectNameMapping,
+    ProjectStatus,
+    ProjectType,
+} from 'utils/common';
 
 import Link from 'components/Link';
 
@@ -18,27 +22,19 @@ const pathOptions: {
 } = {
     active: {
         radius: 8,
-        fillColor: '#ff7f00',
+        fillColor: '#F69143',
         color: 'black',
         weight: 1,
-        opacity: 0.2,
-        fillOpacity: 0.8,
+        opacity: 0.4,
+        fillOpacity: 0.9,
     },
     finished: {
         radius: 5,
-        fillColor: '#1f78b4',
+        fillColor: '#0060C9',
         color: 'black',
         weight: 1,
-        opacity: 0.2,
-        fillOpacity: 0.8,
-    },
-    archived: {
-        radius: 5,
-        fillColor: '#1f78b4',
-        color: 'black',
-        weight: 1,
-        opacity: 0.2,
-        fillOpacity: 0.8,
+        opacity: 0.4,
+        fillOpacity: 0.9,
     },
 };
 
@@ -52,11 +48,11 @@ const sortValue: {
 
 const defaultPathOptions: CircleMarkerOptions = {
     radius: 5,
-    fillColor: '#b15928',
+    fillColor: '#A1A1A1',
     color: 'black',
     weight: 1,
-    opacity: 0.2,
-    fillOpacity: 0.8,
+    opacity: 0.4,
+    fillOpacity: 0.9,
 };
 
 interface Props {
@@ -64,11 +60,13 @@ interface Props {
     children?: React.ReactNode;
     projects: {
         project_id: string;
+        project_type: ProjectType,
         name: string;
         status: ProjectStatus;
         progress: number | null;
         number_of_users: number | null;
         coordinates: [number, number] | null;
+        day: number | null;
     }[];
 }
 
@@ -113,8 +111,10 @@ function ProjectMap(props: Props) {
                             {project.status}
                         </Link>
                         <div>{t('project-card-status-text', { status: project.status })}</div>
+                        <div>{t('project-card-type', { type: projectNameMapping[project.project_type] })}</div>
                         <div>{t('project-card-progress-text', { progress: project.progress })}</div>
                         <div>{t('project-card-contributors-text', { contributors: project.number_of_users })}</div>
+                        <div>{t('project-card-last-update', { date: project.day })}</div>
                     </Popup>
                 </CircleMarker>
             ))}

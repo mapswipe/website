@@ -1,8 +1,13 @@
 {
   "project-card-status-text": "Status: {{status}}",
+  "project-card-type": "Type: {{type}}",
   "project-card-progress-text": "Progress: {{progress}}",
   "project-card-contributors-text": "Contributors: {{contributors}}",
+  "project-card-last-update": "Last Update: {{date, datetime}}",
   "total-area-card-text": "{{area, number}} km2 mapped",
   "finished-project-card-text": "{{projects, number}} completed",
-  "project-pagination-text": "{{remainingProjects}} projects hidden"
+  "search-label": "Search",
+  "project-status": "Select Project Status",
+  "project-type": "Select Project Type",
+  "see-more-button": "See More"
 }

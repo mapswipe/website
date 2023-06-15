@@ -1,5 +1,4 @@
-export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
-export type ProjectType = 1 | 2 | 3 | 4;
+import { ProjectStatus, ProjectType } from 'utils/common';
 
 function compareArray<T extends Array<any>>(foo: T, bar: T): boolean {
     if (foo.length !== bar.length) {
@@ -38,12 +37,15 @@ export interface ProjectGeometryResponse {
             project_details: string;
             look_for: string;
             project_type: ProjectType;
-            tile_server_name: string;
+            tile_server_names: string;
             status: ProjectStatus;
             area_sqkm: number | undefined;
+            centroid: string;
             progress: number | undefined;
             number_of_users: number | undefined;
-            centroid: string;
+            number_of_results: number | undefined;
+            number_of_results_progress: number | undefined;
+            day: string | undefined;
         },
         geometry: GeoJSON.FeatureCollection<GeoJSON.Polygon>,
     }[],
@@ -59,16 +61,13 @@ const getProjectGeometries = memoize(async () => {
             if (!feature.geometry) {
                 return false;
             }
-            if (
-                feature.properties.status === 'private_active'
-                || feature.properties.status === 'private_inactive'
-                || feature.properties.status === 'private_finished'
-                || feature.properties.status === 'tutorial'
-            ) {
+            if (feature.properties.project_type > 3) {
                 return false;
             }
-
-            return true;
+            return (
+                feature.properties.status === 'finished'
+                || feature.properties.status === 'active'
+            );
         }),
     };
 

@@ -3,13 +3,15 @@ import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
-import getProjectCentroids, { ProjectStatus } from 'utils/requests/projectCentroids';
-import getProjectGeometries from 'utils/requests/projectGeometries';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Papa from 'papaparse';
 import { remark } from 'remark';
 import matter from 'gray-matter';
 import html from 'remark-html';
+
+import getProjectCentroids from 'utils/requests/projectCentroids';
+import getProjectGeometries from 'utils/requests/projectGeometries';
+import { ProjectStatus } from 'utils/common';
 
 import i18nextConfig from '../../../../next-i18next.config';
 

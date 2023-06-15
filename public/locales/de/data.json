@@ -1,8 +1,13 @@
 {
   "project-card-status-text": "",
+  "project-card-type": "",
   "project-card-progress-text": "",
   "project-card-contributors-text": "",
+  "project-card-last-update": "",
   "total-area-card-text": "",
   "finished-project-card-text": "",
-  "project-pagination-text": ""
+  "search-label": "",
+  "project-status": "",
+  "project-type": "",
+  "see-more-button": ""
 }
