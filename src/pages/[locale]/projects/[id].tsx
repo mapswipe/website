@@ -7,8 +7,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { remark } from 'remark';
 import matter from 'gray-matter';
 import html from 'remark-html';
+import { IoDownload } from 'react-icons/io5';
 
 import Hero from 'components/Hero';
+import Card from 'components/Card';
 import HtmlOutput from 'components/HtmlOutput';
 import Section from 'components/Section';
 import Heading from 'components/Heading';
@@ -70,9 +72,34 @@ function Project(props: Props) {
         description,
         status,
         projectGeoJSON,
+        urls,
     } = props;
 
     const { t } = useTranslation('project');
+    const dataHeadingMap: Record<DownloadType, string> = {
+        aggregated_results: t('aggregated-results-title'),
+        aggregated_results_with_geometry: t('aggregated-results-with-geometry-title'),
+        hot_tasking_manager_geometries: t('hot-tasking-manager-geometries-title'),
+        moderate_to_high_agreement_yes_maybe_geometries: t('moderate-to-high-agreement-yes-maybe-geometries-title'),
+        groups: t('groups-title'),
+        history: t('history-title'),
+        results: t('results-title'),
+        tasks: t('tasks-title'),
+        users: t('users-title'),
+        area_of_interest: t('area-of-interest-title'),
+    };
+    const dataDescriptionMap: Record<DownloadType, string> = {
+        aggregated_results: t('aggregated-results-description'),
+        aggregated_results_with_geometry: t('aggregated-results-with-geometry-description'),
+        hot_tasking_manager_geometries: t('hot-tasking-manager-geometries-description'),
+        moderate_to_high_agreement_yes_maybe_geometries: t('moderate-to-high-agreement-yes-maybe-geometries-description'),
+        groups: t('groups-description'),
+        history: t('history-description'),
+        results: t('results-description'),
+        tasks: t('tasks-description'),
+        users: t('users-description'),
+        area_of_interest: t('area-of-interest-description'),
+    };
 
     return (
         <div className={_cs(styles.project, className)}>
@@ -133,6 +160,31 @@ function Project(props: Props) {
                         </div>
                     )}
                 </div>
+            </Section>
+            <Section
+                title={t('data-section-heading')}
+                description={t('data-section-description')}
+                className={styles.downloadSection}
+                contentClassName={styles.urlList}
+            >
+                {urls.map((url) => (
+                    <Card
+                        heading={dataHeadingMap[url.name]}
+                        description={dataDescriptionMap[url.name]}
+                        footerActions={(
+                            <a href={url.url}>
+                                <IoDownload className={styles.downloadIcon} />
+                            </a>
+                        )}
+                    >
+                        <div>
+                            {t('download-type', { type: url.type })}
+                        </div>
+                        <div>
+                            {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                        </div>
+                    </Card>
+                ))}
             </Section>
         </div>
     );

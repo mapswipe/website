@@ -60,4 +60,17 @@
             }
         }
     }
+
+    .downloadSection {
+        .urlList {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+            .downloadIcon {
+                color: var(--color-accent);
+                font-size: var(--font-size-super-large);
+            }
+        }
+    }
 }
