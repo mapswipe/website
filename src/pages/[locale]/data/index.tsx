@@ -11,9 +11,15 @@ import {
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { IoDownload } from 'react-icons/io5';
 
-import Card from 'components/Card';
-import Link from 'components/Link';
 import Button from 'components/Button';
+import Card from 'components/Card';
+import Hero from 'components/Hero';
+import ImageWrapper from 'components/ImageWrapper';
+import Link from 'components/Link';
+import ListItem from 'components/ListItem';
+import RawInput from 'components/RawInput';
+import Section from 'components/Section';
+import SelectInput from 'components/SelectInput';
 import {
     rankedSearchOnList,
     projectNameMapping,
@@ -23,11 +29,6 @@ import {
     ProjectType,
 } from 'utils/common';
 import getProjectCentroids from 'utils/requests/projectCentroids';
-import RawInput from 'components/RawInput';
-import SelectInput from 'components/SelectInput';
-import Section from 'components/Section';
-import ImageWrapper from 'components/ImageWrapper';
-import Hero from 'components/Hero';
 import useDebouncedValue from 'hooks/useDebouncedValue';
 
 import i18nextConfig from '../../../../next-i18next.config';
@@ -243,6 +244,86 @@ function Data(props: Props) {
                     />
                 )}
             />
+            <Section
+                title={t('community-stats-section-heading')}
+                description={t('community-stats-section-description')}
+                actions={(
+                    <Link
+                        href="https://community.mapswipe.org"
+                        variant="button"
+                    >
+                        {t('community-dashboard-link-label')}
+                    </Link>
+                )}
+            />
+            <Section
+                title={t('type-section-heading')}
+                description={t('type-section-description')}
+                withAlternativeBackground
+                className={styles.typeSection}
+                contentClassName={styles.typeList}
+            >
+                <Card
+                    coverImageUrl="/img/placeholder.png"
+                    heading={t('type-find-title')}
+                    footerIcons={(
+                        <Button>
+                            {t('type-find-action-label')}
+                        </Button>
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-find-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-find-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-find-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/placeholder.png"
+                    heading={t('type-compare-title')}
+                    footerIcons={(
+                        <Button>
+                            {t('type-compare-action-label')}
+                        </Button>
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-compare-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-compare-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-compare-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/placeholder.png"
+                    heading={t('type-validate-title')}
+                    footerIcons={(
+                        <Button>
+                            {t('type-validate-action-label')}
+                        </Button>
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-validate-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-validate-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-validate-key-point-3')}
+                    />
+                </Card>
+            </Section>
             <Section
                 title={t('explore-section-heading')}
                 className={styles.exploreSection}

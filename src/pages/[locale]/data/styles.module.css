@@ -7,8 +7,22 @@
 
     .illustration {
         position: relative;
-        width: 20rem;
+        width: 30rem;
         height: 40rem;
+    }
+
+    .typeSection {
+        .typeList {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+
+            .keyPointList {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-super-small);
+            }
+        }
     }
 
     .exploreSection {
@@ -79,12 +93,6 @@
                     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
                     grid-gap: var(--spacing-extra-small);
                 }
-            }
-
-            .actions {
-                display: flex;
-                justify-content: center;
-                padding: var(--spacing-large);
             }
         }
     }

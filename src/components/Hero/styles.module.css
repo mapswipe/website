@@ -15,7 +15,6 @@
 
     .section {
         display: flex;
-        justify-content: space-between;
         margin: 0 auto;
         padding: var(--spacing-medium);
         width: 100%;
@@ -42,6 +41,12 @@
                 flex-wrap: wrap;
                 gap: var(--spacing-medium);
             }
+        }
+
+        .right {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
         }
     }
 
