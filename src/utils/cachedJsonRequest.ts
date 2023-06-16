@@ -57,7 +57,8 @@ async function fetchJson<T>(url: string, key: string) {
     }
 
     try {
-        if (lastUpdate > cachedLastUpdate) {
+        // one day stale cache is okay
+        if (lastUpdate - cachedLastUpdate > 1000 * 60 * 60 * 24) {
             throw Error('Cache expired');
         }
 
