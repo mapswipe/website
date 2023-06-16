@@ -169,6 +169,7 @@ function Project(props: Props) {
             >
                 {urls.map((url) => (
                     <Card
+                        key={url.type}
                         heading={dataHeadingMap[url.name]}
                         description={dataDescriptionMap[url.name]}
                         footerActions={(
@@ -328,7 +329,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
             history: historyJSON,
-            urls: urlResponses,
+            urls: urlResponses.filter((url) => url.ok),
         },
     };
 };
