@@ -9,6 +9,10 @@ import { remark } from 'remark';
 import matter from 'gray-matter';
 import html from 'remark-html';
 
+import Hero from 'components/Hero';
+import HtmlOutput from 'components/HtmlOutput';
+import Section from 'components/Section';
+
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
 import { ProjectStatus } from 'utils/common';
@@ -45,25 +49,41 @@ function Project(props: Props) {
     const { t } = useTranslation('project');
 
     return (
-        <div
-            className={_cs(styles.project, className)}
-        >
-            <h1>
-                {name}
-            </h1>
-            <div dangerouslySetInnerHTML={{ __html: description }} />
-            <div className={styles.stats}>
-                <div>{t('project-status-text', { status })}</div>
-                <div>{t('project-progress-text', { progress: totalProgress })}</div>
-                <div>{t('project-total-area-text', { area: totalArea })}</div>
-                <div>{t('project-contributors-text', { contributors: totalContributors })}</div>
-            </div>
-            {projectGeoJSON && (
-                <DynamicProjectMap
-                    className={styles.projectsMap}
-                    geoJSON={projectGeoJSON}
+        <div className={_cs(styles.project, className)}>
+            <Hero
+                title={name}
+            />
+            <Section
+                title={t('overview-section-title')}
+                contentClassName={styles.overviewContent}
+            >
+                <HtmlOutput
+                    className={styles.description}
+                    content={description}
                 />
-            )}
+                {projectGeoJSON && (
+                    <div className={styles.mapContainer}>
+                        <DynamicProjectMap
+                            className={styles.projectsMap}
+                            geoJSON={projectGeoJSON}
+                        />
+                    </div>
+                )}
+            </Section>
+            <div className={styles.stats}>
+                <div>
+                    {t('project-status-text', { status })}
+                </div>
+                <div>
+                    {t('project-progress-text', { progress: totalProgress })}
+                </div>
+                <div>
+                    {t('project-total-area-text', { area: totalArea })}
+                </div>
+                <div>
+                    {t('project-contributors-text', { contributors: totalContributors })}
+                </div>
+            </div>
         </div>
     );
 }

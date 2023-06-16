@@ -23,10 +23,18 @@ function Hero(props: Props) {
     } = props;
 
     return (
-        <div className={_cs(className, styles.hero)}>
+        <div
+            className={_cs(
+                className,
+                styles.hero,
+                !rightContent && styles.withoutRightContent,
+            )}
+        >
             <div className={styles.background} />
-            <section className={styles.section}>
-                <div className={styles.left}>
+            <div className={styles.section}>
+                <div
+                    className={styles.left}
+                >
                     <Heading
                         size="extraLarge"
                         className={styles.heading}
@@ -43,13 +51,14 @@ function Hero(props: Props) {
                             {actions}
                         </div>
                     )}
+                    <div />
                 </div>
                 {rightContent && (
                     <div className={styles.right}>
                         {rightContent}
                     </div>
                 )}
-            </section>
+            </div>
         </div>
     );
 }

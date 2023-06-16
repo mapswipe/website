@@ -44,12 +44,11 @@
             }
 
             .mapContainer {
-                /* NOTE: this is background tile color of leaflet */
-                background-color: #d4dadc;
+                background-color: var(--color-background-leaflet);
                 height: 32rem;
 
                 .projectsMap {
-                    background-color: #d6dcda;
+                    background-color: var(--color-background-leaflet);
                     width: 100%;
                     height: 100%;
                 }

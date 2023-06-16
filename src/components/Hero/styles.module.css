@@ -1,8 +1,11 @@
 .hero {
+    --hero-min-height: 40rem;
+    display: flex;
     position: relative;
-    min-height: 40rem;
-    color: var(--color-text-on-dark);
+    flex-direction: column;
     z-index: 0;
+    min-height: var(--hero-min-height);
+    color: var(--color-text-on-dark);
 
     .background {
         position: absolute;
@@ -15,6 +18,8 @@
 
     .section {
         display: flex;
+        flex-grow: 1;
+        justify-content: center;
         margin: 0 auto;
         padding: var(--spacing-medium);
         width: 100%;
@@ -45,8 +50,19 @@
 
         .right {
             display: flex;
-            justify-content: center;
             flex-grow: 1;
+            justify-content: center;
+        }
+    }
+
+    &.withoutRightContent {
+        --hero-min-height: 24rem;
+
+        .section {
+            .left {
+                max-width: 50rem;
+                text-align: center;
+            }
         }
     }
 
