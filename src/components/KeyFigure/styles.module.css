@@ -6,6 +6,7 @@
     gap: var(--spacing-extra-small);
     border: var(--width-separator-thin) solid var(--color-separator);
     padding: var(--spacing-extra-large);
+    border-radius: 0.5rem;
 
     .label {
         font-size: var(--font-size-large);

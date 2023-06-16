@@ -67,7 +67,11 @@
     }
 
     @media screen and (max-width: 860px) {
-        min-height: 80vh;
+        --hero-min-height: 80vh;
+
+        &.withoutRightContent {
+            --hero-min-height: 24rem;
+        }
     }
 
     @media screen and (max-width: 720px) {

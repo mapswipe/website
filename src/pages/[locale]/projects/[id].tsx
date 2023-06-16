@@ -2,7 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
-import { _cs } from '@togglecorp/fujs';
+import { _cs, bound } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { remark } from 'remark';
 import matter from 'gray-matter';
@@ -16,10 +16,17 @@ import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
 
+import useSizeTracking from 'hooks/useSizeTracking';
+
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
-import getProjectHistory from 'utils/requests/projectHistory';
+import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
 import { ProjectStatus } from 'utils/common';
+import {
+    getBounds,
+    getPathData,
+    getScaleFunction,
+} from 'utils/chart';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
@@ -59,6 +66,7 @@ interface Props extends SSRConfig {
     description: string;
     status: ProjectStatus;
     projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
+    projectHistory: ProjectHistory[];
     urls: UrlInfo[];
 }
 
@@ -73,7 +81,50 @@ function Project(props: Props) {
         status,
         projectGeoJSON,
         urls,
+        projectHistory,
     } = props;
+
+    const svgRef = React.useRef<SVGSVGElement>(null);
+    const svgBounds = useSizeTracking(svgRef);
+
+    const [
+        chartPoints,
+        chartPointsForArea,
+    ] = React.useMemo(
+        () => {
+            const timestamps = projectHistory.map((ph) => ph.timestamp);
+
+            const timeBounds = getBounds(timestamps);
+
+            const xScale = getScaleFunction(
+                timeBounds,
+                { min: 0, max: svgBounds.width },
+                { start: 0, end: 0 },
+            );
+
+            const yScale = getScaleFunction(
+                { min: 0, max: 100 },
+                { min: 0, max: svgBounds.height },
+                { start: 0, end: 0 },
+                true,
+            );
+
+            const points = projectHistory.map((hist) => ({
+                x: xScale(hist.timestamp),
+                y: yScale(bound(100 * hist.progress, 0, 100)),
+            }));
+
+            return [
+                points,
+                [
+                    { x: xScale(timeBounds.min), y: svgBounds.height },
+                    ...points,
+                    { x: xScale(timeBounds.max), y: svgBounds.height },
+                ],
+            ];
+        },
+        [projectHistory, svgBounds],
+    );
 
     const { t } = useTranslation('project');
     const dataHeadingMap: Record<DownloadType, string> = {
@@ -110,10 +161,41 @@ function Project(props: Props) {
                 className={styles.statsSection}
                 contentClassName={styles.content}
             >
+                <div className={styles.chartContainer}>
+                    <svg
+                        className={styles.timelineChart}
+                        ref={svgRef}
+                    >
+                        <defs>
+                            <linearGradient
+                                id="path-gradient"
+                                x1="0%"
+                                y1="0%"
+                                x2="0%"
+                                y2="100%"
+                            >
+                                <stop
+                                    className={styles.stopStart}
+                                    offset="0%"
+                                />
+                                <stop
+                                    className={styles.stopEnd}
+                                    offset="100%"
+                                />
+                            </linearGradient>
+                        </defs>
+                        <path
+                            className={styles.areaPath}
+                            fill="url(#path-gradient)"
+                            d={getPathData(chartPointsForArea)}
+                        />
+                        <path
+                            className={styles.path}
+                            d={getPathData(chartPoints)}
+                        />
+                    </svg>
+                </div>
                 <div className={styles.stats}>
-                    <KeyFigure
-                        value={status}
-                    />
                     <KeyFigure
                         value={`${totalProgress}%`}
                         description={t('project-progress-text')}
@@ -133,9 +215,9 @@ function Project(props: Props) {
                         value={totalContributors}
                         description={t('project-contributors-text')}
                     />
-                </div>
-                <div className={styles.chartContainer}>
-                    Chart
+                    <KeyFigure
+                        value={status}
+                    />
                 </div>
             </Section>
             <Section className={styles.overviewSection}>
@@ -328,7 +410,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             description: contentHtml,
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
-            history: historyJSON,
+            projectHistory: historyJSON,
             urls: urlResponses.filter((url) => url.ok),
         },
     };
