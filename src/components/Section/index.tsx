@@ -8,21 +8,25 @@ import styles from './styles.module.css';
 interface Props {
     className?: string;
     contentClassName?: string;
+    containerClassName?: string;
     title?: React.ReactNode;
     description?: React.ReactNode;
     children?: React.ReactNode;
     actions?: React.ReactNode;
     withAlternativeBackground?: boolean;
+    smallHeading?: boolean;
 }
 
 function Section(props: Props) {
     const {
         className,
         contentClassName,
+        containerClassName,
         title,
         description,
         children,
         actions,
+        smallHeading,
         withAlternativeBackground,
     } = props;
 
@@ -34,12 +38,12 @@ function Section(props: Props) {
                 className,
             )}
         >
-            <div className={styles.container}>
+            <div className={_cs(styles.container, containerClassName)}>
                 <div className={styles.headingContainer}>
                     {title && (
                         <Heading
                             className={styles.heading}
-                            size="large"
+                            size={smallHeading ? 'medium' : 'large'}
                         >
                             {title}
                         </Heading>

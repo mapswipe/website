@@ -34,6 +34,10 @@
                 }
             }
 
+            .bottom {
+                grid-column: span 2 / auto;
+            }
+
             .linksContainer {
                 display: flex;
                 flex-direction: column;

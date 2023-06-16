@@ -44,15 +44,14 @@ function GetInvolved(props: Props) {
             <Section
                 title={t('contribute-now')}
                 description={t('contribute-now-description')}
+            />
+            <Section
+                title={t('individual-heading')}
                 className={styles.individual}
                 contentClassName={styles.content}
+                smallHeading
             >
                 <div className={styles.leftContainer}>
-                    <Heading
-                        size="small"
-                    >
-                        {t('individual-heading')}
-                    </Heading>
                     <ImageWrapper
                         className={styles.placeholder}
                         src="/img/placeholder.png"
@@ -113,6 +112,7 @@ function GetInvolved(props: Props) {
                     )}
                 />
                 <CenteredCard
+                    className={styles.bottom}
                     title={t('possess-language-skills')}
                     description={t('possess-language-skills-description')}
                     actions={(
@@ -125,23 +125,13 @@ function GetInvolved(props: Props) {
                         </Link>
                     )}
                 />
-                <CenteredCard
-                    title={t('part-of-community')}
-                    description={t('part-of-community-description')}
-                    actions={(
-                        <Link
-                            href="https://togglecorp.com"
-                            variant="button"
-                            target="_blank"
-                        >
-                            {t('join-slack-workspace')}
-                        </Link>
-                    )}
-                />
             </Section>
             <Section
+                title={t('group-heading')}
                 className={styles.group}
                 contentClassName={styles.content}
+                smallHeading
+                withAlternativeBackground
             >
                 <div className={styles.cards}>
                     <CenteredCard
@@ -176,11 +166,6 @@ function GetInvolved(props: Props) {
                     />
                 </div>
                 <div className={styles.imageContainer}>
-                    <Heading
-                        size="small"
-                    >
-                        {t('group-heading')}
-                    </Heading>
                     <ImageWrapper
                         className={styles.placeholder}
                         src="/img/placeholder.png"
@@ -189,15 +174,12 @@ function GetInvolved(props: Props) {
                 </div>
             </Section>
             <Section
+                title={t('organization-heading')}
                 className={styles.organizational}
                 contentClassName={styles.content}
+                smallHeading
             >
                 <div className={styles.imageContainer}>
-                    <Heading
-                        size="small"
-                    >
-                        {t('organization-heading')}
-                    </Heading>
                     <ImageWrapper
                         className={styles.placeholder}
                         src="/img/placeholder.png"
@@ -221,8 +203,11 @@ function GetInvolved(props: Props) {
                 />
             </Section>
             <Section
+                title={t('donate-heading')}
                 className={styles.donate}
                 contentClassName={styles.content}
+                smallHeading
+                withAlternativeBackground
             >
                 <CenteredCard
                     className={styles.card}
@@ -240,11 +225,6 @@ function GetInvolved(props: Props) {
                     )}
                 />
                 <div className={styles.imageContainer}>
-                    <Heading
-                        size="small"
-                    >
-                        {t('donate-heading')}
-                    </Heading>
                     <ImageWrapper
                         className={styles.placeholder}
                         src="/img/placeholder.png"

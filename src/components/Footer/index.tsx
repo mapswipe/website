@@ -125,13 +125,11 @@ function Footer(props: Props) {
                     <div className={styles.rightContainer}>
                         <Link
                             href="/[locale]/privacy"
-                            target="_blank"
                         >
                             {t('privacy')}
                         </Link>
                         <Link
                             href="/[locale]/cookies"
-                            target="_blank"
                         >
                             {t('cookies')}
                         </Link>

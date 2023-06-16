@@ -1,4 +1,5 @@
 {
+  "overview-section-title": "",
   "project-status-text": "Status: {{status}}",
   "project-progress-text": "Progress: {{progress}}",
   "project-total-area-text": "Total Area: {{area, number}}",

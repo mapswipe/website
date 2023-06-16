@@ -9,6 +9,7 @@
     --color-heading-on-dark: #ffffff;
     --color-text-on-dark: rgba(255, 255, 255, 0.8);
     --color-brand: #0F193F;
+    --color-text-brand: var(--color-brand);
     --color-accent: rgba(170, 190, 93, 1);
     --color-accent-light: rgba(170, 190, 93, 0.48);
     --color-brand-dark: #020e3b;

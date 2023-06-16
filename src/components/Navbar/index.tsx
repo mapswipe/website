@@ -35,13 +35,16 @@ function Navbar(props: Props) {
     return (
         <div className={_cs(styles.navbar, className)}>
             <div className={styles.navbarContent}>
-                <div className={styles.logo}>
+                <Link
+                    className={styles.logo}
+                    href="/[locale]/"
+                >
                     <Image
                         src="/logo.svg"
                         alt="Mapswipe"
                         layout="fill"
                     />
-                </div>
+                </Link>
                 <div
                     className={_cs(
                         styles.routes,

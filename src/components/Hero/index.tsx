@@ -11,6 +11,7 @@ interface Props {
     description?: React.ReactNode;
     actions?: React.ReactNode;
     rightContent?: React.ReactNode;
+    sectionClassName?: string;
 }
 
 function Hero(props: Props) {
@@ -20,6 +21,7 @@ function Hero(props: Props) {
         description,
         actions,
         rightContent,
+        sectionClassName,
     } = props;
 
     return (
@@ -31,10 +33,8 @@ function Hero(props: Props) {
             )}
         >
             <div className={styles.background} />
-            <div className={styles.section}>
-                <div
-                    className={styles.left}
-                >
+            <div className={_cs(styles.section, sectionClassName)}>
+                <div className={styles.left}>
                     <Heading
                         size="extraLarge"
                         className={styles.heading}
