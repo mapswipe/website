@@ -6,9 +6,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Hero from 'components/Hero';
 import Heading from 'components/Heading';
+import Button from 'components/Button';
 import Link from 'components/Link';
 import Section from 'components/Section';
-import Card from 'components/Card';
+import CenteredCard from 'components/CenteredCard';
 import ImageWrapper from 'components/ImageWrapper';
 
 import i18nextConfig from '../../../../next-i18next.config';
@@ -27,17 +28,14 @@ function GetInvolved(props: Props) {
     const { t } = useTranslation('get-involved');
 
     return (
-        <div
-            className={_cs(styles.getInvolved, className)}
-        >
+        <div className={_cs(styles.getInvolved, className)}>
             <Hero
                 className={styles.hero}
                 title={t('hero-title')}
                 description={t('hero-description')}
                 rightContent={(
                     <ImageWrapper
-                        className={styles.screenshot}
-                        imageClassName={styles.image}
+                        className={styles.illustration}
                         src="/img/placeholder.png"
                         alt="Placeholder"
                     />
@@ -61,7 +59,7 @@ function GetInvolved(props: Props) {
                         alt="Placeholder"
                     />
                 </div>
-                <Card
+                <CenteredCard
                     title={t('looking-to-make-impact')}
                     description={t('looking-to-make-impact-description')}
                     actionsClassName={styles.linksContainer}
@@ -101,39 +99,39 @@ function GetInvolved(props: Props) {
                         </>
                     )}
                 />
-                <Card
+                <CenteredCard
                     title={t('possess-technical-skills')}
                     description={t('possess-techincal-skills-description')}
                     actions={(
                         <Link
                             href="https://togglecorp.com"
-                            variant="buttonTransparent"
+                            variant="button"
                             target="_blank"
                         >
                             {t('volunteer-tech-suppport')}
                         </Link>
                     )}
                 />
-                <Card
+                <CenteredCard
                     title={t('possess-language-skills')}
                     description={t('possess-language-skills-description')}
                     actions={(
                         <Link
                             href="https://togglecorp.com"
-                            variant="buttonTransparent"
+                            variant="button"
                             target="_blank"
                         >
                             {t('volunteer-tech-suppport')}
                         </Link>
                     )}
                 />
-                <Card
+                <CenteredCard
                     title={t('part-of-community')}
                     description={t('part-of-community-description')}
                     actions={(
                         <Link
                             href="https://togglecorp.com"
-                            variant="buttonTransparent"
+                            variant="button"
                             target="_blank"
                         >
                             {t('join-slack-workspace')}
@@ -145,20 +143,38 @@ function GetInvolved(props: Props) {
                 className={styles.group}
                 contentClassName={styles.content}
             >
-                <Card
-                    className={styles.card}
-                    title={t('want-to-host-mapswipe-events')}
-                    description={t('want-to-host-mapswipe-events-description')}
-                    actions={(
-                        <Link
-                            className={styles.downloadLink}
-                            href="https://togglecorp.com"
-                            target="_blank"
-                        >
-                            {t('download-toolkit')}
-                        </Link>
-                    )}
-                />
+                <div className={styles.cards}>
+                    <CenteredCard
+                        className={styles.card}
+                        title={t('want-to-host-mapswipe-events')}
+                        description={t('want-to-host-mapswipe-events-description')}
+                        actions={(
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://togglecorp.com"
+                                variant="button"
+                                target="_blank"
+                            >
+                                {t('download-toolkit')}
+                            </Link>
+                        )}
+                    />
+                    <CenteredCard
+                        className={styles.card}
+                        title={t('engage-your-csr')}
+                        description={t('engage-your-csr-description')}
+                        actions={(
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://togglecorp.com"
+                                variant="button"
+                                target="_blank"
+                            >
+                                {t('register-your-interest')}
+                            </Link>
+                        )}
+                    />
+                </div>
                 <div className={styles.imageContainer}>
                     <Heading
                         size="small"
@@ -171,21 +187,80 @@ function GetInvolved(props: Props) {
                         alt="Placeholder"
                     />
                 </div>
-                <Card
+            </Section>
+            <Section
+                className={styles.organizational}
+                contentClassName={styles.content}
+            >
+                <div className={styles.imageContainer}>
+                    <Heading
+                        size="small"
+                    >
+                        {t('organization-heading')}
+                    </Heading>
+                    <ImageWrapper
+                        className={styles.placeholder}
+                        src="/img/placeholder.png"
+                        alt="Placeholder"
+                    />
+                </div>
+                <CenteredCard
                     className={styles.card}
-                    title={t('engage-your-csr')}
-                    description={t('engage-your-csr-description')}
+                    title={t('humanitarian-or-nonprofit')}
+                    description={t('humanitarian-or-nonprofit-description')}
                     actions={(
                         <Link
                             className={styles.downloadLink}
                             href="https://togglecorp.com"
+                            variant="button"
                             target="_blank"
                         >
-                            {t('register-your-interest')}
+                            {t('tell-us-more')}
                         </Link>
                     )}
                 />
             </Section>
+            <Section
+                className={styles.donate}
+                contentClassName={styles.content}
+            >
+                <CenteredCard
+                    className={styles.card}
+                    title={t('interested-in-supporting')}
+                    description={t('interested-in-supporting-description')}
+                    actions={(
+                        <Link
+                            className={styles.downloadLink}
+                            href="https://togglecorp.com"
+                            variant="button"
+                            target="_blank"
+                        >
+                            {t('donate-now')}
+                        </Link>
+                    )}
+                />
+                <div className={styles.imageContainer}>
+                    <Heading
+                        size="small"
+                    >
+                        {t('donate-heading')}
+                    </Heading>
+                    <ImageWrapper
+                        className={styles.placeholder}
+                        src="/img/placeholder.png"
+                        alt="Placeholder"
+                    />
+                </div>
+            </Section>
+            <Section
+                title={t('contact-section-heading')}
+                description={t('contact-section-description')}
+                actions={(
+                    <Button>
+                        {t('contact-link-label')}
+                    </Button>
+                )}
+            />
         </div>
     );
 }

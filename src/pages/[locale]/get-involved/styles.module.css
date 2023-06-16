@@ -5,23 +5,18 @@
     gap: var(--spacing-gigantic);
 
     .hero {
-        .screenshot {
+        .illustration {
             position: relative;
-            width: 20rem;
+            width: 30rem;
             height: 40rem;
-
-            .image {
-                object-position: center right;
-                object-fit: contain;
-            }
         }
     }
 
     .individual {
         .content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            grid-template-rows: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(24rem, 1fr));
             grid-gap: var(--spacing-large);
 
             .leftContainer {
@@ -34,8 +29,8 @@
                 gap: var(--spacing-medium);
 
                 .placeholder {
-                    width: 16rem;
-                    height: 20rem;
+                    width: 24rem;
+                    height: 28rem;
                 }
             }
 
@@ -53,7 +48,7 @@
 
                     .buttonImageContainer {
                         position: relative;
-                        width: 12rem;
+                        width: 10rem;
                         height: 4rem;
 
                         .image {
@@ -75,29 +70,128 @@
         background-color: var(--color-background-brand-light);
 
         .content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            grid-template-rows: repeat(auto-fit, minmax(20rem, 1fr));
-            grid-gap: var(--spacing-large);
+            display: flex;
+            gap: var(--spacing-large);
 
             .imageContainer {
                 display: flex;
                 align-items: center;
+                flex-basis: 40rem;
                 flex-direction: column;
+                flex-shrink: 0;
                 justify-content: center;
                 text-align: center;
-                grid-row: auto / span 2;
                 gap: var(--spacing-medium);
 
                 .placeholder {
-                    width: 16rem;
-                    height: 20rem;
+                    width: 24rem;
+                    height: 28rem;
+                }
+            }
+
+            .cards {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                gap: var(--spacing-large);
+
+                .card {
+                    background-color: #fff;
+                    max-width: 60rem;
+                }
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-direction: column;
+
+                .imageContainer {
+                    order: 1;
+                }
+
+                .cards {
+                    order: 2;
+                }
+            }
+        }
+    }
+
+    .organizational {
+        .content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-large);
+
+            .imageContainer {
+                display: flex;
+                align-items: center;
+                flex-basis: 40rem;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: var(--spacing-medium);
+
+                .placeholder {
+                    width: 24rem;
+                    height: 28rem;
                 }
             }
 
             .card {
+                flex-grow: 1;
                 background-color: #fff;
-                grid-column: auto / span 2;
+                padding: var(--spacing-gigantic);
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-wrap: wrap;
+
+                .imageContainer {
+                    flex-basis: 100%;
+                }
+            }
+        }
+    }
+
+    .donate {
+        background-color: var(--color-background-brand-light);
+
+        .content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-large);
+
+            .imageContainer {
+                display: flex;
+                align-items: center;
+                flex-basis: 40rem;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: var(--spacing-medium);
+
+                .placeholder {
+                    width: 24rem;
+                    height: 28rem;
+                }
+            }
+
+            .card {
+                flex-grow: 1;
+                background-color: #fff;
+                padding: var(--spacing-gigantic);
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-wrap: wrap;
+
+                .imageContainer {
+                    flex-basis: 100%;
+                    order: 1;
+                }
+
+                .card {
+                    order: 2;
+                }
             }
         }
     }

@@ -18,8 +18,19 @@
   "want-to-host-mapswipe-events": "",
   "want-to-host-mapswipe-events-description": "",
   "download-toolkit": "",
-  "group-heading": "",
   "engage-your-csr": "",
   "engage-your-csr-description": "",
-  "register-your-interest": ""
+  "register-your-interest": "",
+  "group-heading": "",
+  "organization-heading": "",
+  "humanitarian-or-nonprofit": "",
+  "humanitarian-or-nonprofit-description": "",
+  "tell-us-more": "",
+  "interested-in-supporting": "",
+  "interested-in-supporting-description": "",
+  "donate-now": "",
+  "donate-heading": "",
+  "contact-section-heading": "",
+  "contact-section-description": "",
+  "contact-link-label": ""
 }
