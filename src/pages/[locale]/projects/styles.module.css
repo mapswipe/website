@@ -6,23 +6,26 @@
     .statsSection {
         .content {
             display: flex;
+            flex-wrap: wrap;
             align-items: flex-start;
+            gap: var(--spacing-extra-large);
 
             .stats {
-                flex-grow: 1;
                 display: grid;
+                flex-grow: 1;
+                flex-basis: 30rem;
                 grid-gap: var(--spacing-large);
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
             }
 
             .chartContainer {
                 display: flex;
                 align-items: center;
+                flex-basis: 40rem;
+                flex-grow: 1;
                 justify-content: center;
                 background-color: var(--color-background-accent-light);
-                flex-basis: 40rem;
                 height: 20rem;
-                flex-shrink: 0;
             }
         }
     }
@@ -56,13 +59,5 @@
                 }
             }
         }
-    }
-
-    .stats {
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-        gap: var(--spacing-medium);
-        font-size: var(--font-size-extra-large);
     }
 }

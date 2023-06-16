@@ -1,0 +1,22 @@
+.keyFigure {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--spacing-extra-small);
+    border: var(--width-separator-thin) solid var(--color-separator);
+    padding: var(--spacing-extra-large);
+
+    .label {
+        font-size: var(--font-size-large);
+    }
+
+    .value {
+        font-size: var(--font-size-extra-large);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .description {
+        font-size: var(--font-size-large);
+    }
+}

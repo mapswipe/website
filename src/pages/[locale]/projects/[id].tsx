@@ -11,6 +11,8 @@ import html from 'remark-html';
 import Hero from 'components/Hero';
 import HtmlOutput from 'components/HtmlOutput';
 import Section from 'components/Section';
+import Heading from 'components/Heading';
+import KeyFigure from 'components/KeyFigure';
 
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
@@ -20,7 +22,6 @@ import { ProjectStatus } from 'utils/common';
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
-import Heading from 'components/Heading';
 
 type DownloadType = (
     'aggregated_results'
@@ -83,18 +84,28 @@ function Project(props: Props) {
                 contentClassName={styles.content}
             >
                 <div className={styles.stats}>
-                    <div>
-                        {t('project-status-text', { status })}
-                    </div>
-                    <div>
-                        {t('project-progress-text', { progress: totalProgress })}
-                    </div>
-                    <div>
-                        {t('project-total-area-text', { area: totalArea })}
-                    </div>
-                    <div>
-                        {t('project-contributors-text', { contributors: totalContributors })}
-                    </div>
+                    <KeyFigure
+                        value={status}
+                    />
+                    <KeyFigure
+                        value={`${totalProgress}%`}
+                        description={t('project-progress-text')}
+                    />
+                    <KeyFigure
+                        value={totalArea}
+                        description={(
+                            <span>
+                                km
+                                <sup>
+                                    2
+                                </sup>
+                            </span>
+                        )}
+                    />
+                    <KeyFigure
+                        value={totalContributors}
+                        description={t('project-contributors-text')}
+                    />
                 </div>
                 <div className={styles.chartContainer}>
                     Chart
