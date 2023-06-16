@@ -1,4 +1,5 @@
 import { ProjectStatus, ProjectType } from 'utils/common';
+import cachedRequest from 'utils/cachedJsonRequest';
 
 function compareArray<T extends Array<any>>(foo: T, bar: T): boolean {
     if (foo.length !== bar.length) {
@@ -55,8 +56,10 @@ export interface ProjectResponse {
 }
 
 const getProjectCentroids = memoize(async () => {
-    const projectsResponse = await fetch('https://apps.mapswipe.org/api/projects/projects_centroid.geojson');
-    const projects = await projectsResponse.json() as ProjectResponse;
+    const projects = await cachedRequest<ProjectResponse>(
+        'https://apps.mapswipe.org/api/projects/projects_centroid.geojson',
+        'projects_centroid.geojson',
+    );
 
     const filteredProjects = {
         ...projects,
