@@ -35,6 +35,22 @@ import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
 
+type DownloadType = (
+    'projects_overview'
+    | 'projects_with_geometry'
+    | 'projects_with_centroid'
+);
+
+type DownloadFileType = 'geojson' | 'csv';
+
+interface UrlInfo {
+    name: DownloadType;
+    type: DownloadFileType;
+    url: string;
+    ok: boolean;
+    size: number;
+}
+
 const DynamicProjectsMap = dynamic(() => import('components/ProjectsMap'), { ssr: false });
 
 export const getI18nPaths = () => (
@@ -132,17 +148,6 @@ function labelSelector<K extends { label: string }>(option: K) {
 }
 
 const PAGE_SIZE = 9;
-
-type DownloadType = 'projects_overview' | 'projects_with_geometry' | 'projects_with_centroid';
-type DownloadFileType = 'geojson' | 'csv';
-
-interface UrlInfo {
-    name: DownloadType;
-    type: DownloadFileType;
-    url: string;
-    ok: boolean;
-    size: number;
-}
 
 interface Props extends SSRConfig {
     className?: string;

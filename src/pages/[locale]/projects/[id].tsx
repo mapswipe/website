@@ -4,7 +4,6 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Papa from 'papaparse';
 import { remark } from 'remark';
 import matter from 'gray-matter';
 import html from 'remark-html';
@@ -15,11 +14,35 @@ import Section from 'components/Section';
 
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
+import getProjectHistory from 'utils/requests/projectHistory';
 import { ProjectStatus } from 'utils/common';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
+
+type DownloadType = (
+    'aggregated_results'
+    | 'aggregated_results_with_geometry'
+    | 'hot_tasking_manager_geometries'
+    | 'moderate_to_high_agreement_yes_maybe_geometries'
+    | 'groups'
+    | 'history'
+    | 'results'
+    | 'tasks'
+    | 'users'
+    | 'area_of_interest'
+);
+
+type DownloadFileType = 'geojson' | 'csv';
+
+interface UrlInfo {
+    name: DownloadType;
+    type: DownloadFileType;
+    url: string;
+    ok: boolean;
+    size: number;
+}
 
 const DynamicProjectMap = dynamic(() => import('components/ProjectMap'), { ssr: false });
 
@@ -32,6 +55,7 @@ interface Props extends SSRConfig {
     description: string;
     status: ProjectStatus;
     projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
+    urls: UrlInfo[];
 }
 
 function Project(props: Props) {
@@ -137,22 +161,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         (feature) => feature.properties.project_id === projectId,
     )?.geometry;
 
-    const historyRequest = await fetch(`https://apps.mapswipe.org/api/history/history_${projectId}.csv`);
-    const history = await historyRequest.text();
-
-    const historyJSON = await new Promise((resolve, reject) => {
-        Papa.parse(history, {
-            delimiter: ',',
-            newline: '\n',
-            header: true,
-            complete: (results: any) => {
-                resolve(results);
-            },
-            error: (error: any) => {
-                reject(error);
-            },
-        });
-    });
+    const historyJSON = await getProjectHistory(project.properties.project_id);
 
     const matterResult = matter(project.properties.project_details);
 
@@ -161,31 +170,69 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         .process(matterResult.content.replace(/\\n/g, '\n'));
     const contentHtml = processedContent.toString();
 
-    /*
-    // TODO: do we need to do this?
-    const urls = [
-        `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}.csv.gz`,
-        `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
-        `https://apps.mapswipe.org/api/hot_tm/hot_tm_${projectId}.geojson`,
-        `https://apps.mapswipe.org/api/yes_maybe/yes_maybe_${projectId}.geojson`,
-        `https://apps.mapswipe.org/api/groups/groups_${projectId}.csv.gz`,
-        `https://apps.mapswipe.org/api/history/history_${projectId}.csv`,
-        `https://apps.mapswipe.org/api/results/results_${projectId}.csv.gz`,
-        `https://apps.mapswipe.org/api/tasks/tasks_${projectId}.csv.gz`,
-        `https://apps.mapswipe.org/api/users/users_${projectId}.csv.gz`,
-        `https://apps.mapswipe.org/api/project_geometries/project_geom_${projectId}.geojson`,
+    const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
+        {
+            name: 'aggregated_results',
+            url: `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}.csv.gz`,
+            type: 'csv',
+        },
+        {
+            name: 'aggregated_results_with_geometry',
+            url: `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
+            type: 'geojson',
+        },
+        {
+            name: 'hot_tasking_manager_geometries',
+            url: `https://apps.mapswipe.org/api/hot_tm/hot_tm_${projectId}.geojson`,
+            type: 'geojson',
+        },
+        {
+            name: 'moderate_to_high_agreement_yes_maybe_geometries',
+            url: `https://apps.mapswipe.org/api/yes_maybe/yes_maybe_${projectId}.geojson`,
+            type: 'geojson',
+        },
+        {
+            name: 'groups',
+            url: `https://apps.mapswipe.org/api/groups/groups_${projectId}.csv.gz`,
+            type: 'geojson',
+        },
+        {
+            name: 'history',
+            url: `https://apps.mapswipe.org/api/history/history_${projectId}.csv`,
+            type: 'geojson',
+        },
+        {
+            name: 'results',
+            url: `https://apps.mapswipe.org/api/results/results_${projectId}.csv.gz`,
+            type: 'geojson',
+        },
+        {
+            name: 'tasks',
+            url: `https://apps.mapswipe.org/api/tasks/tasks_${projectId}.csv.gz`,
+            type: 'geojson',
+        },
+        {
+            name: 'users',
+            url: `https://apps.mapswipe.org/api/users/users_${projectId}.csv.gz`,
+            type: 'geojson',
+        },
+        {
+            name: 'area_of_interest',
+            url: `https://apps.mapswipe.org/api/project_geometries/project_geom_${projectId}.geojson`,
+            type: 'geojson',
+        },
     ];
 
-    const urlResponses = urls.map(async (url) => {
-        const res = await fetch(url, { method: 'HEAD' });
+    const urlResponsePromises = urls.map(async (url) => {
+        const res = await fetch(url.url, { method: 'HEAD' });
         return {
-            url,
+            ...url,
             ok: res.ok,
+            size: Number(res.headers.get('content-length') ?? '0'),
         };
     });
 
-    const urlResponsesFinal = await Promise.all(urlResponses);
-    */
+    const urlResponses = await Promise.all(urlResponsePromises);
 
     return {
         props: {
@@ -203,7 +250,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
             history: historyJSON,
-            // urls: urlResponsesFinal,
+            urls: urlResponses,
         },
     };
 };

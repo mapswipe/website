@@ -1,5 +1,6 @@
 import util from 'util';
 import fs from 'fs';
+import Papa from 'papaparse';
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -15,7 +16,7 @@ async function timeIt<R>(key: string, header: string, func: (() => Promise<R>)) 
     return resp;
 }
 
-async function fetchJson<T>(url: string, key: string) {
+async function fetchCsv<T>(url: string, key: string) {
     const cacheFileName = `${location}/${key}`;
     const cacheMetaFileName = `${location}/${key}.meta`;
 
@@ -44,7 +45,7 @@ async function fetchJson<T>(url: string, key: string) {
     }
 
     try {
-        // XXX: one day stale cache is okay
+        // one day stale cache is okay
         if (lastUpdate - cachedLastUpdate > 1000 * 60 * 60 * 24) {
             throw Error('Cache expired');
         }
@@ -62,7 +63,23 @@ async function fetchJson<T>(url: string, key: string) {
             `get data from ${url}`,
             async () => {
                 const response = await fetch(url);
-                return response.json();
+                const responseText = await response.text();
+
+                const value = await new Promise((resolve, reject) => {
+                    Papa.parse(responseText, {
+                        delimiter: ',',
+                        newline: '\n',
+                        header: true,
+                        complete: (results: any) => {
+                            resolve(results);
+                        },
+                        error: (error: any) => {
+                            reject(error);
+                        },
+                    });
+                });
+
+                return (value as any).data as T;
             },
         );
 
@@ -82,4 +99,4 @@ async function fetchJson<T>(url: string, key: string) {
     }
 }
 
-export default fetchJson;
+export default fetchCsv;
