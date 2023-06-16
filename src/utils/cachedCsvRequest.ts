@@ -2,19 +2,13 @@ import util from 'util';
 import fs from 'fs';
 import Papa from 'papaparse';
 
+import { timeIt } from 'utils/common';
+
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 
+// FIXME: move this to utils
 const location = 'cache';
-
-async function timeIt<R>(key: string, header: string, func: (() => Promise<R>)) {
-    console.log(`START: ${key}: ${header}`);
-    const startTime = new Date().getTime();
-    const resp = await func();
-    const endTime = new Date().getTime();
-    console.log(`END: ${key}: Took ${endTime - startTime}ms`);
-    return resp;
-}
 
 async function fetchCsv<T>(url: string, key: string) {
     const cacheFileName = `${location}/${key}`;

@@ -7,11 +7,11 @@ const readFile = util.promisify(fs.readFile);
 const location = 'cache';
 
 async function timeIt<R>(key: string, header: string, func: (() => Promise<R>)) {
-    console.log(`START: ${key}: ${header}`);
-    const startTime = new Date().getTime();
+    // console.log(`START: ${key}: ${header}`);
+    // const startTime = new Date().getTime();
     const resp = await func();
-    const endTime = new Date().getTime();
-    console.log(`END: ${key}: Took ${endTime - startTime}ms`);
+    // const endTime = new Date().getTime();
+    // console.log(`END: ${key}: Took ${endTime - startTime}ms`);
     return resp;
 }
 

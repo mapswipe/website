@@ -27,7 +27,7 @@ function ProjectMap(props: Props) {
         (layer: LayerEvent) => {
             const bounds = layer.target?.getBounds();
             if (bounds) {
-                mapRef.current?.fitBounds(bounds, { padding: [20, 20] });
+                mapRef.current?.fitBounds(bounds, { padding: [12, 12] });
             }
         },
         [],
@@ -47,6 +47,13 @@ function ProjectMap(props: Props) {
                 data={geoJSON}
                 eventHandlers={{
                     add: handleGeoJSONAdd,
+                }}
+                pathOptions={{
+                    fillColor: '#AABE5D',
+                    color: '#AABE5D',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.1,
                 }}
             />
             <GestureHandler />

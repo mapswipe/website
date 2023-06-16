@@ -57,7 +57,6 @@ function SelectInput<
                 styles.selectInput,
                 className,
             )}
-            // FIXME: do we even need to pass name?
             name={isDefined(name) ? String(name) : undefined}
             onChange={handleChange}
             value={value ?? undefined}

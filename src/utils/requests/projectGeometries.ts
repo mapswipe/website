@@ -1,30 +1,5 @@
-import { ProjectStatus, ProjectType } from 'utils/common';
+import { memoize, ProjectStatus, ProjectType } from 'utils/common';
 import cachedRequest from 'utils/cachedJsonRequest';
-
-function compareArray<T extends Array<any>>(foo: T, bar: T): boolean {
-    if (foo.length !== bar.length) {
-        return false;
-    }
-    for (let i = 0; i < foo.length; i += 1) {
-        if (foo[i] !== bar[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
-    let lastArgs: A;
-    let lastResponse: R;
-    return (...newArgs: A): R => {
-        if (lastArgs && compareArray(lastArgs, newArgs)) {
-            return lastResponse;
-        }
-        lastResponse = func(...newArgs);
-        lastArgs = newArgs;
-        return lastResponse;
-    };
-}
 
 export interface ProjectGeometryResponse {
     type: 'FeatureCollection',
