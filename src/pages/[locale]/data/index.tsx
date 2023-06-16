@@ -61,6 +61,16 @@ export const getI18nPaths = () => (
     }))
 );
 
+export interface BubbleTypeOption {
+    key: 'area' | 'contributors';
+    label: string;
+}
+
+export const bubbleTypes: BubbleTypeOption[] = [
+    { key: 'area', label: 'Mapped Area' },
+    { key: 'contributors', label: 'Contributors' },
+];
+
 export const getStaticPaths = () => ({
     fallback: false,
     paths: getI18nPaths(),
@@ -91,16 +101,17 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             : null,
     })).sort((foo, bar) => ((bar.day ?? 0) - (foo.day ?? 0)));
 
-    /*
-    const contributors = miniProjects.map((proj) => proj.number_of_users).filter(isDefined);
+    const contributors = miniProjects
+        .map((proj) => proj.number_of_users)
+        .filter(isDefined);
+    const minContributors = Math.min(...contributors);
+    const maxContributors = Math.max(...contributors);
 
-    const min = Math.min(...contributors);
-    const max = Math.max(...contributors);
-    const avg = sum(contributors) / contributors.length;
-    const median = contributors[Math.round(contributors.length / 2)];
-
-    console.warn(min, max, avg, median);
-    */
+    const areas = miniProjects
+        .map((proj) => proj.area_sqkm)
+        .filter(isDefined);
+    const minArea = Math.min(...areas);
+    const maxArea = Math.max(...areas);
 
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
@@ -136,6 +147,10 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             ...translations,
             projects: miniProjects,
             urls: urlResponses,
+            minArea,
+            maxArea,
+            minContributors,
+            maxContributors,
         },
     };
 };
@@ -151,6 +166,10 @@ const PAGE_SIZE = 9;
 
 interface Props extends SSRConfig {
     className?: string;
+    minArea: number,
+    maxArea: number,
+    minContributors: number,
+    maxContributors: number,
     projects: {
         project_id: string;
         project_type: ProjectType,
@@ -170,12 +189,17 @@ function Data(props: Props) {
         className,
         projects,
         urls,
+        minArea,
+        maxArea,
+        minContributors,
+        maxContributors,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
     const [searchText, setSearchText] = useState<string | undefined>();
     const [projectType, setProjectType] = useState<string | undefined>();
     const [projectStatus, setProjectStatus] = useState<string | undefined>();
+    const [bubble, setBubble] = useState<string | undefined>();
 
     const debouncedSearchText = useDebouncedValue(searchText);
 
@@ -235,6 +259,21 @@ function Data(props: Props) {
         projects_with_geometry: t('download-projects-with-geometry-description'),
         projects_with_centroid: t('download-projects-with-centroid-description'),
     };
+
+    const radiusSelector = useCallback(
+        (project: { area_sqkm: number | null, number_of_users: number | null }) => {
+            if (bubble === 'area') {
+                return 4 + 16 * (((project.area_sqkm ?? minArea - minArea))
+                                 / (maxArea - minArea));
+            }
+            if (bubble === 'contributors') {
+                return 4 + 16 * (((project.number_of_users ?? 0) - minContributors)
+                                 / (maxContributors - minContributors));
+            }
+            return 4;
+        },
+        [bubble, maxArea, minArea, maxContributors, minContributors],
+    );
 
     return (
         <div className={_cs(styles.data, className)}>
@@ -370,11 +409,22 @@ function Data(props: Props) {
                         labelSelector={labelSelector}
                         onChange={setProjectType}
                     />
+                    <SelectInput
+                        className={styles.filter}
+                        placeholder={t('bubble-type') ?? undefined}
+                        name={undefined}
+                        value={bubble}
+                        options={bubbleTypes}
+                        keySelector={keySelector}
+                        labelSelector={labelSelector}
+                        onChange={setBubble}
+                    />
                 </div>
                 <div className={styles.mapContainer}>
                     <DynamicProjectsMap
                         className={styles.projectsMap}
                         projects={visibleProjects}
+                        radiusSelector={radiusSelector}
                     />
                 </div>
                 <div className={styles.stats}>
@@ -423,6 +473,9 @@ function Data(props: Props) {
                                 </div>
                                 <div>
                                     {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                </div>
+                                <div>
+                                    {t('project-card-area', { area: project.area_sqkm })}
                                 </div>
                             </div>
                         </Card>

@@ -22,19 +22,17 @@ const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
 } = {
     active: {
-        radius: 8,
         fillColor: '#F69143',
-        color: 'black',
+        color: '#0F193F',
         weight: 1,
-        opacity: 0.4,
+        opacity: 0.2,
         fillOpacity: 0.9,
     },
     finished: {
-        radius: 5,
-        fillColor: '#0060C9',
-        color: 'black',
+        fillColor: '#AABE5D',
+        color: '#0F193F',
         weight: 1,
-        opacity: 0.4,
+        opacity: 0.2,
         fillOpacity: 0.9,
     },
 };
@@ -48,27 +46,30 @@ const sortValue: {
 };
 
 const defaultPathOptions: CircleMarkerOptions = {
-    radius: 5,
-    fillColor: '#A1A1A1',
-    color: 'black',
+    fillColor: '#0F193F',
+    color: '#0F193F',
     weight: 1,
-    opacity: 0.4,
+    opacity: 0.3,
     fillOpacity: 0.9,
 };
+
+interface Project {
+    project_id: string;
+    project_type: ProjectType,
+    name: string;
+    status: ProjectStatus;
+    progress: number | null;
+    number_of_users: number | null;
+    coordinates: [number, number] | null;
+    day: number | null;
+    area_sqkm: number | null;
+}
 
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    projects: {
-        project_id: string;
-        project_type: ProjectType,
-        name: string;
-        status: ProjectStatus;
-        progress: number | null;
-        number_of_users: number | null;
-        coordinates: [number, number] | null;
-        day: number | null;
-    }[];
+    projects: Project[];
+    radiusSelector: (project: Project) => number;
 }
 
 function ProjectMap(props: Props) {
@@ -76,6 +77,7 @@ function ProjectMap(props: Props) {
         className,
         children,
         projects,
+        radiusSelector,
     } = props;
 
     const { t } = useTranslation('data');
@@ -101,7 +103,7 @@ function ProjectMap(props: Props) {
                 <CircleMarker
                     key={project.project_id}
                     center={project.coordinates}
-                    radius={10}
+                    radius={radiusSelector(project)}
                     pathOptions={pathOptions[project.status] ?? defaultPathOptions}
                 >
                     <Popup>
@@ -111,11 +113,12 @@ function ProjectMap(props: Props) {
                             {project.name}
                             {project.status}
                         </Link>
-                        <div>{t('project-card-status-text', { status: project.status })}</div>
                         <div>{t('project-card-type', { type: projectNameMapping[project.project_type] })}</div>
+                        <div>{t('project-card-status-text', { status: project.status })}</div>
                         <div>{t('project-card-progress-text', { progress: project.progress })}</div>
-                        <div>{t('project-card-contributors-text', { contributors: project.number_of_users })}</div>
                         <div>{t('project-card-last-update', { date: project.day })}</div>
+                        <div>{t('project-card-contributors-text', { contributors: project.number_of_users })}</div>
+                        <div>{t('project-card-area', { area: project.area_sqkm })}</div>
                     </Popup>
                 </CircleMarker>
             ))}
