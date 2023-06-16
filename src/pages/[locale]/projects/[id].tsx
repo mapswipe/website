@@ -20,6 +20,7 @@ import { ProjectStatus } from 'utils/common';
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
+import Heading from 'components/Heading';
 
 type DownloadType = (
     'aggregated_results'
@@ -78,36 +79,50 @@ function Project(props: Props) {
                 title={name}
             />
             <Section
-                title={t('overview-section-title')}
-                contentClassName={styles.overviewContent}
+                className={styles.statsSection}
+                contentClassName={styles.content}
             >
-                <HtmlOutput
-                    className={styles.description}
-                    content={description}
-                />
-                {projectGeoJSON && (
-                    <div className={styles.mapContainer}>
-                        <DynamicProjectMap
-                            className={styles.projectsMap}
-                            geoJSON={projectGeoJSON}
-                        />
+                <div className={styles.stats}>
+                    <div>
+                        {t('project-status-text', { status })}
                     </div>
-                )}
+                    <div>
+                        {t('project-progress-text', { progress: totalProgress })}
+                    </div>
+                    <div>
+                        {t('project-total-area-text', { area: totalArea })}
+                    </div>
+                    <div>
+                        {t('project-contributors-text', { contributors: totalContributors })}
+                    </div>
+                </div>
+                <div className={styles.chartContainer}>
+                    Chart
+                </div>
             </Section>
-            <div className={styles.stats}>
-                <div>
-                    {t('project-status-text', { status })}
+            <Section className={styles.overviewSection}>
+                <div className={styles.overviewContent}>
+                    <div className={styles.content}>
+                        <Heading size="large">
+                            {t('overview-section-title')}
+                        </Heading>
+                        <div className={styles.description}>
+                            <HtmlOutput
+                                className={styles.description}
+                                content={description}
+                            />
+                        </div>
+                    </div>
+                    {projectGeoJSON && (
+                        <div className={styles.mapContainer}>
+                            <DynamicProjectMap
+                                className={styles.projectsMap}
+                                geoJSON={projectGeoJSON}
+                            />
+                        </div>
+                    )}
                 </div>
-                <div>
-                    {t('project-progress-text', { progress: totalProgress })}
-                </div>
-                <div>
-                    {t('project-total-area-text', { area: totalArea })}
-                </div>
-                <div>
-                    {t('project-contributors-text', { contributors: totalContributors })}
-                </div>
-            </div>
+            </Section>
         </div>
     );
 }
