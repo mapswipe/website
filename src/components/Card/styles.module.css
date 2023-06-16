@@ -3,8 +3,12 @@
     flex-direction: column;
     border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: 0.5rem;
-    box-shadow: 0 2pt 10pt -4pt rgba(0, 0, 0, 0.3);
     background-color: var(--color-foreground);
+    transition: .3s box-shadow ease-in-out;
+
+    &:hover {
+        box-shadow: var(--box-shadow-medium);
+    }
 
     .coverImageWrapper {
         width: 100%;
@@ -21,7 +25,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding: var(--spacing-large);
+        padding: var(--spacing-extra-large);
         gap: var(--spacing-medium);
 
         .header {

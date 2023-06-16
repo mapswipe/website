@@ -3,11 +3,16 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    transition: .3s box-shadow ease-in-out;
+    border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--border-radius-medium);
-    box-shadow: var(--box-shadow-medium);
     padding: var(--spacing-extra-large) var(--spacing-large);
     text-align: center;
     gap: var(--spacing-large);
+
+    &:hover {
+        box-shadow: var(--box-shadow-medium);
+    }
 
     .heading {
         max-width: 32rem;

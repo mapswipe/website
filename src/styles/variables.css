@@ -22,7 +22,7 @@
     /* NOTE: this is background tile color of leaflet */
     --color-background-leaflet: #d4dadc;
 
-    --color-separator: rgba(0, 0, 0, 0.05);
+    --color-separator: rgba(0, 0, 0, 0.1);
 
     --width-page-max: 86rem;
     --width-heading-max: 50rem;
@@ -37,7 +37,7 @@
     --border-radius-medium: 0.5rem;
     --border-radius-large: 1rem;
 
-    --box-shadow-medium: 0px 2px 8px rgba(15, 25, 63, 0.06);
+    --box-shadow-medium: 0 2pt 10pt -4pt rgba(0, 0, 0, 0.3);
 
     /* Font size */
     --font-size-super-small: calc(var(--font-size-base) / (var(--multiplier) * var(--multiplier) * var(--multiplier)));

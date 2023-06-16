@@ -79,7 +79,7 @@
                 .infoBoxContainer {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: var(--spacing-super-large);
+                    gap: var(--spacing-medium);
                 }
             }
 
@@ -111,10 +111,15 @@
                 align-items: center;
                 flex-direction: column;
                 justify-content: center;
-                box-shadow: var(--box-shadow-medium);
+                border: var(--width-separator-thin) solid var(--color-separator);
+                border-radius: 0.5rem;
                 padding: var(--spacing-large);
                 max-width: 20rem;
                 gap: var(--spacing-medium);
+
+                &:hover {
+                    box-shadow: var(--box-shadow-medium);
+                }
 
                 .icon {
                     color: var(--color-accent);
