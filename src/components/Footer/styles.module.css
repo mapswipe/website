@@ -18,6 +18,7 @@
         margin: 0 auto;
         padding: var(--spacing-mega-large) var(--spacing-large);
         max-width: var(--width-page-max);
+        gap: var(--spacing-mega-large);
 
         .section {
             display: flex;

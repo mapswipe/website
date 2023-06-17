@@ -52,7 +52,7 @@ function GetInvolved(props: Props) {
             >
                 <div className={styles.leftContainer}>
                     <ImageWrapper
-                        className={styles.placeholder}
+                        className={styles.illustration}
                         src="/img/placeholder.png"
                         alt="Placeholder"
                     />
@@ -166,7 +166,7 @@ function GetInvolved(props: Props) {
                 </div>
                 <div className={styles.imageContainer}>
                     <ImageWrapper
-                        className={styles.placeholder}
+                        className={styles.illustration}
                         src="/img/placeholder.png"
                         alt="Placeholder"
                     />
@@ -180,7 +180,7 @@ function GetInvolved(props: Props) {
             >
                 <div className={styles.imageContainer}>
                     <ImageWrapper
-                        className={styles.placeholder}
+                        className={styles.illustration}
                         src="/img/placeholder.png"
                         alt="Placeholder"
                     />
@@ -225,7 +225,7 @@ function GetInvolved(props: Props) {
                 />
                 <div className={styles.imageContainer}>
                     <ImageWrapper
-                        className={styles.placeholder}
+                        className={styles.illustration}
                         src="/img/placeholder.png"
                         alt="Placeholder"
                     />
