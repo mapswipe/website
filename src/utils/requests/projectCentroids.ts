@@ -31,8 +31,10 @@ export interface ProjectResponse {
 }
 
 const getProjectCentroids = memoize(async () => {
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
+
     const projects = await cachedRequest<ProjectResponse>(
-        'https://apps.mapswipe.org/api/projects/projects_centroid.geojson',
+        `${mapswipeApi}projects/projects_centroid.geojson`,
         'projects_centroid.geojson',
     );
 

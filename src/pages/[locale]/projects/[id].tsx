@@ -331,55 +331,57 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         .process(matterResult.content.replace(/\\n/g, '\n'));
     const contentHtml = processedContent.toString();
 
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
+
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
             name: 'aggregated_results',
-            url: `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}.csv.gz`,
+            url: `${mapswipeApi}agg_results/agg_results_${projectId}.csv.gz`,
             type: 'csv',
         },
         {
             name: 'aggregated_results_with_geometry',
-            url: `https://apps.mapswipe.org/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
+            url: `${mapswipeApi}agg_results/agg_results_${projectId}_geom.geojson.gz`,
             type: 'geojson',
         },
         {
             name: 'hot_tasking_manager_geometries',
-            url: `https://apps.mapswipe.org/api/hot_tm/hot_tm_${projectId}.geojson`,
+            url: `${mapswipeApi}hot_tm/hot_tm_${projectId}.geojson`,
             type: 'geojson',
         },
         {
             name: 'moderate_to_high_agreement_yes_maybe_geometries',
-            url: `https://apps.mapswipe.org/api/yes_maybe/yes_maybe_${projectId}.geojson`,
+            url: `${mapswipeApi}yes_maybe/yes_maybe_${projectId}.geojson`,
             type: 'geojson',
         },
         {
             name: 'groups',
-            url: `https://apps.mapswipe.org/api/groups/groups_${projectId}.csv.gz`,
+            url: `${mapswipeApi}groups/groups_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'history',
-            url: `https://apps.mapswipe.org/api/history/history_${projectId}.csv`,
+            url: `${mapswipeApi}history/history_${projectId}.csv`,
             type: 'geojson',
         },
         {
             name: 'results',
-            url: `https://apps.mapswipe.org/api/results/results_${projectId}.csv.gz`,
+            url: `${mapswipeApi}results/results_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'tasks',
-            url: `https://apps.mapswipe.org/api/tasks/tasks_${projectId}.csv.gz`,
+            url: `${mapswipeApi}tasks/tasks_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'users',
-            url: `https://apps.mapswipe.org/api/users/users_${projectId}.csv.gz`,
+            url: `${mapswipeApi}users/users_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'area_of_interest',
-            url: `https://apps.mapswipe.org/api/project_geometries/project_geom_${projectId}.geojson`,
+            url: `${mapswipeApi}project_geometries/project_geom_${projectId}.geojson`,
             type: 'geojson',
         },
     ];

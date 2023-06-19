@@ -99,6 +99,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         day: feature.properties?.day
             ? new Date(feature.properties.day).getTime()
             : null,
+        image: feature.properties?.image ?? null,
     })).sort((foo, bar) => ((bar.day ?? 0) - (foo.day ?? 0)));
 
     const contributors = miniProjects
@@ -113,20 +114,22 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const minArea = Math.min(...areas);
     const maxArea = Math.max(...areas);
 
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
+
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
             name: 'projects_overview',
-            url: 'https://apps.mapswipe.org/api/projects/projects.csv',
+            url: `${mapswipeApi}projects/projects.csv`,
             type: 'csv',
         },
         {
             name: 'projects_with_geometry',
-            url: 'https://apps.mapswipe.org/api/projects/projects_geom.geojson',
+            url: `${mapswipeApi}projects/projects_geom.geojson`,
             type: 'geojson',
         },
         {
             name: 'projects_with_centroid',
-            url: 'https://apps.mapswipe.org/api/projects/projects_centroid.geojson',
+            url: `${mapswipeApi}projects/projects_centroid.geojson`,
             type: 'geojson',
         },
     ];
@@ -171,6 +174,7 @@ interface Props extends SSRConfig {
     minContributors: number,
     maxContributors: number,
     projects: {
+        image: string | null;
         project_id: string;
         project_type: ProjectType,
         name: string;
@@ -440,6 +444,7 @@ function Data(props: Props) {
                         <Card
                             // className={styles.project}
                             key={project.project_id}
+                            coverImageUrl={project.image}
                             heading={(
                                 <Link
                                     href={`/[locale]/projects/${project.project_id}`}

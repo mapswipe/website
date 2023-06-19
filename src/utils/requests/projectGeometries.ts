@@ -28,8 +28,9 @@ export interface ProjectGeometryResponse {
 }
 
 const getProjectGeometries = memoize(async () => {
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
     const projects = await cachedRequest<ProjectGeometryResponse>(
-        'https://apps.mapswipe.org/api/projects/projects_geom.geojson',
+        `${mapswipeApi}projects/projects_geom.geojson`,
         'projects_geom.geojson',
     );
 

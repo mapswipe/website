@@ -29,10 +29,11 @@ function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is Proj
 }
 
 const getProjectHistory = async (projectId: string) => {
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
     const histories = await cachedRequest<(
     ProjectHistoryRaw | { day: '' })[]
     >(
-        `https://apps.mapswipe.org/api/history/history_${projectId}.csv`,
+        `${mapswipeApi}history/history_${projectId}.csv`,
         `history_${projectId}.csv.json`,
         );
 
