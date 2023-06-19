@@ -113,7 +113,6 @@ function GetInvolved(props: Props) {
         <div className={_cs(styles.privacy, className)}>
             <Hero
                 className={styles.hero}
-                sectionClassName={styles.section}
                 title={t('privacy-hero-title')}
             />
             <Section

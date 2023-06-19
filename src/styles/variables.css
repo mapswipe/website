@@ -61,4 +61,8 @@
     --spacing-mega-large: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
     --spacing-gigantic: calc(var(--spacing-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
     --spacing-enourmous: calc(var(--spacing-gigantic) * var(--multiplier));
+
+    --width-scrollbar: 1rem;
+    --radius-scrollbar-border: 0.25rem;
+    --color-foreground-scrollbar: #cccccc;
 }

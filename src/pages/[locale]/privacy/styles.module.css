@@ -4,10 +4,6 @@
 
     .hero {
         min-height: 24rem;
-
-        .section {
-            justify-content: center;
-        }
     }
 
     .content {

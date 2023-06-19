@@ -9,6 +9,14 @@
         position: relative;
         width: 30rem;
         height: 40rem;
+
+        @media screen and (max-width: 840px) {
+            width: 24rem;
+        }
+
+        @media screen and (max-width: 720px) {
+            width: 80vw;
+        }
     }
 
     .typeSection {
