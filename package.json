@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "@togglecorp/fujs": "^2.0.0",
+        "@types/react-dom": "^18.2.6",
         "gray-matter": "^4.0.3",
         "i18next": "^22.5.1",
         "leaflet": "^1.9.4",

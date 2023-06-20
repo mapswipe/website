@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
 import Image from 'next/image';
 import { MdMenu } from 'react-icons/md';
+import { IoEarthSharp } from 'react-icons/io5';
 
 import Link from 'components/Link';
 import Button from 'components/Button';
 import LanguageSwitcher from 'components/LanguageSwitcher';
+import DropdownMenu from 'components/DropdownMenu';
 import useBooleanState from 'hooks/useBooleanState';
 
 import i18nextConfig from '../../../next-i18next.config';
@@ -71,16 +73,28 @@ function Navbar(props: Props) {
                     </Link>
                 </div>
                 <div className={styles.rightContainer}>
-                    <div className={styles.languageSwitcherList}>
+                    <DropdownMenu
+                        label={(
+                            <>
+                                <IoEarthSharp />
+                                <span className={styles.currentLocale}>
+                                    {currentLocale}
+                                </span>
+                            </>
+                        )}
+                        className={styles.dropdown}
+                        dropdownContainerClassName={styles.languageList}
+                    >
                         {i18nextConfig.i18n.locales.map((locale) => (
                             <LanguageSwitcher
-                                className={styles.languageSwitcher}
                                 key={locale}
                                 locale={locale}
                                 active={locale === currentLocale}
+                                className={styles.language}
+                                activeClassName={styles.activeLanguage}
                             />
                         ))}
-                    </div>
+                    </DropdownMenu>
                     <Button
                         className={_cs(
                             styles.menu,

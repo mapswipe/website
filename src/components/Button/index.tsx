@@ -12,23 +12,26 @@ const variantToStyleMap: {
     border: styles.border,
     icon: styles.icon,
 };
-interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+export interface Props extends React.HTMLProps<HTMLButtonElement> {
     className?: string;
     variant?: Variant;
+    elementRef?: React.Ref<HTMLButtonElement>;
 }
 
 // NOTE: this does not support relative buttons
 
-function Button(props: ButtonProps) {
+function Button(props: Props) {
     const {
         children,
         variant = 'primary',
         className,
+        elementRef,
         ...rest
     } = props;
 
     return (
         <button
+            ref={elementRef}
             className={_cs(
                 className,
                 styles.button,

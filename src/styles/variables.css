@@ -51,6 +51,8 @@
     --font-size-gigantic: calc(var(--font-size-base) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier));
 
     /* Spacing */
+    --spacing-tiny: calc(var(--spacing-base) / (var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier)));
+    --spacing-ultra-small: calc(var(--spacing-base) / (var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier) * var(--multiplier)));
     --spacing-super-small: calc(var(--spacing-base) / (var(--multiplier) * var(--multiplier) * var(--multiplier)));
     --spacing-extra-small: calc(var(--spacing-base) / (var(--multiplier) * var(--multiplier)));
     --spacing-small: calc(var(--spacing-base) / var(--multiplier));
