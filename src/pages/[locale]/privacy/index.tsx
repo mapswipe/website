@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import matter from 'gray-matter';
 import html from 'remark-html';
 
+import Page from 'components/Page';
 import Hero from 'components/Hero';
 import Section from 'components/Section';
 import HtmlOutput from 'components/HtmlOutput';
@@ -110,7 +111,7 @@ function GetInvolved(props: Props) {
     const { t } = useTranslation('privacy');
 
     return (
-        <div className={_cs(styles.privacy, className)}>
+        <Page contentClassName={_cs(styles.privacy, className)}>
             <Hero
                 className={styles.hero}
                 title={t('privacy-hero-title')}
@@ -122,7 +123,7 @@ function GetInvolved(props: Props) {
                     content={policyContent}
                 />
             </Section>
-        </div>
+        </Page>
     );
 }
 

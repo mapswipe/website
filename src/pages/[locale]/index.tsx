@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { IoSearch } from 'react-icons/io5';
 
+import Page from 'components/Page';
 import Link from 'components/Link';
 import ImageWrapper from 'components/ImageWrapper';
 import InfoBox from 'components/InfoBox';
@@ -62,7 +63,7 @@ function Home(props: Props) {
     const { t } = useTranslation('home');
 
     return (
-        <div className={_cs(styles.home, className)}>
+        <Page contentClassName={_cs(styles.home, className)}>
             <Head>
                 <title>{`MapSwipe ${t('home')}`}</title>
             </Head>
@@ -273,7 +274,7 @@ function Home(props: Props) {
                     ))}
                 </div>
             </Section>
-        </div>
+        </Page>
     );
 }
 

@@ -12,6 +12,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { IoDownload } from 'react-icons/io5';
 
 import Button from 'components/Button';
+import Page from 'components/Page';
 import Card from 'components/Card';
 import Hero from 'components/Hero';
 import ImageWrapper from 'components/ImageWrapper';
@@ -280,7 +281,7 @@ function Data(props: Props) {
     );
 
     return (
-        <div className={_cs(styles.data, className)}>
+        <Page contentClassName={_cs(styles.data, className)}>
             <Hero
                 title={t('data-page-heading')}
                 description={t('data-page-description')}
@@ -444,7 +445,7 @@ function Data(props: Props) {
                         <Card
                             // className={styles.project}
                             key={project.project_id}
-                            coverImageUrl={project.image}
+                            coverImageUrl={project.image ?? undefined}
                             heading={(
                                 <Link
                                     href={`/[locale]/projects/${project.project_id}`}
@@ -526,7 +527,7 @@ function Data(props: Props) {
                     </Button>
                 )}
             />
-        </div>
+        </Page>
     );
 }
 

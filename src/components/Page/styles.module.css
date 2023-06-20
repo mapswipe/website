@@ -1,4 +1,4 @@
-.app {
+.page {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -7,7 +7,7 @@
         flex-shrink: 0;
     }
 
-    .maincontent {
+    .mainContent {
         flex-grow: 1;
     }
 

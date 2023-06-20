@@ -1,14 +1,10 @@
 import { appWithTranslation } from 'next-i18next';
 import { Lato, DM_Sans } from 'next/font/google';
-import Navbar from 'components/Navbar';
-import Footer from 'components/Footer';
 import type { AppProps } from 'next/app';
 
 import 'leaflet/dist/leaflet.css';
 import 'styles/globals.css';
 import 'styles/variables.css';
-
-import styles from './styles.module.css';
 
 const lato = Lato({
     weight: ['400', '700'],
@@ -42,14 +38,8 @@ function MyApp(props: AppProps) {
                 }
                 `}
             </style>
-            <div className={styles.app}>
-                <Navbar className={styles.navbar} />
-                <main className={styles.mainContent}>
-                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                    <Component {...pageProps} />
-                </main>
-                <Footer className={styles.footer} />
-            </div>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Component {...pageProps} />
         </>
     );
 }

@@ -4,6 +4,7 @@ import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import Page from 'components/Page';
 import Hero from 'components/Hero';
 import Button from 'components/Button';
 import Link from 'components/Link';
@@ -27,7 +28,7 @@ function GetInvolved(props: Props) {
     const { t } = useTranslation('get-involved');
 
     return (
-        <div className={_cs(styles.getInvolved, className)}>
+        <Page contentClassName={_cs(styles.getInvolved, className)}>
             <Hero
                 className={styles.hero}
                 title={t('hero-title')}
@@ -240,7 +241,7 @@ function GetInvolved(props: Props) {
                     </Button>
                 )}
             />
-        </div>
+        </Page>
     );
 }
 

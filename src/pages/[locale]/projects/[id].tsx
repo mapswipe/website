@@ -9,6 +9,7 @@ import matter from 'gray-matter';
 import html from 'remark-html';
 import { IoDownload } from 'react-icons/io5';
 
+import Page from 'components/Page';
 import Hero from 'components/Hero';
 import Card from 'components/Card';
 import HtmlOutput from 'components/HtmlOutput';
@@ -153,7 +154,7 @@ function Project(props: Props) {
     };
 
     return (
-        <div className={_cs(styles.project, className)}>
+        <Page contentClassName={_cs(styles.project, className)}>
             <Hero
                 title={name}
             />
@@ -269,7 +270,7 @@ function Project(props: Props) {
                     </Card>
                 ))}
             </Section>
-        </div>
+        </Page>
     );
 }
 

@@ -22,6 +22,7 @@ export interface ProjectResponse {
             number_of_results: number | undefined;
             number_of_results_progress: number | undefined;
             day: string | undefined;
+            image: string | undefined;
         },
         geometry: {
             type: 'Point',
