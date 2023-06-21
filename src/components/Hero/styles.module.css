@@ -6,9 +6,12 @@
     z-index: 0;
     min-height: var(--hero-min-height);
     color: var(--color-text-on-dark);
+    overflow-x: hidden;
+    overflow-y: hidden;
 
     .section {
         flex-shrink: 0;
+        flex-grow: 1;
         background-color: var(--color-background);
         width: 100%;
 
@@ -55,7 +58,7 @@
     }
 
     .angledBackground {
-        border-width: 0 calc(100vw - 1rem) 6rem 0;
+        border-width: 0 100vw 6rem 0;
         border-style: solid;
         border-color: transparent var(--color-background) transparent transparent;
         width: 0px;
