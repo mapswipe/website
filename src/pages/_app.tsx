@@ -1,16 +1,13 @@
 import { appWithTranslation } from 'next-i18next';
-import { Poppins, DM_Sans } from 'next/font/google';
-import Navbar from 'components/Navbar';
-import Footer from 'components/Footer';
+import { Lato, DM_Sans } from 'next/font/google';
+import type { AppProps } from 'next/app';
 
 import 'leaflet/dist/leaflet.css';
 import 'styles/globals.css';
 import 'styles/variables.css';
 
-import type { AppProps } from 'next/app';
-
-const poppins = Poppins({
-    weight: ['300', '400', '500', '600', '700'],
+const lato = Lato({
+    weight: ['400', '700'],
     subsets: ['latin'],
     display: 'swap',
 });
@@ -36,15 +33,13 @@ function MyApp(props: AppProps) {
             >
                 {`
                 :root {
-                    --font-family-poppins: ${poppins.style.fontFamily};
+                    --font-family-lato: ${lato.style.fontFamily};
                     --font-family-dm-sans: ${dmSans.style.fontFamily};
                 }
                 `}
             </style>
-            <Navbar />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />
-            <Footer />
         </>
     );
 }

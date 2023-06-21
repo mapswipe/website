@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    line-height: 1.5;
 }
 
 html {
@@ -12,8 +13,7 @@ body {
     padding: 0;
     min-height: 100vh;
     color: var(--color-text);
-    font-family: var(--font-family-poppins), sans-serif;
-    font-size: var(--font-size-medium);
+    font-family: var(--font-family-lato), sans-serif;
     font-weight: var(--font-weight-medium);
 }
 
@@ -29,4 +29,18 @@ p {
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
     font-family: var(--font-family-dm-sans), sans-serif;
+}
+
+::-webkit-scrollbar {
+    background-color: var(--color-background-scrollbar);
+    width: var(--width-scrollbar);
+    height: var(--width-scrollbar);
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-background-scrollbar);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-foreground-scrollbar);
 }

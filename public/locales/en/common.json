@@ -5,8 +5,10 @@
   "home-link": "Home",
   "get-involved-link": "Get Involved",
   "data-link": "Data",
+  "community-dashboard-link": "Community",
   "footer-follow-us-title": "Follow Us On",
   "copyright": "Copyright © 2023 MapSwipe",
   "privacy": "Privacy",
-  "cookies": "Cookies"
+  "cookies": "Cookies",
+  "didnot-find-language": "Add missing language"
 }

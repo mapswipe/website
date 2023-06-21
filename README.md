@@ -4,10 +4,17 @@ Next application for Mapswipe
 
 ## Development
 
-Before you start, create `.env` file and set the environment variables
+Before you start, create `.env.local` file:
 
 ```bash
-touch .env
+touch .env.local
+```
+
+Set these environment variables:
+
+```env
+MAPSWIPE_API_ENDPOINT=https://apps.mapswipe.org/api/
+MAPSWIPE_COMMUNITY_API_ENDPOINT=https://api.mapswipe.org/graphql/
 ```
 
 ## Running

@@ -1,0 +1,42 @@
+.section {
+    width: 100%;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        padding: var(--spacing-enourmous) var(--spacing-super-large);
+        width: 100%;
+        max-width: var(--width-page-max);
+        gap: var(--spacing-enourmous);
+
+        .heading {
+            align-self: center;
+            max-width: var(--width-heading-max);
+            text-align: center;
+        }
+
+        .description {
+            align-self: center;
+            max-width: var(--width-heading-max);
+            text-align: center;
+            font-size: var(--font-size-large);
+        }
+
+        .headingContainer {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-large);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    &.withAlternativeBackground {
+        background-color: var(--color-background-brand-light);
+    }
+}
+

@@ -1,0 +1,11 @@
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: var(--border-radius-small);
+    box-shadow: 0 0 0 var(--go-ui-spacing-px) var(--go-ui-color-gray-30), 0 4px 16px 2px var(--go-ui-color-gray-30);
+    background: var(--color-foreground);
+    padding: var(--spacing-medium) 0;
+    min-width: 10rem;
+    overflow: auto;
+}

@@ -1,50 +1,49 @@
-export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
-export type ProjectType = 1 | 2 | 3 | 4;
+import {
+    memoize,
+    ProjectStatus,
+    ProjectType,
+    parseProjectName,
+} from 'utils/common';
+import cachedRequest from 'utils/cachedJsonRequest';
 
-function compareArray<T extends Array<any>>(foo: T, bar: T): boolean {
-    if (foo.length !== bar.length) {
-        return false;
-    }
-    for (let i = 0; i < foo.length; i += 1) {
-        if (foo[i] !== bar[i]) {
-            return false;
-        }
-    }
-    return true;
+interface CommonProperties {
+    idx: number;
+    url: string | undefined;
+    project_id: string;
+    project_details: string;
+    look_for: string;
+    project_type: ProjectType;
+    tile_server_names: string;
+    status: ProjectStatus;
+    area_sqkm: number | undefined;
+    centroid: string;
+    progress: number | undefined;
+    number_of_users: number | undefined;
+    number_of_results: number | undefined;
+    number_of_results_progress: number | undefined;
+    day: string | undefined;
+    image: string | undefined;
 }
 
-function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
-    let lastArgs: A;
-    let lastResponse: R;
-    return (...newArgs: A): R => {
-        if (lastArgs && compareArray(lastArgs, newArgs)) {
-            return lastResponse;
-        }
-        lastResponse = func(...newArgs);
-        lastArgs = newArgs;
-        return lastResponse;
-    };
+interface PropertiesWithLegacyName extends CommonProperties {
+    name: string;
+    legacyName: true;
 }
 
-export interface ProjectResponse {
+interface PropertiesWithName extends CommonProperties {
+    topic: string;
+    region: string;
+    taskNumber: string;
+    requestingOrganization: string;
+    legacyName?: false;
+}
+
+interface RawProjectResponse {
     type: 'FeatureCollection',
     name: 'projects',
     features: {
         type: 'Feature',
-        properties: {
-            idx: number;
-            project_id: string;
-            name: string;
-            project_details: string;
-            look_for: string;
-            project_type: ProjectType;
-            tile_server_name: string;
-            status: ProjectStatus;
-            area_sqkm: number | undefined;
-            progress: number | undefined;
-            number_of_users: number | undefined;
-            centroid: string;
-        },
+        properties: PropertiesWithLegacyName,
         geometry: {
             type: 'Point',
             coordinates: [number, number] | undefined,
@@ -52,9 +51,26 @@ export interface ProjectResponse {
     }[],
 }
 
-const getProjectCentroids = memoize(async () => {
-    const projectsResponse = await fetch('https://apps.mapswipe.org/api/projects/projects_centroid.geojson');
-    const projects = await projectsResponse.json() as ProjectResponse;
+export interface ProjectResponse {
+    type: 'FeatureCollection',
+    name: 'projects',
+    features: {
+        type: 'Feature',
+        properties: PropertiesWithName | PropertiesWithLegacyName,
+        geometry: {
+            type: 'Point',
+            coordinates: [number, number] | undefined,
+        },
+    }[],
+}
+
+const getProjectCentroids = memoize(async (): Promise<ProjectResponse> => {
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
+
+    const projects = await cachedRequest<RawProjectResponse>(
+        `${mapswipeApi}projects/projects_centroid.geojson`,
+        'projects_centroid.geojson',
+    );
 
     const filteredProjects = {
         ...projects,
@@ -62,16 +78,28 @@ const getProjectCentroids = memoize(async () => {
             if (!feature.geometry) {
                 return false;
             }
-            if (
-                feature.properties.status === 'private_active'
-                || feature.properties.status === 'private_inactive'
-                || feature.properties.status === 'private_finished'
-                || feature.properties.status === 'tutorial'
-            ) {
+            if (feature.properties.project_type > 3) {
                 return false;
             }
+            return (
+                feature.properties.status === 'finished'
+                || feature.properties.status === 'active'
+            );
+        }).map((feature) => {
+            const projectName = parseProjectName(feature.properties.name);
 
-            return true;
+            const properties: PropertiesWithLegacyName | PropertiesWithName = projectName ? {
+                ...feature.properties,
+                ...projectName,
+            } : {
+                ...feature.properties,
+                legacyName: true,
+            };
+
+            return {
+                ...feature,
+                properties,
+            };
         }),
     };
 

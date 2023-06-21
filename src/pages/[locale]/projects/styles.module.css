@@ -1,17 +1,138 @@
 .project {
     display: flex;
     flex-direction: column;
-    padding: var(--spacing-medium);
     gap: var(--spacing-medium);
 
-    .stats {
-        display: flex;
-        gap: var(--spacing-medium);
-        font-size: var(--font-size-extra-large);
+    .hero {
     }
 
-    .projectsMap {
-        width: 100%;
-        height: 32rem;
+    .illustration {
+        position: relative;
+        width: 30rem;
+        height: 40rem;
+
+        @media screen and (max-width: 840px) {
+            width: 24rem;
+        }
+
+        @media screen and (max-width: 720px) {
+            width: 80vw;
+        }
+    }
+
+    .statsSection {
+        .content {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (max-width: 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
+
+            .stats {
+                display: grid;
+                grid-gap: var(--spacing-large);
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+
+                @media screen and (max-width: 30rem) {
+                    grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+                }
+            }
+
+            .chartContainer {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                min-height: 20rem;
+                padding: var(--spacing-large);
+                border: var(--width-separator-thin) solid var(--color-separator);
+                border-radius: 0.5rem;
+
+                .timelineChart {
+                    width: 100%;
+                    height: 100%;
+
+                    .stopStart {
+                        stop-color: var(--color-accent);
+                        stop-opacity: 0.5;
+                    }
+
+                    .stopEnd {
+                        stop-color: var(--color-accent);
+                        stop-opacity: 0;
+                    }
+
+                    .path {
+                        stroke: var(--color-accent);
+                        stroke-width: 2pt;
+                        fill: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .overviewSection {
+        .overviewContent {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (max-width: 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-large);
+
+                .description {
+                    flex-grow: 1;
+                    max-width: 36rem;
+                    font-size: var(--font-size-large);
+                }
+            }
+
+            .mapContainer {
+                height: 32rem;
+
+                .projectsMap {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+    .downloadSection {
+        .urlList {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (max-width: 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
+
+            .downloadIcon {
+                color: var(--color-accent);
+                font-size: var(--font-size-super-large);
+            }
+        }
     }
 }

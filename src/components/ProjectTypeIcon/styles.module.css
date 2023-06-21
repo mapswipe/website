@@ -1,0 +1,22 @@
+.icon {
+    display: block;
+    --height: 1.5rem;
+    width: var(--height);
+    height: var(--height);
+
+    path {
+        fill: var(--color-text);
+    }
+
+    &.small {
+        --height: 1.2rem;
+    }
+
+    &.medium {
+        --height: 1.5rem;
+    }
+
+    &.large {
+        --height: 1.8rem;
+    }
+}

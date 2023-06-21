@@ -5,16 +5,18 @@ import { useRouter } from 'next/router';
 
 import styles from './styles.module.css';
 
-type Variant = 'transparent' | 'button' | 'buttonTransparent' | 'icon';
+type Variant = 'transparent' | 'button' | 'buttonTransparent' | 'icon' | 'underline';
 const variantToStyleMap: {
     [key in Variant]: string | undefined;
 } = {
     transparent: undefined,
     button: styles.button,
+    underline: styles.underline,
     buttonTransparent: styles.buttonTransparent,
     icon: styles.icon,
 };
-interface LinkProps extends Omit<NextLinkProps, 'locale'> {
+
+interface Props extends Omit<NextLinkProps, 'locale'> {
     children?: React.ReactNode;
     className?: string;
     locale?: string;
@@ -24,7 +26,7 @@ interface LinkProps extends Omit<NextLinkProps, 'locale'> {
 
 // NOTE: this does not support relative links
 
-function Link(props: LinkProps) {
+function Link(props: Props) {
     const {
         children,
         variant = 'transparent',

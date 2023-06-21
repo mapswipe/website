@@ -3,9 +3,14 @@ import { useTranslation, SSRConfig } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
 import Image from 'next/image';
+import { MdMenu } from 'react-icons/md';
+import { IoEarthSharp } from 'react-icons/io5';
 
 import Link from 'components/Link';
+import Button from 'components/Button';
 import LanguageSwitcher from 'components/LanguageSwitcher';
+import DropdownMenu from 'components/DropdownMenu';
+import useBooleanState from 'hooks/useBooleanState';
 
 import i18nextConfig from '../../../next-i18next.config';
 
@@ -22,6 +27,7 @@ function Navbar(props: Props) {
 
     const { t } = useTranslation('common');
     const router = useRouter();
+    const [isNavShown, , , , toggleNavVisibility] = useBooleanState(false);
 
     let currentLocale = router.query.locale ?? i18nextConfig.i18n.defaultLocale;
     if (Array.isArray(currentLocale)) {
@@ -29,18 +35,24 @@ function Navbar(props: Props) {
     }
 
     return (
-        <div
-            className={_cs(styles.navbar, className)}
-        >
+        <div className={_cs(styles.navbar, className)}>
             <div className={styles.navbarContent}>
-                <div className={styles.logo}>
+                <Link
+                    className={styles.logo}
+                    href="/[locale]/"
+                >
                     <Image
                         src="/logo.svg"
                         alt="Mapswipe"
                         layout="fill"
                     />
-                </div>
-                <div className={styles.routes}>
+                </Link>
+                <div
+                    className={_cs(
+                        styles.routes,
+                        isNavShown && styles.navShown,
+                    )}
+                >
                     <Link
                         className={styles.link}
                         href="/[locale]/get-involved"
@@ -53,15 +65,52 @@ function Navbar(props: Props) {
                     >
                         {t('data-link')}
                     </Link>
+                    <Link
+                        className={styles.link}
+                        href="https://community.mapswipe.org/"
+                    >
+                        {t('community-dashboard-link')}
+                    </Link>
                 </div>
-                <div className={styles.languageSwitcher}>
-                    {i18nextConfig.i18n.locales.map((locale) => (
-                        <LanguageSwitcher
-                            key={locale}
-                            locale={locale}
-                            active={locale === currentLocale}
-                        />
-                    ))}
+                <div className={styles.rightContainer}>
+                    <DropdownMenu
+                        label={(
+                            <>
+                                <IoEarthSharp />
+                                <span className={styles.currentLocale}>
+                                    {currentLocale}
+                                </span>
+                            </>
+                        )}
+                        className={styles.dropdown}
+                        dropdownContainerClassName={styles.languageList}
+                    >
+                        {i18nextConfig.i18n.locales.map((locale) => (
+                            <LanguageSwitcher
+                                key={locale}
+                                locale={locale}
+                                active={locale === currentLocale}
+                                className={styles.language}
+                                activeClassName={styles.activeLanguage}
+                            />
+                        ))}
+                        <Link
+                            className={styles.language}
+                            href="/[locale]/get-involved/#individual"
+                        >
+                            {t('didnot-find-language')}
+                        </Link>
+                    </DropdownMenu>
+                    <Button
+                        className={_cs(
+                            styles.menu,
+                        )}
+                        name="toggle"
+                        variant="transparent"
+                        onClick={toggleNavVisibility}
+                    >
+                        <MdMenu />
+                    </Button>
                 </div>
             </div>
         </div>

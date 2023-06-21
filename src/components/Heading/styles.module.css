@@ -1,9 +1,10 @@
 .heading {
     margin: 0;
-    font-weight: var(--font-weight-semi-bold);
+    color: var(--color-heading);
+    font-weight: var(--font-weight-bold);
 
     &.normal {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Lato', sans-serif;
         font-weight: var(--font-weight-normal);
     }
 

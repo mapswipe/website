@@ -9,36 +9,31 @@ import {
 import { useTranslation } from 'next-i18next';
 import { CircleMarkerOptions, LatLngTuple } from 'leaflet';
 
-import { ProjectStatus } from 'utils/requests/projectCentroids';
+import {
+    projectNameMapping,
+    ProjectStatus,
+    ProjectType,
+} from 'utils/common';
 
+import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
 } = {
     active: {
-        radius: 8,
-        fillColor: '#ff7f00',
-        color: 'black',
+        fillColor: '#F69143',
+        color: '#0F193F',
         weight: 1,
         opacity: 0.2,
-        fillOpacity: 0.8,
+        fillOpacity: 0.9,
     },
     finished: {
-        radius: 5,
-        fillColor: '#1f78b4',
-        color: 'black',
+        fillColor: '#AABE5D',
+        color: '#0F193F',
         weight: 1,
         opacity: 0.2,
-        fillOpacity: 0.8,
-    },
-    archived: {
-        radius: 5,
-        fillColor: '#1f78b4',
-        color: 'black',
-        weight: 1,
-        opacity: 0.2,
-        fillOpacity: 0.8,
+        fillOpacity: 0.9,
     },
 };
 
@@ -51,25 +46,30 @@ const sortValue: {
 };
 
 const defaultPathOptions: CircleMarkerOptions = {
-    radius: 5,
-    fillColor: '#b15928',
-    color: 'black',
+    fillColor: '#0F193F',
+    color: '#0F193F',
     weight: 1,
-    opacity: 0.2,
-    fillOpacity: 0.8,
+    opacity: 0.3,
+    fillOpacity: 0.9,
 };
+
+interface Project {
+    project_id: string;
+    project_type: ProjectType,
+    name: string;
+    status: ProjectStatus;
+    progress: number | null;
+    number_of_users: number | null;
+    coordinates: [number, number] | null;
+    day: number | null;
+    area_sqkm: number | null;
+}
 
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    projects: {
-        project_id: string;
-        name: string;
-        status: ProjectStatus;
-        progress: number | null;
-        number_of_users: number | null;
-        coordinates: [number, number] | null;
-    }[];
+    projects: Project[];
+    radiusSelector: (project: Project) => number;
 }
 
 function ProjectMap(props: Props) {
@@ -77,6 +77,7 @@ function ProjectMap(props: Props) {
         className,
         children,
         projects,
+        radiusSelector,
     } = props;
 
     const { t } = useTranslation('data');
@@ -102,7 +103,7 @@ function ProjectMap(props: Props) {
                 <CircleMarker
                     key={project.project_id}
                     center={project.coordinates}
-                    radius={10}
+                    radius={radiusSelector(project)}
                     pathOptions={pathOptions[project.status] ?? defaultPathOptions}
                 >
                     <Popup>
@@ -112,12 +113,16 @@ function ProjectMap(props: Props) {
                             {project.name}
                             {project.status}
                         </Link>
+                        <div>{t('project-card-type', { type: projectNameMapping[project.project_type] })}</div>
                         <div>{t('project-card-status-text', { status: project.status })}</div>
                         <div>{t('project-card-progress-text', { progress: project.progress })}</div>
+                        <div>{t('project-card-last-update', { date: project.day })}</div>
                         <div>{t('project-card-contributors-text', { contributors: project.number_of_users })}</div>
+                        <div>{t('project-card-area', { area: project.area_sqkm })}</div>
                     </Popup>
                 </CircleMarker>
             ))}
+            <GestureHandler />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"

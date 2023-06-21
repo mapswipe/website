@@ -3,10 +3,16 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    border: var(--width-separator-thin) solid var(--color-accent-light);
+    transition: .3s box-shadow ease-in-out;
+    border: var(--width-separator-thin) solid var(--color-separator);
+    border-radius: 0.5rem;
     padding: var(--spacing-medium) var(--spacing-extra-large);
     max-width: 15rem;
     gap: var(--spacing-extra-small);
+
+    &:hover {
+        box-shadow: var(--box-shadow-medium);
+    }
 
     .topContainer {
         display: flex;
