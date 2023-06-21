@@ -90,6 +90,7 @@ function RadioInput<
                 {options.map((option) => (
                     <OptionRenderer
                         option={option}
+                        key={keySelector(option)}
                         value={value}
                         onChange={onChange}
                         keySelector={keySelector}

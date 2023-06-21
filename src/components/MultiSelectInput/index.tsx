@@ -94,6 +94,7 @@ function MultiSelectInput<
             <div className={styles.optionsContainer}>
                 {options.map((option) => (
                     <OptionRenderer
+                        key={keySelector(option)}
                         option={option}
                         value={value}
                         onChange={onChange}
