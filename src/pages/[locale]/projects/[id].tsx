@@ -422,7 +422,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
                 : null,
             totalArea: Math.round(project.properties.area_sqkm ?? 0),
             totalContributors: project.properties.number_of_users ?? null,
-            name: project.properties.name,
+            name: project.properties.legacyName
+                ? project.properties.name
+                : project.properties.topic,
             image: project.properties.image,
             description: contentHtml,
             status: project.properties.status,

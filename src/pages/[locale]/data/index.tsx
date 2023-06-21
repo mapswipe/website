@@ -96,7 +96,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const miniProjects = projects.features.map((feature) => ({
         project_id: feature.properties.project_id ?? null,
         project_type: feature.properties.project_type,
-        name: feature.properties.name ?? null,
+        name: feature.properties.legacyName
+            ? feature.properties.name
+            : feature.properties.topic,
         status: feature.properties.status ?? null,
         progress: feature.properties.progress !== null && feature.properties.progress !== undefined
             ? Math.round(feature.properties.progress * 100)

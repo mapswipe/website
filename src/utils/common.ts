@@ -4,6 +4,21 @@ import {
     compareStringSearch,
 } from '@togglecorp/fujs';
 
+const matchRegex = /^(?<topic>.+)\s+-\s+(?<region>.+)\((?<taskNumber>\d+)\)\s+(?<requestingOrganization>.+)$/;
+interface ParseRes {
+    topic: string;
+    region: string;
+    taskNumber: string;
+    requestingOrganization: string;
+}
+export function parseProjectName(name: string): ParseRes | undefined {
+    const match = name.match(matchRegex);
+    if (!match) {
+        return undefined;
+    }
+    return match.groups as unknown as ParseRes;
+}
+
 export function rankedSearchOnList<T>(
     list: T[],
     searchString: string | undefined,
