@@ -2,12 +2,17 @@ version: '3.8'
 
 services:
   next:
+    build: .
     command: sh -c 'yarn install && yarn dev'
     ports:
       - '3020:3020'
+    env_file:
+      .env.local
 
   checks:
-    <<: *base_next_setup
+    build: .
     command: sh -c 'pre-commit run -vvv --all-files'
+    env_file:
+      - .env.local
     profiles:
       - test

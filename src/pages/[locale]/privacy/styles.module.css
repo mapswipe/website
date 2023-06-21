@@ -1,0 +1,13 @@
+.privacy {
+    display: flex;
+    flex-direction: column;
+
+    .hero {
+        min-height: 24rem;
+    }
+
+    .content {
+        margin: auto;
+        max-width: 60rem;
+    }
+}

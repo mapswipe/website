@@ -11,5 +11,9 @@ RUN apt-get update -y \
 
 WORKDIR /code
 
+COPY ./package.json /code/package.json
+
+COPY . /code/
+
 # Initial commands runs
 RUN git config --global --add safe.directory /code

@@ -1,0 +1,99 @@
+.hero {
+    --hero-min-height: 24rem;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    z-index: 0;
+    min-height: var(--hero-min-height);
+    overflow-x: hidden;
+    overflow-y: hidden;
+    color: var(--color-text-on-dark);
+
+    .section {
+        flex-shrink: 0;
+        background-color: var(--color-background);
+        width: 100%;
+
+        .mainContent {
+            display: flex;
+            position: relative;
+            flex-grow: 1;
+            justify-content: center;
+            margin: 0 auto;
+            padding: var(--spacing-medium);
+            width: 100%;
+            max-width: var(--width-page-max);
+            gap: var(--spacing-super-large);
+
+            .left {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-extra-large);
+                padding-top: var(--spacing-mega-large);
+                max-width: 40rem;
+
+                .heading {
+                    color: var(--color-heading-on-dark);
+                }
+
+                .description {
+                    font-size: var(--font-size-extra-large);
+                }
+
+                .buttonsContainer {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: var(--spacing-medium);
+                }
+            }
+
+            .right {
+                display: flex;
+                flex-grow: 1;
+                justify-content: center;
+                margin-bottom: -10rem;
+            }
+        }
+    }
+
+    .angledBackground {
+        border-width: 0 100vw 6rem 0;
+        border-style: solid;
+        border-color: transparent var(--color-background) transparent transparent;
+        width: 0px;
+        height: 0px;
+    }
+
+    &.withoutRightContent {
+        --hero-min-height: 24rem;
+
+        .section {
+            .left {
+                max-width: 50rem;
+                text-align: center;
+            }
+        }
+    }
+
+    @media screen and (max-width: 860px) {
+        --hero-min-height: 80vh;
+
+        &.withoutRightContent {
+            --hero-min-height: 24rem;
+        }
+    }
+
+    @media screen and (max-width: 720px) {
+        min-height: unset;
+
+        .section {
+            .mainContent {
+                flex-direction: column;
+
+                .right {
+                    align-self: center;
+                }
+            }
+        }
+    }
+}

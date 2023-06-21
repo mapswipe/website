@@ -1,0 +1,43 @@
+.fourHundredFour {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: var(--spacing-gigantic);
+
+    .leftContent {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--spacing-large);
+        gap: var(--spacing-extra-large);
+
+        .headingContainer {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    .rightContent {
+        width: 40rem;
+        height: 40rem;
+    }
+
+    @media screen and (max-width: 720px) {
+        flex-direction: column;
+
+        .rightContent {
+            order: 1;
+            width: 96vw;
+            height: 50vh;
+        }
+
+        .leftContent {
+            order: 2;
+        }
+    }
+}

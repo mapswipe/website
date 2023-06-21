@@ -1,0 +1,236 @@
+.getInvolved {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--spacing-gigantic);
+    gap: var(--spacing-gigantic);
+
+    .hero {
+        .illustration {
+            position: relative;
+            width: 30rem;
+            height: 40rem;
+
+            @media screen and (max-width: 840px) {
+                width: 24rem;
+            }
+
+            @media screen and (max-width: 720px) {
+                width: 80vw;
+            }
+        }
+    }
+
+    .contributeSection {
+        gap: 0;
+    }
+
+    .sectionContainer {
+        gap: var(--spacing-gigantic);
+    }
+
+    .individual {
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(20rem, 1fr));
+            grid-gap: var(--spacing-large);
+
+            .leftContainer {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                grid-row: auto / span 2;
+                gap: var(--spacing-medium);
+
+                .illustration {
+                    width: 24rem;
+                    height: 28rem;
+
+                    @media screen and (max-width: 720px) {
+                        width: 80vw;
+                    }
+                }
+            }
+
+            .bottom {
+                grid-column: span 2 / auto;
+            }
+
+            .linksContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: var(--spacing-small);
+
+                .buttonsContainer {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: var(--spacing-large);
+
+                    .buttonImageContainer {
+                        position: relative;
+                        width: 10rem;
+                        height: 4rem;
+
+                        .image {
+                            object-position: center center;
+                            object-fit: contain;
+                            border-radius: var(--border-radius-medium);
+                        }
+                    }
+                }
+
+                .downloadLink {
+                    text-decoration: underline;
+                }
+            }
+
+            @media screen and (max-width: 840px) {
+                .bottom {
+                    grid-column: unset;
+                }
+            }
+        }
+    }
+
+    .group {
+        .content {
+            display: flex;
+            gap: var(--spacing-large);
+
+            .imageContainer {
+                display: flex;
+                align-items: center;
+                flex-basis: 40rem;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: var(--spacing-medium);
+
+                .illustration {
+                    width: 24rem;
+                    height: 28rem;
+
+                    @media screen and (max-width: 720px) {
+                        width: 80vw;
+                    }
+                }
+            }
+
+            .cards {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                gap: var(--spacing-large);
+
+                .card {
+                    background-color: #fff;
+                    max-width: 60rem;
+                }
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-direction: column;
+
+                .imageContainer {
+                    flex-basis: unset;
+                    order: 1;
+                }
+
+                .cards {
+                    order: 2;
+                }
+            }
+        }
+    }
+
+    .organizational {
+        .content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-large);
+
+            .imageContainer {
+                display: flex;
+                align-items: center;
+                flex-basis: 40rem;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: var(--spacing-medium);
+
+                .illustration {
+                    width: 24rem;
+                    height: 28rem;
+
+                    @media screen and (max-width: 720px) {
+                        width: 80vw;
+                    }
+                }
+            }
+
+            .card {
+                flex-grow: 1;
+                background-color: #fff;
+                padding: var(--spacing-gigantic);
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-wrap: wrap;
+
+                .imageContainer {
+                    flex-basis: 100%;
+                }
+            }
+        }
+    }
+
+    .donate {
+        .content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-large);
+
+            .imageContainer {
+                display: flex;
+                align-items: center;
+                flex-basis: 40rem;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: var(--spacing-medium);
+
+                .illustration {
+                    width: 24rem;
+                    height: 28rem;
+
+                    @media screen and (max-width: 720px) {
+                        width: 80vw;
+                    }
+                }
+            }
+
+            .card {
+                flex-grow: 1;
+                background-color: #fff;
+                padding: var(--spacing-gigantic);
+            }
+
+            @media screen and (max-width: 720px) {
+                flex-wrap: wrap;
+
+                .imageContainer {
+                    flex-basis: 100%;
+                    order: 1;
+                }
+
+                .card {
+                    order: 2;
+                }
+            }
+        }
+    }
+}

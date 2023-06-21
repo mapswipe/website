@@ -1,0 +1,14 @@
+.listItem {
+    display: flex;
+    gap: var(--spacing-extra-small);
+
+    .icon {
+        flex-shrink: 0;
+        color: var(--color-accent);
+        font-size: var(--font-size-large);
+    }
+
+    .label {
+        flex-grow: 1;
+    }
+}

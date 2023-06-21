@@ -1,9 +1,10 @@
 const withExportImages = require('next-export-optimize-images');
 
 const nextConfig = withExportImages({
+    output: 'export',
     reactStrictMode: true,
     images: {
-        // domain: ['localhost: 8020'],
+        domain: ['https://firebasestorage.googleapis.com/v0/b/msf-mapswipe.appspot.com'],
         deviceSizes: [640, 960, 1280, 1600, 1920],
     },
 });

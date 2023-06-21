@@ -1,0 +1,30 @@
+.tag {
+    display: flex;
+    align-items: center;
+    border: transparent solid var(--width-separator-thin);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--color-background-accent-light);
+    padding: var(--spacing-super-small) var(--spacing-extra-small);
+    color: var(--color-text);
+    gap: var(--spacing-super-small);
+    font-size: var(--font-size-small);
+
+    &.border {
+        border-color: var(--color-brand);
+        background-color: unset;
+    }
+
+    &.icon {
+        display: flex;
+        align-items: center;
+        border-radius: var(--border-radius-medium);
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: var(--spacing-super-small) var(--spacing-extra-small);
+        line-height: 1;
+        color: var(--color-text-on-dark);
+
+        &:hover {
+            background-color: var(--color-accent);
+        }
+    }
+}
