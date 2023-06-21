@@ -7,6 +7,11 @@ on:
       - develop
       - feat/cd  # TODO: REMOVE THIS
 
+on:
+  schedule:
+    # Runs "At 00:01. every day" (see https://crontab.guru)
+    - cron: '1 0 * * *'
+
 jobs:
   test_build:
     if: github.event_name == 'push'
