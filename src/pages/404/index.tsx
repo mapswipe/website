@@ -4,6 +4,7 @@ import {
 } from '@togglecorp/fujs';
 
 import Heading from 'components/Heading';
+import ImageWrapper from 'components/ImageWrapper';
 import Link from 'components/Link';
 
 import styles from './styles.module.css';
@@ -19,23 +20,31 @@ function FourHundredFour(props: Props) {
 
     return (
         <div className={_cs(className, styles.fourHundredFour)}>
-            <div className={styles.headingContainer}>
-                <Heading size="extraLarge">
-                    404
-                </Heading>
-                <Heading
-                    size="medium"
-                    font="normal"
+            <div className={styles.leftContent}>
+                <div className={styles.headingContainer}>
+                    <Heading size="extraLarge">
+                        404
+                    </Heading>
+                    <Heading
+                        size="medium"
+                        font="normal"
+                    >
+                        This area has not been swiped yet!
+                    </Heading>
+                </div>
+                <Link
+                    href="/"
+                    variant="buttonTransparent"
                 >
-                    This area has not been swiped yet!
-                </Heading>
+                    Go back to home
+                </Link>
             </div>
-            <Link
-                href="/"
-                variant="buttonTransparent"
-            >
-                Go back to home
-            </Link>
+            <div className={styles.rightContent}>
+                <ImageWrapper
+                    src="/img/404.svg"
+                    alt="404 Page"
+                />
+            </div>
         </div>
     );
 }

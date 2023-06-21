@@ -4,10 +4,10 @@ import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { IoSearch } from 'react-icons/io5';
 
 import Page from 'components/Page';
 import Link from 'components/Link';
+import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import ImageWrapper from 'components/ImageWrapper';
 import InfoBox from 'components/InfoBox';
 import Heading from 'components/Heading';
@@ -156,7 +156,9 @@ function Home(props: Props) {
                 contentClassName={styles.content}
             >
                 <div className={styles.missionType}>
-                    <IoSearch
+                    <ProjectTypeIcon
+                        size="large"
+                        type="1"
                         className={styles.icon}
                     />
                     <Heading>
@@ -167,7 +169,9 @@ function Home(props: Props) {
                     </div>
                 </div>
                 <div className={styles.missionType}>
-                    <IoSearch
+                    <ProjectTypeIcon
+                        size="large"
+                        type="3"
                         className={styles.icon}
                     />
                     <Heading>
@@ -178,7 +182,9 @@ function Home(props: Props) {
                     </div>
                 </div>
                 <div className={styles.missionType}>
-                    <IoSearch
+                    <ProjectTypeIcon
+                        size="large"
+                        type="2"
                         className={styles.icon}
                     />
                     <Heading>
