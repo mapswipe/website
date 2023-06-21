@@ -30,6 +30,11 @@ const partners = [
         link: 'https://www.redcross.org.uk/',
     },
     {
+        altText: 'Canadian Red Cross Logo',
+        imageSrc: 'img/crc.svg',
+        link: 'https://www.redcross.ca/',
+    },
+    {
         altText: 'HeiGIT logo',
         imageSrc: 'img/heigit.png',
         link: 'https://heigit.org/',
@@ -82,9 +87,8 @@ function Home(props: Props) {
                 actions={(
                     <>
                         <Link
-                            href="https://togglecorp.com"
+                            href="#startMapswiping"
                             variant="button"
-                            target="_blank"
                         >
                             {t('download-app-label')}
                         </Link>
@@ -186,6 +190,7 @@ function Home(props: Props) {
                 </div>
             </Section>
             <Section
+                sectionId="startMapswiping"
                 className={styles.startMapswiping}
                 title={t('start-mapswiping-title')}
                 contentClassName={styles.content}
@@ -221,7 +226,7 @@ function Home(props: Props) {
                         </div>
                         <Link
                             className={styles.downloadLink}
-                            href="https://togglecorp.com"
+                            href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
                             target="_blank"
                         >
                             {t('download-apk-label')}

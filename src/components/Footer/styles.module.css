@@ -22,9 +22,13 @@
 
         .section {
             display: flex;
-            flex-basis: 20rem;
+            flex-basis: 24rem;
             flex-direction: column;
             gap: var(--spacing-small);
+
+            &.midSection {
+                flex-basis: 12rem;
+            }
         }
 
         .links {
@@ -42,7 +46,6 @@
 
     .bottomContainer {
         background-color: var(--color-brand-dark);
-        padding: 0 var(--spacing-large);
 
         .content {
             display: flex;
@@ -50,6 +53,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin: 0 auto;
+            padding: 0 var(--spacing-large);
             max-width: var(--width-page-max);
 
             .leftContainer {

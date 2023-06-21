@@ -15,6 +15,8 @@
     --color-brand-dark: #020e3b;
     --color-foreground: #ffffff;
 
+    --color-border-light: #d0d0d0;
+    --color-border: #000;
     --color-background: var(--color-brand);
     --color-background-brand-light: #f6f8ff;
     --color-background-accent-light: #f5f5f5;

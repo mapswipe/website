@@ -15,6 +15,7 @@ interface Props {
     actions?: React.ReactNode;
     withAlternativeBackground?: boolean;
     smallHeading?: boolean;
+    sectionId?: string;
 }
 
 function Section(props: Props) {
@@ -25,6 +26,7 @@ function Section(props: Props) {
         title,
         description,
         children,
+        sectionId,
         actions,
         smallHeading,
         withAlternativeBackground,
@@ -32,6 +34,7 @@ function Section(props: Props) {
 
     return (
         <section
+            id={sectionId}
             className={_cs(
                 styles.section,
                 withAlternativeBackground && styles.withAlternativeBackground,

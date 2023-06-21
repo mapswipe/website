@@ -36,7 +36,7 @@
     }
 
     &.withAlternativeBackground {
-        background-color: var(--color-background-accent-light);
+        background-color: var(--color-background-brand-light);
     }
 }
 

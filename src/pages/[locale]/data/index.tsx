@@ -12,6 +12,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { IoDownload } from 'react-icons/io5';
 
 import Button from 'components/Button';
+import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Page from 'components/Page';
 import Card from 'components/Card';
 import Hero from 'components/Hero';
@@ -315,6 +316,11 @@ function Data(props: Props) {
                 <Card
                     coverImageUrl="/img/placeholder.png"
                     heading={t('type-find-title')}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="1"
+                        />
+                    )}
                     footerIcons={(
                         <Button>
                             {t('type-find-action-label')}
@@ -335,6 +341,11 @@ function Data(props: Props) {
                 <Card
                     coverImageUrl="/img/placeholder.png"
                     heading={t('type-compare-title')}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="3"
+                        />
+                    )}
                     footerIcons={(
                         <Button>
                             {t('type-compare-action-label')}
@@ -355,6 +366,11 @@ function Data(props: Props) {
                 <Card
                     coverImageUrl="/img/placeholder.png"
                     heading={t('type-validate-title')}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="2"
+                        />
+                    )}
                     footerIcons={(
                         <Button>
                             {t('type-validate-action-label')}
@@ -386,51 +402,53 @@ function Data(props: Props) {
                     </Button>
                 )}
             >
-                <div className={styles.filters}>
-                    <RawInput
-                        className={styles.filter}
-                        placeholder={t('search-label') ?? undefined}
-                        name={undefined}
-                        value={searchText}
-                        onChange={setSearchText}
-                    />
-                    <SelectInput
-                        className={styles.filter}
-                        placeholder={t('project-status') ?? undefined}
-                        name={undefined}
-                        value={projectStatus}
-                        options={projectStatuses}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        onChange={setProjectStatus}
-                    />
-                    <SelectInput
-                        className={styles.filter}
-                        placeholder={t('project-type') ?? undefined}
-                        name={undefined}
-                        value={projectType}
-                        options={projectTypes}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        onChange={setProjectType}
-                    />
-                    <SelectInput
-                        className={styles.filter}
-                        placeholder={t('bubble-type') ?? undefined}
-                        name={undefined}
-                        value={bubble}
-                        options={bubbleTypes}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        onChange={setBubble}
-                    />
-                </div>
-                <div className={styles.mapContainer}>
-                    <DynamicProjectsMap
-                        className={styles.projectsMap}
-                        projects={visibleProjects}
-                        radiusSelector={radiusSelector}
-                    />
+                <div className={styles.topContainer}>
+                    <div className={styles.filters}>
+                        <RawInput
+                            className={styles.filter}
+                            placeholder={t('search-label') ?? undefined}
+                            name={undefined}
+                            value={searchText}
+                            onChange={setSearchText}
+                        />
+                        <SelectInput
+                            className={styles.filter}
+                            placeholder={t('project-status') ?? undefined}
+                            name={undefined}
+                            value={projectStatus}
+                            options={projectStatuses}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            onChange={setProjectStatus}
+                        />
+                        <SelectInput
+                            className={styles.filter}
+                            placeholder={t('project-type') ?? undefined}
+                            name={undefined}
+                            value={projectType}
+                            options={projectTypes}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            onChange={setProjectType}
+                        />
+                        <SelectInput
+                            className={styles.filter}
+                            placeholder={t('bubble-type') ?? undefined}
+                            name={undefined}
+                            value={bubble}
+                            options={bubbleTypes}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            onChange={setBubble}
+                        />
+                    </div>
+                    <div className={styles.mapContainer}>
+                        <DynamicProjectsMap
+                            className={styles.projectsMap}
+                            projects={visibleProjects}
+                            radiusSelector={radiusSelector}
+                        />
+                    </div>
                 </div>
                 <div className={styles.stats}>
                     <div>
@@ -445,7 +463,7 @@ function Data(props: Props) {
                         <Card
                             // className={styles.project}
                             key={project.project_id}
-                            coverImageUrl={project.image ?? undefined}
+                            // coverImageUrl={project.image ?? undefined}
                             heading={(
                                 <Link
                                     href={`/[locale]/projects/${project.project_id}`}
@@ -491,6 +509,7 @@ function Data(props: Props) {
             <Section
                 title={t('download-section-heading')}
                 className={styles.downloadSection}
+                withAlternativeBackground
                 contentClassName={styles.urlList}
             >
                 {urls.map((url) => (
@@ -516,11 +535,11 @@ function Data(props: Props) {
             <Section
                 title={t('license-section-heading')}
                 description={t('license-section-description')}
-                withAlternativeBackground
             />
             <Section
                 title={t('contact-section-heading')}
                 description={t('contact-section-description')}
+                withAlternativeBackground
                 actions={(
                     <Button>
                         {t('contact-link-label')}

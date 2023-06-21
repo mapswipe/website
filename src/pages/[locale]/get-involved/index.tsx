@@ -44,91 +44,96 @@ function GetInvolved(props: Props) {
             <Section
                 title={t('contribute-now')}
                 description={t('contribute-now-description')}
-            />
-            <Section
-                title={t('individual-heading')}
-                className={styles.individual}
-                contentClassName={styles.content}
-                smallHeading
+                containerClassName={styles.contributeSection}
             >
-                <div className={styles.leftContainer}>
-                    <ImageWrapper
-                        className={styles.illustration}
-                        src="/img/placeholder.png"
-                        alt="Placeholder"
+                <Section
+                    sectionId="individual"
+                    title={t('individual-heading')}
+                    className={styles.individual}
+                    contentClassName={styles.content}
+                    containerClassName={styles.sectionContainer}
+                    smallHeading
+                >
+                    <div className={styles.leftContainer}>
+                        <ImageWrapper
+                            className={styles.illustration}
+                            src="/img/placeholder.png"
+                            alt="Placeholder"
+                        />
+                    </div>
+                    <CenteredCard
+                        title={t('looking-to-make-impact')}
+                        description={t('looking-to-make-impact-description')}
+                        actionsClassName={styles.linksContainer}
+                        actions={(
+                            <>
+                                <div className={styles.buttonsContainer}>
+                                    <Link
+                                        className={styles.buttonImageContainer}
+                                        href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
+                                        target="_blank"
+                                    >
+                                        <ImageWrapper
+                                            imageClassName={styles.image}
+                                            src="/img/playstore.png"
+                                            alt="Download on playstore"
+                                        />
+                                    </Link>
+                                    <Link
+                                        className={styles.buttonImageContainer}
+                                        href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
+                                        target="_blank"
+                                    >
+                                        <ImageWrapper
+                                            imageClassName={styles.image}
+                                            src="/img/apple.png"
+                                            alt="Download on Apple Store"
+                                        />
+                                    </Link>
+                                </div>
+                                <Link
+                                    className={styles.downloadLink}
+                                    href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
+                                    target="_blank"
+                                >
+                                    {t('download-apk-label')}
+                                </Link>
+                            </>
+                        )}
                     />
-                </div>
-                <CenteredCard
-                    title={t('looking-to-make-impact')}
-                    description={t('looking-to-make-impact-description')}
-                    actionsClassName={styles.linksContainer}
-                    actions={(
-                        <>
-                            <div className={styles.buttonsContainer}>
-                                <Link
-                                    className={styles.buttonImageContainer}
-                                    href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
-                                    target="_blank"
-                                >
-                                    <ImageWrapper
-                                        imageClassName={styles.image}
-                                        src="/img/playstore.png"
-                                        alt="Download on playstore"
-                                    />
-                                </Link>
-                                <Link
-                                    className={styles.buttonImageContainer}
-                                    href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
-                                    target="_blank"
-                                >
-                                    <ImageWrapper
-                                        imageClassName={styles.image}
-                                        src="/img/apple.png"
-                                        alt="Download on Apple Store"
-                                    />
-                                </Link>
-                            </div>
+                    <CenteredCard
+                        title={t('possess-technical-skills')}
+                        description={t('possess-techincal-skills-description')}
+                        actions={(
                             <Link
-                                className={styles.downloadLink}
-                                href="https://togglecorp.com"
+                                href="https://github.com/mapswipe/"
+                                variant="button"
                                 target="_blank"
                             >
-                                {t('download-apk-label')}
+                                {t('volunteer-tech-suppport')}
                             </Link>
-                        </>
-                    )}
-                />
-                <CenteredCard
-                    title={t('possess-technical-skills')}
-                    description={t('possess-techincal-skills-description')}
-                    actions={(
-                        <Link
-                            href="https://togglecorp.com"
-                            variant="button"
-                            target="_blank"
-                        >
-                            {t('volunteer-tech-suppport')}
-                        </Link>
-                    )}
-                />
-                <CenteredCard
-                    className={styles.bottom}
-                    title={t('possess-language-skills')}
-                    description={t('possess-language-skills-description')}
-                    actions={(
-                        <Link
-                            href="https://togglecorp.com"
-                            variant="button"
-                            target="_blank"
-                        >
-                            {t('volunteer-tech-suppport')}
-                        </Link>
-                    )}
-                />
+                        )}
+                    />
+                    <CenteredCard
+                        className={styles.bottom}
+                        title={t('possess-language-skills')}
+                        description={t('possess-language-skills-description')}
+                        actions={(
+                            <Link
+                                href="https://mapswipe.org"
+                                variant="button"
+                                target="_blank"
+                            >
+                                {t('volunteer-tech-suppport')}
+                            </Link>
+                        )}
+                    />
+                </Section>
             </Section>
             <Section
                 title={t('group-heading')}
                 className={styles.group}
+                containerClassName={styles.sectionContainer}
                 contentClassName={styles.content}
                 smallHeading
                 withAlternativeBackground
@@ -141,7 +146,7 @@ function GetInvolved(props: Props) {
                         actions={(
                             <Link
                                 className={styles.downloadLink}
-                                href="https://togglecorp.com"
+                                href="https://mapswipe.org"
                                 variant="button"
                                 target="_blank"
                             >
@@ -156,7 +161,7 @@ function GetInvolved(props: Props) {
                         actions={(
                             <Link
                                 className={styles.downloadLink}
-                                href="https://togglecorp.com"
+                                href="https://mapswipe.org"
                                 variant="button"
                                 target="_blank"
                             >
@@ -175,6 +180,7 @@ function GetInvolved(props: Props) {
             </Section>
             <Section
                 title={t('organization-heading')}
+                containerClassName={styles.sectionContainer}
                 className={styles.organizational}
                 contentClassName={styles.content}
                 smallHeading
@@ -193,7 +199,7 @@ function GetInvolved(props: Props) {
                     actions={(
                         <Link
                             className={styles.downloadLink}
-                            href="https://togglecorp.com"
+                            href="https://mapswipe.org"
                             variant="button"
                             target="_blank"
                         >
@@ -206,6 +212,7 @@ function GetInvolved(props: Props) {
                 title={t('donate-heading')}
                 className={styles.donate}
                 contentClassName={styles.content}
+                containerClassName={styles.sectionContainer}
                 smallHeading
                 withAlternativeBackground
             >
@@ -216,7 +223,7 @@ function GetInvolved(props: Props) {
                     actions={(
                         <Link
                             className={styles.downloadLink}
-                            href="https://togglecorp.com"
+                            href="https://opencollective.com/mapswipe"
                             variant="button"
                             target="_blank"
                         >

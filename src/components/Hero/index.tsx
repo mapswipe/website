@@ -41,11 +41,13 @@ function Hero(props: Props) {
                         >
                             {title}
                         </Heading>
-                        <div
-                            className={styles.description}
-                        >
-                            {description}
-                        </div>
+                        {description && (
+                            <div
+                                className={styles.description}
+                            >
+                                {description}
+                            </div>
+                        )}
                         {actions && (
                             <div className={styles.buttonsContainer}>
                                 {actions}

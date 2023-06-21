@@ -5,6 +5,8 @@ import {
 } from '@togglecorp/fujs';
 import Link from 'components/Link';
 import {
+    IoSearch,
+    IoLogoSlack,
     IoLogoFacebook,
     IoLogoTwitter,
     IoLogoGithub,
@@ -41,7 +43,7 @@ function Footer(props: Props) {
                         {t('footer-about-us-description')}
                     </div>
                 </div>
-                <div className={styles.section}>
+                <div className={_cs(styles.section, styles.midSection)}>
                     <Heading
                         className={styles.heading}
                         size="small"
@@ -87,7 +89,7 @@ function Footer(props: Props) {
                             <IoLogoFacebook />
                         </Link>
                         <Link
-                            href="https://twitter.com/TheMissingMaps"
+                            href="https://twitter.com/mapswipe"
                             variant="icon"
                             target="_blank"
                         >
@@ -108,11 +110,25 @@ function Footer(props: Props) {
                             <IoLogoGithub />
                         </Link>
                         <Link
+                            href="https://wiki.openstreetmap.org/wiki/MapSwipe"
+                            variant="icon"
+                            target="_blank"
+                        >
+                            <IoSearch />
+                        </Link>
+                        <Link
                             href="mailto:info@mapswipe.org"
                             variant="icon"
                             target="_blank"
                         >
                             <IoMail />
+                        </Link>
+                        <Link
+                            href="https://slack.openstreetmap.us/"
+                            variant="icon"
+                            target="_blank"
+                        >
+                            <IoLogoSlack />
                         </Link>
                     </div>
                 </div>

@@ -94,6 +94,12 @@ function Navbar(props: Props) {
                                 activeClassName={styles.activeLanguage}
                             />
                         ))}
+                        <Link
+                            className={styles.language}
+                            href="/[locale]/get-involved/#individual"
+                        >
+                            {t('didnot-find-language')}
+                        </Link>
                     </DropdownMenu>
                     <Button
                         className={_cs(

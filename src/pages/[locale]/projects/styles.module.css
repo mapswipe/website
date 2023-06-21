@@ -3,11 +3,32 @@
     flex-direction: column;
     gap: var(--spacing-medium);
 
+    .hero {
+    }
+
+    .illustration {
+        position: relative;
+        width: 30rem;
+        height: 40rem;
+
+        @media screen and (max-width: 840px) {
+            width: 24rem;
+        }
+
+        @media screen and (max-width: 720px) {
+            width: 80vw;
+        }
+    }
+
     .statsSection {
         .content {
             display: grid;
             grid-gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
 
             @media screen and (max-width: 30rem) {
                 grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -63,6 +84,10 @@
             grid-gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
 
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
             @media screen and (max-width: 30rem) {
                 grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
             }
@@ -95,6 +120,14 @@
             display: grid;
             grid-gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (max-width: 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
 
             .downloadIcon {
                 color: var(--color-accent);

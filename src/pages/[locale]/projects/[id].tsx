@@ -10,6 +10,7 @@ import html from 'remark-html';
 import { IoDownload } from 'react-icons/io5';
 
 import Page from 'components/Page';
+// import ImageWrapper from 'components/ImageWrapper';
 import Hero from 'components/Hero';
 import Card from 'components/Card';
 import HtmlOutput from 'components/HtmlOutput';
@@ -62,6 +63,7 @@ interface Props extends SSRConfig {
     className?: string;
     totalProgress: number | null;
     totalArea: number | null;
+    // image: string | undefined;
     totalContributors: number | null;
     name: string;
     description: string;
@@ -75,6 +77,7 @@ function Project(props: Props) {
     const {
         className,
         totalProgress,
+        // image,
         totalArea,
         totalContributors,
         name,
@@ -156,7 +159,17 @@ function Project(props: Props) {
     return (
         <Page contentClassName={_cs(styles.project, className)}>
             <Hero
+                className={styles.hero}
                 title={name}
+                /*
+                rightContent={image && (
+                    <ImageWrapper
+                        className={styles.illustration}
+                        src={image}
+                        alt="Placeholder"
+                    />
+                )}
+                */
             />
             <Section
                 className={styles.statsSection}
@@ -410,6 +423,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             totalArea: Math.round(project.properties.area_sqkm ?? 0),
             totalContributors: project.properties.number_of_users ?? null,
             name: project.properties.name,
+            image: project.properties.image,
             description: contentHtml,
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,

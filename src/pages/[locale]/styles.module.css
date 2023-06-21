@@ -23,12 +23,12 @@
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            gap: var(--spacing-mega-large);
+            gap: var(--spacing-gigantic);
 
             .pictures {
                 display: flex;
                 align-items: center;
-                flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                flex-basis: calc(40% - var(--spacing-gigantic) / 2);
                 flex-wrap: wrap;
                 justify-content: flex-end;
                 gap: var(--spacing-medium);
@@ -68,11 +68,12 @@
 
             .descriptionContainer {
                 display: flex;
-                flex-basis: calc(50% - var(--spacing-mega-large) / 2);
+                flex-basis: calc(60% - var(--spacing-gigantic) / 2);
                 flex-direction: column;
                 gap: var(--spacing-medium);
 
                 .description {
+                    max-width: 40rem;
                     font-size: var(--font-size-large);
                 }
 
@@ -150,7 +151,7 @@
                 justify-content: center;
                 border-radius: var(--border-radius-small);
                 background-color: var(--color-background-brand-light);
-                padding: var(--spacing-extra-large);
+                padding: var(--spacing-extra-large) var(--spacing-gigantic);
                 gap: var(--spacing-extra-large);
                 text-align: center;
 
@@ -192,7 +193,7 @@
                 flex-direction: column;
                 border-radius: var(--border-radius-small);
                 background-color: var(--color-background-accent-light);
-                padding: var(--spacing-extra-large);
+                padding: var(--spacing-extra-large) var(--spacing-gigantic);
                 gap: var(--spacing-extra-large);
                 text-align: center;
             }
@@ -211,7 +212,7 @@
             display: flex;
             align-items: center;
             flex-direction: column;
-            gap: var(--spacing-large);
+            gap: var(--spacing-super-large);
 
             .missingMapsLogo {
                 width: 12rem;
@@ -220,6 +221,7 @@
 
             .description {
                 max-width: var(--width-heading-max);
+                text-align: center;
                 font-size: var(--font-size-large);
             }
 
@@ -228,7 +230,7 @@
                 align-items: center;
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: var(--spacing-large);
+                gap: var(--spacing-mega-large);
 
                 .partnerLogo {
                     width: 8rem;

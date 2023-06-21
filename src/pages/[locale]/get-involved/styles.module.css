@@ -20,6 +20,14 @@
         }
     }
 
+    .contributeSection {
+        gap: 0;
+    }
+
+    .sectionContainer {
+        gap: var(--spacing-gigantic);
+    }
+
     .individual {
         .content {
             display: grid;
@@ -89,8 +97,6 @@
     }
 
     .group {
-        background-color: var(--color-background-brand-light);
-
         .content {
             display: flex;
             gap: var(--spacing-large);
@@ -183,8 +189,6 @@
     }
 
     .donate {
-        background-color: var(--color-background-brand-light);
-
         .content {
             display: flex;
             align-items: center;
