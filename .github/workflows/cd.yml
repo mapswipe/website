@@ -1,0 +1,76 @@
+name: CD
+
+on:
+  push:
+    # NOTE: Don't add other branches
+    branches:
+      - develop
+      - feat/cd  # TODO: REMOVE THIS
+
+jobs:
+  test_build:
+    if: github.event_name == 'push'
+    name: Run Tests + Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - uses: actions/cache@v3
+        id: data-cache
+        with:
+          path: cache
+          key: data-cache
+
+      - name: Run yarn install
+        run: yarn install
+
+      - name: Build + Test
+        run: yarn export  # TODO: Use yarn build instead
+        env:
+          # Common
+          NODE_OPTIONS: --max_old_space_size=4096
+          NEXT_PRIVATE_STANDALONE: true
+          # App ENV
+          MAPSWIPE_COMMUNITY_API_ENDPOINT: https://api.mapswipe.org/graphql/
+          MAPSWIPE_API_ENDPOINT: https://api-mock-mapswipe.dev.togglecorp.com/api/  # TODO: UPDATE THIS
+
+      - name: Upload GH artifacts
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: out/
+
+  deploy:
+    name: Deploy (GH Page)
+    needs: test_build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    permissions:
+      contents: write
+      id-token: write
+      pages: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v2
