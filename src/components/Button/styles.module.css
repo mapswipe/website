@@ -3,8 +3,8 @@
     border: 0;
     background-color: transparent;
     cursor: pointer;
-    font-size: inherit;
     font-family: inherit;
+    font-size: inherit;
 
     &.primary {
         border-radius: var(--border-radius-medium);

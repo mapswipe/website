@@ -9,24 +9,30 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { IoDownload } from 'react-icons/io5';
+import {
+    IoDownload,
+    IoEllipseSharp,
+} from 'react-icons/io5';
 
 import Button from 'components/Button';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Page from 'components/Page';
 import Card from 'components/Card';
+import KeyFigure from 'components/KeyFigure';
 import Hero from 'components/Hero';
 import ImageWrapper from 'components/ImageWrapper';
 import Link from 'components/Link';
+import Heading from 'components/Heading';
 import ListItem from 'components/ListItem';
 import RawInput from 'components/RawInput';
 import Section from 'components/Section';
-import SelectInput from 'components/SelectInput';
+import RadioInput from 'components/RadioInput';
+import MultiSelectInput from 'components/MultiSelectInput';
 import {
     rankedSearchOnList,
     projectNameMapping,
-    projectTypes,
-    projectStatuses,
+    ProjectStatusOption,
+    ProjectTypeOption,
     ProjectStatus,
     ProjectType,
 } from 'utils/common';
@@ -163,8 +169,12 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 function keySelector<K extends { key: string }>(option: K) {
     return option.key;
 }
-function labelSelector<K extends { label: string }>(option: K) {
+function labelSelector<K extends { label: string | React.ReactNode }>(option: K) {
     return option.label;
+}
+
+function iconSelector<K extends { icon?: React.ReactNode }>(option: K) {
+    return option.icon;
 }
 
 const PAGE_SIZE = 9;
@@ -203,13 +213,50 @@ function Data(props: Props) {
 
     const [items, setItems] = useState(PAGE_SIZE);
     const [searchText, setSearchText] = useState<string | undefined>();
-    const [projectType, setProjectType] = useState<string | undefined>();
-    const [projectStatus, setProjectStatus] = useState<string | undefined>();
+    const [projectTypes, setProjectTypes] = useState<string[] | undefined>();
+    const [projectStatuses, setProjectStatuses] = useState<string[] | undefined>();
     const [bubble, setBubble] = useState<string | undefined>();
 
     const debouncedSearchText = useDebouncedValue(searchText);
 
     const { t } = useTranslation('data');
+
+    const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
+        {
+            key: 'active',
+            label: t('active-projects'),
+            icon: (<IoEllipseSharp className={styles.active} />),
+        },
+        {
+            key: 'finished',
+            label: t('finished-projects'),
+            icon: (<IoEllipseSharp className={styles.finished} />),
+        },
+    ]), [t]);
+
+    const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
+        {
+            key: '1',
+            label: t('build-area'),
+            icon: (
+                <ProjectTypeIcon type="1" size="small" />
+            ),
+        },
+        {
+            key: '2',
+            label: t('footprint'),
+            icon: (
+                <ProjectTypeIcon type="2" size="small" />
+            ),
+        },
+        {
+            key: '3',
+            label: t('change-detection'),
+            icon: (
+                <ProjectTypeIcon type="3" size="small" />
+            ),
+        },
+    ]), [t]);
 
     const handleSeeMore = useCallback(
         () => {
@@ -222,12 +269,14 @@ function Data(props: Props) {
         () => {
             let filteredProjects = projects;
 
-            filteredProjects = projectStatus
-                ? filteredProjects.filter((project) => project.status === projectStatus)
+            filteredProjects = projectStatuses
+                ? filteredProjects.filter((project) => projectStatuses.includes(project.status))
                 : filteredProjects;
 
-            filteredProjects = projectType
-                ? filteredProjects.filter((project) => String(project.project_type) === projectType)
+            filteredProjects = projectTypes
+                ? filteredProjects.filter(
+                    (project) => projectTypes.includes(String(project.project_type)),
+                )
                 : filteredProjects;
 
             filteredProjects = debouncedSearchText
@@ -240,7 +289,12 @@ function Data(props: Props) {
 
             return filteredProjects;
         },
-        [projects, projectStatus, projectType, debouncedSearchText],
+        [
+            projects,
+            projectStatuses,
+            projectTypes,
+            debouncedSearchText,
+        ],
     );
 
     const completedProjects = visibleProjects.filter(
@@ -294,18 +348,39 @@ function Data(props: Props) {
                     />
                 )}
             />
-            <Section
-                title={t('community-stats-section-heading')}
-                description={t('community-stats-section-description')}
-                actions={(
-                    <Link
-                        href="https://community.mapswipe.org"
-                        variant="button"
+            <Section contentClassName={styles.statsHeader}>
+                <div className={styles.leftContent}>
+                    <KeyFigure
+                        className={_cs(styles.figure, styles.largeFigure)}
+                        value="100M"
+                        label="Total Swipes"
+                        variant="circle"
+                    />
+                    <KeyFigure
+                        className={styles.figure}
+                        value="70K"
+                        label="Total Contributors"
+                        variant="circle"
+                    />
+                </div>
+                <div className={styles.rightContent}>
+                    <Heading
+                        className={styles.heading}
+                        size="large"
                     >
-                        {t('community-dashboard-link-label')}
-                    </Link>
-                )}
-            />
+                        {t('community-stats-section-heading')}
+                    </Heading>
+                    <div className={styles.sectionDescription}>
+                        {t('community-stats-section-description')}
+                        <Link
+                            href="https://community.mapswipe.org"
+                            variant="underline"
+                        >
+                            {t('community-dashboard-link-label')}
+                        </Link>
+                    </div>
+                </div>
+            </Section>
             <Section
                 title={t('type-section-heading')}
                 description={t('type-section-description')}
@@ -404,6 +479,24 @@ function Data(props: Props) {
             >
                 <div className={styles.topContainer}>
                     <div className={styles.filters}>
+                        <MultiSelectInput
+                            label={t('project-status') ?? undefined}
+                            value={projectStatuses}
+                            options={projectStatusOptions}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            iconSelector={iconSelector}
+                            onChange={setProjectStatuses}
+                        />
+                        <MultiSelectInput
+                            label={t('project-type') ?? undefined}
+                            value={projectTypes}
+                            options={projectTypeOptions}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            iconSelector={iconSelector}
+                            onChange={setProjectTypes}
+                        />
                         <RawInput
                             className={styles.filter}
                             placeholder={t('search-label') ?? undefined}
@@ -411,30 +504,8 @@ function Data(props: Props) {
                             value={searchText}
                             onChange={setSearchText}
                         />
-                        <SelectInput
-                            className={styles.filter}
-                            placeholder={t('project-status') ?? undefined}
-                            name={undefined}
-                            value={projectStatus}
-                            options={projectStatuses}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            onChange={setProjectStatus}
-                        />
-                        <SelectInput
-                            className={styles.filter}
-                            placeholder={t('project-type') ?? undefined}
-                            name={undefined}
-                            value={projectType}
-                            options={projectTypes}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            onChange={setProjectType}
-                        />
-                        <SelectInput
-                            className={styles.filter}
-                            placeholder={t('bubble-type') ?? undefined}
-                            name={undefined}
+                        <RadioInput
+                            label={t('bubble-type') ?? undefined}
                             value={bubble}
                             options={bubbleTypes}
                             keySelector={keySelector}

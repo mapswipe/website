@@ -42,21 +42,23 @@ function Section(props: Props) {
             )}
         >
             <div className={_cs(styles.container, containerClassName)}>
-                <div className={styles.headingContainer}>
-                    {title && (
-                        <Heading
-                            className={styles.heading}
-                            size={smallHeading ? 'medium' : 'large'}
-                        >
-                            {title}
-                        </Heading>
-                    )}
-                    {description && (
-                        <div className={styles.description}>
-                            {description}
-                        </div>
-                    )}
-                </div>
+                {(title || description) && (
+                    <div className={styles.headingContainer}>
+                        {title && (
+                            <Heading
+                                className={styles.heading}
+                                size={smallHeading ? 'medium' : 'large'}
+                            >
+                                {title}
+                            </Heading>
+                        )}
+                        {description && (
+                            <div className={styles.description}>
+                                {description}
+                            </div>
+                        )}
+                    </div>
+                )}
                 {children && (
                     <div className={contentClassName}>
                         {children}

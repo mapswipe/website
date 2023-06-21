@@ -1,6 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-import { IoCheckmarkCircle } from 'react-icons/io5';
+import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 
 import styles from './styles.module.css';
 
@@ -13,7 +13,7 @@ interface Props {
 function ListItem(props: Props) {
     const {
         className,
-        icon = <IoCheckmarkCircle />,
+        icon = <IoCheckmarkCircleOutline />,
         label,
     } = props;
 

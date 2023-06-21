@@ -5,8 +5,8 @@
     justify-content: center;
     gap: var(--spacing-extra-small);
     border: var(--width-separator-thin) solid var(--color-separator);
-    padding: var(--spacing-extra-large);
     border-radius: 0.5rem;
+    padding: var(--spacing-extra-large);
 
     .label {
         font-size: var(--font-size-large);
@@ -19,5 +19,22 @@
 
     .description {
         font-size: var(--font-size-large);
+    }
+
+    &.circle {
+        --size: 8rem;
+        --border-size: 4rem;
+        position: relative;
+        border: none;
+        border-radius: var(--border-size);
+        width: var(--size);
+        height: var(--size);
+        box-shadow: 0 0 0 2rem var(--color-accent-light);
+        background-color: var(--color-accent-light);
+        text-align: center;
+
+        &.complement {
+            background-color: var(--color-complement);
+        }
     }
 }

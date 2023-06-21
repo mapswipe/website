@@ -15,6 +15,11 @@
         font-size: var(--font-size-large);
     }
 
+    &.underline {
+        text-decoration: underline;
+        color: var(--color-link);
+    }
+
     &.icon {
         display: flex;
         align-items: center;

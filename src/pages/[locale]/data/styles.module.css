@@ -19,6 +19,53 @@
         }
     }
 
+    .statsHeader {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--spacing-enourmous);
+
+        .leftContent {
+            display: flex;
+            justify-content: center;
+            flex-basis: 20rem;
+            transform: rotate(45deg);
+            padding: 0 var(--spacing-large);
+            gap: var(--spacing-medium);
+
+            .figure {
+                transform: rotate(-45deg);
+            }
+
+            .largeFigure {
+                --size: 10rem;
+                --border-size: 5rem;
+            }
+        }
+
+        .rightContent {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+
+            .heading {
+                align-self: center;
+                max-width: var(--width-heading-max);
+                text-align: center;
+            }
+            .sectionDescription {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-small);
+                align-self: center;
+                max-width: 30rem;
+                text-align: center;
+                font-size: var(--font-size-large);
+            }
+        }
+    }
+
     .typeSection {
         .typeList {
             display: grid;
@@ -41,24 +88,35 @@
 
             .topContainer {
                 display: flex;
-                gap: var(--spacing-mega-large);
+                gap: var(--spacing-large);
 
                 .filters {
                     display: flex;
+                    flex-basis: 24rem;
                     flex-direction: column;
-                    flex-basis: 20rem;
+                    border: var(--width-separator-thin) solid var(--color-border-light);
+                    border-radius: var(--border-radius-small);
+                    padding: var(--spacing-medium);
                     gap: var(--spacing-large);
+
+                    .active {
+                        color: var(--color-active);
+                    }
+
+                    .finished {
+                        color: var(--color-finished);
+                    }
 
                     .filter {
                         border: var(--width-separator-thin) solid var(--color-border-light);
                         border-radius: var(--border-radius-small);
-                        padding: var(--spacing-super-small) var(--spacing-small);
+                        padding: var(--spacing-super-small) var(--spacing-medium);
                     }
                 }
 
                 .mapContainer {
-                    background-color: var(--color-background-leaflet);
                     flex-grow: 1;
+                    background-color: var(--color-background-leaflet);
                     height: 32rem;
 
                     .projectsMap {

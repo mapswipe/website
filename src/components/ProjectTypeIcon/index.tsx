@@ -3,22 +3,39 @@ import { _cs } from '@togglecorp/fujs';
 
 import styles from './styles.module.css';
 
+type SizeTypes = 'small' | 'medium' | 'large';
+
+const sizeToStyleMap: {
+    [key in SizeTypes]: string;
+} = {
+    small: styles.small,
+    medium: styles.medium,
+    large: styles.large,
+};
+
 export interface Props {
     className?: string;
     type: '1' | '2' | '3';
+    size?: SizeTypes;
 }
-
 function ProjectTypeIcon(props: Props) {
     const {
-        className,
+        className: classNameFromProps,
         type,
+        size = 'medium',
     } = props;
+
+    const className = _cs(
+        styles.icon,
+        classNameFromProps,
+        sizeToStyleMap[size],
+    );
 
     return (
         <>
             {type === '1' && (
                 <svg
-                    className={_cs(styles.icon, className)}
+                    className={className}
                     id="Layer_2"
                     data-name="Layer 2"
                     xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +48,7 @@ function ProjectTypeIcon(props: Props) {
             )}
             {type === '2' && (
                 <svg
-                    className={_cs(styles.icon, className)}
+                    className={className}
                     id="Layer_2"
                     data-name="Layer 2"
                     xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +61,7 @@ function ProjectTypeIcon(props: Props) {
             )}
             {type === '3' && (
                 <svg
-                    className={_cs(styles.icon, className)}
+                    className={className}
                     id="Layer_2"
                     data-name="Layer 2"
                     xmlns="http://www.w3.org/2000/svg"

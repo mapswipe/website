@@ -64,24 +64,15 @@ export type ProjectType = 1 | 2 | 3 | 4;
 
 export interface ProjectStatusOption {
     key: ProjectStatus;
-    label: string;
+    label: string | React.ReactNode;
+    icon?: React.ReactNode;
 }
 
 export interface ProjectTypeOption {
     key: `${ProjectType}`;
     label: string;
+    icon?: React.ReactNode;
 }
-
-export const projectStatuses: ProjectStatusOption[] = [
-    { key: 'active', label: 'Active' },
-    { key: 'finished', label: 'Finished' },
-];
-
-export const projectTypes: ProjectTypeOption[] = [
-    { key: '1', label: 'Build Area' },
-    { key: '2', label: 'Footprint' },
-    { key: '3', label: 'Change Detection' },
-];
 
 export const projectNameMapping: {
     [key in ProjectTypeOption['key']]: string
