@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
@@ -7,16 +7,25 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { remark } from 'remark';
 import matter from 'gray-matter';
 import html from 'remark-html';
-import { IoDownload } from 'react-icons/io5';
+import {
+    IoDownloadOutline,
+    IoEllipseSharp,
+    IoFlag,
+    IoCalendarClearOutline,
+    IoLocationOutline,
+} from 'react-icons/io5';
 
 import Page from 'components/Page';
+import ProjectTypeIcon from 'components/ProjectTypeIcon';
 // import ImageWrapper from 'components/ImageWrapper';
 import Hero from 'components/Hero';
+import Tag from 'components/Tag';
 import Card from 'components/Card';
 import HtmlOutput from 'components/HtmlOutput';
 import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
+import Link from 'components/Link';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 
@@ -24,7 +33,11 @@ import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
 import getFileSizes from 'utils/requests/fileSizes';
 import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
-import { ProjectStatus } from 'utils/common';
+import {
+    ProjectStatus,
+    ProjectStatusOption,
+    ProjectTypeOption,
+} from 'utils/common';
 import {
     getBounds,
     getPathData,
@@ -65,12 +78,16 @@ interface Props extends SSRConfig {
     totalArea: number | null;
     // image: string | undefined;
     totalContributors: number | null;
+    type: number | undefined | null;
     name: string;
     description: string;
     status: ProjectStatus;
     projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
     projectHistory: ProjectHistory[];
     urls: UrlInfo[];
+    region?: string | null;
+    requestingOrganization?: string | null;
+    day?: number | null;
 }
 
 function Project(props: Props) {
@@ -81,11 +98,15 @@ function Project(props: Props) {
         totalArea,
         totalContributors,
         name,
+        type,
         description,
         status,
         projectGeoJSON,
         urls,
         projectHistory,
+        region,
+        requestingOrganization,
+        day,
     } = props;
 
     const svgRef = React.useRef<SVGSVGElement>(null);
@@ -156,11 +177,96 @@ function Project(props: Props) {
         area_of_interest: t('area-of-interest-description'),
     };
 
+    const projectStatusOptions: Record<string, ProjectStatusOption> = useMemo(() => ({
+        active: {
+            key: 'active',
+            label: t('active-projects'),
+            icon: (<IoEllipseSharp className={styles.active} />),
+        },
+        finished: {
+            key: 'finished',
+            label: t('finished-projects'),
+            icon: (<IoEllipseSharp className={styles.finished} />),
+        },
+    }), [t]);
+
+    const projectTypeOptions: Record<string, ProjectTypeOption> = useMemo(() => ({
+        1: {
+            key: '1',
+            label: t('build-area'),
+            icon: (
+                <ProjectTypeIcon type="1" size="small" />
+            ),
+        },
+        2: {
+            key: '2',
+            label: t('footprint'),
+            icon: (
+                <ProjectTypeIcon type="2" size="small" />
+            ),
+        },
+        3: {
+            key: '3',
+            label: t('change-detection'),
+            icon: (
+                <ProjectTypeIcon type="3" size="small" />
+            ),
+        },
+    }), [t]);
+
     return (
         <Page contentClassName={_cs(styles.project, className)}>
             <Hero
                 className={styles.hero}
                 title={name}
+                description={(
+                    <div className={styles.heroDescription}>
+                        <div className={styles.tags}>
+                            {type && (
+                                <Tag
+                                    icon={projectTypeOptions[type].icon}
+                                >
+                                    {projectTypeOptions[type].label}
+                                </Tag>
+                            )}
+                            {status && (
+                                <Tag
+                                    icon={projectStatusOptions[status].icon}
+                                >
+                                    {projectStatusOptions[status].label}
+                                </Tag>
+                            )}
+                        </div>
+                        {region && (
+                            <Tag
+                                className={styles.heroTag}
+                                icon={<IoLocationOutline />}
+                                variant="transparent"
+                            >
+                                {region}
+                            </Tag>
+                        )}
+                        {requestingOrganization && (
+                            <Tag
+                                className={styles.heroTag}
+                                icon={<IoFlag />}
+                                variant="transparent"
+                            >
+                                {requestingOrganization}
+                            </Tag>
+                        )}
+                        {day && (
+                            <Tag
+                                className={styles.heroTag}
+                                icon={<IoCalendarClearOutline />}
+                                variant="transparent"
+                            >
+                                {day}
+                            </Tag>
+                        )}
+                    </div>
+                )}
+                rightContent={<div />}
                 /*
                 rightContent={image && (
                     <ImageWrapper
@@ -171,10 +277,55 @@ function Project(props: Props) {
                 )}
                 */
             />
+            <Section className={styles.overviewSection}>
+                <div className={styles.overviewContent}>
+                    <div className={styles.content}>
+                        <Heading size="large">
+                            {t('overview-section-title')}
+                        </Heading>
+                        <div className={styles.description}>
+                            <HtmlOutput
+                                className={styles.description}
+                                content={description}
+                            />
+                        </div>
+                    </div>
+                    <div className={styles.stats}>
+                        <KeyFigure
+                            className={_cs(styles.largeFigure, styles.figure)}
+                            value={totalArea}
+                            variant="circle"
+                            description={(
+                                <span>
+                                    km
+                                    <sup>
+                                        2
+                                    </sup>
+                                </span>
+                            )}
+                        />
+                        <KeyFigure
+                            className={styles.figure}
+                            variant="circle"
+                            circleColor="complement"
+                            value={totalContributors}
+                            description={t('project-contributors-text')}
+                        />
+                    </div>
+                </div>
+            </Section>
             <Section
                 className={styles.statsSection}
                 contentClassName={styles.content}
             >
+                {projectGeoJSON && (
+                    <div className={styles.mapContainer}>
+                        <DynamicProjectMap
+                            className={styles.projectsMap}
+                            geoJSON={projectGeoJSON}
+                        />
+                    </div>
+                )}
                 <div className={styles.chartContainer}>
                     <svg
                         className={styles.timelineChart}
@@ -207,81 +358,70 @@ function Project(props: Props) {
                             d={getPathData(chartPoints)}
                         />
                     </svg>
-                </div>
-                <div className={styles.stats}>
-                    <KeyFigure
-                        value={`${totalProgress}%`}
-                        description={t('project-progress-text')}
-                    />
-                    <KeyFigure
-                        value={totalArea}
-                        description={(
-                            <span>
-                                km
-                                <sup>
-                                    2
-                                </sup>
-                            </span>
-                        )}
-                    />
-                    <KeyFigure
-                        value={totalContributors}
-                        description={t('project-contributors-text')}
-                    />
-                    <KeyFigure
-                        value={status}
-                    />
-                </div>
-            </Section>
-            <Section className={styles.overviewSection}>
-                <div className={styles.overviewContent}>
-                    <div className={styles.content}>
-                        <Heading size="large">
-                            {t('overview-section-title')}
-                        </Heading>
-                        <div className={styles.description}>
-                            <HtmlOutput
-                                className={styles.description}
-                                content={description}
+                    <div className={styles.progressBar}>
+                        <div className={styles.track}>
+                            <div
+                                style={{ width: `${totalProgress}%` }}
+                                className={styles.progress}
                             />
+                        </div>
+                        <div className={styles.progressLabel}>
+                            {t('project-card-progress-text', { progress: totalProgress })}
                         </div>
                     </div>
-                    {projectGeoJSON && (
-                        <div className={styles.mapContainer}>
-                            <DynamicProjectMap
-                                className={styles.projectsMap}
-                                geoJSON={projectGeoJSON}
-                            />
-                        </div>
-                    )}
                 </div>
             </Section>
             <Section
                 title={t('data-section-heading')}
                 description={t('data-section-description')}
+                descriptionClassName={styles.description}
                 className={styles.downloadSection}
                 contentClassName={styles.urlList}
+                withAlternativeBackground
             >
                 {urls.map((url) => (
                     <Card
+                        childrenContainerClassName={styles.downloadCard}
                         key={url.type}
                         heading={dataHeadingMap[url.name]}
-                        description={dataDescriptionMap[url.name]}
-                        footerActions={(
-                            <a href={url.url}>
-                                <IoDownload className={styles.downloadIcon} />
-                            </a>
-                        )}
                     >
-                        <div>
-                            {t('download-type', { type: url.type })}
+                        <div className={styles.leftContent}>
+                            {dataDescriptionMap[url.name]}
                         </div>
-                        <div>
-                            {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                        <div className={styles.rightContent}>
+                            <div className={styles.fileDetails}>
+                                <Tag>
+                                    {url.type}
+                                </Tag>
+                                <div>
+                                    {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                                </div>
+                            </div>
+                            <Link
+                                href={url.url}
+                                variant="button"
+                                className={styles.link}
+                            >
+                                <IoDownloadOutline />
+                                {t('download')}
+                            </Link>
                         </div>
                     </Card>
                 ))}
             </Section>
+            <Section
+                title={t('license-section-heading')}
+                description={(
+                    <div className={styles.licenseDescription}>
+                        <p>
+                            {t('license-section-description-1')}
+                        </p>
+                        <p>
+                            {t('license-section-description-2')}
+                        </p>
+                    </div>
+                )}
+            />
         </Page>
     );
 }
@@ -419,7 +559,17 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             name: project.properties.legacyName
                 ? project.properties.name
                 : project.properties.topic,
+            region: project.properties.legacyName
+                ? null
+                : project.properties.region,
+            requestingOrganization: project.properties.legacyName
+                ? null
+                : project.properties.requestingOrganization,
+            day: project.properties?.day
+                ? new Date(project.properties.day).getTime()
+                : null,
             image: project.properties.image,
+            type: project.properties.project_type,
             description: contentHtml,
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,

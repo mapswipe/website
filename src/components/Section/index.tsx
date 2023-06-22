@@ -16,6 +16,7 @@ interface Props {
     withAlternativeBackground?: boolean;
     smallHeading?: boolean;
     sectionId?: string;
+    descriptionClassName?: string;
 }
 
 function Section(props: Props) {
@@ -25,6 +26,7 @@ function Section(props: Props) {
         containerClassName,
         title,
         description,
+        descriptionClassName,
         children,
         sectionId,
         actions,
@@ -53,7 +55,7 @@ function Section(props: Props) {
                             </Heading>
                         )}
                         {description && (
-                            <div className={styles.description}>
+                            <div className={_cs(styles.description, descriptionClassName)}>
                                 {description}
                             </div>
                         )}

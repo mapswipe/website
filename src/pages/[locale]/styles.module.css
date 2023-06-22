@@ -108,28 +108,14 @@
             gap: var(--spacing-large);
 
             .missionType {
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content: center;
-                border: var(--width-separator-thin) solid var(--color-separator);
-                border-radius: 0.5rem;
-                padding: var(--spacing-large);
-                max-width: 20rem;
-                gap: var(--spacing-medium);
+                max-width: 25rem;
+
+                .missionImage {
+                    height: 10rem;
+                }
 
                 &:hover {
                     box-shadow: var(--box-shadow-medium);
-                }
-
-                .icon {
-                    color: var(--color-accent);
-                    font-size: var(--font-size-mega-large);
-                }
-
-                .missionTypeDescription {
-                    text-align: center;
-                    font-size: var(--font-size-large);
                 }
             }
         }
@@ -138,7 +124,7 @@
     .startMapswiping {
         .content {
             display: flex;
-            gap: var(--spacing-large);
+            gap: var(--spacing-mega-large);
 
             .description {
                 font-size: var(--font-size-extra-large);

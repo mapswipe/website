@@ -17,6 +17,7 @@ interface Props {
     footerContent?: React.ReactNode;
     footerIcons?: React.ReactNode;
     footerActions?: React.ReactNode;
+    imageClassName?: string;
     coverImageUrl?: string;
 }
 
@@ -25,6 +26,7 @@ function Card(props: Props) {
         className,
         heading,
         description,
+        imageClassName,
         childrenContainerClassName,
         icons,
         actions,
@@ -42,7 +44,7 @@ function Card(props: Props) {
         <div className={_cs(styles.card, className)}>
             {coverImageUrl && (
                 <ImageWrapper
-                    className={styles.coverImageWrapper}
+                    className={_cs(styles.coverImageWrapper, imageClassName)}
                     imageClassName={styles.image}
                     src={coverImageUrl}
                     alt="cover-image"
@@ -60,7 +62,7 @@ function Card(props: Props) {
                                 )}
                                 <Heading
                                     className={styles.heading}
-                                    size="small"
+                                    size="extraSmall"
                                 >
                                     {heading}
                                 </Heading>

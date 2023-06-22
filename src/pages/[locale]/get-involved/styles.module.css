@@ -20,8 +20,61 @@
         }
     }
 
-    .contributeSection {
-        gap: 0;
+    .imageContainer {
+        display: flex;
+        align-items: center;
+        flex-basis: 40rem;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: var(--spacing-extra-large);
+
+        .illustration {
+            width: 24rem;
+            height: 28rem;
+
+            @media screen and (max-width: 720px) {
+                width: 80vw;
+            }
+        }
+    }
+
+    .contributeContainer {
+        gap: var(--spacing-small);
+        background-color: var(--color-background-brand-light);
+        max-width: calc(var(--width-page-max) - 2 * var(--spacing-super-large));
+        border-radius: var(--border-radius-large);
+
+        .contributeSection {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            .buttonsContainer {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: var(--spacing-large);
+
+                .buttonImageContainer {
+                    position: relative;
+                    width: 10rem;
+                    height: 4rem;
+
+                    .image {
+                        object-position: center center;
+                        object-fit: contain;
+                        border-radius: var(--border-radius-medium);
+                    }
+                }
+            }
+
+            .downloadLink {
+                text-decoration: underline;
+                color: var(--color-link);
+            }
+        }
     }
 
     .sectionContainer {
@@ -30,67 +83,31 @@
 
     .individual {
         .content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            grid-template-rows: repeat(auto-fit, minmax(20rem, 1fr));
-            grid-gap: var(--spacing-large);
+            display: flex;
+            gap: var(--spacing-large);
 
-            .leftContainer {
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                grid-row: auto / span 2;
-                gap: var(--spacing-medium);
-
-                .illustration {
-                    width: 24rem;
-                    height: 28rem;
-
-                    @media screen and (max-width: 720px) {
-                        width: 80vw;
-                    }
-                }
-            }
-
-            .bottom {
-                grid-column: span 2 / auto;
-            }
-
-            .linksContainer {
+            .cards {
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                gap: var(--spacing-small);
+                flex-grow: 1;
+                gap: var(--spacing-large);
 
-                .buttonsContainer {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    gap: var(--spacing-large);
-
-                    .buttonImageContainer {
-                        position: relative;
-                        width: 10rem;
-                        height: 4rem;
-
-                        .image {
-                            object-position: center center;
-                            object-fit: contain;
-                            border-radius: var(--border-radius-medium);
-                        }
-                    }
-                }
-
-                .downloadLink {
-                    text-decoration: underline;
+                .card {
+                    background-color: #fff;
+                    max-width: 60rem;
                 }
             }
 
-            @media screen and (max-width: 840px) {
-                .bottom {
-                    grid-column: unset;
+            @media screen and (max-width: 720px) {
+                flex-direction: column;
+
+                .imageContainer {
+                    flex-basis: unset;
+                    order: 1;
+                }
+
+                .cards {
+                    order: 2;
                 }
             }
         }
@@ -100,25 +117,6 @@
         .content {
             display: flex;
             gap: var(--spacing-large);
-
-            .imageContainer {
-                display: flex;
-                align-items: center;
-                flex-basis: 40rem;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                gap: var(--spacing-medium);
-
-                .illustration {
-                    width: 24rem;
-                    height: 28rem;
-
-                    @media screen and (max-width: 720px) {
-                        width: 80vw;
-                    }
-                }
-            }
 
             .cards {
                 display: flex;
@@ -153,25 +151,6 @@
             align-items: center;
             gap: var(--spacing-large);
 
-            .imageContainer {
-                display: flex;
-                align-items: center;
-                flex-basis: 40rem;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                gap: var(--spacing-medium);
-
-                .illustration {
-                    width: 24rem;
-                    height: 28rem;
-
-                    @media screen and (max-width: 720px) {
-                        width: 80vw;
-                    }
-                }
-            }
-
             .card {
                 flex-grow: 1;
                 background-color: #fff;
@@ -193,25 +172,6 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-large);
-
-            .imageContainer {
-                display: flex;
-                align-items: center;
-                flex-basis: 40rem;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                gap: var(--spacing-medium);
-
-                .illustration {
-                    width: 24rem;
-                    height: 28rem;
-
-                    @media screen and (max-width: 720px) {
-                        width: 80vw;
-                    }
-                }
-            }
 
             .card {
                 flex-grow: 1;

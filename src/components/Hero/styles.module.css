@@ -28,6 +28,7 @@
             .left {
                 display: flex;
                 flex-direction: column;
+                justify-content: center;
                 gap: var(--spacing-extra-large);
                 padding-top: var(--spacing-mega-large);
                 max-width: 40rem;
@@ -50,8 +51,9 @@
             .right {
                 display: flex;
                 flex-grow: 1;
-                justify-content: center;
+                justify-content: flex-end;
                 margin-bottom: -10rem;
+                min-height: 10rem;
             }
         }
     }

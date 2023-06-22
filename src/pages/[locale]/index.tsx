@@ -3,15 +3,25 @@ import { GetStaticProps } from 'next';
 import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import {
+    gql,
+    request,
+} from 'graphql-request';
+
 import Head from 'next/head';
 
 import Page from 'components/Page';
 import Link from 'components/Link';
+import {
+    graphqlEndpoint,
+    Stats,
+} from 'utils/common';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import ImageWrapper from 'components/ImageWrapper';
-import InfoBox from 'components/InfoBox';
-import Heading from 'components/Heading';
+import KeyFigure from 'components/KeyFigure';
+import Card from 'components/Card';
 import Hero from 'components/Hero';
+import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
 
 import i18nextConfig from '../../../next-i18next.config';
@@ -21,7 +31,7 @@ import styles from './styles.module.css';
 const partners = [
     {
         altText: 'American Red Cross Logo',
-        imageSrc: 'img/arc.png',
+        imageSrc: 'img/arc.svg',
         link: 'https://www.redcross.org/',
     },
     {
@@ -58,11 +68,15 @@ const partners = [
 
 interface Props extends SSRConfig {
     className?: string;
+    totalContributors?: number | null | undefined;
+    totalSwipes?: number | null | undefined;
 }
 
 function Home(props: Props) {
     const {
         className,
+        totalContributors,
+        totalSwipes,
     } = props;
 
     const { t } = useTranslation('home');
@@ -138,12 +152,22 @@ function Home(props: Props) {
                         {t('mobilizing-volunteer-description-paragraph-2')}
                     </div>
                     <div className={styles.infoBoxContainer}>
-                        <InfoBox
-                            value="100M"
+                        <KeyFigure
+                            value={(
+                                <NumberOutput
+                                    value={totalSwipes}
+                                    normal
+                                />
+                            )}
                             label="Total Swipes"
                         />
-                        <InfoBox
-                            value="70K"
+                        <KeyFigure
+                            value={(
+                                <NumberOutput
+                                    value={totalContributors}
+                                    normal
+                                />
+                            )}
                             label="Total Contributors"
                         />
                     </div>
@@ -155,45 +179,45 @@ function Home(props: Props) {
                 description={t('explore-mission-types-description')}
                 contentClassName={styles.content}
             >
-                <div className={styles.missionType}>
-                    <ProjectTypeIcon
-                        size="large"
-                        type="1"
-                        className={styles.icon}
-                    />
-                    <Heading>
-                        {t('find-mission-type-heading')}
-                    </Heading>
-                    <div className={styles.missionTypeDescription}>
-                        {t('find-mission-type-description')}
-                    </div>
-                </div>
-                <div className={styles.missionType}>
-                    <ProjectTypeIcon
-                        size="large"
-                        type="3"
-                        className={styles.icon}
-                    />
-                    <Heading>
-                        {t('compare-mission-type-heading')}
-                    </Heading>
-                    <div className={styles.missionTypeDescription}>
-                        {t('compare-mission-type-description')}
-                    </div>
-                </div>
-                <div className={styles.missionType}>
-                    <ProjectTypeIcon
-                        size="large"
-                        type="2"
-                        className={styles.icon}
-                    />
-                    <Heading>
-                        {t('validate-mission-type-heading')}
-                    </Heading>
-                    <div className={styles.missionTypeDescription}>
-                        {t('validate-mission-type-description')}
-                    </div>
-                </div>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/placeholder.png"
+                    heading={t('type-find-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="1"
+                        />
+                    )}
+                >
+                    {t('find-mission-type-description')}
+                </Card>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/placeholder.png"
+                    heading={t('type-compare-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="3"
+                        />
+                    )}
+                >
+                    {t('compare-mission-type-description')}
+                </Card>
+                <Card
+                    className={styles.missionType}
+                    imageClassName={styles.missionImage}
+                    coverImageUrl="/img/placeholder.png"
+                    heading={t('type-validate-title')}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="2"
+                        />
+                    )}
+                >
+                    {t('validate-mission-type-description')}
+                </Card>
             </Section>
             <Section
                 sectionId="startMapswiping"
@@ -308,9 +332,27 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         'home',
         'common',
     ]);
+    const stats = gql`
+        query CommunityStats {
+            communityStats {
+                totalContributors
+                totalUserGroups
+                totalSwipes
+            }
+        }
+    `;
+    const value: Stats = await request(graphqlEndpoint, stats);
+
+    const {
+        totalContributors,
+        totalSwipes,
+    } = value?.communityStats ?? {};
+
     return {
         props: {
             ...translations,
+            totalContributors,
+            totalSwipes,
         },
     };
 };

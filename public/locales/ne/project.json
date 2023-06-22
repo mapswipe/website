@@ -19,11 +19,19 @@
   "tasks-description": "",
   "users-description": "",
   "area-of-interest-description": "",
-  "project-progress-text": "",
-  "project-contributors-text": "",
+  "active-projects": "",
+  "finished-projects": "",
+  "build-area": "",
+  "footprint": "",
+  "change-detection": "",
   "overview-section-title": "",
+  "project-contributors-text": "",
+  "project-card-progress-text": "",
   "data-section-heading": "",
   "data-section-description": "",
-  "download-type": "",
-  "download-size": ""
+  "download-size": "",
+  "download": "",
+  "license-section-heading": "",
+  "license-section-description-1": "",
+  "license-section-description-2": ""
 }

@@ -27,13 +27,14 @@
         position: relative;
         border: none;
         border-radius: var(--border-size);
+        box-shadow: 0 0 0 2rem var(--color-background-brand-light);
+        background-color: var(--color-background-brand-light);
         width: var(--size);
         height: var(--size);
-        box-shadow: 0 0 0 2rem var(--color-accent-light);
-        background-color: var(--color-accent-light);
         text-align: center;
 
         &.complement {
+            box-shadow: 0 0 0 2rem var(--color-complement);
             background-color: var(--color-complement);
         }
     }

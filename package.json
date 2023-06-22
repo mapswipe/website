@@ -20,6 +20,8 @@
     "dependencies": {
         "@togglecorp/fujs": "^2.0.0",
         "env-cmd": "^10.1.0",
+        "graphql": "^16.6.0",
+        "graphql-request": "^5.1.0",
         "gray-matter": "^4.0.3",
         "i18next": "^22.5.1",
         "leaflet": "^1.9.4",

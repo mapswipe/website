@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import Page from 'components/Page';
 import Hero from 'components/Hero';
+import Heading from 'components/Heading';
 import Button from 'components/Button';
 import Link from 'components/Link';
 import Section from 'components/Section';
@@ -44,63 +45,58 @@ function GetInvolved(props: Props) {
             <Section
                 title={t('contribute-now')}
                 description={t('contribute-now-description')}
-                containerClassName={styles.contributeSection}
+                containerClassName={styles.contributeContainer}
+                contentClassName={styles.contributeSection}
             >
-                <Section
-                    sectionId="individual"
-                    title={t('individual-heading')}
-                    className={styles.individual}
-                    contentClassName={styles.content}
-                    containerClassName={styles.sectionContainer}
-                    smallHeading
-                >
-                    <div className={styles.leftContainer}>
+                <div className={styles.buttonsContainer}>
+                    <Link
+                        className={styles.buttonImageContainer}
+                        href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
+                        target="_blank"
+                    >
                         <ImageWrapper
-                            className={styles.illustration}
-                            src="/img/placeholder.png"
-                            alt="Placeholder"
+                            imageClassName={styles.image}
+                            src="/img/playstore.png"
+                            alt="Download on playstore"
                         />
-                    </div>
-                    <CenteredCard
-                        title={t('looking-to-make-impact')}
-                        description={t('looking-to-make-impact-description')}
-                        actionsClassName={styles.linksContainer}
-                        actions={(
-                            <>
-                                <div className={styles.buttonsContainer}>
-                                    <Link
-                                        className={styles.buttonImageContainer}
-                                        href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
-                                        target="_blank"
-                                    >
-                                        <ImageWrapper
-                                            imageClassName={styles.image}
-                                            src="/img/playstore.png"
-                                            alt="Download on playstore"
-                                        />
-                                    </Link>
-                                    <Link
-                                        className={styles.buttonImageContainer}
-                                        href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
-                                        target="_blank"
-                                    >
-                                        <ImageWrapper
-                                            imageClassName={styles.image}
-                                            src="/img/apple.png"
-                                            alt="Download on Apple Store"
-                                        />
-                                    </Link>
-                                </div>
-                                <Link
-                                    className={styles.downloadLink}
-                                    href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
-                                    target="_blank"
-                                >
-                                    {t('download-apk-label')}
-                                </Link>
-                            </>
-                        )}
+                    </Link>
+                    <Link
+                        className={styles.buttonImageContainer}
+                        href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
+                        target="_blank"
+                    >
+                        <ImageWrapper
+                            imageClassName={styles.image}
+                            src="/img/apple.png"
+                            alt="Download on Apple Store"
+                        />
+                    </Link>
+                </div>
+                <Link
+                    className={styles.downloadLink}
+                    href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
+                    target="_blank"
+                >
+                    {t('download-apk-label')}
+                </Link>
+            </Section>
+            <Section
+                sectionId="individual"
+                className={styles.individual}
+                contentClassName={styles.content}
+                containerClassName={styles.sectionContainer}
+            >
+                <div className={styles.imageContainer}>
+                    <Heading size="small">
+                        {t('individual-heading')}
+                    </Heading>
+                    <ImageWrapper
+                        className={styles.illustration}
+                        src="/img/placeholder.png"
+                        alt="Placeholder"
                     />
+                </div>
+                <div className={styles.cards}>
                     <CenteredCard
                         title={t('possess-technical-skills')}
                         description={t('possess-techincal-skills-description')}
@@ -128,14 +124,12 @@ function GetInvolved(props: Props) {
                             </Link>
                         )}
                     />
-                </Section>
+                </div>
             </Section>
             <Section
-                title={t('group-heading')}
                 className={styles.group}
                 containerClassName={styles.sectionContainer}
                 contentClassName={styles.content}
-                smallHeading
                 withAlternativeBackground
             >
                 <div className={styles.cards}>
@@ -171,6 +165,9 @@ function GetInvolved(props: Props) {
                     />
                 </div>
                 <div className={styles.imageContainer}>
+                    <Heading size="small">
+                        {t('group-heading')}
+                    </Heading>
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/placeholder.png"
@@ -179,13 +176,14 @@ function GetInvolved(props: Props) {
                 </div>
             </Section>
             <Section
-                title={t('organization-heading')}
                 containerClassName={styles.sectionContainer}
                 className={styles.organizational}
                 contentClassName={styles.content}
-                smallHeading
             >
                 <div className={styles.imageContainer}>
+                    <Heading size="small">
+                        {t('organization-heading')}
+                    </Heading>
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/placeholder.png"
@@ -209,11 +207,9 @@ function GetInvolved(props: Props) {
                 />
             </Section>
             <Section
-                title={t('donate-heading')}
                 className={styles.donate}
                 contentClassName={styles.content}
                 containerClassName={styles.sectionContainer}
-                smallHeading
                 withAlternativeBackground
             >
                 <CenteredCard
@@ -232,6 +228,9 @@ function GetInvolved(props: Props) {
                     )}
                 />
                 <div className={styles.imageContainer}>
+                    <Heading size="small">
+                        {t('donate-heading')}
+                    </Heading>
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/placeholder.png"

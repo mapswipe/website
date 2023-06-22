@@ -1,3 +1,4 @@
 {
-  "project-pagination-text": "{{remainingProjects}} projects hidden"
+  "project-pagination-text": "{{remainingProjects}} projects hidden",
+  "download-type": "{{type}}"
 }
