@@ -8,18 +8,18 @@
 
     &.primary {
         border-radius: var(--border-radius-medium);
-        background-color: var(--color-accent);
+        background-color: var(--color-accent-dark);
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-text-on-dark);
-        font-size: var(--font-size-large);
+        font-size: var(--font-size-medium);
     }
 
     &.border {
-        border: var(--width-separator-thin) solid var(--color-accent);
+        border: var(--width-separator-thin) solid var(--color-accent-dark);
         border-radius: var(--border-radius-medium);
         padding: var(--spacing-super-small) var(--spacing-medium);
-        color: var(--color-accent);
-        font-size: var(--font-size-large);
+        color: var(--color-accent-dark);
+        font-size: var(--font-size-medium);
     }
 
     &.icon {
@@ -32,7 +32,7 @@
         color: var(--color-text-on-dark);
 
         &:hover {
-            background-color: var(--color-accent);
+            background-color: var(--color-accent-dark);
         }
     }
 }

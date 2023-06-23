@@ -49,7 +49,7 @@ function Section(props: Props) {
                         {title && (
                             <Heading
                                 className={styles.heading}
-                                size={smallHeading ? 'medium' : 'large'}
+                                size={smallHeading ? 'small' : 'medium'}
                             >
                                 {title}
                             </Heading>

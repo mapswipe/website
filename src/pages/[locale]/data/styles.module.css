@@ -13,16 +13,17 @@
     }
 
     .illustration {
-        position: relative;
         width: 30rem;
-        height: 40rem;
+        height: 32rem;
 
         @media screen and (max-width: 840px) {
             width: 24rem;
+            height: 28rem;
         }
 
         @media screen and (max-width: 720px) {
             width: 80vw;
+            height: 20rem;
         }
     }
 
@@ -79,7 +80,11 @@
         .typeList {
             display: grid;
             grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+            @media screen and (max-width: 24rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
 
             .keyPointList {
                 display: flex;
@@ -117,6 +122,7 @@
 
                     .row {
                         display: flex;
+                        flex-wrap: wrap;
                         gap: var(--spacing-large);
                     }
 
@@ -124,6 +130,10 @@
                         display: flex;
                         flex-direction: column;
                         gap: var(--spacing-super-small);
+
+                        .filter {
+                            max-width: 10rem;
+                        }
                     }
 
                     .clearButton {
@@ -139,10 +149,13 @@
                 .mapContainer {
                     position: relative;
                     flex-grow: 1;
+                    border-radius: var(--border-radius-medium);
                     background-color: var(--color-background-leaflet);
                     height: 32rem;
 
                     .projectsMap {
+                        border: var(--width-separator-thin) solid var(--color-separator);
+                        border-radius: var(--border-radius-medium);
                         background-color: var(--color-background-leaflet);
                         width: 100%;
                         height: 100%;
@@ -153,7 +166,6 @@
                         bottom: 0;
                         left: 0;
                         z-index: 100000;
-                        border-radius: var(--border-radius-small);
                         background-color: rgba(0, 0, 0, 0.2);
                         padding: var(--spacing-extra-small) var(--spacing-medium);
 
@@ -171,14 +183,33 @@
 
             .stats {
                 display: flex;
+                align-items: center;
+                flex-wrap: wrap;
                 gap: var(--spacing-large);
-                font-size: var(--font-size-extra-large);
+                font-size: var(--font-size-large);
+
+                .circle {
+                    font-size: var(--font-size-extra-small);
+                }
+
+                @media screen and (max-width: 720px) {
+                    align-items: flex-start;
+                    flex-direction: column;
+
+                    .circle {
+                        display: none;
+                    }
+                }
             }
 
             .projectList {
                 display: grid;
                 grid-gap: var(--spacing-extra-large);
-                grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+                @media screen and (max-width: 24rem) {
+                    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+                }
 
                 .cardLink {
                     &:hover {
@@ -194,6 +225,11 @@
                     }
                 }
 
+                .row {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-extra-small);
+                }
                 .progressBar {
                     display: flex;
                     flex-direction: column;
@@ -218,16 +254,16 @@
                 .projectStats {
                     display: flex;
                     flex-direction: column;
-                    gap: var(--spacing-super-small);
-
-                    .row {
-                        display: flex;
-                        align-items: center;
-                        gap: var(--spacing-extra-small);
-                    }
+                    gap: var(--spacing-medium);
 
                     .tag {
                         padding: 0;
+                    }
+
+                    .bottomTags {
+                        display: flex;
+                        flex-direction: column;
+                        gap: var(--spacing-super-small);
                     }
                 }
             }
@@ -238,13 +274,9 @@
         .urlList {
             display: grid;
             grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 
-            @media screen and (max-width: 36rem) {
-                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            }
-
-            @media screen and (max-width: 30rem) {
+            @media screen and (max-width: 24rem) {
                 grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
             }
 

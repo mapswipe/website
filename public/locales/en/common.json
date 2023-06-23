@@ -7,8 +7,14 @@
   "data-link": "Data",
   "community-dashboard-link": "Community",
   "footer-follow-us-title": "Follow Us On",
+  "facebook": "Facebook",
+  "twitter": "Twitter",
+  "instagram": "Instagram",
+  "github": "Github",
+  "osm-wiki": "OSM Wiki",
+  "email": "Email",
+  "slack": "Slack",
   "copyright": "Copyright © 2023 MapSwipe",
   "privacy": "Privacy",
-  "cookies": "Cookies",
   "didnot-find-language": "Add missing language"
 }

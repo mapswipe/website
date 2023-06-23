@@ -452,7 +452,7 @@ function Data(props: Props) {
                 rightContent={(
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/data-banner.svg"
                         alt="Placeholder"
                     />
                 )}
@@ -486,7 +486,7 @@ function Data(props: Props) {
                 <div className={styles.rightContent}>
                     <Heading
                         className={styles.heading}
-                        size="large"
+                        size="medium"
                     >
                         {t('community-stats-section-heading')}
                     </Heading>
@@ -684,6 +684,7 @@ function Data(props: Props) {
                             totalProjects: visibleProjects.length,
                         })}
                     </div>
+                    <IoEllipseSharp className={styles.circle} />
                     <div>
                         {t('total-area-card-text', { area: roundedTotalArea })}
                     </div>
@@ -698,22 +699,9 @@ function Data(props: Props) {
                             <Card
                                 className={styles.project}
                                 // coverImageUrl={project.image ?? undefined}
+                                headingFont="normal"
                                 heading={project.name}
-                                footerContent={(
-                                    <div className={styles.progressBar}>
-                                        <div className={styles.track}>
-                                            <div
-                                                style={{ width: `${project.progress}%` }}
-                                                className={styles.progress}
-                                            />
-                                        </div>
-                                        <div className={styles.progressLabel}>
-                                            {t('project-card-progress-text', { progress: project.progress })}
-                                        </div>
-                                    </div>
-                                )}
-                            >
-                                <div className={styles.projectStats}>
+                                description={(
                                     <div className={styles.row}>
                                         {project.project_type && (
                                             <Tag
@@ -734,43 +722,62 @@ function Data(props: Props) {
                                             </Tag>
                                         )}
                                     </div>
-                                    {project.region && (
-                                        <Tag
-                                            className={styles.tag}
-                                            icon={<IoLocationOutline />}
-                                            variant="transparent"
-                                        >
-                                            {project.region}
-                                        </Tag>
-                                    )}
-                                    {project.requestingOrganization && (
-                                        <Tag
-                                            className={styles.tag}
-                                            icon={<IoFlag />}
-                                            variant="transparent"
-                                        >
-                                            {project.requestingOrganization}
-                                        </Tag>
-                                    )}
-                                    <div className={styles.row}>
-                                        {project.day && (
+                                )}
+                                cardContentClassName={styles.cardContent}
+                                footerContent={(
+                                    <div className={styles.progressBar}>
+                                        <div className={styles.track}>
+                                            <div
+                                                style={{ width: `${project.progress}%` }}
+                                                className={styles.progress}
+                                            />
+                                        </div>
+                                        <div className={styles.progressLabel}>
+                                            {t('project-card-progress-text', { progress: project.progress })}
+                                        </div>
+                                    </div>
+                                )}
+                            >
+                                <div className={styles.projectStats}>
+                                    <div className={styles.bottomTags}>
+                                        {project.region && (
                                             <Tag
                                                 className={styles.tag}
-                                                icon={<IoCalendarClearOutline />}
+                                                icon={<IoLocationOutline />}
                                                 variant="transparent"
                                             >
-                                                {t('project-card-last-update', { date: project.day })}
+                                                {project.region}
                                             </Tag>
                                         )}
-                                        {project.number_of_users && (
+                                        {project.requestingOrganization && (
                                             <Tag
                                                 className={styles.tag}
-                                                icon={<IoPerson />}
+                                                icon={<IoFlag />}
                                                 variant="transparent"
                                             >
-                                                {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                                {project.requestingOrganization}
                                             </Tag>
                                         )}
+                                        <div className={styles.row}>
+                                            {project.day && (
+                                                <Tag
+                                                    className={styles.tag}
+                                                    icon={<IoCalendarClearOutline />}
+                                                    variant="transparent"
+                                                >
+                                                    {t('project-card-last-update', { date: project.day })}
+                                                </Tag>
+                                            )}
+                                            {project.number_of_users && (
+                                                <Tag
+                                                    className={styles.tag}
+                                                    icon={<IoPerson />}
+                                                    variant="transparent"
+                                                >
+                                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                                </Tag>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </Card>
@@ -802,7 +809,7 @@ function Data(props: Props) {
                         </div>
                         <Link
                             href={url.url}
-                            variant="button"
+                            variant="buttonTransparent"
                             className={styles.link}
                         >
                             <IoDownloadOutline />

@@ -36,7 +36,7 @@ function GetInvolved(props: Props) {
                 rightContent={(
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/get-involved-banner.svg"
                         alt="Placeholder"
                     />
                 )}
@@ -91,7 +91,7 @@ function GetInvolved(props: Props) {
                     </Heading>
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/individual.svg"
                         alt="Placeholder"
                     />
                 </div>
@@ -168,7 +168,7 @@ function GetInvolved(props: Props) {
                     </Heading>
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/group.svg"
                         alt="Placeholder"
                     />
                 </div>
@@ -184,7 +184,7 @@ function GetInvolved(props: Props) {
                     </Heading>
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/organization.svg"
                         alt="Placeholder"
                     />
                 </div>
@@ -213,7 +213,20 @@ function GetInvolved(props: Props) {
                 <CenteredCard
                     className={styles.card}
                     title={t('interested-in-supporting')}
-                    description={t('interested-in-supporting-description')}
+                    description={(
+                        <div className={styles.donateCardDescription}>
+                            <p>
+                                {t('interested-in-supporting-description-1')}
+                            </p>
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://github.com/mapswipe/mapswipe/files/11629085/MapSwipe.2022.Financial.Report.-.20230204.pdf"
+                                target="_blank"
+                            >
+                                {t('download-financial-report')}
+                            </Link>
+                        </div>
+                    )}
                     actions={(
                         <Link
                             className={styles.downloadLink}
@@ -231,7 +244,7 @@ function GetInvolved(props: Props) {
                     </Heading>
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/donate.svg"
                         alt="Placeholder"
                     />
                 </div>

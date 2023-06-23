@@ -27,8 +27,6 @@ We won't do anything with your information you wouldn't reasonably expect.
 
 Processing of your personal information is carried out by or on behalf of the British Red Cross Society, incorporated by Royal Charter 1908; registered as a charity in England and Wales (220949), Scotland (SC037738) and the Isle of Man (0752).
 
-This notice, together with our [cookie policy](/cookie) tells you about how we collect, use and protect your personal information.
-
 If you have any queries about our Privacy Notice, please get in touch with our Information Governance team:
 
 | | |
@@ -42,7 +40,7 @@ If you have any queries about our Privacy Notice, please get in touch with our I
 When you download the MapSwipe app, you will have to create an account and provide us with some information about you so that we can link your contributions to your account. We are hoping to introduce an option to map as a guest without you having to give us any information, however this is not yet available.
 
 ### When you indirectly give us information
-We monitor how the app is used, for example the pages you view and how you navigate the app, to help us improve the experience. This data is aggregated and anonymised, so we are not able to identify individual users. If you use our website, we may also obtain information about your visit to our website by using cookies. Please visit our cookie policy for information on this.
+We monitor how the app is used, for example the pages you view and how you navigate the app, to help us improve the experience. This data is aggregated and anonymised, so we are not able to identify individual users.
 
 ### What information we might collect
 When you create an account, we will ask you to provide your email address and create a username and password for your account. If you use your OpenStreetMap account to signup or login, we will instead obtain your user identifier and username from OpenStreetMap. Your email address and OpenStreetMap identifier are referred to in this Privacy Notice as 'personal information', whereas your username will be publicly visible and tied to your contributions in the app. Your password is encrypted and not visible to anyone.

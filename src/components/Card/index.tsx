@@ -10,6 +10,7 @@ interface Props {
     className?: string;
     heading?: React.ReactNode;
     description?: React.ReactNode;
+    headingFont?: 'normal' | 'heading';
     children?: React.ReactNode;
     childrenContainerClassName?: string;
     icons?: React.ReactNode;
@@ -18,6 +19,7 @@ interface Props {
     footerIcons?: React.ReactNode;
     footerActions?: React.ReactNode;
     imageClassName?: string;
+    cardContentClassName?: string;
     coverImageUrl?: string;
 }
 
@@ -25,12 +27,14 @@ function Card(props: Props) {
     const {
         className,
         heading,
+        headingFont,
         description,
         imageClassName,
         childrenContainerClassName,
         icons,
         actions,
         footerContent,
+        cardContentClassName,
         footerActions,
         footerIcons,
         children,
@@ -50,7 +54,7 @@ function Card(props: Props) {
                     alt="cover-image"
                 />
             )}
-            <div className={styles.cardContent}>
+            <div className={_cs(styles.cardContent, cardContentClassName)}>
                 {(showHeader || !!description) && (
                     <div className={styles.headerWrapper}>
                         {showHeader && (
@@ -62,6 +66,7 @@ function Card(props: Props) {
                                 )}
                                 <Heading
                                     className={styles.heading}
+                                    font={headingFont}
                                     size="extraSmall"
                                 >
                                     {heading}

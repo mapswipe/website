@@ -94,7 +94,7 @@ function Home(props: Props) {
                     <ImageWrapper
                         className={styles.screenshot}
                         imageClassName={styles.image}
-                        src="/screenshot.png"
+                        src="/img/banner.png"
                         alt="Mapswipe"
                     />
                 )}
@@ -291,7 +291,7 @@ function Home(props: Props) {
                         alt="Missing Maps Logo"
                     />
                 </Link>
-                <div className={styles.description}>
+                <div className={styles.partnersDescription}>
                     {t('missing-map-description')}
                 </div>
                 <div className={styles.partnerLogos}>

@@ -22,6 +22,7 @@ interface Props extends Omit<NextLinkProps, 'locale'> {
     locale?: string;
     target?: string;
     variant?: Variant;
+    title?: React.ReactNode;
 }
 
 // NOTE: this does not support relative links
@@ -31,6 +32,7 @@ function Link(props: Props) {
         children,
         variant = 'transparent',
         className,
+        title,
         ...rest
     } = props;
 
@@ -62,6 +64,7 @@ function Link(props: Props) {
             )}
             // eslint-disable-next-line
             {...rest}
+            title={title ? String(title) : undefined}
             href={href}
         >
             {children}

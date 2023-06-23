@@ -20,7 +20,7 @@
             flex-grow: 1;
             justify-content: center;
             margin: 0 auto;
-            padding: var(--spacing-medium);
+            padding: 6rem var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
             width: 100%;
             max-width: var(--width-page-max);
             gap: var(--spacing-super-large);
@@ -28,7 +28,6 @@
             .left {
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
                 gap: var(--spacing-extra-large);
                 padding-top: var(--spacing-mega-large);
                 max-width: 40rem;
@@ -52,8 +51,6 @@
                 display: flex;
                 flex-grow: 1;
                 justify-content: flex-end;
-                margin-bottom: -10rem;
-                min-height: 10rem;
             }
         }
     }

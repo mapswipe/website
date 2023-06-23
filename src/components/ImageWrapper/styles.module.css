@@ -4,6 +4,7 @@
     height: 100%;
 
     .image {
+        object-position: center center;
         object-fit: contain;
     }
 }
