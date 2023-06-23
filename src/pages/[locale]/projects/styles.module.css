@@ -91,19 +91,20 @@
 
             .chartContainer {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
+                flex-direction: column;
                 justify-content: center;
+                border: var(--width-separator-thin) solid var(--color-separator);
+                padding: var(--spacing-large);
                 height: 100%;
                 min-height: 20rem;
-                padding: var(--spacing-large);
-                border: var(--width-separator-thin) solid var(--color-separator);
                 border-radius: 0.5rem;
                 gap: var(--spacing-small);
 
                 .timelineChart {
                     width: 100%;
                     height: 100%;
+                    --path-stroke-width: 1pt;
 
                     .stopStart {
                         stop-color: var(--color-accent);
@@ -120,12 +121,64 @@
                         stroke-width: 2pt;
                         fill: none;
                     }
+
+                    .yAxisTickText {
+                        text-anchor: middle;
+                        font-size: var(--font-size-extra-small);
+                    }
+
+                    .xAxisTickText {
+                        text-anchor: middle;
+                        transition: var(--duration-transition-medium) ease-in-out transform;
+                        font-size: var(--font-size-extra-small);
+
+                        @media screen and (max-width: 30rem) {
+                            transform: rotate(-30deg);
+                        }
+                    }
+
+                    .xAxisGridLine,
+                    .yAxisGridLine {
+                        stroke: var(--color-text);
+                        stroke-dasharray: 4 4;
+                        stroke-opacity: 0.2;
+                        transition: var(--duration-transition-medium) ease-in-out stroke-opacity;
+
+                        &.hovered {
+                            stroke-opacity: 1;
+                        }
+                    }
+
+                    .rect {
+                        transition: var(--duration-transition-medium) ease-in-out fill-opacity;
+                        cursor: pointer;
+                        fill-opacity: 0;
+                        fill: var(--color-white);
+                    }
+                }
+
+                .emptyChart {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    opacity: 0.5;
+                    gap: var(--spacing-medium);
+
+                    .chartIcon {
+                        font-size: 10rem;
+                    }
+
+                    .message {
+                        font-size: var(--font-size-large);
+                    }
                 }
 
                 .progressBar {
                     display: flex;
-                    flex-direction: column;
                     align-self: stretch;
+                    flex-direction: column;
                     gap: var(--spacing-super-small);
 
                     .progressLabel {

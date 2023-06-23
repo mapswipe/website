@@ -6,25 +6,27 @@
     .optionsContainer {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--spacing-extra-small);
+        border-radius: 1rem;
+        background-color: var(--color-background-accent-light);
 
         .option {
             display: flex;
             align-items: center;
+            flex-shrink: 0;
             border: transparent solid var(--width-separator-thin);
-            border-radius: var(--border-radius-medium);
+            border-radius: 1rem;
             background-color: var(--color-background-accent-light);
-            padding: var(--spacing-super-small) var(--spacing-extra-small);
+            padding: var(--spacing-super-small) var(--spacing-medium);
             color: var(--color-text);
-            gap: var(--spacing-super-small);
             font-size: var(--font-size-small);
 
             &.selected {
-                border-color: var(--color-brand);
+                background-color: var(--color-brand);
+                color: var(--color-text-on-dark);
             }
 
             &.small {
-                padding: var(--spacing-tiny) var(--spacing-ultra-small);
+                padding: var(--spacing-tiny) var(--spacing-small);
                 font-size: var(--font-size-extra-small);
             }
         }

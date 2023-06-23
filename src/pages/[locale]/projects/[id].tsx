@@ -13,6 +13,7 @@ import {
     IoFlag,
     IoCalendarClearOutline,
     IoLocationOutline,
+    IoStatsChartSharp,
 } from 'react-icons/io5';
 
 import Page from 'components/Page';
@@ -47,6 +48,27 @@ import {
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
+
+const X_AXIS_HEIGHT = 20;
+const Y_AXIS_WIDTH = 10;
+const CHART_OFFSET = 10;
+
+const chartMargin = {
+    left: 2 * Y_AXIS_WIDTH + CHART_OFFSET,
+    top: CHART_OFFSET,
+    right: CHART_OFFSET * 3,
+    bottom: 2 * X_AXIS_HEIGHT + CHART_OFFSET,
+};
+
+const xAxisFormatter = (date: Date) => date.toLocaleString(
+    // TODO: set language
+    undefined,
+    {
+        day: '2-digit',
+        month: 'short',
+        year: '2-digit',
+    },
+);
 
 type DownloadType = (
     'aggregated_results'
@@ -115,29 +137,57 @@ function Project(props: Props) {
     const [
         chartPoints,
         chartPointsForArea,
+        xAxisTicks,
+        yAxisTicks,
     ] = React.useMemo(
         () => {
             const timestamps = projectHistory.map((ph) => ph.timestamp);
+            const initialTimeBounds = getBounds(timestamps);
 
-            const timeBounds = getBounds(timestamps);
+            const NUM_BREAKPOINT_X = 5;
+            const timeDiff = initialTimeBounds.max - initialTimeBounds.min;
+            const tickDuration = Math.ceil(timeDiff / NUM_BREAKPOINT_X);
+
+            const timeBounds = {
+                min: initialTimeBounds.min,
+                max: initialTimeBounds.min + (tickDuration * NUM_BREAKPOINT_X),
+            };
 
             const xScale = getScaleFunction(
                 timeBounds,
                 { min: 0, max: svgBounds.width },
-                { start: 0, end: 0 },
+                { start: chartMargin.left, end: chartMargin.right },
             );
 
+            const percentageBound = { min: 0, max: 100 };
             const yScale = getScaleFunction(
-                { min: 0, max: 100 },
+                percentageBound,
                 { min: 0, max: svgBounds.height },
-                { start: 0, end: 0 },
+                { start: chartMargin.top, end: chartMargin.bottom },
                 true,
+            );
+            const percentageTicks = [0, 20, 40, 60, 80, 100].map(
+                (percentage) => ({
+                    value: percentage,
+                    y: yScale(percentage),
+                }),
             );
 
             const points = projectHistory.map((hist) => ({
                 x: xScale(hist.timestamp),
                 y: yScale(bound(100 * hist.progress, 0, 100)),
             }));
+
+            const timeTicks = Array.from(Array(NUM_BREAKPOINT_X + 1)).map((_, i) => {
+                const timestamp = initialTimeBounds.min + tickDuration * i;
+                const date = new Date(timestamp);
+
+                return {
+                    date,
+                    timestamp,
+                    x: xScale(timestamp),
+                };
+            });
 
             return [
                 points,
@@ -146,10 +196,14 @@ function Project(props: Props) {
                     ...points,
                     { x: xScale(timeBounds.max), y: svgBounds.height },
                 ],
+                timeTicks,
+                percentageTicks,
             ];
         },
         [projectHistory, svgBounds],
     );
+
+    console.info(chartPoints);
 
     const { t } = useTranslation('project');
     const dataHeadingMap: Record<DownloadType, string> = {
@@ -329,37 +383,87 @@ function Project(props: Props) {
                     </div>
                 )}
                 <div className={styles.chartContainer}>
-                    <svg
-                        className={styles.timelineChart}
-                        ref={svgRef}
-                    >
-                        <defs>
-                            <linearGradient
-                                id="path-gradient"
-                                x1="0%"
-                                y1="0%"
-                                x2="0%"
-                                y2="100%"
-                            >
-                                <stop
-                                    className={styles.stopStart}
-                                    offset="0%"
-                                />
-                                <stop
-                                    className={styles.stopEnd}
-                                    offset="100%"
-                                />
-                            </linearGradient>
-                        </defs>
-                        <path
-                            fill="url(#path-gradient)"
-                            d={getPathData(chartPointsForArea)}
-                        />
-                        <path
-                            className={styles.path}
-                            d={getPathData(chartPoints)}
-                        />
-                    </svg>
+                    {chartPoints.length > 1 ? (
+                        <svg
+                            className={styles.timelineChart}
+                            ref={svgRef}
+                        >
+                            <defs>
+                                <linearGradient
+                                    id="path-gradient"
+                                    x1="0%"
+                                    y1="0%"
+                                    x2="0%"
+                                    y2="100%"
+                                >
+                                    <stop
+                                        className={styles.stopStart}
+                                        offset="0%"
+                                    />
+                                    <stop
+                                        className={styles.stopEnd}
+                                        offset="100%"
+                                    />
+                                </linearGradient>
+                            </defs>
+                            {yAxisTicks.map((point, i) => (
+                                <React.Fragment key={point.value}>
+                                    <text
+                                        className={styles.yAxisTickText}
+                                        x={Y_AXIS_WIDTH}
+                                        y={point.y + i * 2}
+                                    >
+                                        {point.value}
+                                    </text>
+                                    <line
+                                        className={styles.xAxisGridLine}
+                                        x1={chartMargin.left - CHART_OFFSET}
+                                        y1={point.y}
+                                        x2={svgBounds.width - CHART_OFFSET}
+                                        y2={point.y}
+                                    />
+                                </React.Fragment>
+                            ))}
+                            {xAxisTicks.map(
+                                (tick) => (
+                                    <React.Fragment key={tick.timestamp}>
+                                        <text
+                                            className={styles.xAxisTickText}
+                                            x={tick.x}
+                                            y={svgBounds.height - CHART_OFFSET}
+                                        >
+                                            {xAxisFormatter(tick.date)}
+                                        </text>
+                                        <line
+                                            className={_cs(
+                                                styles.yAxisGridLine,
+                                                // hoveredPointKey === point.key && styles.hovered,
+                                            )}
+                                            x1={tick.x}
+                                            y1={0}
+                                            x2={tick.x}
+                                            y2={svgBounds.height - CHART_OFFSET}
+                                        />
+                                    </React.Fragment>
+                                ),
+                            )}
+                            <path
+                                fill="url(#path-gradient)"
+                                d={getPathData(chartPointsForArea)}
+                            />
+                            <path
+                                className={styles.path}
+                                d={getPathData(chartPoints)}
+                            />
+                        </svg>
+                    ) : (
+                        <div className={styles.emptyChart}>
+                            <IoStatsChartSharp className={styles.chartIcon} />
+                            <div className={styles.message}>
+                                Not enough data points for the chart!
+                            </div>
+                        </div>
+                    )}
                     <div className={styles.progressBar}>
                         <div className={styles.track}>
                             <div
