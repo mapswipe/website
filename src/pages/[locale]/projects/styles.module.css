@@ -12,6 +12,10 @@
     }
 
     .hero {
+        .mainContent {
+            padding: var(--spacing-medium);
+        }
+
         .heroDescription {
             display: flex;
             flex-direction: column;
@@ -22,6 +26,7 @@
                 gap: var(--spacing-small);
 
                 >* {
+                    padding: var(--spacing-tiny) var(--spacing-small);
                     font-size: var(--font-size-medium);
                 }
             }
@@ -81,97 +86,91 @@
             }
 
             .mapContainer {
+                border-radius: var(--border-radius-medium);
                 height: 32rem;
 
                 .projectsMap {
+                    border-radius: var(--border-radius-medium);
+                    border: var(--width-separator-thin) solid var(--color-separator);
                     width: 100%;
                     height: 100%;
                 }
             }
 
-            .chartContainer {
+            .rightContainer {
                 display: flex;
-                align-items: center;
                 flex-direction: column;
-                justify-content: center;
-                border: var(--width-separator-thin) solid var(--color-separator);
-                padding: var(--spacing-large);
-                height: 100%;
-                min-height: 20rem;
-                border-radius: 0.5rem;
-                gap: var(--spacing-small);
+                gap: var(--spacing-large);
 
-                .timelineChart {
-                    width: 100%;
-                    height: 100%;
-                    --path-stroke-width: 1pt;
-
-                    .stopStart {
-                        stop-color: var(--color-accent);
-                        stop-opacity: 0.5;
-                    }
-
-                    .stopEnd {
-                        stop-color: var(--color-accent);
-                        stop-opacity: 0;
-                    }
-
-                    .path {
-                        stroke: var(--color-accent);
-                        stroke-width: 2pt;
-                        fill: none;
-                    }
-
-                    .yAxisTickText {
-                        text-anchor: middle;
-                        font-size: var(--font-size-extra-small);
-                    }
-
-                    .xAxisTickText {
-                        text-anchor: middle;
-                        transition: var(--duration-transition-medium) ease-in-out transform;
-                        font-size: var(--font-size-extra-small);
-
-                        @media screen and (max-width: 30rem) {
-                            transform: rotate(-30deg);
-                        }
-                    }
-
-                    .xAxisGridLine,
-                    .yAxisGridLine {
-                        stroke: var(--color-text);
-                        stroke-dasharray: 4 4;
-                        stroke-opacity: 0.2;
-                        transition: var(--duration-transition-medium) ease-in-out stroke-opacity;
-
-                        &.hovered {
-                            stroke-opacity: 1;
-                        }
-                    }
-
-                    .rect {
-                        transition: var(--duration-transition-medium) ease-in-out fill-opacity;
-                        cursor: pointer;
-                        fill-opacity: 0;
-                        fill: var(--color-white);
-                    }
-                }
-
-                .emptyChart {
+                .chartContainer {
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
+                    flex-direction: column;
                     justify-content: center;
+                    border: var(--width-separator-thin) solid var(--color-separator);
+                    border-radius: var(--border-radius-medium);
+                    padding: var(--spacing-large);
                     height: 100%;
-                    opacity: 0.5;
-                    gap: var(--spacing-medium);
+                    min-height: 20rem;
+                    gap: var(--spacing-small);
 
-                    .chartIcon {
-                        font-size: 10rem;
+                    .timelineChart {
+                        width: 100%;
+                        height: 100%;
+                        --path-stroke-width: 1pt;
+
+                        .stopStart {
+                            stop-color: var(--color-accent);
+                            stop-opacity: 0.5;
+                        }
+
+                        .stopEnd {
+                            stop-color: var(--color-accent);
+                            stop-opacity: 0;
+                        }
+
+                        .path {
+                            stroke: var(--color-accent);
+                            stroke-width: 2pt;
+                            fill: none;
+                        }
+
+                        .yAxisTickText {
+                            text-anchor: middle;
+                            font-size: var(--font-size-extra-small);
+                        }
+
+                        .xAxisTickText {
+                            text-anchor: middle;
+                            transition: var(--duration-transition-medium) ease-in-out transform;
+                            font-size: var(--font-size-extra-small);
+                        }
+
+                        .xAxisGridLine,
+                        .yAxisGridLine {
+                            stroke: var(--color-text);
+                            stroke-dasharray: 4 4;
+                            stroke-opacity: 0.2;
+                            transition: var(--duration-transition-medium) ease-in-out stroke-opacity;
+                        }
                     }
 
-                    .message {
-                        font-size: var(--font-size-large);
+                    .emptyChart {
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        justify-content: center;
+                        opacity: 0.5;
+                        height: 100%;
+                        gap: var(--spacing-medium);
+
+                        .chartIcon {
+                            font-size: 10rem;
+                        }
+
+                        .message {
+                            font-size: var(--font-size-large);
+                        }
                     }
                 }
 
@@ -179,10 +178,15 @@
                     display: flex;
                     align-self: stretch;
                     flex-direction: column;
+                    border: var(--width-separator-thin) solid var(--color-separator);
+                    border-radius: var(--border-radius-medium);
+                    padding: var(--spacing-large);
                     gap: var(--spacing-super-small);
 
                     .progressLabel {
-                        align-self: flex-start;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
                     }
                     .track {
                         border-radius: 0.25rem;
@@ -261,13 +265,9 @@
         .urlList {
             display: grid;
             grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 
-            @media screen and (max-width: 36rem) {
-                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            }
-
-            @media screen and (max-width: 30rem) {
+            @media screen and (max-width: 24rem) {
                 grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
             }
 
@@ -292,6 +292,7 @@
                 }
 
                 @media screen and (max-width: 720px) {
+                    align-items: unset;
                     flex-direction: column;
                 }
             }

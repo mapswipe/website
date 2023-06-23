@@ -1,0 +1,60 @@
+.cardLink {
+    &:hover {
+        text-decoration: unset;
+    }
+
+    .active {
+        color: var(--color-active);
+    }
+
+    .finished {
+        color: var(--color-finished);
+    }
+
+    .project {
+        border: none;
+        height: 100%;
+    }
+
+    .row {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-extra-small);
+    }
+    .progressBar {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-super-small);
+
+        .progressLabel {
+            align-self: flex-start;
+        }
+        .track {
+            border-radius: 0.25rem;
+            background-color: var(--color-separator);
+            height: 0.5rem;
+
+            .progress {
+                border-radius: 0.25rem;
+                background-color: var(--color-background-bar);
+                height: 100%;
+            }
+        }
+    }
+
+    .projectStats {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-medium);
+
+        .tag {
+            padding: 0;
+        }
+
+        .bottomTags {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-super-small);
+        }
+    }
+}

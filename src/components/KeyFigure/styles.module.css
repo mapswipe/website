@@ -9,16 +9,17 @@
     padding: var(--spacing-large);
 
     .label {
-        font-size: var(--font-size-large);
+        color: var(--color-heading);
+        font-size: var(--font-size-medium);
     }
 
     .value {
         display: flex;
         align-items: center;
         justify-content: center;
+        color: var(--color-heading);
         font-size: var(--font-size-extra-large);
         font-weight: var(--font-weight-bold);
-        color: var(--color-heading);
         gap: var(--spacing-super-small);
 
         .icon {

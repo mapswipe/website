@@ -152,7 +152,6 @@ function Home(props: Props) {
                     </div>
                     <div className={styles.infoBoxContainer}>
                         <KeyFigure
-                            className={styles.figure}
                             value={(
                                 <NumberOutput
                                     value={totalSwipes}
@@ -162,11 +161,9 @@ function Home(props: Props) {
                             label="Total Swipes"
                         />
                         <KeyFigure
-                            className={styles.figure}
                             value={(
                                 <NumberOutput
                                     value={totalContributors}
-                                    normal
                                 />
                             )}
                             label="Total Contributors"

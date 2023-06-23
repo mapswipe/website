@@ -723,7 +723,6 @@ function Data(props: Props) {
                                         )}
                                     </div>
                                 )}
-                                cardContentClassName={styles.cardContent}
                                 footerContent={(
                                     <div className={styles.progressBar}>
                                         <div className={styles.track}>

@@ -23,11 +23,9 @@ export function useRedirect(toFromProps?: string) {
 
             if (to.match(regex)) {
                 const newTo = to.replace(regex, `/${detectedLng}`);
-                console.info('Redirecting (A)', detectedLng, to, newTo);
                 router.replace(newTo);
             } else {
                 const newTo = `/${detectedLng}${to}`;
-                console.info('Redirecting (B)', detectedLng, to, newTo);
                 router.replace(newTo);
             }
         },

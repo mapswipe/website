@@ -203,8 +203,6 @@ function Project(props: Props) {
         [projectHistory, svgBounds],
     );
 
-    console.info(chartPoints);
-
     const { t } = useTranslation('project');
     const dataHeadingMap: Record<DownloadType, string> = {
         aggregated_results: t('aggregated-results-title'),
@@ -272,12 +270,14 @@ function Project(props: Props) {
         <Page contentClassName={_cs(styles.project, className)}>
             <Hero
                 className={styles.hero}
+                mainContentClassName={styles.mainContent}
                 title={name}
                 description={(
                     <div className={styles.heroDescription}>
                         <div className={styles.topTags}>
                             {type && (
                                 <Tag
+                                    spacing="medium"
                                     icon={projectTypeOptions[type].icon}
                                 >
                                     {projectTypeOptions[type].label}
@@ -336,7 +336,7 @@ function Project(props: Props) {
             <Section className={styles.overviewSection}>
                 <div className={styles.overviewContent}>
                     <div className={styles.content}>
-                        <Heading size="large">
+                        <Heading size="medium">
                             {t('overview-section-title')}
                         </Heading>
                         <div className={styles.description}>
@@ -351,7 +351,7 @@ function Project(props: Props) {
                             className={_cs(styles.largeFigure, styles.figure)}
                             value={totalArea}
                             variant="circle"
-                            description={(
+                            label={(
                                 <span>
                                     km
                                     <sup>
@@ -365,7 +365,7 @@ function Project(props: Props) {
                             variant="circle"
                             circleColor="complement"
                             value={totalContributors}
-                            description={t('project-contributors-text')}
+                            label={t('project-contributors-text')}
                         />
                     </div>
                 </div>
@@ -382,98 +382,100 @@ function Project(props: Props) {
                         />
                     </div>
                 )}
-                <div className={styles.chartContainer}>
-                    {chartPoints.length > 1 ? (
-                        <svg
-                            className={styles.timelineChart}
-                            ref={svgRef}
-                        >
-                            <defs>
-                                <linearGradient
-                                    id="path-gradient"
-                                    x1="0%"
-                                    y1="0%"
-                                    x2="0%"
-                                    y2="100%"
-                                >
-                                    <stop
-                                        className={styles.stopStart}
-                                        offset="0%"
-                                    />
-                                    <stop
-                                        className={styles.stopEnd}
-                                        offset="100%"
-                                    />
-                                </linearGradient>
-                            </defs>
-                            {yAxisTicks.map((point, i) => (
-                                <React.Fragment key={point.value}>
-                                    <text
-                                        className={styles.yAxisTickText}
-                                        x={Y_AXIS_WIDTH}
-                                        y={point.y + i * 2}
-                                    >
-                                        {point.value}
-                                    </text>
-                                    <line
-                                        className={styles.xAxisGridLine}
-                                        x1={chartMargin.left - CHART_OFFSET}
-                                        y1={point.y}
-                                        x2={svgBounds.width - CHART_OFFSET}
-                                        y2={point.y}
-                                    />
-                                </React.Fragment>
-                            ))}
-                            {xAxisTicks.map(
-                                (tick) => (
-                                    <React.Fragment key={tick.timestamp}>
-                                        <text
-                                            className={styles.xAxisTickText}
-                                            x={tick.x}
-                                            y={svgBounds.height - CHART_OFFSET}
-                                        >
-                                            {xAxisFormatter(tick.date)}
-                                        </text>
-                                        <line
-                                            className={_cs(
-                                                styles.yAxisGridLine,
-                                                // hoveredPointKey === point.key && styles.hovered,
-                                            )}
-                                            x1={tick.x}
-                                            y1={0}
-                                            x2={tick.x}
-                                            y2={svgBounds.height - CHART_OFFSET}
-                                        />
-                                    </React.Fragment>
-                                ),
-                            )}
-                            <path
-                                fill="url(#path-gradient)"
-                                d={getPathData(chartPointsForArea)}
-                            />
-                            <path
-                                className={styles.path}
-                                d={getPathData(chartPoints)}
-                            />
-                        </svg>
-                    ) : (
-                        <div className={styles.emptyChart}>
-                            <IoStatsChartSharp className={styles.chartIcon} />
-                            <div className={styles.message}>
-                                Not enough data points for the chart!
-                            </div>
-                        </div>
-                    )}
+                <div className={styles.rightContainer}>
                     <div className={styles.progressBar}>
+                        <div className={styles.progressLabel}>
+                            <div>{t('project-progress-label')}</div>
+                            <div>{t('project-card-progress-text', { progress: totalProgress })}</div>
+                        </div>
                         <div className={styles.track}>
                             <div
                                 style={{ width: `${totalProgress}%` }}
                                 className={styles.progress}
                             />
                         </div>
-                        <div className={styles.progressLabel}>
-                            {t('project-card-progress-text', { progress: totalProgress })}
-                        </div>
+                    </div>
+                    <div className={styles.chartContainer}>
+                        {chartPoints.length > 1 ? (
+                            <svg
+                                className={styles.timelineChart}
+                                ref={svgRef}
+                            >
+                                <defs>
+                                    <linearGradient
+                                        id="path-gradient"
+                                        x1="0%"
+                                        y1="0%"
+                                        x2="0%"
+                                        y2="100%"
+                                    >
+                                        <stop
+                                            className={styles.stopStart}
+                                            offset="0%"
+                                        />
+                                        <stop
+                                            className={styles.stopEnd}
+                                            offset="100%"
+                                        />
+                                    </linearGradient>
+                                </defs>
+                                {yAxisTicks.map((point, i) => (
+                                    <React.Fragment key={point.value}>
+                                        <text
+                                            className={styles.yAxisTickText}
+                                            x={Y_AXIS_WIDTH}
+                                            y={point.y + i * 2}
+                                        >
+                                            {point.value}
+                                        </text>
+                                        <line
+                                            className={styles.xAxisGridLine}
+                                            x1={chartMargin.left - CHART_OFFSET}
+                                            y1={point.y}
+                                            x2={svgBounds.width - CHART_OFFSET}
+                                            y2={point.y}
+                                        />
+                                    </React.Fragment>
+                                ))}
+                                {xAxisTicks.map(
+                                    (tick) => (
+                                        <React.Fragment key={tick.timestamp}>
+                                            <text
+                                                className={styles.xAxisTickText}
+                                                x={tick.x}
+                                                y={svgBounds.height - CHART_OFFSET}
+                                            >
+                                                {xAxisFormatter(tick.date)}
+                                            </text>
+                                            <line
+                                                className={_cs(
+                                                    styles.yAxisGridLine,
+                                                )}
+                                                x1={tick.x}
+                                                y1={0}
+                                                x2={tick.x}
+                                                y2={svgBounds.height - CHART_OFFSET}
+                                            />
+                                        </React.Fragment>
+                                    ),
+                                )}
+                                <path
+                                    fill="url(#path-gradient)"
+                                    d={getPathData(chartPointsForArea)}
+                                />
+                                <path
+                                    className={styles.path}
+                                    d={getPathData(chartPoints)}
+                                />
+                            </svg>
+                        ) : (
+                            <div className={styles.emptyChart}>
+                                <IoStatsChartSharp className={styles.chartIcon} />
+                                <div className={styles.message}>
+                                    Not enough data points for the chart!
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </Section>

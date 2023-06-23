@@ -60,7 +60,7 @@ function Card(props: Props) {
                         {showHeader && (
                             <div className={styles.header}>
                                 {icons && (
-                                    <div className={styles.icons}>
+                                    <div>
                                         {icons}
                                     </div>
                                 )}
@@ -72,14 +72,14 @@ function Card(props: Props) {
                                     {heading}
                                 </Heading>
                                 {actions && (
-                                    <div className={styles.actions}>
+                                    <div>
                                         {actions}
                                     </div>
                                 )}
                             </div>
                         )}
                         {description && (
-                            <div className={styles.description}>
+                            <div>
                                 {description}
                             </div>
                         )}
@@ -91,7 +91,7 @@ function Card(props: Props) {
                 {showFooter && (
                     <div className={styles.footer}>
                         {footerIcons && (
-                            <div className={styles.footerIcons}>
+                            <div>
                                 {footerIcons}
                             </div>
                         )}
@@ -99,7 +99,7 @@ function Card(props: Props) {
                             {footerContent}
                         </div>
                         {footerActions && (
-                            <div className={styles.footerActions}>
+                            <div>
                                 {footerActions}
                             </div>
                         )}

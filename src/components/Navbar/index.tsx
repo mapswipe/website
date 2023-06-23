@@ -44,7 +44,7 @@ function Navbar(props: Props) {
                     <Image
                         src="/logo.svg"
                         alt="Mapswipe"
-                        layout="fill"
+                        fill
                     />
                 </Link>
                 <div
@@ -54,13 +54,19 @@ function Navbar(props: Props) {
                     )}
                 >
                     <Link
-                        className={styles.link}
+                        className={_cs(
+                            styles.link,
+                            router.pathname === '/[locale]/get-involved' && styles.active,
+                        )}
                         href="/[locale]/get-involved"
                     >
                         {t('get-involved-link')}
                     </Link>
                     <Link
-                        className={styles.link}
+                        className={_cs(
+                            styles.link,
+                            router.pathname === '/[locale]/data' && styles.active,
+                        )}
                         href="/[locale]/data"
                     >
                         {t('data-link')}

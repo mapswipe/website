@@ -12,6 +12,10 @@
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-text-on-dark);
         font-size: var(--font-size-medium);
+
+        &:hover {
+            background-color: var(--color-accent);
+        }
     }
 
     &.border {
@@ -20,6 +24,12 @@
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-accent-dark);
         font-size: var(--font-size-medium);
+
+        &:hover {
+            border-color: var(--color-accent);
+            text-decoration: unset;
+            color: var(--color-accent);
+        }
     }
 
     &.icon {
@@ -32,7 +42,7 @@
         color: var(--color-text-on-dark);
 
         &:hover {
-            background-color: var(--color-accent-dark);
+            background-color: var(--color-accent);
         }
     }
 }
