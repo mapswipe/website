@@ -15,15 +15,21 @@
         .heroDescription {
             display: flex;
             flex-direction: column;
-            gap: var(--spacing-small);
+            gap: var(--spacing-large);
 
-            .tags {
+            .topTags {
                 display: flex;
                 gap: var(--spacing-small);
 
                 >* {
                     font-size: var(--font-size-medium);
                 }
+            }
+
+            .bottomTags {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-extra-small);
             }
 
             .heroTag {
@@ -34,6 +40,7 @@
         }
     }
 
+    /*
     .illustration {
         position: relative;
         width: 30rem;
@@ -47,6 +54,7 @@
             width: 80vw;
         }
     }
+    */
 
     .statsSection {
         .content {
@@ -159,19 +167,20 @@
 
             .stats {
                 display: flex;
-                flex-basis: 20rem;
+                align-self: center;
+                flex-direction: column;
                 justify-content: center;
-                transform: rotate(45deg);
-                padding: var(--spacing-large);
-                gap: var(--spacing-medium);
+                padding: var(--spacing-mega-large);
+                width: 20rem;
 
                 .figure {
-                    transform: rotate(-45deg);
+                    align-self: flex-end;
                 }
 
                 .largeFigure {
                     --size: 10rem;
                     --border-size: 5rem;
+                    align-self: flex-start;
                 }
             }
 
@@ -180,8 +189,6 @@
                 justify-content: center;
 
                 .stats {
-                    flex-basis: 12rem;
-
                     .largeFigure {
                         --size: 8rem;
                         --border-size: 4rem;
@@ -192,46 +199,43 @@
     }
 
     .downloadSection {
-        .description {
+        .downloadDescription {
             max-width: 60rem;
             text-align: center;
             font-size: var(--font-size-medium);
         }
 
         .urlList {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-extra-large);
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+
+            @media screen and (max-width: 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (max-width: 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
 
             .downloadCard {
                 display: flex;
+                align-items: flex-end;
                 justify-content: space-between;
                 gap: var(--spacing-large);
 
-                .leftContent {
-                    max-width: 60rem;
+                .fileDetails {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-extra-small);
                 }
 
-                .rightContent {
+                .link {
                     display: flex;
-                    flex-shrink: 0;
-                    align-items: flex-end;
-                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: var(--font-size-medium);
                     gap: var(--spacing-extra-small);
-
-                    .fileDetails {
-                        display: flex;
-                        align-items: center;
-                        gap: var(--spacing-extra-small);
-                    }
-
-                    .link {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: var(--font-size-medium);
-                        gap: var(--spacing-extra-small);
-                    }
                 }
 
                 @media screen and (max-width: 720px) {
@@ -244,8 +248,8 @@
     .licenseDescription {
         display: flex;
         flex-direction: column;
-        text-align: center;
         max-width: 60rem;
+        text-align: center;
         gap: var(--spacing-large);
         font-size: var(--font-size-medium);
     }

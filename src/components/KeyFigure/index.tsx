@@ -1,5 +1,6 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { FaPlus } from 'react-icons/fa';
 
 import styles from './styles.module.css';
 
@@ -31,11 +32,12 @@ function KeyFigure(props: Props) {
                 circleColor === 'complement' && styles.complement,
             )}
         >
-            <div className={styles.label}>
-                {label}
-            </div>
             <div className={styles.value}>
                 {value}
+                <FaPlus className={styles.icon} />
+            </div>
+            <div className={styles.label}>
+                {label}
             </div>
             <div className={styles.description}>
                 {description}

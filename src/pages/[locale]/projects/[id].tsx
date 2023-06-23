@@ -221,7 +221,7 @@ function Project(props: Props) {
                 title={name}
                 description={(
                     <div className={styles.heroDescription}>
-                        <div className={styles.tags}>
+                        <div className={styles.topTags}>
                             {type && (
                                 <Tag
                                     icon={projectTypeOptions[type].icon}
@@ -237,33 +237,35 @@ function Project(props: Props) {
                                 </Tag>
                             )}
                         </div>
-                        {region && (
-                            <Tag
-                                className={styles.heroTag}
-                                icon={<IoLocationOutline />}
-                                variant="transparent"
-                            >
-                                {region}
-                            </Tag>
-                        )}
-                        {requestingOrganization && (
-                            <Tag
-                                className={styles.heroTag}
-                                icon={<IoFlag />}
-                                variant="transparent"
-                            >
-                                {requestingOrganization}
-                            </Tag>
-                        )}
-                        {day && (
-                            <Tag
-                                className={styles.heroTag}
-                                icon={<IoCalendarClearOutline />}
-                                variant="transparent"
-                            >
-                                {day}
-                            </Tag>
-                        )}
+                        <div className={styles.bottomTags}>
+                            {region && (
+                                <Tag
+                                    className={styles.heroTag}
+                                    icon={<IoLocationOutline />}
+                                    variant="transparent"
+                                >
+                                    {region}
+                                </Tag>
+                            )}
+                            {requestingOrganization && (
+                                <Tag
+                                    className={styles.heroTag}
+                                    icon={<IoFlag />}
+                                    variant="transparent"
+                                >
+                                    {requestingOrganization}
+                                </Tag>
+                            )}
+                            {day && (
+                                <Tag
+                                    className={styles.heroTag}
+                                    icon={<IoCalendarClearOutline />}
+                                    variant="transparent"
+                                >
+                                    {t('date', { date: day })}
+                                </Tag>
+                            )}
+                        </div>
                     </div>
                 )}
                 rightContent={<div />}
@@ -374,7 +376,7 @@ function Project(props: Props) {
             <Section
                 title={t('data-section-heading')}
                 description={t('data-section-description')}
-                descriptionClassName={styles.description}
+                descriptionClassName={styles.downloadDescription}
                 className={styles.downloadSection}
                 contentClassName={styles.urlList}
                 withAlternativeBackground
@@ -384,28 +386,24 @@ function Project(props: Props) {
                         childrenContainerClassName={styles.downloadCard}
                         key={url.type}
                         heading={dataHeadingMap[url.name]}
+                        description={dataDescriptionMap[url.name]}
                     >
-                        <div className={styles.leftContent}>
-                            {dataDescriptionMap[url.name]}
-                        </div>
-                        <div className={styles.rightContent}>
-                            <div className={styles.fileDetails}>
-                                <Tag>
-                                    {url.type}
-                                </Tag>
-                                <div>
-                                    {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
-                                </div>
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {url.type}
+                            </Tag>
+                            <div>
+                                {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
                             </div>
-                            <Link
-                                href={url.url}
-                                variant="button"
-                                className={styles.link}
-                            >
-                                <IoDownloadOutline />
-                                {t('download')}
-                            </Link>
                         </div>
+                        <Link
+                            href={url.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
                     </Card>
                 ))}
             </Section>
@@ -558,7 +556,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             totalContributors: project.properties.number_of_users ?? null,
             name: project.properties.legacyName
                 ? project.properties.name
-                : project.properties.topic,
+                : `${project.properties.topic} (${project.properties.taskNumber})`,
             region: project.properties.legacyName
                 ? null
                 : project.properties.region,

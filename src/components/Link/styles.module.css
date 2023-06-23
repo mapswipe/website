@@ -1,10 +1,18 @@
 .link {
+    &:hover {
+        text-decoration: underline;
+    }
+
     &.button {
         border-radius: var(--border-radius-medium);
         background-color: var(--color-accent);
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-text-on-dark);
         font-size: var(--font-size-large);
+
+        &:hover {
+            text-decoration: unset;
+        }
     }
 
     &.buttonTransparent {
@@ -13,11 +21,18 @@
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-accent);
         font-size: var(--font-size-large);
+
+        &:hover {
+            text-decoration: unset;
+        }
     }
 
     &.underline {
-        text-decoration: underline;
         color: var(--color-link);
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &.icon {
@@ -31,6 +46,7 @@
 
         &:hover {
             background-color: var(--color-accent);
+            text-decoration: unset;
         }
     }
 }

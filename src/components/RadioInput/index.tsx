@@ -12,6 +12,7 @@ interface OptionProps<OPTION, VALUE> {
     keySelector: (option: OPTION) => VALUE;
     labelSelector: (option: OPTION) => string | React.ReactNode;
     iconSelector?: (option: OPTION) => React.ReactNode;
+    optionSize?: 'small' | 'medium' | 'large';
 }
 
 function OptionRenderer<OPTION, VALUE>(props: OptionProps<OPTION, VALUE>) {
@@ -22,6 +23,7 @@ function OptionRenderer<OPTION, VALUE>(props: OptionProps<OPTION, VALUE>) {
         keySelector,
         iconSelector,
         labelSelector,
+        optionSize,
     } = props;
 
     const key = keySelector(option);
@@ -45,6 +47,7 @@ function OptionRenderer<OPTION, VALUE>(props: OptionProps<OPTION, VALUE>) {
             className={_cs(
                 styles.option,
                 isSelected && styles.selected,
+                optionSize === 'small' && styles.small,
             )}
             onClick={handleClick}
             variant="transparent"
@@ -64,6 +67,7 @@ export interface Props<OPTION, VALUE> {
     keySelector: (option: OPTION) => VALUE;
     labelSelector: (option: OPTION) => string | React.ReactNode;
     iconSelector?: (option: OPTION) => React.ReactNode;
+    optionSize?: 'small' | 'medium' | 'large';
 }
 
 function RadioInput<
@@ -79,6 +83,7 @@ function RadioInput<
         labelSelector,
         iconSelector,
         label,
+        optionSize,
     } = props;
 
     return (
@@ -95,6 +100,7 @@ function RadioInput<
                         onChange={onChange}
                         keySelector={keySelector}
                         labelSelector={labelSelector}
+                        optionSize={optionSize}
                         iconSelector={iconSelector}
                     />
                 ))}

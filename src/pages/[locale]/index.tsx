@@ -109,7 +109,6 @@ function Home(props: Props) {
                         <Link
                             href="/[locale]/data"
                             variant="buttonTransparent"
-                            target="_blank"
                         >
                             {t('data-link')}
                         </Link>
@@ -153,6 +152,7 @@ function Home(props: Props) {
                     </div>
                     <div className={styles.infoBoxContainer}>
                         <KeyFigure
+                            className={styles.figure}
                             value={(
                                 <NumberOutput
                                     value={totalSwipes}
@@ -162,6 +162,7 @@ function Home(props: Props) {
                             label="Total Swipes"
                         />
                         <KeyFigure
+                            className={styles.figure}
                             value={(
                                 <NumberOutput
                                     value={totalContributors}

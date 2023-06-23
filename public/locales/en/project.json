@@ -24,6 +24,7 @@
   "build-area": "Find",
   "footprint": "Validate",
   "change-detection": "Compare",
+  "date": "{{date, datetime}}",
   "overview-section-title": "Project Overview",
   "project-contributors-text": "Contributors",
   "project-card-progress-text": "{{progress, number}}% completed",

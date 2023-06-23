@@ -1,4 +1,7 @@
 {
   "project-pagination-text": "",
-  "download-type": ""
+  "download-type": "",
+  "type-find-action-label": "",
+  "type-compare-action-label": "",
+  "type-validate-action-label": ""
 }

@@ -6,10 +6,6 @@
     border-radius: 0.5rem;
     background-color: var(--color-foreground);
 
-    &:hover {
-        box-shadow: var(--box-shadow-medium);
-    }
-
     .coverImageWrapper {
         width: 100%;
         height: 20rem;

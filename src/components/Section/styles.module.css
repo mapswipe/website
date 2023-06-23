@@ -20,7 +20,7 @@
             align-self: center;
             max-width: var(--width-heading-max);
             text-align: center;
-            font-size: var(--font-size-large);
+            font-size: var(--font-size-medium);
         }
 
         .headingContainer {

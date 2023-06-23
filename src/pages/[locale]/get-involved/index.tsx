@@ -98,20 +98,6 @@ function GetInvolved(props: Props) {
                 </div>
                 <div className={styles.cards}>
                     <CenteredCard
-                        title={t('possess-technical-skills')}
-                        description={t('possess-techincal-skills-description')}
-                        actions={(
-                            <Link
-                                href="https://github.com/mapswipe/"
-                                variant="button"
-                                target="_blank"
-                            >
-                                {t('volunteer-tech-suppport')}
-                            </Link>
-                        )}
-                    />
-                    <CenteredCard
-                        className={styles.bottom}
                         title={t('possess-language-skills')}
                         description={t('possess-language-skills-description')}
                         actions={(
@@ -120,7 +106,20 @@ function GetInvolved(props: Props) {
                                 variant="button"
                                 target="_blank"
                             >
-                                {t('volunteer-tech-suppport')}
+                                {t('contribute-on-transifex')}
+                            </Link>
+                        )}
+                    />
+                    <CenteredCard
+                        title={t('possess-technical-skills')}
+                        description={t('possess-techincal-skills-description')}
+                        actions={(
+                            <Link
+                                href="https://github.com/mapswipe/"
+                                variant="button"
+                                target="_blank"
+                            >
+                                {t('contribute-on-github')}
                             </Link>
                         )}
                     />
@@ -140,7 +139,7 @@ function GetInvolved(props: Props) {
                         actions={(
                             <Link
                                 className={styles.downloadLink}
-                                href="https://mapswipe.org"
+                                href="https://drive.google.com/drive/folders/1j5XnyqI_LKYBCg9oJaaWIKbsBxwB8Cld?usp=drive_link"
                                 variant="button"
                                 target="_blank"
                             >
@@ -155,7 +154,7 @@ function GetInvolved(props: Props) {
                         actions={(
                             <Link
                                 className={styles.downloadLink}
-                                href="https://mapswipe.org"
+                                href="https://docs.google.com/forms/d/e/1FAIpQLSf_05ZvC4i7HfDgYqedvsPxG66o8SHMaKs1GpnLC9KVFa4FuQ/viewform?usp=sf_link"
                                 variant="button"
                                 target="_blank"
                             >
@@ -197,7 +196,7 @@ function GetInvolved(props: Props) {
                     actions={(
                         <Link
                             className={styles.downloadLink}
-                            href="https://mapswipe.org"
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSetcSda6EyuvOXMUPe7Gw7wNNIdR9R9RlvOi1j9Zu-C3ZXtbg/viewform?usp=sf_link"
                             variant="button"
                             target="_blank"
                         >
@@ -242,9 +241,13 @@ function GetInvolved(props: Props) {
                 title={t('contact-section-heading')}
                 description={t('contact-section-description')}
                 actions={(
-                    <Button>
+                    <Link
+                        href="mailto:info@mapswipe.org"
+                        variant="button"
+                        target="_blank"
+                    >
                         {t('contact-link-label')}
-                    </Button>
+                    </Link>
                 )}
             />
         </Page>

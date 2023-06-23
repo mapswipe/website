@@ -80,7 +80,12 @@
                 .infoBoxContainer {
                     display: flex;
                     flex-wrap: wrap;
+                    max-width: 40rem;
                     gap: var(--spacing-medium);
+
+                    .figure {
+                        flex-grow: 1;
+                    }
                 }
             }
 
@@ -108,14 +113,11 @@
             gap: var(--spacing-large);
 
             .missionType {
-                max-width: 25rem;
+                max-width: calc(100% / 3 - 2 * var(--spacing-large) / 3);
+                font-size: var(--font-size-medium);
 
                 .missionImage {
                     height: 10rem;
-                }
-
-                &:hover {
-                    box-shadow: var(--box-shadow-medium);
                 }
             }
         }

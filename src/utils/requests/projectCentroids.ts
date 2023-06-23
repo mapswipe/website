@@ -87,17 +87,28 @@ const getProjectCentroids = memoize(async (): Promise<ProjectResponse> => {
                 return false;
             }
             return (
-                feature.properties.status === 'finished'
+                feature.properties.status === 'private_active'
+                || feature.properties.status === 'archived'
+                || feature.properties.status === 'finished'
                 || feature.properties.status === 'active'
             );
         }).map((feature) => {
             const projectName = parseProjectName(feature.properties.name);
+            let { status } = feature.properties;
+            if (status === 'private_active') {
+                status = 'active';
+            }
+            if (status === 'archived') {
+                status = 'finished';
+            }
 
             const properties: PropertiesWithLegacyName | PropertiesWithName = projectName ? {
                 ...feature.properties,
                 ...projectName,
+                status,
             } : {
                 ...feature.properties,
+                status,
                 legacyName: true,
             };
 

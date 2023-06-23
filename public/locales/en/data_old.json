@@ -1,4 +1,7 @@
 {
   "project-pagination-text": "{{remainingProjects}} projects hidden",
-  "download-type": "{{type}}"
+  "download-type": "{{type}}",
+  "type-find-action-label": "Example in Mali",
+  "type-compare-action-label": "Example in Madagascar",
+  "type-validate-action-label": "Example in Madagascar"
 }

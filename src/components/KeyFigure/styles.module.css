@@ -4,17 +4,27 @@
     flex-direction: column;
     justify-content: center;
     gap: var(--spacing-extra-small);
-    border: var(--width-separator-thin) solid var(--color-separator);
+    border: var(--width-separator-thin) solid var(--color-accent-light);
     border-radius: 0.5rem;
-    padding: var(--spacing-extra-large);
+    padding: var(--spacing-large);
 
     .label {
         font-size: var(--font-size-large);
     }
 
     .value {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: var(--font-size-extra-large);
         font-weight: var(--font-weight-bold);
+        color: var(--color-heading);
+        gap: var(--spacing-super-small);
+
+        .icon {
+            color: var(--color-accent);
+            font-size: var(--font-size-large);
+        }
     }
 
     .description {
@@ -32,6 +42,12 @@
         width: var(--size);
         height: var(--size);
         text-align: center;
+        gap: var(--spacing-tiny);
+
+        .label {
+            color: var(--color-heading);
+            font-size: var(--font-size-medium);
+        }
 
         &.complement {
             box-shadow: 0 0 0 2rem var(--color-complement);

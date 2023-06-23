@@ -3,16 +3,11 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    transition: .3s box-shadow ease-in-out;
     border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--border-radius-medium);
     padding: var(--spacing-extra-large) var(--spacing-large);
     text-align: center;
     gap: var(--spacing-large);
-
-    &:hover {
-        box-shadow: var(--box-shadow-medium);
-    }
 
     .heading {
         max-width: 32rem;
@@ -20,6 +15,7 @@
         color: var(--color-text-brand);
         font-family: var(--font-family-dm-sans), sans-serif;
         font-size: var(--font-size-large);
+        font-weight: var(--font-weight-bold);
     }
 
     .description {
