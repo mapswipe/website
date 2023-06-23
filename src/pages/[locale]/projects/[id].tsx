@@ -393,7 +393,8 @@ function Project(props: Props) {
                                 {url.type}
                             </Tag>
                             <div>
-                                {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                                {url.size > (1048576 / 10) && t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                                {(url.size <= (1048576 / 10)) && t('download-size', { size: url.size / 1024, formatParams: { size: { style: 'unit', unit: 'kilobyte', maximumFractionDigits: 1 } } })}
                             </div>
                         </div>
                         <Link

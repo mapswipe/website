@@ -182,7 +182,7 @@ function Home(props: Props) {
             >
                 <Card
                     className={styles.missionType}
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/find.svg"
                     heading={t('type-find-title')}
                     imageClassName={styles.missionImage}
                     icons={(
@@ -195,7 +195,7 @@ function Home(props: Props) {
                 </Card>
                 <Card
                     className={styles.missionType}
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/compare.svg"
                     heading={t('type-compare-title')}
                     imageClassName={styles.missionImage}
                     icons={(
@@ -209,7 +209,7 @@ function Home(props: Props) {
                 <Card
                     className={styles.missionType}
                     imageClassName={styles.missionImage}
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/validate.svg"
                     heading={t('type-validate-title')}
                     icons={(
                         <ProjectTypeIcon

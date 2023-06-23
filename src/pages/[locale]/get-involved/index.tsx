@@ -7,7 +7,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Page from 'components/Page';
 import Hero from 'components/Hero';
 import Heading from 'components/Heading';
-import Button from 'components/Button';
 import Link from 'components/Link';
 import Section from 'components/Section';
 import CenteredCard from 'components/CenteredCard';

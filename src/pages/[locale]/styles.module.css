@@ -28,9 +28,9 @@
             .pictures {
                 display: flex;
                 align-items: center;
-                flex-basis: calc(40% - var(--spacing-gigantic) / 2);
+                flex-basis: 28rem;
                 flex-wrap: wrap;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 gap: var(--spacing-medium);
 
                 .imageContainer {
@@ -68,19 +68,19 @@
 
             .descriptionContainer {
                 display: flex;
-                flex-basis: calc(60% - var(--spacing-gigantic) / 2);
+                flex-basis: calc(100% - 28rem - var(--spacing-gigantic));
                 flex-direction: column;
                 gap: var(--spacing-medium);
 
                 .description {
-                    max-width: 40rem;
+                    max-width: 100%;
                     font-size: var(--font-size-large);
                 }
 
                 .infoBoxContainer {
                     display: flex;
                     flex-wrap: wrap;
-                    max-width: 40rem;
+                    max-width: 100%;
                     gap: var(--spacing-medium);
 
                     .figure {
@@ -89,7 +89,7 @@
                 }
             }
 
-            @media screen and (max-width: 720px) {
+            @media screen and (max-width: 840px) {
                 flex-direction: column;
 
                 .pictures {
@@ -97,6 +97,8 @@
                 }
 
                 .descriptionContainer {
+                    flex-basis: 100%;
+
                     .infoBoxContainer {
                         justify-content: center;
                     }
@@ -117,7 +119,7 @@
                 font-size: var(--font-size-medium);
 
                 .missionImage {
-                    height: 10rem;
+                    height: 20rem;
                 }
             }
         }

@@ -509,7 +509,7 @@ function Data(props: Props) {
                 contentClassName={styles.typeList}
             >
                 <Card
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/find.svg"
                     heading={t('type-find-title')}
                     icons={(
                         <ProjectTypeIcon
@@ -529,7 +529,7 @@ function Data(props: Props) {
                     />
                 </Card>
                 <Card
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/compare.svg"
                     heading={t('type-compare-title')}
                     icons={(
                         <ProjectTypeIcon
@@ -549,7 +549,7 @@ function Data(props: Props) {
                     />
                 </Card>
                 <Card
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/validate.svg"
                     heading={t('type-validate-title')}
                     icons={(
                         <ProjectTypeIcon
@@ -796,7 +796,8 @@ function Data(props: Props) {
                                 {url.type}
                             </Tag>
                             <div>
-                                {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                                {url.size > (1048576 / 10) && t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
+                                {(url.size <= (1048576 / 10)) && t('download-size', { size: url.size / 1024, formatParams: { size: { style: 'unit', unit: 'kilobyte', maximumFractionDigits: 1 } } })}
                             </div>
                         </div>
                         <Link
