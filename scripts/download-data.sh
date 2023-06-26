@@ -24,7 +24,9 @@ function download_file(){
         curl $1 --output $DESTINATION_DIR/$2
     else
         # Check if hash is changed
+        set +e
         echo -n `cat $DESTINATION_DIR/$2.md5` $DESTINATION_DIR/$2 | md5sum --status --check
+        set -e
         if ! [ "$?" == "0" ]; then
             curl $1 --output $DESTINATION_DIR/$2
         fi

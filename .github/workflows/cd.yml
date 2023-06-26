@@ -1,18 +1,16 @@
 name: CD
 
+# NOTE: Don't update this
 on:
   push:
-    # NOTE: Don't add other branches
     branches:
       - release
-      - feat/cd  # TODO: REMOVE ME
-  # schedule:
-  #   # Runs "At 00:01. every day" (see https://crontab.guru)
-  #   - cron: '1 0 * * *'
+  schedule:
+    # Runs "At 00:01. every day" (see https://crontab.guru)
+    - cron: '1 0 * * *'
 
 jobs:
   test_build:
-    if: github.event_name == 'push'
     name: Run Tests + Build
     runs-on: ubuntu-latest
 
@@ -57,7 +55,6 @@ jobs:
     name: Deploy (GH Page)
     needs: test_build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     permissions:
       contents: write
