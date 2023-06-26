@@ -1,5 +1,9 @@
-import cachedRequest from 'utils/cachedCsvRequest';
+import util from 'util';
+import fs from 'fs';
+import Papa from 'papaparse';
 import { isFalsyString, isDefined } from '@togglecorp/fujs';
+
+import { timeIt } from 'utils/common';
 
 export type ProjectHistoryRaw = {
     day: string,
@@ -19,6 +23,7 @@ export interface ProjectHistory {
     timestamp: number;
     progress: number;
 }
+const readFile = util.promisify(fs.readFile);
 
 function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is ProjectHistoryRaw {
     if (isFalsyString(hist.day)) {
@@ -29,24 +34,40 @@ function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is Proj
 }
 
 const getProjectHistory = async (projectId: string) => {
-    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
-    const histories = await cachedRequest<(
-    ProjectHistoryRaw | { day: '' })[]
-    >(
-        `${mapswipeApi}history/history_${projectId}.csv`,
-        `history_${projectId}.csv.json`,
+    try {
+        const cacheFileContent = await timeIt(
+            projectId,
+            'read cache from disk',
+            () => readFile(`cache/project-history/history_${projectId}.csv`),
         );
+        const parsedContent = await new Promise((resolve, reject) => {
+            Papa.parse(cacheFileContent.toString(), {
+                delimiter: ',',
+                newline: '\n',
+                header: true,
+                complete: (results: any) => {
+                    resolve(results);
+                },
+                error: (error: any) => {
+                    reject(error);
+                },
+            });
+        });
+        const histories = (parsedContent as any).data as (ProjectHistoryRaw | { day: '' })[];
 
-    return histories.filter(isValidHistoryData).map((hist) => {
-        if (isFalsyString(hist.cum_progress)) {
-            return undefined;
-        }
+        return histories.filter(isValidHistoryData).map((hist) => {
+            if (isFalsyString(hist.cum_progress)) {
+                return undefined;
+            }
 
-        return {
-            timestamp: new Date(hist.day).getTime(),
-            progress: Number(hist.cum_progress),
-        };
-    }).filter(isDefined);
+            return {
+                timestamp: new Date(hist.day).getTime(),
+                progress: Number(hist.cum_progress),
+            };
+        }).filter(isDefined);
+    } catch {
+        return [];
+    }
 };
 
 export default getProjectHistory;

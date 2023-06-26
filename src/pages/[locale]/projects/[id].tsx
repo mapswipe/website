@@ -22,6 +22,7 @@ import useSizeTracking from 'hooks/useSizeTracking';
 
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectGeometries from 'utils/requests/projectGeometries';
+import getFileSizes from 'utils/requests/fileSizes';
 import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
 import { ProjectStatus } from 'utils/common';
 import {
@@ -53,7 +54,6 @@ interface UrlInfo {
     name: DownloadType;
     type: DownloadFileType;
     url: string;
-    ok: boolean;
     size: number;
 }
 
@@ -199,7 +199,6 @@ function Project(props: Props) {
                             </linearGradient>
                         </defs>
                         <path
-                            className={styles.areaPath}
                             fill="url(#path-gradient)"
                             d={getPathData(chartPointsForArea)}
                         />
@@ -345,69 +344,64 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         .process(matterResult.content.replace(/\\n/g, '\n'));
     const contentHtml = processedContent.toString();
 
-    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
-
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
             name: 'aggregated_results',
-            url: `${mapswipeApi}agg_results/agg_results_${projectId}.csv.gz`,
+            url: `/api/agg_results/agg_results_${projectId}.csv.gz`,
             type: 'csv',
         },
         {
             name: 'aggregated_results_with_geometry',
-            url: `${mapswipeApi}agg_results/agg_results_${projectId}_geom.geojson.gz`,
+            url: `/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
             type: 'geojson',
         },
         {
             name: 'hot_tasking_manager_geometries',
-            url: `${mapswipeApi}hot_tm/hot_tm_${projectId}.geojson`,
+            url: `/api/hot_tm/hot_tm_${projectId}.geojson`,
             type: 'geojson',
         },
         {
             name: 'moderate_to_high_agreement_yes_maybe_geometries',
-            url: `${mapswipeApi}yes_maybe/yes_maybe_${projectId}.geojson`,
+            url: `/api/yes_maybe/yes_maybe_${projectId}.geojson`,
             type: 'geojson',
         },
         {
             name: 'groups',
-            url: `${mapswipeApi}groups/groups_${projectId}.csv.gz`,
+            url: `/api/groups/groups_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'history',
-            url: `${mapswipeApi}history/history_${projectId}.csv`,
+            url: `/api/history/history_${projectId}.csv`,
             type: 'geojson',
         },
         {
             name: 'results',
-            url: `${mapswipeApi}results/results_${projectId}.csv.gz`,
+            url: `/api/results/results_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'tasks',
-            url: `${mapswipeApi}tasks/tasks_${projectId}.csv.gz`,
+            url: `/api/tasks/tasks_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'users',
-            url: `${mapswipeApi}users/users_${projectId}.csv.gz`,
+            url: `/api/users/users_${projectId}.csv.gz`,
             type: 'geojson',
         },
         {
             name: 'area_of_interest',
-            url: `${mapswipeApi}project_geometries/project_geom_${projectId}.geojson`,
+            url: `/api/project_geometries/project_geom_${projectId}.geojson`,
             type: 'geojson',
         },
     ];
 
-    const urlResponsePromises = urls.map(async (url) => {
-        const res = await fetch(url.url, { method: 'HEAD' });
-        return {
-            ...url,
-            ok: res.ok,
-            size: Number(res.headers.get('content-length') ?? '0'),
-        };
-    });
+    const fileSizes = await getFileSizes();
+    const urlResponsePromises = urls.map((url) => ({
+        ...url,
+        size: fileSizes?.[url.url] ?? 0,
+    }));
 
     const urlResponses = await Promise.all(urlResponsePromises);
 
@@ -430,7 +424,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
             projectHistory: historyJSON,
-            urls: urlResponses.filter((url) => url.ok),
+            urls: urlResponses.filter((url) => url.size > 0),
         },
     };
 };
