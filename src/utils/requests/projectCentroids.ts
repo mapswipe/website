@@ -1,10 +1,15 @@
+import util from 'util';
+import fs from 'fs';
+
 import {
+    timeIt,
     memoize,
     ProjectStatus,
     ProjectType,
     parseProjectName,
 } from 'utils/common';
-import cachedRequest from 'utils/cachedJsonRequest';
+
+const readFile = util.promisify(fs.readFile);
 
 interface CommonProperties {
     idx: number;
@@ -65,12 +70,12 @@ export interface ProjectResponse {
 }
 
 const getProjectCentroids = memoize(async (): Promise<ProjectResponse> => {
-    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
-
-    const projects = await cachedRequest<RawProjectResponse>(
-        `${mapswipeApi}projects/projects_centroid.geojson`,
-        'projects_centroid.geojson',
+    const cacheFileContent = await timeIt(
+        'project_centriods',
+        'read cache from disk',
+        () => readFile('cache/projects_centroid.geojson'),
     );
+    const projects = JSON.parse(cacheFileContent.toString()) as RawProjectResponse;
 
     const filteredProjects = {
         ...projects,

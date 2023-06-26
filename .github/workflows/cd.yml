@@ -38,37 +38,37 @@ jobs:
         env:
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
 
-      # - name: Build + Test
-      #   run: yarn build
-      #   timeout-minutes: 30
-      #   env:
-      #     # Common
-      #     NODE_OPTIONS: --max_old_space_size=4096
-      #     # App ENV
-      #     MAPSWIPE_COMMUNITY_API_ENDPOINT: ${{ vars.MAPSWIPE_COMMUNITY_API_ENDPOINT }}
-      #     MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
+      - name: Build + Test
+        run: yarn build
+        timeout-minutes: 30
+        env:
+          # Common
+          NODE_OPTIONS: --max_old_space_size=4096
+          # App ENV
+          MAPSWIPE_COMMUNITY_API_ENDPOINT: ${{ vars.MAPSWIPE_COMMUNITY_API_ENDPOINT }}
+          MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
 
-      # - name: Upload GH artifacts
-      #   uses: actions/upload-pages-artifact@v1
-      #   with:
-      #     path: out/
+      - name: Upload GH artifacts
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: out/
 
-#   deploy:
-#     name: Deploy (GH Page)
-#     needs: test_build
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'push'
+  deploy:
+    name: Deploy (GH Page)
+    needs: test_build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
-#     permissions:
-#       contents: write
-#       id-token: write
-#       pages: write
+    permissions:
+      contents: write
+      id-token: write
+      pages: write
 
-#     environment:
-#       name: github-pages
-#       url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-#     steps:
-#       - name: Deploy to GitHub Pages 🚀
-#         id: deployment
-#         uses: actions/deploy-pages@v2
+    steps:
+      - name: Deploy to GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v2

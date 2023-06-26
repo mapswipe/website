@@ -17,6 +17,7 @@ import {
 import Button from 'components/Button';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Page from 'components/Page';
+import getFileSizes from 'utils/requests/fileSizes';
 import Card from 'components/Card';
 import KeyFigure from 'components/KeyFigure';
 import Hero from 'components/Hero';
@@ -55,7 +56,6 @@ interface UrlInfo {
     name: DownloadType;
     type: DownloadFileType;
     url: string;
-    ok: boolean;
     size: number;
 }
 
@@ -124,34 +124,30 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const minArea = Math.min(...areas);
     const maxArea = Math.max(...areas);
 
-    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
-
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
             name: 'projects_overview',
-            url: `${mapswipeApi}projects/projects.csv`,
+            url: '/api/projects/projects.csv',
             type: 'csv',
         },
         {
             name: 'projects_with_geometry',
-            url: `${mapswipeApi}projects/projects_geom.geojson`,
+            url: '/api/projects/projects_geom.geojson',
             type: 'geojson',
         },
         {
             name: 'projects_with_centroid',
-            url: `${mapswipeApi}projects/projects_centroid.geojson`,
+            url: '/api/projects/projects_centroid.geojson',
             type: 'geojson',
         },
     ];
 
-    const urlResponsePromises = urls.map(async (url) => {
-        const res = await fetch(url.url, { method: 'HEAD' });
-        return {
-            ...url,
-            ok: res.ok,
-            size: Number(res.headers.get('content-length') ?? '0'),
-        };
-    });
+    const fileSizes = await getFileSizes();
+    const urlResponsePromises = urls.map(async (url) => ({
+        ...url,
+        ...url,
+        size: fileSizes?.[url.url] ?? 0,
+    }));
 
     const urlResponses = await Promise.all(urlResponsePromises);
 

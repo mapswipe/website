@@ -37,4 +37,4 @@ download_file $MAPSWIPE_API_ENDPOINT/website-data/project-history.zip project-hi
 download_file $MAPSWIPE_API_ENDPOINT/projects/projects_centroid.geojson projects_centroid.geojson
 download_file $MAPSWIPE_API_ENDPOINT/projects/projects_geom.geojson projects_geom.geojson
 
-unzip -o $DESTINATION_DIR/project-history.zip -d $DESTINATION_DIR
+unzip -o $DESTINATION_DIR/project-history.zip -d $DESTINATION_DIR/project-history

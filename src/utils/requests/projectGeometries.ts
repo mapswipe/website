@@ -1,10 +1,15 @@
+import util from 'util';
+import fs from 'fs';
+
 import {
     memoize,
     ProjectStatus,
     ProjectType,
+    timeIt,
     parseProjectName,
 } from 'utils/common';
-import cachedRequest from 'utils/cachedJsonRequest';
+
+const readFile = util.promisify(fs.readFile);
 
 interface CommonProperties {
     idx: number;
@@ -59,11 +64,12 @@ export interface ProjectGeometryResponse {
 }
 
 const getProjectGeometries = memoize(async (): Promise<ProjectGeometryResponse> => {
-    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
-    const projects = await cachedRequest<RawProjectGeometryResponse>(
-        `${mapswipeApi}projects/projects_geom.geojson`,
-        'projects_geom.geojson',
+    const cacheFileContent = await timeIt(
+        'project_geom',
+        'read cache from disk',
+        () => readFile('cache/projects_geom.geojson'),
     );
+    const projects = JSON.parse(cacheFileContent.toString()) as RawProjectGeometryResponse;
 
     const filteredProjects = {
         ...projects,
