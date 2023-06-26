@@ -263,18 +263,14 @@
         }
 
         .urlList {
-            display: grid;
-            grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-
-            @media screen and (max-width: 24rem) {
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-            }
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-large);
 
             .downloadCard {
                 display: flex;
                 align-items: flex-end;
-                justify-content: space-between;
+                justify-content: flex-end;
                 gap: var(--spacing-large);
 
                 .fileDetails {

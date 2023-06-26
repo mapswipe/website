@@ -7,7 +7,6 @@ import {
     gql,
     request,
 } from 'graphql-request';
-
 import Head from 'next/head';
 
 import Page from 'components/Page';
@@ -84,7 +83,7 @@ function Home(props: Props) {
     return (
         <Page contentClassName={_cs(styles.home, className)}>
             <Head>
-                <title>{`MapSwipe ${t('home')}`}</title>
+                <title>{t('home-tab-head')}</title>
             </Head>
             <Hero
                 className={styles.hero}

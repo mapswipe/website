@@ -3,5 +3,8 @@
   "download-type": "{{type}}",
   "type-find-action-label": "Example in Mali",
   "type-compare-action-label": "Example in Madagascar",
-  "type-validate-action-label": "Example in Madagascar"
+  "type-validate-action-label": "Example in Madagascar",
+  "project-card-type": "Type: {{type}}",
+  "project-card-status-text": "Status: {{status}}",
+  "project-card-area": "Area Mapped: {{area, number}}"
 }

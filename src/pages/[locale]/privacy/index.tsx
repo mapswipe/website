@@ -7,6 +7,7 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import matter from 'gray-matter';
 import html from 'remark-html';
+import Head from 'next/head';
 
 import Page from 'components/Page';
 import Hero from 'components/Hero';
@@ -110,6 +111,9 @@ function GetInvolved(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.privacy, className)}>
+            <Head>
+                <title>{t('privacy-tab-head')}</title>
+            </Head>
             <Hero
                 className={styles.hero}
                 title={t('privacy-hero-title')}

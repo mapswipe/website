@@ -110,7 +110,7 @@
                     flex-basis: 24rem;
                     flex-direction: column;
                     border: var(--width-separator-thin) solid var(--color-border-light);
-                    border-radius: var(--border-radius-small);
+                    border-radius: var(--border-radius-medium);
                     padding: var(--spacing-medium);
                     gap: var(--spacing-large);
 
@@ -166,6 +166,7 @@
                         bottom: 0;
                         left: 0;
                         z-index: 100000;
+                        border-radius: var(--border-radius-medium);
                         background-color: rgba(0, 0, 0, 0.2);
                         padding: var(--spacing-extra-small) var(--spacing-medium);
 

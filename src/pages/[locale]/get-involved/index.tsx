@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 
 import Page from 'components/Page';
 import Hero from 'components/Hero';
@@ -29,6 +30,9 @@ function GetInvolved(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.getInvolved, className)}>
+            <Head>
+                <title>{t('get-involved-tab-head')}</title>
+            </Head>
             <Hero
                 className={styles.hero}
                 title={t('hero-title')}
@@ -86,7 +90,7 @@ function GetInvolved(props: Props) {
                 containerClassName={styles.sectionContainer}
             >
                 <div className={styles.imageContainer}>
-                    <Heading size="small">
+                    <Heading size="medium">
                         {t('individual-heading')}
                     </Heading>
                     <ImageWrapper
@@ -101,7 +105,7 @@ function GetInvolved(props: Props) {
                         description={t('possess-language-skills-description')}
                         actions={(
                             <Link
-                                href="https://mapswipe.org"
+                                href="https://explore.transifex.com/mapswipe/"
                                 variant="button"
                                 target="_blank"
                             >
@@ -163,7 +167,7 @@ function GetInvolved(props: Props) {
                     />
                 </div>
                 <div className={styles.imageContainer}>
-                    <Heading size="small">
+                    <Heading size="medium">
                         {t('group-heading')}
                     </Heading>
                     <ImageWrapper
@@ -179,7 +183,7 @@ function GetInvolved(props: Props) {
                 contentClassName={styles.content}
             >
                 <div className={styles.imageContainer}>
-                    <Heading size="small">
+                    <Heading size="medium">
                         {t('organization-heading')}
                     </Heading>
                     <ImageWrapper
@@ -239,7 +243,7 @@ function GetInvolved(props: Props) {
                     )}
                 />
                 <div className={styles.imageContainer}>
-                    <Heading size="small">
+                    <Heading size="medium">
                         {t('donate-heading')}
                     </Heading>
                     <ImageWrapper
