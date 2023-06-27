@@ -19,7 +19,7 @@ import {
 
 import Page from 'components/Page';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
-// import ImageWrapper from 'components/ImageWrapper';
+import ImageWrapper from 'components/ImageWrapper';
 import Hero from 'components/Hero';
 import Tag from 'components/Tag';
 import Card from 'components/Card';
@@ -99,7 +99,7 @@ interface Props extends SSRConfig {
     className?: string;
     totalProgress: number | null;
     totalArea: number | null;
-    // image: string | undefined;
+    image: string | undefined;
     totalContributors: number | null;
     type: number | undefined | null;
     name: string;
@@ -110,14 +110,14 @@ interface Props extends SSRConfig {
     urls: UrlInfo[];
     region?: string | null;
     requestingOrganization?: string | null;
-    day?: number | null;
+    created?: number | null;
 }
 
 function Project(props: Props) {
     const {
         className,
         totalProgress,
-        // image,
+        image,
         totalArea,
         totalContributors,
         name,
@@ -129,7 +129,7 @@ function Project(props: Props) {
         projectHistory,
         region,
         requestingOrganization,
-        day,
+        created,
     } = props;
 
     const svgRef = React.useRef<SVGSVGElement>(null);
@@ -314,28 +314,28 @@ function Project(props: Props) {
                                     {requestingOrganization}
                                 </Tag>
                             )}
-                            {day && (
+                            {created && (
                                 <Tag
                                     className={styles.heroTag}
                                     icon={<IoCalendarClearOutline />}
                                     variant="transparent"
                                 >
-                                    {t('date', { date: day })}
+                                    {t('date', { date: created })}
                                 </Tag>
                             )}
                         </div>
                     </div>
                 )}
-                rightContent={<div />}
-                /*
-                rightContent={image && (
+                rightContent={image ? (
                     <ImageWrapper
                         className={styles.illustration}
                         src={image}
                         alt="Placeholder"
+                        nonOptimizedImage
                     />
+                ) : (
+                    <div />
                 )}
-                */
             />
             <Section className={styles.overviewSection}>
                 <div className={styles.overviewContent}>
@@ -676,6 +676,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
                 : project.properties.requestingOrganization,
             day: project.properties?.day
                 ? new Date(project.properties.day).getTime()
+                : null,
+            created: project.properties?.created
+                ? new Date(project.properties.created).getTime()
                 : null,
             image: project.properties.image,
             type: project.properties.project_type,

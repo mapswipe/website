@@ -9,6 +9,7 @@ export interface Props extends ImageProps {
     className?: string;
     src: string;
     imageClassName?: string;
+    nonOptimizedImage?: boolean;
 }
 
 function ImageWrapper(props: Props) {
@@ -16,18 +17,28 @@ function ImageWrapper(props: Props) {
         className,
         imageClassName,
         src,
+        nonOptimizedImage,
         ...otherProps
     } = props;
 
     return (
         <div className={_cs(className, styles.imageWrapper)}>
-            <Image
-                src={src}
-                className={_cs(imageClassName, styles.image)}
-                fill
+            {!nonOptimizedImage ? (
+                <Image
+                    src={src}
+                    className={_cs(imageClassName, styles.image)}
+                    fill
+                    // eslint-disable-next-line
+                    {...otherProps}
+                />
+            ) : (
                 // eslint-disable-next-line
-                {...otherProps}
-            />
+                <img
+                    src={src}
+                    className={_cs(imageClassName, styles.image, styles.nonOptimizedImage)}
+                    alt={otherProps.alt}
+                />
+            )}
         </div>
     );
 }

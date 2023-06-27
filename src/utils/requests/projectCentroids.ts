@@ -27,6 +27,7 @@ interface CommonProperties {
     number_of_results: number | undefined;
     number_of_results_progress: number | undefined;
     day: string | undefined;
+    created: string | undefined;
     image: string | undefined;
 }
 

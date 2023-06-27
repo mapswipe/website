@@ -13,6 +13,7 @@ interface Props {
     rightContent?: React.ReactNode;
     sectionClassName?: string;
     mainContentClassName?: string;
+    leftContentClassName?: string;
 }
 
 function Hero(props: Props) {
@@ -23,6 +24,7 @@ function Hero(props: Props) {
         actions,
         rightContent,
         sectionClassName,
+        leftContentClassName,
         mainContentClassName,
     } = props;
 
@@ -36,7 +38,7 @@ function Hero(props: Props) {
         >
             <div className={_cs(styles.section, sectionClassName)}>
                 <div className={_cs(styles.mainContent, mainContentClassName)}>
-                    <div className={styles.left}>
+                    <div className={_cs(styles.left, leftContentClassName)}>
                         <Heading
                             size="extraLarge"
                             className={styles.heading}

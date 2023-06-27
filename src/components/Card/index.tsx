@@ -21,6 +21,9 @@ interface Props {
     imageClassName?: string;
     cardContentClassName?: string;
     coverImageUrl?: string;
+    coverImageOnSide?: boolean;
+    borderless?: boolean;
+    nonOptimizedImage?: boolean;
 }
 
 function Card(props: Props) {
@@ -39,18 +42,29 @@ function Card(props: Props) {
         footerIcons,
         children,
         coverImageUrl,
+        coverImageOnSide,
+        borderless,
+        nonOptimizedImage,
     } = props;
 
     const showHeader = icons || heading || actions;
     const showFooter = footerIcons || footerContent || footerActions;
 
     return (
-        <div className={_cs(styles.card, className)}>
+        <div
+            className={_cs(
+                styles.card,
+                className,
+                coverImageOnSide && styles.coverImageOnSide,
+                borderless && styles.borderless,
+            )}
+        >
             {coverImageUrl && (
                 <ImageWrapper
                     className={_cs(styles.coverImageWrapper, imageClassName)}
                     imageClassName={styles.image}
                     src={coverImageUrl}
+                    nonOptimizedImage={nonOptimizedImage}
                     alt="cover-image"
                 />
             )}

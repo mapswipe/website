@@ -1,0 +1,7 @@
+{
+  "blogs-tab-head": "Blogs | Mapswipe",
+  "blogs-hero-title": "Blogs",
+  "featured-posts": "Featured",
+  "date": "{{date, datetime}}",
+  "other-posts": "Other"
+}

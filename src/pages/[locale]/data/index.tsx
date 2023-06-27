@@ -144,6 +144,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         day: feature.properties?.day
             ? new Date(feature.properties.day).getTime()
             : null,
+        created: feature.properties?.created
+            ? new Date(feature.properties.created).getTime()
+            : null,
         image: feature.properties?.image ?? null,
     })).sort((foo, bar) => ((bar.day ?? 0) - (foo.day ?? 0)));
 
@@ -239,6 +242,7 @@ interface Props extends SSRConfig {
         coordinates: [number, number] | null;
         area_sqkm: number | null;
         day: number | null;
+        created: number | null;
         region: string | null;
         requestingOrganization: string | null;
     }[];
@@ -358,13 +362,13 @@ function Data(props: Props) {
 
             filteredProjects = dateFrom
                 ? filteredProjects.filter(
-                    (project) => compareDate(project.day, dateFrom) >= 0,
+                    (project) => compareDate(project.created, dateFrom) >= 0,
                 )
                 : filteredProjects;
 
             filteredProjects = dateTo
                 ? filteredProjects.filter(
-                    (project) => compareDate(dateTo, project.day) >= 0,
+                    (project) => compareDate(dateTo, project.created) >= 0,
                 )
                 : filteredProjects;
 
@@ -702,7 +706,8 @@ function Data(props: Props) {
                         >
                             <Card
                                 className={styles.project}
-                                // coverImageUrl={project.image ?? undefined}
+                                coverImageUrl={project.image ?? undefined}
+                                imageClassName={styles.projectImage}
                                 headingFont="normal"
                                 heading={project.name}
                                 description={(
@@ -740,6 +745,7 @@ function Data(props: Props) {
                                         </div>
                                     </div>
                                 )}
+                                nonOptimizedImage
                             >
                                 <div className={styles.projectStats}>
                                     <div className={styles.bottomTags}>
@@ -762,13 +768,13 @@ function Data(props: Props) {
                                             </Tag>
                                         )}
                                         <div className={styles.row}>
-                                            {project.day && (
+                                            {project.created && (
                                                 <Tag
                                                     className={styles.tag}
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-last-update', { date: project.day })}
+                                                    {t('project-card-last-update', { date: project.created })}
                                                 </Tag>
                                             )}
                                             {project.number_of_users && (

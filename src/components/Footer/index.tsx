@@ -67,6 +67,11 @@ function Footer(props: Props) {
                             {t('data-link')}
                         </Link>
                         <Link
+                            href="/[locale]/blogs"
+                        >
+                            {t('blogs-link')}
+                        </Link>
+                        <Link
                             href="https://community.mapswipe.org/"
                         >
                             {t('community-dashboard-link')}

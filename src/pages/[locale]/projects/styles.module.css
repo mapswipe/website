@@ -39,17 +39,15 @@
 
             .heroTag {
                 padding: 0;
-                color: var(--color-text-on-dark);
+                color: var(--color-text-on-dark-light);
                 font-size: var(--font-size-medium);
             }
         }
     }
 
-    /*
     .illustration {
-        position: relative;
         width: 30rem;
-        height: 40rem;
+        height: 28rem;
 
         @media screen and (max-width: 840px) {
             width: 24rem;
@@ -59,7 +57,6 @@
             width: 80vw;
         }
     }
-    */
 
     .statsSection {
         .content {

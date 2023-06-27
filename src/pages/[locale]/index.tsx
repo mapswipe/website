@@ -8,6 +8,7 @@ import {
     request,
 } from 'graphql-request';
 import Head from 'next/head';
+import { IoCalendarClearOutline } from 'react-icons/io5';
 
 import Page from 'components/Page';
 import Link from 'components/Link';
@@ -16,12 +17,14 @@ import {
     Stats,
 } from 'utils/common';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
+import Tag from 'components/Tag';
 import ImageWrapper from 'components/ImageWrapper';
 import KeyFigure from 'components/KeyFigure';
 import Card from 'components/Card';
 import Hero from 'components/Hero';
 import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
+import getBlogs, { Blog } from 'utils/requests/getBlogs';
 
 import i18nextConfig from '../../../next-i18next.config';
 
@@ -69,6 +72,7 @@ interface Props extends SSRConfig {
     className?: string;
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
+    featuredBlogs: Blog[];
 }
 
 function Home(props: Props) {
@@ -76,6 +80,7 @@ function Home(props: Props) {
         className,
         totalContributors,
         totalSwipes,
+        featuredBlogs,
     } = props;
 
     const { t } = useTranslation('home');
@@ -273,6 +278,43 @@ function Home(props: Props) {
                 </div>
             </Section>
             <Section
+                className={styles.recentNewsAndUpdates}
+                title={t('news-and-updates-title')}
+                contentClassName={styles.content}
+            >
+                {featuredBlogs.map((blog, index) => (
+                    <Card
+                        className={_cs(
+                            styles.blogItem,
+                            index === 0 && styles.firstGrid,
+                        )}
+                        key={blog.name}
+                        description={(
+                            <Tag
+                                className={styles.tag}
+                                icon={<IoCalendarClearOutline />}
+                                variant="transparent"
+                            >
+                                {t('date', { date: blog.publishedDate })}
+                            </Tag>
+                        )}
+                        heading={blog.title}
+                        coverImageUrl={blog.coverImage}
+                        childrenContainerClassName={styles.cardContent}
+                        coverImageOnSide={index !== 0}
+                        borderless
+                    >
+                        <div className={styles.blogDescription}>{blog.description}</div>
+                        <Link
+                            className={styles.link}
+                            href={`/[locale]/blogs/${blog.name}`}
+                        >
+                            Read more
+                        </Link>
+                    </Card>
+                ))}
+            </Section>
+            <Section
                 className={styles.partners}
                 title={t('partners')}
                 contentClassName={styles.content}
@@ -339,6 +381,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         }
     `;
     const value: Stats = await request(graphqlEndpoint, stats);
+    const blogs = await getBlogs();
+
+    const featuredBlogs = blogs.filter((blog) => blog.featured).slice(0, 3);
 
     const {
         totalContributors,
@@ -350,6 +395,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             ...translations,
             totalContributors,
             totalSwipes,
+            featuredBlogs,
         },
     };
 };

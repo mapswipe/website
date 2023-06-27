@@ -20,6 +20,8 @@
   "download-apk-label": "Or Download an APK",
   "get-involved-description": "Learn more about how individuals, groups, and organizations can contribute to the community.",
   "get-involved-link": "Get involved",
+  "news-and-updates-title": "News & updates",
+  "date": "{{date, datetime}}",
   "partners": "Partners",
   "missing-map-description": "MapSwipe is part of the Missing Maps Project and is managed by a volunteer-led team with support from  these organizations."
 }
