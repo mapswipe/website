@@ -32,11 +32,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --prefer-online
 
-      - name: Yarn generate
-        run: yarn generate
-
       - name: Check
         run: pre-commit run -vvv --all-files
 
-      - name: Build
-        run: yarn export
+      # FIXME: Check build after creating fixtures

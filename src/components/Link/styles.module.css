@@ -1,28 +1,50 @@
 .link {
+    &:hover {
+        text-decoration: underline;
+    }
+
     &.button {
+        transition: 0.2s all ease-in-out;
         border-radius: var(--border-radius-medium);
-        background-color: var(--color-accent);
+        background-color: var(--color-accent-dark);
         padding: var(--spacing-super-small) var(--spacing-medium);
         color: var(--color-text-on-dark);
-        font-size: var(--font-size-large);
+        font-size: var(--font-size-medium);
+
+        &:hover {
+            background-color: var(--color-accent);
+            text-decoration: unset;
+        }
     }
 
     &.buttonTransparent {
-        border: var(--width-separator-thin) solid var(--color-accent);
+        transition: 0.2s all ease-in-out;
+        border: var(--width-separator-thin) solid var(--color-accent-dark);
         border-radius: var(--border-radius-medium);
         padding: var(--spacing-super-small) var(--spacing-medium);
-        color: var(--color-accent);
-        font-size: var(--font-size-large);
+        color: var(--color-accent-dark);
+        font-size: var(--font-size-medium);
+
+        &:hover {
+            border-color: var(--color-accent);
+            text-decoration: unset;
+            color: var(--color-accent);
+        }
     }
 
     &.underline {
-        text-decoration: underline;
+        transition: 0.2s all ease-in-out;
         color: var(--color-link);
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &.icon {
         display: flex;
         align-items: center;
+        transition: 0.2s all ease-in-out;
         border-radius: var(--border-radius-medium);
         background-color: rgba(0, 0, 0, 0.2);
         padding: var(--spacing-super-small) var(--spacing-extra-small);
@@ -31,6 +53,7 @@
 
         &:hover {
             background-color: var(--color-accent);
+            text-decoration: unset;
         }
     }
 }

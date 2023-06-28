@@ -4,6 +4,15 @@ import {
     compareStringSearch,
 } from '@togglecorp/fujs';
 
+export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
+
+export interface Stats {
+    communityStats: {
+        totalContributors: number | null | undefined;
+        totalSwipes: number | null | undefined;
+    } | null | undefined;
+}
+
 const matchRegex = /^(?<topic>.+)\s+-\s+(?<region>.+)\((?<taskNumber>\d+)\)\s+(?<requestingOrganization>.+)$/;
 interface ParseRes {
     topic: string;
@@ -37,7 +46,7 @@ export function rankedSearchOnList<T>(
         ));
 }
 
-export async function timeIt<R>(key: string, header: string, func: (() => Promise<R>)) {
+export async function timeIt<R>(_: string, __: string, func: (() => Promise<R>)) {
     // console.log(`START: ${key}: ${header}`);
     // const startTime = new Date().getTime();
     const resp = await func();
@@ -97,6 +106,20 @@ export const projectNameMapping: {
     3: 'Change Detection',
     4: 'Completeness',
 };
+
+const mb = 1024 * 1024;
+export function getFileSizeProperties(fileSize: number) {
+    if (fileSize > (mb / 10)) {
+        return {
+            size: fileSize / mb,
+            unit: 'megabyte',
+        };
+    }
+    return {
+        size: fileSize / 1024,
+        unit: 'kilobyte',
+    };
+}
 
 export const languageTitleMap: Record<string, string> = {
     ab: 'Abkhazian',

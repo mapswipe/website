@@ -20,7 +20,7 @@
             flex-grow: 1;
             justify-content: center;
             margin: 0 auto;
-            padding: var(--spacing-medium);
+            padding: 6rem var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
             width: 100%;
             max-width: var(--width-page-max);
             gap: var(--spacing-super-large);
@@ -50,8 +50,7 @@
             .right {
                 display: flex;
                 flex-grow: 1;
-                justify-content: center;
-                margin-bottom: -10rem;
+                justify-content: flex-end;
             }
         }
     }

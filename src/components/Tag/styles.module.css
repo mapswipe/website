@@ -27,4 +27,20 @@
             background-color: var(--color-accent);
         }
     }
+
+    &.transparent {
+        background-color: transparent;
+    }
+
+    &.small {
+        padding: var(--spacing-tiny) var(--spacing-super-small);
+    }
+
+    &.medium {
+        padding: var(--spacing-super-small) var(--spacing-extra-small);
+    }
+
+    &.large {
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
 }

@@ -59,7 +59,7 @@ function SelectInput<
             )}
             name={isDefined(name) ? String(name) : undefined}
             onChange={handleChange}
-            value={value ?? undefined}
+            value={value ?? ''}
         >
             <option
                 value=""

@@ -44,7 +44,6 @@ function LanguageSwitcher(props: Props) {
             }}
             className={_cs(
                 styles.languageSwitcher,
-                active && styles.active,
                 active && activeClassName,
                 className,
             )}

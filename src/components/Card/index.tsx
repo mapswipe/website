@@ -10,6 +10,7 @@ interface Props {
     className?: string;
     heading?: React.ReactNode;
     description?: React.ReactNode;
+    headingFont?: 'normal' | 'heading';
     children?: React.ReactNode;
     childrenContainerClassName?: string;
     icons?: React.ReactNode;
@@ -17,62 +18,82 @@ interface Props {
     footerContent?: React.ReactNode;
     footerIcons?: React.ReactNode;
     footerActions?: React.ReactNode;
+    imageClassName?: string;
+    cardContentClassName?: string;
     coverImageUrl?: string;
+    coverImageOnSide?: boolean;
+    borderless?: boolean;
+    nonOptimizedImage?: boolean;
 }
 
 function Card(props: Props) {
     const {
         className,
         heading,
+        headingFont,
         description,
+        imageClassName,
         childrenContainerClassName,
         icons,
         actions,
         footerContent,
+        cardContentClassName,
         footerActions,
         footerIcons,
         children,
         coverImageUrl,
+        coverImageOnSide,
+        borderless,
+        nonOptimizedImage,
     } = props;
 
     const showHeader = icons || heading || actions;
     const showFooter = footerIcons || footerContent || footerActions;
 
     return (
-        <div className={_cs(styles.card, className)}>
+        <div
+            className={_cs(
+                styles.card,
+                className,
+                coverImageOnSide && styles.coverImageOnSide,
+                borderless && styles.borderless,
+            )}
+        >
             {coverImageUrl && (
                 <ImageWrapper
-                    className={styles.coverImageWrapper}
+                    className={_cs(styles.coverImageWrapper, imageClassName)}
                     imageClassName={styles.image}
                     src={coverImageUrl}
+                    nonOptimizedImage={nonOptimizedImage}
                     alt="cover-image"
                 />
             )}
-            <div className={styles.cardContent}>
+            <div className={_cs(styles.cardContent, cardContentClassName)}>
                 {(showHeader || !!description) && (
                     <div className={styles.headerWrapper}>
                         {showHeader && (
                             <div className={styles.header}>
                                 {icons && (
-                                    <div className={styles.icons}>
+                                    <div>
                                         {icons}
                                     </div>
                                 )}
                                 <Heading
                                     className={styles.heading}
-                                    size="small"
+                                    font={headingFont}
+                                    size="extraSmall"
                                 >
                                     {heading}
                                 </Heading>
                                 {actions && (
-                                    <div className={styles.actions}>
+                                    <div>
                                         {actions}
                                     </div>
                                 )}
                             </div>
                         )}
                         {description && (
-                            <div className={styles.description}>
+                            <div>
                                 {description}
                             </div>
                         )}
@@ -84,7 +105,7 @@ function Card(props: Props) {
                 {showFooter && (
                     <div className={styles.footer}>
                         {footerIcons && (
-                            <div className={styles.footerIcons}>
+                            <div>
                                 {footerIcons}
                             </div>
                         )}
@@ -92,7 +113,7 @@ function Card(props: Props) {
                             {footerContent}
                         </div>
                         {footerActions && (
-                            <div className={styles.footerActions}>
+                            <div>
                                 {footerActions}
                             </div>
                         )}

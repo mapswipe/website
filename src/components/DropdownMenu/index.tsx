@@ -10,7 +10,7 @@ import {
 } from 'react-icons/io5';
 
 import Popup from 'components/Popup';
-import Button from 'components/Button';
+import Button, { Props as ButtonProps } from 'components/Button';
 import useBlurEffect from 'hooks/useBlurEffect';
 
 export interface Props {
@@ -36,16 +36,17 @@ function DropdownMenu(props: Props) {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const handleMenuClick = useCallback(
-        () => {
+    const handleMenuClick: NonNullable<ButtonProps['onClick']> = useCallback(
+        (e) => {
+            e.stopPropagation();
             setShowDropdown((prevValue) => !prevValue);
         },
         [setShowDropdown],
     );
 
     const handleBlurCallback = useCallback(
-        (clickedInside: boolean, clickedInParent: boolean) => {
-            const isClickedWithin = clickedInside || clickedInParent;
+        (_: boolean, clickedInParent: boolean) => {
+            const isClickedWithin = clickedInParent;
             if (isClickedWithin) {
                 return;
             }

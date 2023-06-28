@@ -1,10 +1,27 @@
+import { useEffect } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { Lato, DM_Sans } from 'next/font/google';
 import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
 
 import 'leaflet/dist/leaflet.css';
 import 'styles/globals.css';
 import 'styles/variables.css';
+
+if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+        api_host: 'https://app.posthog.com',
+        // NOTE: Persistence in memory will not add any cookies
+        persistence: 'memory',
+        loaded: (loadedPosthog) => {
+            if (process.env.NODE_ENV === 'development') {
+                loadedPosthog.debug();
+            }
+        },
+    });
+}
 
 const lato = Lato({
     weight: ['400', '700'],
@@ -22,6 +39,17 @@ function MyApp(props: AppProps) {
         Component,
         pageProps,
     } = props;
+    const router = useRouter();
+
+    useEffect(() => {
+        // Track page views
+        const handleRouteChange = () => posthog?.capture('$pageview');
+        router.events.on('routeChangeComplete', handleRouteChange);
+
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
+    }, [router]);
 
     return (
         <>
@@ -38,8 +66,10 @@ function MyApp(props: AppProps) {
                 }
                 `}
             </style>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Component {...pageProps} />
+            <PostHogProvider client={posthog}>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <Component {...pageProps} />
+            </PostHogProvider>
         </>
     );
 }

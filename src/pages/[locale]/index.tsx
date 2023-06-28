@@ -3,16 +3,28 @@ import { GetStaticProps } from 'next';
 import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import {
+    gql,
+    request,
+} from 'graphql-request';
 import Head from 'next/head';
+import { IoCalendarClearOutline } from 'react-icons/io5';
 
 import Page from 'components/Page';
 import Link from 'components/Link';
+import {
+    graphqlEndpoint,
+    Stats,
+} from 'utils/common';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
+import Tag from 'components/Tag';
 import ImageWrapper from 'components/ImageWrapper';
-import InfoBox from 'components/InfoBox';
-import Heading from 'components/Heading';
+import KeyFigure from 'components/KeyFigure';
+import Card from 'components/Card';
 import Hero from 'components/Hero';
+import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
+import getBlogs, { Blog } from 'utils/requests/getBlogs';
 
 import i18nextConfig from '../../../next-i18next.config';
 
@@ -21,7 +33,7 @@ import styles from './styles.module.css';
 const partners = [
     {
         altText: 'American Red Cross Logo',
-        imageSrc: 'img/arc.png',
+        imageSrc: 'img/arc.svg',
         link: 'https://www.redcross.org/',
     },
     {
@@ -58,11 +70,17 @@ const partners = [
 
 interface Props extends SSRConfig {
     className?: string;
+    totalContributors?: number | null | undefined;
+    totalSwipes?: number | null | undefined;
+    featuredBlogs: Omit<Blog, 'markdownContent'>[];
 }
 
 function Home(props: Props) {
     const {
         className,
+        totalContributors,
+        totalSwipes,
+        featuredBlogs,
     } = props;
 
     const { t } = useTranslation('home');
@@ -70,7 +88,7 @@ function Home(props: Props) {
     return (
         <Page contentClassName={_cs(styles.home, className)}>
             <Head>
-                <title>{`MapSwipe ${t('home')}`}</title>
+                <title>{t('home-tab-head')}</title>
             </Head>
             <Hero
                 className={styles.hero}
@@ -80,7 +98,7 @@ function Home(props: Props) {
                     <ImageWrapper
                         className={styles.screenshot}
                         imageClassName={styles.image}
-                        src="/screenshot.png"
+                        src="/img/banner.png"
                         alt="Mapswipe"
                     />
                 )}
@@ -95,7 +113,6 @@ function Home(props: Props) {
                         <Link
                             href="/[locale]/data"
                             variant="buttonTransparent"
-                            target="_blank"
                         >
                             {t('data-link')}
                         </Link>
@@ -138,12 +155,21 @@ function Home(props: Props) {
                         {t('mobilizing-volunteer-description-paragraph-2')}
                     </div>
                     <div className={styles.infoBoxContainer}>
-                        <InfoBox
-                            value="100M"
+                        <KeyFigure
+                            value={(
+                                <NumberOutput
+                                    value={totalSwipes}
+                                    normal
+                                />
+                            )}
                             label="Total Swipes"
                         />
-                        <InfoBox
-                            value="70K"
+                        <KeyFigure
+                            value={(
+                                <NumberOutput
+                                    value={totalContributors}
+                                />
+                            )}
                             label="Total Contributors"
                         />
                     </div>
@@ -155,45 +181,45 @@ function Home(props: Props) {
                 description={t('explore-mission-types-description')}
                 contentClassName={styles.content}
             >
-                <div className={styles.missionType}>
-                    <ProjectTypeIcon
-                        size="large"
-                        type="1"
-                        className={styles.icon}
-                    />
-                    <Heading>
-                        {t('find-mission-type-heading')}
-                    </Heading>
-                    <div className={styles.missionTypeDescription}>
-                        {t('find-mission-type-description')}
-                    </div>
-                </div>
-                <div className={styles.missionType}>
-                    <ProjectTypeIcon
-                        size="large"
-                        type="3"
-                        className={styles.icon}
-                    />
-                    <Heading>
-                        {t('compare-mission-type-heading')}
-                    </Heading>
-                    <div className={styles.missionTypeDescription}>
-                        {t('compare-mission-type-description')}
-                    </div>
-                </div>
-                <div className={styles.missionType}>
-                    <ProjectTypeIcon
-                        size="large"
-                        type="2"
-                        className={styles.icon}
-                    />
-                    <Heading>
-                        {t('validate-mission-type-heading')}
-                    </Heading>
-                    <div className={styles.missionTypeDescription}>
-                        {t('validate-mission-type-description')}
-                    </div>
-                </div>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/find.svg"
+                    heading={t('type-find-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="1"
+                        />
+                    )}
+                >
+                    {t('find-mission-type-description')}
+                </Card>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/compare.svg"
+                    heading={t('type-compare-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="3"
+                        />
+                    )}
+                >
+                    {t('compare-mission-type-description')}
+                </Card>
+                <Card
+                    className={styles.missionType}
+                    imageClassName={styles.missionImage}
+                    coverImageUrl="/img/validate.svg"
+                    heading={t('type-validate-title')}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="2"
+                        />
+                    )}
+                >
+                    {t('validate-mission-type-description')}
+                </Card>
             </Section>
             <Section
                 sectionId="startMapswiping"
@@ -202,7 +228,7 @@ function Home(props: Props) {
                 contentClassName={styles.content}
             >
                 <div className={styles.download}>
-                    <div className={styles.description}>
+                    <div className={styles.startMapswipingDescription}>
                         {t('download-description')}
                     </div>
                     <div className={styles.linksContainer}>
@@ -240,7 +266,7 @@ function Home(props: Props) {
                     </div>
                 </div>
                 <div className={styles.getInvolved}>
-                    <div className={styles.description}>
+                    <div className={styles.startMapswipingDescription}>
                         {t('get-involved-description')}
                     </div>
                     <Link
@@ -250,6 +276,43 @@ function Home(props: Props) {
                         {t('get-involved-link')}
                     </Link>
                 </div>
+            </Section>
+            <Section
+                className={styles.recentNewsAndUpdates}
+                title={t('news-and-updates-title')}
+                contentClassName={styles.content}
+            >
+                {featuredBlogs.map((blog, index) => (
+                    <Card
+                        className={_cs(
+                            styles.blogItem,
+                            index === 0 && styles.firstGrid,
+                        )}
+                        key={blog.name}
+                        description={(
+                            <Tag
+                                className={styles.tag}
+                                icon={<IoCalendarClearOutline />}
+                                variant="transparent"
+                            >
+                                {t('date', { date: blog.publishedDate })}
+                            </Tag>
+                        )}
+                        heading={blog.title}
+                        coverImageUrl={blog.coverImage}
+                        childrenContainerClassName={styles.cardContent}
+                        coverImageOnSide={index !== 0}
+                        borderless
+                    >
+                        <div className={styles.blogDescription}>{blog.description}</div>
+                        <Link
+                            className={styles.link}
+                            href={`/[locale]/blogs/${blog.name}`}
+                        >
+                            Read more
+                        </Link>
+                    </Card>
+                ))}
             </Section>
             <Section
                 className={styles.partners}
@@ -266,7 +329,7 @@ function Home(props: Props) {
                         alt="Missing Maps Logo"
                     />
                 </Link>
-                <div className={styles.description}>
+                <div className={styles.partnersDescription}>
                     {t('missing-map-description')}
                 </div>
                 <div className={styles.partnerLogos}>
@@ -308,9 +371,37 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         'home',
         'common',
     ]);
+    const stats = gql`
+        query CommunityStats {
+            communityStats {
+                totalContributors
+                totalUserGroups
+                totalSwipes
+            }
+        }
+    `;
+    const value: Stats = await request(graphqlEndpoint, stats);
+    const blogs = await getBlogs();
+
+    const featuredBlogs = blogs
+        .filter((blog) => blog.featured)
+        .slice(0, 3)
+        .map((blog) => ({
+            name: blog.name,
+            title: blog.title,
+            publishedDate: blog.publishedDate,
+            description: blog.description,
+            author: blog.author,
+            coverImage: blog.coverImage,
+            featured: blog.featured,
+        }));
+
     return {
         props: {
             ...translations,
+            totalContributors: value.communityStats?.totalContributors,
+            totalSwipes: value.communityStats?.totalSwipes,
+            featuredBlogs,
         },
     };
 };

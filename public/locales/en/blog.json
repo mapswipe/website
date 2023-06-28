@@ -1,0 +1,4 @@
+{
+  "blog-tab-head": "Blog - {{blogTitle}} | Mapswipe",
+  "date": "{{date, datetime}}"
+}

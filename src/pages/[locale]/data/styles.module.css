@@ -3,19 +3,27 @@
     flex-direction: column;
     gap: var(--spacing-gigantic);
     background-color: var(--color-foreground);
-    padding-bottom: var(--spacing-mega-large);
+
+    .active {
+        color: var(--color-active);
+    }
+
+    .finished {
+        color: var(--color-finished);
+    }
 
     .illustration {
-        position: relative;
         width: 30rem;
-        height: 40rem;
+        height: 24rem;
 
         @media screen and (max-width: 840px) {
             width: 24rem;
+            height: 20rem;
         }
 
         @media screen and (max-width: 720px) {
             width: 80vw;
+            height: 16rem;
         }
     }
 
@@ -27,19 +35,20 @@
 
         .leftContent {
             display: flex;
+            align-self: center;
+            flex-direction: column;
             justify-content: center;
-            flex-basis: 20rem;
-            transform: rotate(45deg);
-            padding: 0 var(--spacing-large);
-            gap: var(--spacing-medium);
+            padding: var(--spacing-mega-large);
+            width: 20rem;
 
             .figure {
-                transform: rotate(-45deg);
+                align-self: flex-end;
             }
 
             .largeFigure {
                 --size: 10rem;
                 --border-size: 5rem;
+                align-self: flex-start;
             }
         }
 
@@ -48,6 +57,7 @@
             flex-direction: column;
             flex-grow: 1;
             justify-content: center;
+            gap: var(--spacing-medium);
 
             .heading {
                 align-self: center;
@@ -56,12 +66,12 @@
             }
             .sectionDescription {
                 display: flex;
+                align-self: center;
                 flex-direction: column;
                 gap: var(--spacing-small);
-                align-self: center;
                 max-width: 30rem;
                 text-align: center;
-                font-size: var(--font-size-large);
+                font-size: var(--font-size-medium);
             }
         }
     }
@@ -70,7 +80,11 @@
         .typeList {
             display: grid;
             grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+            @media screen and (max-width: 24rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
 
             .keyPointList {
                 display: flex;
@@ -88,6 +102,7 @@
 
             .topContainer {
                 display: flex;
+                flex-wrap: wrap;
                 gap: var(--spacing-large);
 
                 .filters {
@@ -95,49 +110,131 @@
                     flex-basis: 24rem;
                     flex-direction: column;
                     border: var(--width-separator-thin) solid var(--color-border-light);
-                    border-radius: var(--border-radius-small);
+                    border-radius: var(--border-radius-medium);
                     padding: var(--spacing-medium);
                     gap: var(--spacing-large);
-
-                    .active {
-                        color: var(--color-active);
-                    }
-
-                    .finished {
-                        color: var(--color-finished);
-                    }
 
                     .filter {
                         border: var(--width-separator-thin) solid var(--color-border-light);
                         border-radius: var(--border-radius-small);
                         padding: var(--spacing-super-small) var(--spacing-medium);
                     }
+
+                    .row {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: var(--spacing-large);
+                    }
+
+                    .inputContainer {
+                        display: flex;
+                        flex-direction: column;
+                        gap: var(--spacing-super-small);
+
+                        .filter {
+                            max-width: 10rem;
+                        }
+                    }
+
+                    .clearButton {
+                        display: flex;
+                        align-items: center;
+                        align-self: flex-end;
+                        padding: var(--spacing-tiny) var(--spacing-extra-small);
+                        font-size: var(--font-size-small);
+                        gap: var(--spacing-ultra-small);
+                    }
                 }
 
                 .mapContainer {
+                    position: relative;
                     flex-grow: 1;
+                    border-radius: var(--border-radius-medium);
                     background-color: var(--color-background-leaflet);
                     height: 32rem;
 
                     .projectsMap {
+                        border: var(--width-separator-thin) solid var(--color-separator);
+                        border-radius: var(--border-radius-medium);
                         background-color: var(--color-background-leaflet);
                         width: 100%;
                         height: 100%;
                     }
+
+                    .mapSettings {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        z-index: 100000;
+                        border-radius: var(--border-radius-medium);
+                        background-color: rgba(0, 0, 0, 0.2);
+                        padding: var(--spacing-extra-small) var(--spacing-medium);
+
+                        .bubbleFilter {
+                            align-items: center;
+                            flex-direction: row;
+                        }
+                    }
+                }
+
+                @media screen and (max-width: 920px) {
+                    flex-direction: column;
                 }
             }
 
             .stats {
                 display: flex;
+                align-items: center;
+                flex-wrap: wrap;
                 gap: var(--spacing-large);
-                font-size: var(--font-size-extra-large);
-            }
+                font-size: var(--font-size-large);
 
+                .circle {
+                    font-size: var(--font-size-extra-small);
+                }
+
+                @media screen and (max-width: 720px) {
+                    align-items: flex-start;
+                    flex-direction: column;
+
+                    .circle {
+                        display: none;
+                    }
+                }
+            }
 
             .projectList {
                 display: grid;
                 grid-gap: var(--spacing-extra-large);
-                grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+                @media screen and (max-width: 24rem) {
+                    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+                }
+
+                .cardLink {
+                    &:hover {
+                        text-decoration: unset;
+                    }
+                }
+
+                .project {
+                    height: 100%;
+
+                    .projectImage {
+                        height: 10rem;
+                    }
+
+                    &:hover {
+                        box-shadow: var(--box-shadow-medium);
+                    }
+                }
+
+                .projectDetailsRow {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-extra-small);
+                }
 
                 .progressBar {
                     display: flex;
@@ -154,16 +251,26 @@
 
                         .progress {
                             border-radius: 0.25rem;
-                            background-color: var(--color-accent);
+                            background-color: var(--color-background-bar);
                             height: 100%;
                         }
                     }
                 }
 
                 .projectStats {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-                    grid-gap: var(--spacing-extra-small);
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--spacing-medium);
+
+                    .tag {
+                        padding: 0;
+                    }
+
+                    .bottomTags {
+                        display: flex;
+                        flex-direction: column;
+                        gap: var(--spacing-super-small);
+                    }
                 }
             }
         }
@@ -173,11 +280,36 @@
         .urlList {
             display: grid;
             grid-gap: var(--spacing-extra-large);
-            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 
-            .downloadIcon {
-                color: var(--color-accent);
-                font-size: var(--font-size-super-large);
+            @media screen and (max-width: 24rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
+
+            .downloadCard {
+                display: flex;
+                align-items: flex-end;
+                justify-content: space-between;
+                gap: var(--spacing-large);
+
+                .fileDetails {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-extra-small);
+                }
+
+                .link {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: var(--font-size-medium);
+                    gap: var(--spacing-extra-small);
+                }
+
+                @media screen and (max-width: 720px) {
+                    align-items: unset;
+                    flex-direction: column;
+                }
             }
         }
     }

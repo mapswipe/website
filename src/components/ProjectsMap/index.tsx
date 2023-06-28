@@ -1,5 +1,5 @@
-import React from 'react';
-import { isDefined } from '@togglecorp/fujs';
+import React, { useMemo } from 'react';
+import { isDefined, listToMap } from '@togglecorp/fujs';
 import {
     MapContainer,
     TileLayer,
@@ -9,14 +9,28 @@ import {
 import { useTranslation } from 'next-i18next';
 import { CircleMarkerOptions, LatLngTuple } from 'leaflet';
 
+import Card from 'components/Card';
+import ProjectTypeIcon from 'components/ProjectTypeIcon';
+import Tag from 'components/Tag';
 import {
-    projectNameMapping,
+    IoLocationOutline,
+    IoFlag,
+    IoPerson,
+    IoCalendarClearOutline,
+    IoEllipseSharp,
+} from 'react-icons/io5';
+
+import {
+    ProjectTypeOption,
+    ProjectStatusOption,
     ProjectStatus,
     ProjectType,
 } from 'utils/common';
 
 import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
+
+import styles from './styles.module.css';
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
@@ -63,6 +77,8 @@ interface Project {
     coordinates: [number, number] | null;
     day: number | null;
     area_sqkm: number | null;
+    region: string | null;
+    requestingOrganization: string | null;
 }
 
 interface Props {
@@ -81,6 +97,59 @@ function ProjectMap(props: Props) {
     } = props;
 
     const { t } = useTranslation('data');
+
+    const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
+        {
+            key: 'active',
+            label: t('active-projects'),
+            icon: (<IoEllipseSharp className={styles.active} />),
+        },
+        {
+            key: 'finished',
+            label: t('finished-projects'),
+            icon: (<IoEllipseSharp className={styles.finished} />),
+        },
+    ]), [t]);
+
+    const projectStatusOptionMap = useMemo(() => (
+        listToMap(
+            projectStatusOptions,
+            (item) => item.key,
+            (item) => item,
+        )
+    ), [projectStatusOptions]);
+
+    const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
+        {
+            key: '1',
+            label: t('build-area'),
+            icon: (
+                <ProjectTypeIcon type="1" size="small" />
+            ),
+        },
+        {
+            key: '2',
+            label: t('footprint'),
+            icon: (
+                <ProjectTypeIcon type="2" size="small" />
+            ),
+        },
+        {
+            key: '3',
+            label: t('change-detection'),
+            icon: (
+                <ProjectTypeIcon type="3" size="small" />
+            ),
+        },
+    ]), [t]);
+
+    const projectTypeOptionsMap = useMemo(() => (
+        listToMap(
+            projectTypeOptions,
+            (item) => item.key,
+            (item) => item,
+        )
+    ), [projectTypeOptions]);
 
     const sanitizedProjects = projects
         .map((project) => (isDefined(project.coordinates) ? {
@@ -108,17 +177,95 @@ function ProjectMap(props: Props) {
                 >
                     <Popup>
                         <Link
+                            className={styles.cardLink}
+                            key={project.project_id}
                             href={`/[locale]/projects/${project.project_id}`}
                         >
-                            {project.name}
-                            {project.status}
+                            <Card
+                                className={styles.project}
+                                // coverImageUrl={project.image ?? undefined}
+                                headingFont="normal"
+                                heading={project.name}
+                                description={(
+                                    <div className={styles.row}>
+                                        {project.project_type && (
+                                            <Tag
+                                                spacing="small"
+                                                icon={(
+                                                    projectTypeOptionsMap[project.project_type].icon
+                                                )}
+                                            >
+                                                {projectTypeOptionsMap[project.project_type].label}
+                                            </Tag>
+                                        )}
+                                        {project.status && (
+                                            <Tag
+                                                spacing="small"
+                                                icon={projectStatusOptionMap[project.status].icon}
+                                            >
+                                                {projectStatusOptionMap[project.status].label}
+                                            </Tag>
+                                        )}
+                                    </div>
+                                )}
+                                footerContent={(
+                                    <div className={styles.progressBar}>
+                                        <div className={styles.track}>
+                                            <div
+                                                style={{ width: `${project.progress}%` }}
+                                                className={styles.progress}
+                                            />
+                                        </div>
+                                        <div className={styles.progressLabel}>
+                                            {t('project-card-progress-text', { progress: project.progress })}
+                                        </div>
+                                    </div>
+                                )}
+                            >
+                                <div className={styles.projectStats}>
+                                    <div className={styles.bottomTags}>
+                                        {project.region && (
+                                            <Tag
+                                                className={styles.tag}
+                                                icon={<IoLocationOutline />}
+                                                variant="transparent"
+                                            >
+                                                {project.region}
+                                            </Tag>
+                                        )}
+                                        {project.requestingOrganization && (
+                                            <Tag
+                                                className={styles.tag}
+                                                icon={<IoFlag />}
+                                                variant="transparent"
+                                            >
+                                                {project.requestingOrganization}
+                                            </Tag>
+                                        )}
+                                        <div className={styles.row}>
+                                            {project.day && (
+                                                <Tag
+                                                    className={styles.tag}
+                                                    icon={<IoCalendarClearOutline />}
+                                                    variant="transparent"
+                                                >
+                                                    {t('project-card-last-update', { date: project.day })}
+                                                </Tag>
+                                            )}
+                                            {project.number_of_users && (
+                                                <Tag
+                                                    className={styles.tag}
+                                                    icon={<IoPerson />}
+                                                    variant="transparent"
+                                                >
+                                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                                </Tag>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
                         </Link>
-                        <div>{t('project-card-type', { type: projectNameMapping[project.project_type] })}</div>
-                        <div>{t('project-card-status-text', { status: project.status })}</div>
-                        <div>{t('project-card-progress-text', { progress: project.progress })}</div>
-                        <div>{t('project-card-last-update', { date: project.day })}</div>
-                        <div>{t('project-card-contributors-text', { contributors: project.number_of_users })}</div>
-                        <div>{t('project-card-area', { area: project.area_sqkm })}</div>
                     </Popup>
                 </CircleMarker>
             ))}

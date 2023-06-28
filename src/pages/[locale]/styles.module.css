@@ -6,13 +6,17 @@
 
     .hero {
         .screenshot {
-            position: relative;
-            width: 20rem;
-            height: 40rem;
+            width: 30rem;
+            height: 28rem;
 
-            .image {
-                object-position: center right;
-                object-fit: contain;
+            @media screen and (max-width: 840px) {
+                width: 24rem;
+                height: 24rem;
+            }
+
+            @media screen and (max-width: 720px) {
+                width: 80vw;
+                height: 20rem;
             }
         }
     }
@@ -23,14 +27,14 @@
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            gap: var(--spacing-gigantic);
+            gap: var(--spacing-super-large);
 
             .pictures {
                 display: flex;
                 align-items: center;
-                flex-basis: calc(40% - var(--spacing-gigantic) / 2);
+                flex-basis: 32rem;
                 flex-wrap: wrap;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 gap: var(--spacing-medium);
 
                 .imageContainer {
@@ -44,13 +48,13 @@
                 }
 
                 .single {
-                    width: 12rem;
-                    height: 16rem;
+                    width: 14rem;
+                    height: 18rem;
                 }
 
                 .double {
-                    width: 12rem;
-                    height: 12rem;
+                    width: 14rem;
+                    height: 14rem;
 
                     .image {
                         object-position: center center;
@@ -68,23 +72,23 @@
 
             .descriptionContainer {
                 display: flex;
-                flex-basis: calc(60% - var(--spacing-gigantic) / 2);
+                flex-basis: calc(100% - 32rem - var(--spacing-super-large));
                 flex-direction: column;
                 gap: var(--spacing-medium);
 
                 .description {
-                    max-width: 40rem;
-                    font-size: var(--font-size-large);
+                    max-width: 100%;
+                    font-size: var(--font-size-medium);
                 }
 
                 .infoBoxContainer {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: var(--spacing-medium);
+                    display: grid;
+                    grid-gap: var(--spacing-medium);
+                    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
                 }
             }
 
-            @media screen and (max-width: 720px) {
+            @media screen and (max-width: 840px) {
                 flex-direction: column;
 
                 .pictures {
@@ -92,6 +96,8 @@
                 }
 
                 .descriptionContainer {
+                    flex-basis: 100%;
+
                     .infoBoxContainer {
                         justify-content: center;
                     }
@@ -102,34 +108,19 @@
 
     .missionTypes {
         .content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: var(--spacing-large);
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+            @media screen and (max-width: 20rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
 
             .missionType {
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content: center;
-                border: var(--width-separator-thin) solid var(--color-separator);
-                border-radius: 0.5rem;
-                padding: var(--spacing-large);
-                max-width: 20rem;
-                gap: var(--spacing-medium);
+                font-size: var(--font-size-medium);
 
-                &:hover {
-                    box-shadow: var(--box-shadow-medium);
-                }
-
-                .icon {
-                    color: var(--color-accent);
-                    font-size: var(--font-size-mega-large);
-                }
-
-                .missionTypeDescription {
-                    text-align: center;
-                    font-size: var(--font-size-large);
+                .missionImage {
+                    height: 20rem;
                 }
             }
         }
@@ -138,10 +129,10 @@
     .startMapswiping {
         .content {
             display: flex;
-            gap: var(--spacing-large);
+            gap: var(--spacing-mega-large);
 
-            .description {
-                font-size: var(--font-size-extra-large);
+            .startMapswipingDescription {
+                font-size: var(--font-size-large);
             }
 
             .download {
@@ -149,7 +140,7 @@
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
                 flex-direction: column;
                 justify-content: center;
-                border-radius: var(--border-radius-small);
+                border-radius: var(--border-radius-medium);
                 background-color: var(--color-background-brand-light);
                 padding: var(--spacing-extra-large) var(--spacing-gigantic);
                 gap: var(--spacing-extra-large);
@@ -181,7 +172,7 @@
                     }
 
                     .downloadLink {
-                        text-decoration: underline;
+                        color: var(--color-link);
                     }
                 }
             }
@@ -191,7 +182,7 @@
                 align-items: center;
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
                 flex-direction: column;
-                border-radius: var(--border-radius-small);
+                border-radius: var(--border-radius-medium);
                 background-color: var(--color-background-accent-light);
                 padding: var(--spacing-extra-large) var(--spacing-gigantic);
                 gap: var(--spacing-extra-large);
@@ -200,6 +191,56 @@
 
             @media screen and (max-width: 720px) {
                 flex-direction: column;
+            }
+        }
+    }
+
+    .recentNewsAndUpdates {
+        .content {
+            display: grid;
+            grid-gap: var(--spacing-extra-large);
+            grid-template-columns: minmax(20rem, 2fr) minmax(20rem, 3fr);
+
+            .blogItem {
+                .tag {
+                    padding: var(--spacing-ultra-small) 0;
+                }
+
+                .cardContent {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--spacing-small);
+
+                    .blogDescription {
+                        display: -webkit-box;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                    }
+
+                    .link {
+                        color: var(--color-accent);
+                        font-size: var(--font-size-medium);
+                        font-weight: var(--font-weight-bold);
+                    }
+                }
+            }
+
+            .firstGrid {
+                grid-row: auto / span 2;
+            }
+
+            @media screen and (max-width: 800px) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+
+                .firstGrid {
+                    grid-row: unset;
+                }
+            }
+
+            @media screen and (max-width: 24rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
             }
         }
     }
@@ -219,10 +260,10 @@
                 height: 4rem;
             }
 
-            .description {
+            .partnersDescription {
                 max-width: var(--width-heading-max);
                 text-align: center;
-                font-size: var(--font-size-large);
+                font-size: var(--font-size-medium);
             }
 
             .partnerLogos {

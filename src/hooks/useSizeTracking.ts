@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import ResizeObserver from 'resize-observer-polyfill';
 
 function useSizeTracking(ref: React.RefObject<HTMLElement | SVGSVGElement>, disabled = false) {
     const [size, setSize] = useState(() => {

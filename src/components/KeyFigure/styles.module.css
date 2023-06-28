@@ -4,17 +4,28 @@
     flex-direction: column;
     justify-content: center;
     gap: var(--spacing-extra-small);
-    border: var(--width-separator-thin) solid var(--color-separator);
+    border: var(--width-separator-thin) solid var(--color-accent-light);
     border-radius: 0.5rem;
-    padding: var(--spacing-extra-large);
+    padding: var(--spacing-large);
 
     .label {
-        font-size: var(--font-size-large);
+        color: var(--color-heading);
+        font-size: var(--font-size-medium);
     }
 
     .value {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-heading);
         font-size: var(--font-size-extra-large);
         font-weight: var(--font-weight-bold);
+        gap: var(--spacing-super-small);
+
+        .icon {
+            color: var(--color-accent);
+            font-size: var(--font-size-large);
+        }
     }
 
     .description {
@@ -27,13 +38,20 @@
         position: relative;
         border: none;
         border-radius: var(--border-size);
+        box-shadow: 0 0 0 2rem var(--color-background-brand-light);
+        background-color: var(--color-background-brand-light);
         width: var(--size);
         height: var(--size);
-        box-shadow: 0 0 0 2rem var(--color-accent-light);
-        background-color: var(--color-accent-light);
         text-align: center;
+        gap: var(--spacing-tiny);
+
+        .label {
+            color: var(--color-heading);
+            font-size: var(--font-size-medium);
+        }
 
         &.complement {
+            box-shadow: 0 0 0 2rem var(--color-complement);
             background-color: var(--color-complement);
         }
     }

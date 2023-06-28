@@ -7,6 +7,7 @@
     .navbarContent {
         display: flex;
         position: relative;
+        align-items: center;
         margin: auto;
         background-color: var(--color-background);
         padding: var(--spacing-medium);
@@ -32,7 +33,18 @@
             gap: var(--spacing-medium);
 
             .link {
+                border-bottom: var(--width-separator-thin) solid transparent;
+                font-size: var(--font-size-medium);
                 font-weight: var(--font-weight-semi-bold);
+
+                &.active {
+                    border-bottom-color: var(--color-accent);
+                }
+
+                &:hover {
+                    border-bottom-color: var(--color-accent);
+                    text-decoration: unset;
+                }
             }
         }
 
@@ -49,7 +61,7 @@
                 padding: var(--spacing-tiny) var(--spacing-extra-small);
                 text-transform: uppercase;
                 color: var(--color-text-on-dark);
-                font-size: var(--font-size-medium);
+                font-size: var(--font-size-small);
                 gap: var(--spacing-tiny);
 
                 .currentLocale {
@@ -100,12 +112,13 @@
         padding: var(--spacing-ultra-small) var(--spacing-medium);
 
         &.activeLanguage {
-            background-color: var(--color-accent);
-            color: var(--color-text-on-dark);
+            background-color: var(--color-background-brand-light);
+            color: var(--color-text);
+            font-weight: var(--font-weight-bold);
         }
 
         &:hover {
-            background-color: var(--color-accent-light);
+            background-color: var(--color-background-brand-light);
             color: var(--color-text);
         }
     }

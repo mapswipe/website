@@ -4,8 +4,8 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 import Link from 'components/Link';
+import { FaRegNewspaper } from 'react-icons/fa';
 import {
-    IoSearch,
     IoLogoSlack,
     IoLogoFacebook,
     IoLogoTwitter,
@@ -67,6 +67,11 @@ function Footer(props: Props) {
                             {t('data-link')}
                         </Link>
                         <Link
+                            href="/[locale]/blogs"
+                        >
+                            {t('blogs-link')}
+                        </Link>
+                        <Link
                             href="https://community.mapswipe.org/"
                         >
                             {t('community-dashboard-link')}
@@ -85,6 +90,7 @@ function Footer(props: Props) {
                             href="https://www.facebook.com/TheMissingMaps"
                             variant="icon"
                             target="_blank"
+                            title={t('facebook')}
                         >
                             <IoLogoFacebook />
                         </Link>
@@ -92,6 +98,7 @@ function Footer(props: Props) {
                             href="https://twitter.com/mapswipe"
                             variant="icon"
                             target="_blank"
+                            title={t('twitter')}
                         >
                             <IoLogoTwitter />
                         </Link>
@@ -99,6 +106,7 @@ function Footer(props: Props) {
                             href="https://www.instagram.com/themissingmaps/"
                             variant="icon"
                             target="_blank"
+                            title={t('instagram')}
                         >
                             <IoLogoInstagram />
                         </Link>
@@ -106,6 +114,7 @@ function Footer(props: Props) {
                             href="https://github.com/mapswipe"
                             variant="icon"
                             target="_blank"
+                            title={t('github')}
                         >
                             <IoLogoGithub />
                         </Link>
@@ -113,13 +122,15 @@ function Footer(props: Props) {
                             href="https://wiki.openstreetmap.org/wiki/MapSwipe"
                             variant="icon"
                             target="_blank"
+                            title={t('osm-wiki')}
                         >
-                            <IoSearch />
+                            <FaRegNewspaper />
                         </Link>
                         <Link
                             href="mailto:info@mapswipe.org"
                             variant="icon"
                             target="_blank"
+                            title={t('email')}
                         >
                             <IoMail />
                         </Link>
@@ -127,6 +138,7 @@ function Footer(props: Props) {
                             href="https://slack.openstreetmap.us/"
                             variant="icon"
                             target="_blank"
+                            title={t('slack')}
                         >
                             <IoLogoSlack />
                         </Link>
@@ -143,11 +155,6 @@ function Footer(props: Props) {
                             href="/[locale]/privacy"
                         >
                             {t('privacy')}
-                        </Link>
-                        <Link
-                            href="/[locale]/cookies"
-                        >
-                            {t('cookies')}
                         </Link>
                     </div>
                 </div>

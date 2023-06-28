@@ -2,24 +2,36 @@ import React, { useState, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
+import { gql, request } from 'graphql-request';
+import Head from 'next/head';
 import {
     _cs,
+    unique,
+    listToMap,
+    compareDate,
     sum,
     isDefined,
     bound,
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
-    IoDownload,
+    IoLocationOutline,
+    IoClose,
+    IoDownloadOutline,
+    IoFlag,
+    IoPerson,
+    IoCalendarClearOutline,
     IoEllipseSharp,
 } from 'react-icons/io5';
 
 import Button from 'components/Button';
+import Tag from 'components/Tag';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Page from 'components/Page';
 import getFileSizes from 'utils/requests/fileSizes';
 import Card from 'components/Card';
 import KeyFigure from 'components/KeyFigure';
+import NumberOutput from 'components/NumberOutput';
 import Hero from 'components/Hero';
 import ImageWrapper from 'components/ImageWrapper';
 import Link from 'components/Link';
@@ -29,13 +41,16 @@ import RawInput from 'components/RawInput';
 import Section from 'components/Section';
 import RadioInput from 'components/RadioInput';
 import MultiSelectInput from 'components/MultiSelectInput';
+import SelectInput from 'components/SelectInput';
 import {
     rankedSearchOnList,
-    projectNameMapping,
-    ProjectStatusOption,
     ProjectTypeOption,
+    ProjectStatusOption,
     ProjectStatus,
     ProjectType,
+    graphqlEndpoint,
+    Stats,
+    getFileSizeProperties,
 } from 'utils/common';
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import useDebouncedValue from 'hooks/useDebouncedValue';
@@ -92,14 +107,35 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     ]);
 
     const projects = await getProjectCentroids();
+    const stats = gql`
+        query CommunityStats {
+            communityStats {
+                totalContributors
+                totalUserGroups
+                totalSwipes
+            }
+        }
+    `;
+    const value: Stats = await request(graphqlEndpoint, stats);
+
+    const {
+        totalContributors,
+        totalSwipes,
+    } = value?.communityStats ?? {};
 
     const miniProjects = projects.features.map((feature) => ({
         project_id: feature.properties.project_id ?? null,
         project_type: feature.properties.project_type,
         name: feature.properties.legacyName
             ? feature.properties.name
-            : feature.properties.topic,
+            : `${feature.properties.topic} (${feature.properties.taskNumber})`,
         status: feature.properties.status ?? null,
+        region: feature.properties.legacyName
+            ? null
+            : feature.properties.region,
+        requestingOrganization: feature.properties.legacyName
+            ? null
+            : feature.properties.requestingOrganization,
         progress: feature.properties.progress !== null && feature.properties.progress !== undefined
             ? Math.round(feature.properties.progress * 100)
             : null,
@@ -108,6 +144,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         coordinates: feature.geometry?.coordinates ?? null,
         day: feature.properties?.day
             ? new Date(feature.properties.day).getTime()
+            : null,
+        created: feature.properties?.created
+            ? new Date(feature.properties.created).getTime()
             : null,
         image: feature.properties?.image ?? null,
     })).sort((foo, bar) => ((bar.day ?? 0) - (foo.day ?? 0)));
@@ -160,9 +199,19 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             maxArea,
             minContributors,
             maxContributors,
+            totalContributors,
+            totalSwipes,
         },
     };
 };
+
+function organizationKeySelector<K extends { label: string }>(option: K) {
+    return option.label;
+}
+
+function organizationLabelSelector<K extends { label: string }>(option: K) {
+    return option.label;
+}
 
 function keySelector<K extends { key: string }>(option: K) {
     return option.key;
@@ -194,8 +243,13 @@ interface Props extends SSRConfig {
         coordinates: [number, number] | null;
         area_sqkm: number | null;
         day: number | null;
+        created: number | null;
+        region: string | null;
+        requestingOrganization: string | null;
     }[];
     urls: UrlInfo[];
+    totalContributors?: number | null | undefined;
+    totalSwipes?: number | null | undefined;
 }
 
 function Data(props: Props) {
@@ -207,13 +261,27 @@ function Data(props: Props) {
         maxArea,
         minContributors,
         maxContributors,
+        totalContributors,
+        totalSwipes,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
     const [searchText, setSearchText] = useState<string | undefined>();
+    const [dateFrom, setDateFrom] = useState<string | undefined>();
+    const [dateTo, setDateTo] = useState<string | undefined>();
     const [projectTypes, setProjectTypes] = useState<string[] | undefined>();
+    const [organization, setOrganization] = useState<string | undefined>();
     const [projectStatuses, setProjectStatuses] = useState<string[] | undefined>();
     const [bubble, setBubble] = useState<string | undefined>();
+
+    const organizationOptions = useMemo(() => (
+        unique(
+            projects
+                .map((project) => project.requestingOrganization)
+                .filter(isDefined),
+            (item) => item,
+        ).map((org) => ({ label: org }))
+    ), [projects]);
 
     const debouncedSearchText = useDebouncedValue(searchText);
 
@@ -231,6 +299,14 @@ function Data(props: Props) {
             icon: (<IoEllipseSharp className={styles.finished} />),
         },
     ]), [t]);
+
+    const projectStatusOptionMap = useMemo(() => (
+        listToMap(
+            projectStatusOptions,
+            (item) => item.key,
+            (item) => item,
+        )
+    ), [projectStatusOptions]);
 
     const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
         {
@@ -256,6 +332,14 @@ function Data(props: Props) {
         },
     ]), [t]);
 
+    const projectTypeOptionsMap = useMemo(() => (
+        listToMap(
+            projectTypeOptions,
+            (item) => item.key,
+            (item) => item,
+        )
+    ), [projectTypeOptions]);
+
     const handleSeeMore = useCallback(
         () => {
             setItems((item) => bound(0, projects.length, item + PAGE_SIZE));
@@ -277,6 +361,24 @@ function Data(props: Props) {
                 )
                 : filteredProjects;
 
+            filteredProjects = dateFrom
+                ? filteredProjects.filter(
+                    (project) => compareDate(project.created, dateFrom) >= 0,
+                )
+                : filteredProjects;
+
+            filteredProjects = dateTo
+                ? filteredProjects.filter(
+                    (project) => compareDate(dateTo, project.created) >= 0,
+                )
+                : filteredProjects;
+
+            filteredProjects = organization
+                ? filteredProjects.filter(
+                    (project) => project.requestingOrganization === organization,
+                )
+                : filteredProjects;
+
             filteredProjects = debouncedSearchText
                 ? rankedSearchOnList(
                     filteredProjects,
@@ -288,19 +390,18 @@ function Data(props: Props) {
             return filteredProjects;
         },
         [
+            dateFrom,
+            dateTo,
             projects,
+            organization,
             projectStatuses,
             projectTypes,
             debouncedSearchText,
         ],
     );
 
-    const completedProjects = visibleProjects.filter(
-        (feature) => feature.status === 'finished',
-    );
-    const totalFinishedProjects = completedProjects.length;
     const totalArea = sum(
-        completedProjects.map(
+        visibleProjects.map(
             (feature) => feature.area_sqkm,
         ).filter(isDefined),
     );
@@ -333,15 +434,34 @@ function Data(props: Props) {
         [bubble, maxArea, minArea, maxContributors, minContributors],
     );
 
+    const handleClearFiltersClick = useCallback(() => {
+        setProjectStatuses(undefined);
+        setOrganization(undefined);
+        setSearchText(undefined);
+        setDateFrom(undefined);
+        setDateTo(undefined);
+        setProjectTypes(undefined);
+    }, []);
+
+    const filtersApplied = searchText
+        || dateFrom
+        || dateTo
+        || organization
+        || projectTypes
+        || projectStatuses;
+
     return (
         <Page contentClassName={_cs(styles.data, className)}>
+            <Head>
+                <title>{t('data-tab-head')}</title>
+            </Head>
             <Hero
                 title={t('data-page-heading')}
                 description={t('data-page-description')}
                 rightContent={(
                     <ImageWrapper
                         className={styles.illustration}
-                        src="/img/placeholder.png"
+                        src="/img/data-banner.svg"
                         alt="Placeholder"
                     />
                 )}
@@ -350,21 +470,32 @@ function Data(props: Props) {
                 <div className={styles.leftContent}>
                     <KeyFigure
                         className={_cs(styles.figure, styles.largeFigure)}
-                        value="100M"
-                        label="Total Swipes"
+                        value={(
+                            <NumberOutput
+                                value={totalSwipes}
+                                normal
+                            />
+                        )}
+                        label={t('total-swipes')}
                         variant="circle"
                     />
                     <KeyFigure
                         className={styles.figure}
-                        value="70K"
-                        label="Total Contributors"
+                        circleColor="complement"
+                        value={(
+                            <NumberOutput
+                                value={totalContributors}
+                                normal
+                            />
+                        )}
+                        label={t('contributors')}
                         variant="circle"
                     />
                 </div>
                 <div className={styles.rightContent}>
                     <Heading
                         className={styles.heading}
-                        size="large"
+                        size="medium"
                     >
                         {t('community-stats-section-heading')}
                     </Heading>
@@ -387,17 +518,12 @@ function Data(props: Props) {
                 contentClassName={styles.typeList}
             >
                 <Card
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/find.svg"
                     heading={t('type-find-title')}
                     icons={(
                         <ProjectTypeIcon
                             type="1"
                         />
-                    )}
-                    footerIcons={(
-                        <Button>
-                            {t('type-find-action-label')}
-                        </Button>
                     )}
                     childrenContainerClassName={styles.keyPointList}
                 >
@@ -412,17 +538,12 @@ function Data(props: Props) {
                     />
                 </Card>
                 <Card
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/compare.svg"
                     heading={t('type-compare-title')}
                     icons={(
                         <ProjectTypeIcon
                             type="3"
                         />
-                    )}
-                    footerIcons={(
-                        <Button>
-                            {t('type-compare-action-label')}
-                        </Button>
                     )}
                     childrenContainerClassName={styles.keyPointList}
                 >
@@ -437,17 +558,12 @@ function Data(props: Props) {
                     />
                 </Card>
                 <Card
-                    coverImageUrl="/img/placeholder.png"
+                    coverImageUrl="/img/validate.svg"
                     heading={t('type-validate-title')}
                     icons={(
                         <ProjectTypeIcon
                             type="2"
                         />
-                    )}
-                    footerIcons={(
-                        <Button>
-                            {t('type-validate-action-label')}
-                        </Button>
                     )}
                     childrenContainerClassName={styles.keyPointList}
                 >
@@ -502,14 +618,54 @@ function Data(props: Props) {
                             value={searchText}
                             onChange={setSearchText}
                         />
-                        <RadioInput
-                            label={t('bubble-type') ?? undefined}
-                            value={bubble}
-                            options={bubbleTypes}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                            onChange={setBubble}
+                        <SelectInput
+                            name="org"
+                            className={styles.filter}
+                            placeholder={t('organization-placeholder') ?? undefined}
+                            value={organization}
+                            options={organizationOptions}
+                            keySelector={organizationKeySelector}
+                            labelSelector={organizationLabelSelector}
+                            onChange={setOrganization}
                         />
+                        <div className={styles.row}>
+                            <div className={styles.inputContainer}>
+                                <div>
+                                    {t('date-from-label')}
+                                </div>
+                                <RawInput
+                                    className={styles.filter}
+                                    placeholder={t('search-label') ?? undefined}
+                                    name={undefined}
+                                    value={dateFrom}
+                                    onChange={setDateFrom}
+                                    type="date"
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <div>
+                                    {t('date-to-label')}
+                                </div>
+                                <RawInput
+                                    className={styles.filter}
+                                    placeholder={t('search-label') ?? undefined}
+                                    name={undefined}
+                                    value={dateTo}
+                                    onChange={setDateTo}
+                                    type="date"
+                                />
+                            </div>
+                        </div>
+                        {filtersApplied && (
+                            <Button
+                                className={styles.clearButton}
+                                onClick={handleClearFiltersClick}
+                                variant="border"
+                            >
+                                <IoClose />
+                                {t('clear-filters')}
+                            </Button>
+                        )}
                     </div>
                     <div className={styles.mapContainer}>
                         <DynamicProjectsMap
@@ -517,61 +673,125 @@ function Data(props: Props) {
                             projects={visibleProjects}
                             radiusSelector={radiusSelector}
                         />
+                        <div className={styles.mapSettings}>
+                            <RadioInput
+                                className={styles.bubbleFilter}
+                                label={t('bubble-type') ?? undefined}
+                                value={bubble}
+                                options={bubbleTypes}
+                                keySelector={keySelector}
+                                labelSelector={labelSelector}
+                                onChange={setBubble}
+                                optionSize="small"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className={styles.stats}>
                     <div>
-                        {t('total-area-card-text', { area: roundedTotalArea })}
+                        {t('finished-project-card-text', {
+                            totalProjects: visibleProjects.length,
+                        })}
                     </div>
+                    <IoEllipseSharp className={styles.circle} />
                     <div>
-                        {t('finished-project-card-text', { projects: totalFinishedProjects })}
+                        {t('total-area-card-text', { area: roundedTotalArea })}
                     </div>
                 </div>
                 <div className={styles.projectList}>
                     {tableProjects.map((project) => (
-                        <Card
-                            // className={styles.project}
+                        <Link
+                            className={styles.cardLink}
                             key={project.project_id}
-                            // coverImageUrl={project.image ?? undefined}
-                            heading={(
-                                <Link
-                                    href={`/[locale]/projects/${project.project_id}`}
-                                >
-                                    {project.name}
-                                </Link>
-                            )}
-                            footerContent={(
-                                <div className={styles.progressBar}>
-                                    <div className={styles.track}>
-                                        <div
-                                            style={{ width: `${project.progress}%` }}
-                                            className={styles.progress}
-                                        />
-                                    </div>
-                                    <div className={styles.progressLabel}>
-                                        {t('project-card-progress-text', { progress: project.progress })}
-                                    </div>
-                                </div>
-                            )}
+                            href={`/[locale]/projects/${project.project_id}`}
                         >
-                            <div className={styles.projectStats}>
-                                <div>
-                                    {t('project-card-type', { type: projectNameMapping[project.project_type] })}
+                            <Card
+                                className={styles.project}
+                                coverImageUrl={project.image ?? undefined}
+                                imageClassName={styles.projectImage}
+                                headingFont="normal"
+                                heading={project.name}
+                                description={(
+                                    <div className={styles.projectDetailsRow}>
+                                        {project.project_type && (
+                                            <Tag
+                                                spacing="small"
+                                                icon={(
+                                                    projectTypeOptionsMap[project.project_type].icon
+                                                )}
+                                            >
+                                                {projectTypeOptionsMap[project.project_type].label}
+                                            </Tag>
+                                        )}
+                                        {project.status && (
+                                            <Tag
+                                                spacing="small"
+                                                icon={projectStatusOptionMap[project.status].icon}
+                                            >
+                                                {projectStatusOptionMap[project.status].label}
+                                            </Tag>
+                                        )}
+                                    </div>
+                                )}
+                                footerContent={(
+                                    <div className={styles.progressBar}>
+                                        <div className={styles.track}>
+                                            <div
+                                                style={{ width: `${project.progress}%` }}
+                                                className={styles.progress}
+                                            />
+                                        </div>
+                                        <div className={styles.progressLabel}>
+                                            {t('project-card-progress-text', { progress: project.progress })}
+                                        </div>
+                                    </div>
+                                )}
+                                nonOptimizedImage
+                            >
+                                <div className={styles.projectStats}>
+                                    <div className={styles.bottomTags}>
+                                        {project.region && (
+                                            <Tag
+                                                className={styles.tag}
+                                                icon={<IoLocationOutline />}
+                                                variant="transparent"
+                                            >
+                                                {project.region}
+                                            </Tag>
+                                        )}
+                                        {project.requestingOrganization && (
+                                            <Tag
+                                                className={styles.tag}
+                                                icon={<IoFlag />}
+                                                variant="transparent"
+                                            >
+                                                {project.requestingOrganization}
+                                            </Tag>
+                                        )}
+                                        <div className={styles.projectDetailsRow}>
+                                            {project.created && (
+                                                <Tag
+                                                    className={styles.tag}
+                                                    icon={<IoCalendarClearOutline />}
+                                                    variant="transparent"
+                                                >
+                                                    {t('project-card-last-update', { date: project.created })}
+                                                </Tag>
+                                            )}
+                                            {project.number_of_users && (
+                                                <Tag
+                                                    className={styles.tag}
+                                                    icon={<IoPerson />}
+                                                    variant="transparent"
+                                                >
+                                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                                </Tag>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    {t('project-card-status-text', { status: project.status })}
-                                </div>
-                                <div>
-                                    {t('project-card-last-update', { date: project.day })}
-                                </div>
-                                <div>
-                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
-                                </div>
-                                <div>
-                                    {t('project-card-area', { area: project.area_sqkm })}
-                                </div>
-                            </div>
-                        </Card>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
             </Section>
@@ -584,20 +804,26 @@ function Data(props: Props) {
                 {urls.map((url) => (
                     <Card
                         key={url.name}
+                        childrenContainerClassName={styles.downloadCard}
                         heading={downloadHeadingMap[url.name]}
                         description={downloadDescriptionMap[url.name]}
-                        footerActions={(
-                            <a href={url.url}>
-                                <IoDownload className={styles.downloadIcon} />
-                            </a>
-                        )}
                     >
-                        <div>
-                            {t('download-type', { type: url.type })}
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {url.type}
+                            </Tag>
+                            <div>
+                                {t('download-size', { size: getFileSizeProperties(url.size), formatParams: { size: { style: 'unit', unit: getFileSizeProperties(url.size), maximumFractionDigits: 1 } } })}
+                            </div>
                         </div>
-                        <div>
-                            {t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
-                        </div>
+                        <Link
+                            href={url.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
                     </Card>
                 ))}
             </Section>
