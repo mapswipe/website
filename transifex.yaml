@@ -1,4 +1,4 @@
-git: https://github.com/toggle-corp/mapswipe-community-website.git
+git: https://github.com/mapswipe/community-website.git
 filters:
   - filter_type: dynamic
     file_format: KEYVALUEJSON
