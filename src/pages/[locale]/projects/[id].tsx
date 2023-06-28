@@ -39,6 +39,7 @@ import {
     ProjectStatus,
     ProjectStatusOption,
     ProjectTypeOption,
+    getFileSizeProperties,
 } from 'utils/common';
 import {
     getBounds,
@@ -90,6 +91,7 @@ interface UrlInfo {
     name: DownloadType;
     type: DownloadFileType;
     url: string;
+    fileSizeCheckUrl: string;
     size: number;
 }
 
@@ -503,8 +505,7 @@ function Project(props: Props) {
                                 {url.type}
                             </Tag>
                             <div>
-                                {url.size > (1048576 / 10) && t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
-                                {(url.size <= (1048576 / 10)) && t('download-size', { size: url.size / 1024, formatParams: { size: { style: 'unit', unit: 'kilobyte', maximumFractionDigits: 1 } } })}
+                                {t('download-size', { size: getFileSizeProperties(url.size), formatParams: { size: { style: 'unit', unit: getFileSizeProperties(url.size), maximumFractionDigits: 1 } } })}
                             </div>
                         </div>
                         <Link
@@ -593,55 +594,66 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         .process(matterResult.content.replace(/\\n/g, '\n'));
     const contentHtml = processedContent.toString();
 
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
             name: 'aggregated_results',
-            url: `/api/agg_results/agg_results_${projectId}.csv.gz`,
+            url: `${mapswipeApi}agg_results/agg_results_${projectId}.csv.gz`,
+            fileSizeCheckUrl: `/api/agg_results/agg_results_${projectId}.csv.gz`,
             type: 'csv',
         },
         {
             name: 'aggregated_results_with_geometry',
-            url: `/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
+            url: `${mapswipeApi}agg_results/agg_results_${projectId}_geom.geojson.gz`,
+            fileSizeCheckUrl: `/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
             type: 'geojson',
         },
         {
             name: 'hot_tasking_manager_geometries',
-            url: `/api/hot_tm/hot_tm_${projectId}.geojson`,
+            url: `${mapswipeApi}hot_tm/hot_tm_${projectId}.geojson`,
+            fileSizeCheckUrl: `/api/hot_tm/hot_tm_${projectId}.geojson`,
             type: 'geojson',
         },
         {
             name: 'moderate_to_high_agreement_yes_maybe_geometries',
-            url: `/api/yes_maybe/yes_maybe_${projectId}.geojson`,
+            url: `${mapswipeApi}yes_maybe/yes_maybe_${projectId}.geojson`,
+            fileSizeCheckUrl: `/api/yes_maybe/yes_maybe_${projectId}.geojson`,
             type: 'geojson',
         },
         {
             name: 'groups',
-            url: `/api/groups/groups_${projectId}.csv.gz`,
-            type: 'geojson',
+            url: `${mapswipeApi}groups/groups_${projectId}.csv.gz`,
+            fileSizeCheckUrl: `/api/groups/groups_${projectId}.csv.gz`,
+            type: 'csv',
         },
         {
             name: 'history',
-            url: `/api/history/history_${projectId}.csv`,
+            url: `${mapswipeApi}history/history_${projectId}.csv`,
+            fileSizeCheckUrl: `/api/history/history_${projectId}.csv`,
             type: 'geojson',
         },
         {
             name: 'results',
-            url: `/api/results/results_${projectId}.csv.gz`,
-            type: 'geojson',
+            url: `${mapswipeApi}results/results_${projectId}.csv.gz`,
+            fileSizeCheckUrl: `/api/results/results_${projectId}.csv.gz`,
+            type: 'csv',
         },
         {
             name: 'tasks',
-            url: `/api/tasks/tasks_${projectId}.csv.gz`,
-            type: 'geojson',
+            url: `${mapswipeApi}tasks/tasks_${projectId}.csv.gz`,
+            fileSizeCheckUrl: `/api/tasks/tasks_${projectId}.csv.gz`,
+            type: 'csv',
         },
         {
             name: 'users',
-            url: `/api/users/users_${projectId}.csv.gz`,
-            type: 'geojson',
+            url: `${mapswipeApi}users/users_${projectId}.csv.gz`,
+            fileSizeCheckUrl: `/api/users/users_${projectId}.csv.gz`,
+            type: 'csv',
         },
         {
             name: 'area_of_interest',
-            url: `/api/project_geometries/project_geom_${projectId}.geojson`,
+            url: `${mapswipeApi}project_geometries/project_geom_${projectId}.geojson`,
+            fileSizeCheckUrl: `/api/project_geometries/project_geom_${projectId}.geojson`,
             type: 'geojson',
         },
     ];
@@ -649,7 +661,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const fileSizes = await getFileSizes();
     const urlResponsePromises = urls.map((url) => ({
         ...url,
-        size: fileSizes?.[url.url] ?? 0,
+        size: fileSizes?.[url.fileSizeCheckUrl] ?? 0,
     }));
 
     const urlResponses = await Promise.all(urlResponsePromises);

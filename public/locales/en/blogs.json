@@ -3,5 +3,6 @@
   "blogs-hero-title": "Blogs",
   "featured-posts": "Featured",
   "date": "{{date, datetime}}",
+  "read-more": "Read more",
   "other-posts": "Other"
 }

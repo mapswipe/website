@@ -58,13 +58,13 @@ const getBlogs = (async () => {
 
         return ({
             ...file,
-            markdownContent: matterResult.content,
-            title: matterResult.data.title as string,
-            publishedDate: matterResult.data.publishedDate as string,
-            author: matterResult.data.author as string,
-            featured: matterResult.data.featured as boolean,
-            description: matterResult.data.description as string,
-            coverImage: matterResult.data.coverImage as string,
+            markdownContent: matterResult.content ?? '',
+            title: (matterResult.data.title ?? file.name) as string,
+            publishedDate: matterResult.data.publishedDate as string | undefined,
+            author: matterResult.data.author as string | undefined,
+            featured: (matterResult.data.featured ?? false) as boolean,
+            description: matterResult.data.description as string | undefined,
+            coverImage: matterResult.data.coverImage as string | undefined,
         });
     });
 });

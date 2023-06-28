@@ -20,7 +20,7 @@ import styles from './styles.module.css';
 
 interface Props extends SSRConfig {
     className?: string;
-    blogs: Blog[];
+    blogs: Omit<Blog, 'markdownContent'>[];
 }
 
 function Blogs(props: Props) {
@@ -75,7 +75,7 @@ function Blogs(props: Props) {
                                 className={styles.link}
                                 href={`/[locale]/blogs/${blog.name}`}
                             >
-                                Read more
+                                {t('read-more')}
                             </Link>
                         </Card>
                     ))}
@@ -139,10 +139,20 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     ]);
     const blogs = await getBlogs();
 
+    const finalBlogs = blogs.map((blog) => ({
+        name: blog.name,
+        title: blog.title,
+        publishedDate: blog.publishedDate,
+        description: blog.description,
+        author: blog.author,
+        coverImage: blog.coverImage,
+        featured: blog.featured,
+    }));
+
     return {
         props: {
             ...translations,
-            blogs,
+            blogs: finalBlogs,
         },
     };
 };

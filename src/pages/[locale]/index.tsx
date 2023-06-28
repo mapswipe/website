@@ -72,7 +72,7 @@ interface Props extends SSRConfig {
     className?: string;
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
-    featuredBlogs: Blog[];
+    featuredBlogs: Omit<Blog, 'markdownContent'>[];
 }
 
 function Home(props: Props) {
@@ -383,18 +383,24 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const value: Stats = await request(graphqlEndpoint, stats);
     const blogs = await getBlogs();
 
-    const featuredBlogs = blogs.filter((blog) => blog.featured).slice(0, 3);
-
-    const {
-        totalContributors,
-        totalSwipes,
-    } = value?.communityStats ?? {};
+    const featuredBlogs = blogs
+        .filter((blog) => blog.featured)
+        .slice(0, 3)
+        .map((blog) => ({
+            name: blog.name,
+            title: blog.title,
+            publishedDate: blog.publishedDate,
+            description: blog.description,
+            author: blog.author,
+            coverImage: blog.coverImage,
+            featured: blog.featured,
+        }));
 
     return {
         props: {
             ...translations,
-            totalContributors,
-            totalSwipes,
+            totalContributors: value.communityStats?.totalContributors,
+            totalSwipes: value.communityStats?.totalSwipes,
             featuredBlogs,
         },
     };

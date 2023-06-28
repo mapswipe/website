@@ -3,23 +3,8 @@ import {
     caseInsensitiveSubmatch,
     compareStringSearch,
 } from '@togglecorp/fujs';
-import { DocumentNode } from 'graphql';
 
 export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
-
-// NOTE: this should be imporeted from @graphql-typed-document-node/core instead
-export interface TypedDocumentNode<
-    Result = { [key: string]: any },
-    Variables = { [key: string]: any },
-> extends DocumentNode {
-    /*
-    * This type is used to ensure that the variables you pass in to the query are
-    * assignable to Variables and that the Result is assignable to whatever you pass
-    * your result to. The method is never actually implemented, but the type is valid
-    * because we list it as optional
-    */
-    __apiType?: (variables: Variables) => Result;
-}
 
 export interface Stats {
     communityStats: {
@@ -61,7 +46,7 @@ export function rankedSearchOnList<T>(
         ));
 }
 
-export async function timeIt<R>(key: string, header: string, func: (() => Promise<R>)) {
+export async function timeIt<R>(_: string, __: string, func: (() => Promise<R>)) {
     // console.log(`START: ${key}: ${header}`);
     // const startTime = new Date().getTime();
     const resp = await func();
@@ -121,6 +106,20 @@ export const projectNameMapping: {
     3: 'Change Detection',
     4: 'Completeness',
 };
+
+const mb = 1024 * 1024;
+export function getFileSizeProperties(fileSize: number) {
+    if (fileSize > (mb / 10)) {
+        return {
+            size: fileSize / mb,
+            unit: 'megabyte',
+        };
+    }
+    return {
+        size: fileSize / 1024,
+        unit: 'kilobyte',
+    };
+}
 
 export const languageTitleMap: Record<string, string> = {
     ab: 'Abkhazian',

@@ -130,13 +130,13 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
     const selectedBlog = blogs.find((blog) => blog.name === blogSlug);
     if (!selectedBlog) {
-        throw new Error('Could not find the current blog.');
+        throw new Error(`Could not find the current blog ${blogSlug}.`);
     }
 
     const processedContent = await remark()
         .use(html)
         .use(remarkGfm)
-        .process(selectedBlog.markdownContent.replace(/\\n/g, '\n') ?? '');
+        .process(selectedBlog.markdownContent);
     const contentHtml = processedContent.toString();
 
     return {

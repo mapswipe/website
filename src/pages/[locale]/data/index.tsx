@@ -50,6 +50,7 @@ import {
     ProjectType,
     graphqlEndpoint,
     Stats,
+    getFileSizeProperties,
 } from 'utils/common';
 import getProjectCentroids from 'utils/requests/projectCentroids';
 import useDebouncedValue from 'hooks/useDebouncedValue';
@@ -812,8 +813,7 @@ function Data(props: Props) {
                                 {url.type}
                             </Tag>
                             <div>
-                                {url.size > (1048576 / 10) && t('download-size', { size: url.size / (1024 * 1024), formatParams: { size: { style: 'unit', unit: 'megabyte', maximumFractionDigits: 1 } } })}
-                                {(url.size <= (1048576 / 10)) && t('download-size', { size: url.size / 1024, formatParams: { size: { style: 'unit', unit: 'kilobyte', maximumFractionDigits: 1 } } })}
+                                {t('download-size', { size: getFileSizeProperties(url.size), formatParams: { size: { style: 'unit', unit: getFileSizeProperties(url.size), maximumFractionDigits: 1 } } })}
                             </div>
                         </div>
                         <Link

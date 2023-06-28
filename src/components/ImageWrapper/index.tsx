@@ -28,11 +28,11 @@ function ImageWrapper(props: Props) {
                     src={src}
                     className={_cs(imageClassName, styles.image)}
                     fill
-                    // eslint-disable-next-line
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...otherProps}
                 />
             ) : (
-                // eslint-disable-next-line
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={src}
                     className={_cs(imageClassName, styles.image, styles.nonOptimizedImage)}
