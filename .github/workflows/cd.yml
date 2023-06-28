@@ -4,7 +4,8 @@ name: CD
 on:
   push:
     branches:
-      - release
+      - main
+
   schedule:
     # Runs "At 00:01. every day" (see https://crontab.guru)
     - cron: '1 0 * * *'
@@ -15,7 +16,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # NOTE: This uses default branch which is `main`
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
