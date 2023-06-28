@@ -3,7 +3,7 @@ title: MapSwipe change detection analysis in response to Cyclone Batsirai Madaga
 publishedDate: 15/08/2022
 author: Laurie Boobier
 description: Between the 5th and 22nd of February 2022, tropical cyclones Batsirai and Emnati hit Madagascar’s east coast, destroying, and flooding numerous medical and...
-coverImage: https://raw.githubusercontent.com/MissingMaps/img/main/images/missingmaps-blog_20220815_MapSwipe%20(2).jpg
+coverImage: /img/blogImages/placeholder.png
 featured: true
 ---
 
