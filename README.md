@@ -38,3 +38,12 @@ docker-compose --profile test run --rm checks
 ```bash
 docker-compose exec next bash -c 'yarn export'
 ```
+
+## Automatic Deployment
+
+Deployments will be triggered in 2 ways:
+
+1. Anything pushed to `main` branch will trigger immediate deployment
+to configured github io page.
+2. Every day at UTC 00:01, deployment will be triggered with
+latest data from MapSwipe database.

@@ -813,7 +813,7 @@ function Data(props: Props) {
                                 {url.type}
                             </Tag>
                             <div>
-                                {t('download-size', { size: getFileSizeProperties(url.size), formatParams: { size: { style: 'unit', unit: getFileSizeProperties(url.size), maximumFractionDigits: 1 } } })}
+                                {t('download-size', { size: getFileSizeProperties(url.size).size, formatParams: { size: { style: 'unit', unit: getFileSizeProperties(url.size).unit, maximumFractionDigits: 1 } } })}
                             </div>
                         </div>
                         <Link
