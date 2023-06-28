@@ -131,7 +131,7 @@
             display: flex;
             gap: var(--spacing-mega-large);
 
-            .description {
+            .startMapswipingDescription {
                 font-size: var(--font-size-large);
             }
 

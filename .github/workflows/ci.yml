@@ -36,4 +36,4 @@ jobs:
         run: pre-commit run -vvv --all-files
 
       - name: Build
-        run: yarn export
+        run: yarn build

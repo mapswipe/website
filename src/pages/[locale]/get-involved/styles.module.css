@@ -46,6 +46,12 @@
         }
     }
 
+    .card {
+        flex-grow: 1;
+        background-color: #fff;
+        padding: var(--spacing-gigantic);
+    }
+
     .contributeContainer {
         gap: var(--spacing-small);
         border-radius: var(--border-radius-large);
@@ -101,7 +107,6 @@
                 gap: var(--spacing-large);
 
                 .card {
-                    background-color: #fff;
                     max-width: 60rem;
                 }
             }
@@ -160,12 +165,6 @@
             align-items: center;
             gap: var(--spacing-large);
 
-            .card {
-                flex-grow: 1;
-                background-color: #fff;
-                padding: var(--spacing-gigantic);
-            }
-
             @media screen and (max-width: 720px) {
                 flex-wrap: wrap;
 
@@ -186,12 +185,6 @@
                 display: flex;
                 flex-direction: column;
                 gap: var(--spacing-ultra-small);
-            }
-
-            .card {
-                flex-grow: 1;
-                background-color: #fff;
-                padding: var(--spacing-gigantic);
             }
 
             @media screen and (max-width: 720px) {

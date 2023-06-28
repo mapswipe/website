@@ -22,9 +22,9 @@
 
             .description {
                 display: -webkit-box;
+                flex-grow: 1;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                flex-grow: 1;
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
             }

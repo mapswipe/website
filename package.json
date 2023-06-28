@@ -19,7 +19,6 @@
     },
     "dependencies": {
         "@togglecorp/fujs": "^2.0.0",
-        "env-cmd": "^10.1.0",
         "graphql": "^16.6.0",
         "graphql-request": "^5.1.0",
         "gray-matter": "^4.0.3",
@@ -52,6 +51,7 @@
         "@types/react-dom": "^18.2.6",
         "@typescript-eslint/eslint-plugin": "^5.48.0",
         "@typescript-eslint/parser": "^5.48.0",
+        "env-cmd": "^10.1.0",
         "eslint": "^8.31.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-typescript": "^17.0.0",

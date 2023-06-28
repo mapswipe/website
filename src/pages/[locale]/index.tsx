@@ -228,7 +228,7 @@ function Home(props: Props) {
                 contentClassName={styles.content}
             >
                 <div className={styles.download}>
-                    <div className={styles.description}>
+                    <div className={styles.startMapswipingDescription}>
                         {t('download-description')}
                     </div>
                     <div className={styles.linksContainer}>
@@ -266,7 +266,7 @@ function Home(props: Props) {
                     </div>
                 </div>
                 <div className={styles.getInvolved}>
-                    <div className={styles.description}>
+                    <div className={styles.startMapswipingDescription}>
                         {t('get-involved-description')}
                     </div>
                     <Link

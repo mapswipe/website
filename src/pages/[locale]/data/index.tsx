@@ -712,7 +712,7 @@ function Data(props: Props) {
                                 headingFont="normal"
                                 heading={project.name}
                                 description={(
-                                    <div className={styles.row}>
+                                    <div className={styles.projectDetailsRow}>
                                         {project.project_type && (
                                             <Tag
                                                 spacing="small"
@@ -768,7 +768,7 @@ function Data(props: Props) {
                                                 {project.requestingOrganization}
                                             </Tag>
                                         )}
-                                        <div className={styles.row}>
+                                        <div className={styles.projectDetailsRow}>
                                             {project.created && (
                                                 <Tag
                                                     className={styles.tag}

@@ -230,11 +230,12 @@
                     }
                 }
 
-                .row {
+                .projectDetailsRow {
                     display: flex;
                     align-items: center;
                     gap: var(--spacing-extra-small);
                 }
+
                 .progressBar {
                     display: flex;
                     flex-direction: column;
