@@ -1,7 +1,10 @@
 import React from 'react';
 import { GetStaticProps } from 'next';
 import { useTranslation, SSRConfig } from 'next-i18next';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    compareDate,
+} from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
     gql,
@@ -396,12 +399,15 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             featured: blog.featured,
         }));
 
+    const sortedBlogs = [...featuredBlogs]
+        .sort((foo, bar) => compareDate(foo.publishedDate, bar.publishedDate, -1));
+
     return {
         props: {
             ...translations,
             totalContributors: value.communityStats?.totalContributors,
             totalSwipes: value.communityStats?.totalSwipes,
-            featuredBlogs,
+            featuredBlogs: sortedBlogs,
         },
     };
 };

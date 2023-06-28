@@ -24,7 +24,7 @@
   "build-area": "Find",
   "footprint": "Validate",
   "change-detection": "Compare",
-  "project-tab-head": "Project detail - {{projectTitle}} | MapSwipe",
+  "project-tab-head": "{{projectTitle}} | MapSwipe",
   "date": "{{date, datetime}}",
   "overview-section-title": "Project overview",
   "project-contributors-text": "Contributors",
