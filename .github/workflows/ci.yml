@@ -35,5 +35,4 @@ jobs:
       - name: Check
         run: pre-commit run -vvv --all-files
 
-      - name: Build
-        run: yarn build
+      # FIXME: Check build after creating fixtures
