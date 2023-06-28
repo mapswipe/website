@@ -7,7 +7,7 @@ import matter from 'gray-matter';
 export interface Blog {
     name: string;
     title: string;
-    publishedDate?: string;
+    publishedDate?: number;
     description?: string;
     author?: string;
     coverImage?: string;
@@ -60,7 +60,9 @@ const getBlogs = (async () => {
             ...file,
             markdownContent: matterResult.content ?? '',
             title: (matterResult.data.title ?? file.name) as string,
-            publishedDate: matterResult.data.publishedDate as string | undefined,
+            publishedDate: new Date(
+                matterResult.data.publishedDate,
+            ).getTime() as number | undefined,
             author: matterResult.data.author as string | undefined,
             featured: (matterResult.data.featured ?? false) as boolean,
             description: matterResult.data.description as string | undefined,

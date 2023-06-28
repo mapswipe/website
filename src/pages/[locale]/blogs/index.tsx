@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
 import { GetStaticProps } from 'next';
 import { useTranslation, SSRConfig } from 'next-i18next';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+    compareDate,
+} from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { IoCalendarClearOutline } from 'react-icons/io5';
@@ -149,10 +152,13 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         featured: blog.featured,
     }));
 
+    const sortedBlogs = [...finalBlogs]
+        .sort((foo, bar) => compareDate(foo.publishedDate, bar.publishedDate, -1));
+
     return {
         props: {
             ...translations,
-            blogs: finalBlogs,
+            blogs: sortedBlogs,
         },
     };
 };

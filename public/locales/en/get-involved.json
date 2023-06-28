@@ -1,5 +1,5 @@
 {
-  "get-involved-tab-head": "Get Involved - Get Involved | MapSwipe",
+  "get-involved-tab-head": "Get Involved | MapSwipe",
   "hero-title": "Swipe, volunteer and contribute.",
   "hero-description": "There are many ways to get involved with MapSwipe.",
   "contribute-now": "Contribute now",
@@ -8,10 +8,10 @@
   "individual-heading": "Individuals",
   "possess-language-skills": "Do you possess language translation skills?",
   "possess-language-skills-description": "Volunteer to help make the app & website available in more languages.",
-  "contribute-on-transifex": "Contribute on transifex",
+  "contribute-on-transifex": "Contribute on Transifex",
   "possess-technical-skills": "Do you possess technical skills?",
   "possess-techincal-skills-description": "Volunteer to support app development and contribute your expertise in improving the MapSwipe app.",
-  "contribute-on-github": "Contribute on github",
+  "contribute-on-github": "Contribute on GitHub",
   "want-to-host-mapswipe-events": "Are you a community, academic, or non-profit group wanting to host MapSwipe events?",
   "want-to-host-mapswipe-events-description": "Download our MapSwipe Event Toolkit and start bringing people together by mapping projects.",
   "download-toolkit": "Download toolkit",
@@ -30,5 +30,5 @@
   "donate-heading": "Donate",
   "contact-section-heading": "Have other questions?",
   "contact-section-description": "Get in touch with us! Share feedback, explore project types, or dive into MapSwipe analytics. We're here to assist you!",
-  "contact-link-label": "Contact Us"
+  "contact-link-label": "Contact us"
 }
