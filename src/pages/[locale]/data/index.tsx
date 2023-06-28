@@ -520,6 +520,7 @@ function Data(props: Props) {
                 <Card
                     coverImageUrl="/img/find.svg"
                     heading={t('type-find-title')}
+                    imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
                             type="1"
@@ -540,6 +541,7 @@ function Data(props: Props) {
                 <Card
                     coverImageUrl="/img/compare.svg"
                     heading={t('type-compare-title')}
+                    imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
                             type="3"
@@ -560,6 +562,7 @@ function Data(props: Props) {
                 <Card
                     coverImageUrl="/img/validate.svg"
                     heading={t('type-validate-title')}
+                    imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
                             type="2"
