@@ -86,6 +86,10 @@
                 grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
             }
 
+            .missionImage {
+                height: 20rem;
+            }
+
             .keyPointList {
                 display: flex;
                 flex-direction: column;

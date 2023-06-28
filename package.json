@@ -9,7 +9,6 @@
         "dev": "next dev -p 3020",
         "build": "next build && next-export-optimize-images",
         "start": "next start",
-        "generate": "graphql-codegen --config codegen.yml && eslint --fix src/generated/types.ts",
         "generate:i18n": "i18next 'src/**/*.{jsx,tsx}' -o 'public/locales/$LOCALE/$NAMESPACE.json'",
         "lint": "next lint",
         "fetch-data": "env-cmd -f .env.local ./scripts/download-data.sh",
