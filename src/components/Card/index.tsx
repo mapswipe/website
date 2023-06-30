@@ -65,7 +65,7 @@ function Card(props: Props) {
                     imageClassName={styles.image}
                     src={coverImageUrl}
                     nonOptimizedImage={nonOptimizedImage}
-                    alt="cover-image"
+                    alt="card-cover-image"
                 />
             )}
             <div className={_cs(styles.cardContent, cardContentClassName)}>

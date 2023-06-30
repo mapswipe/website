@@ -102,7 +102,7 @@ function Home(props: Props) {
                         className={styles.screenshot}
                         imageClassName={styles.image}
                         src="/img/banner.png"
-                        alt="Mapswipe"
+                        alt={t('hero-logo')}
                     />
                 )}
                 actions={(
@@ -132,21 +132,21 @@ function Home(props: Props) {
                         className={_cs(styles.imageContainer, styles.single)}
                         imageClassName={styles.image}
                         src="img/msf_mapping.jpg"
-                        alt="Mapswipe"
+                        alt={t('mobilize-volunteer')}
                     />
                     <div className={styles.images}>
                         <ImageWrapper
                             className={_cs(styles.imageContainer, styles.double)}
                             imageClassName={styles.image}
                             src="img/mapswipe_mapathon.jpg"
-                            alt="Mapswipe"
+                            alt={t('mapathon')}
                             fill
                         />
                         <ImageWrapper
                             className={_cs(styles.imageContainer, styles.double)}
                             imageClassName={styles.image}
                             src="img/field_mapping.jpg"
-                            alt="Mapswipe"
+                            alt={t('field-mapping')}
                         />
                     </div>
                 </div>
@@ -244,7 +244,7 @@ function Home(props: Props) {
                                 <ImageWrapper
                                     imageClassName={styles.image}
                                     src="img/playstore.png"
-                                    alt="Download on playstore"
+                                    alt={t('download-playstore')}
                                 />
                             </Link>
                             <Link
@@ -255,7 +255,7 @@ function Home(props: Props) {
                                 <ImageWrapper
                                     imageClassName={styles.image}
                                     src="img/apple.png"
-                                    alt="Download on Apple Store"
+                                    alt={t('download-apple-store')}
                                 />
                             </Link>
                         </div>
@@ -329,7 +329,7 @@ function Home(props: Props) {
                     <ImageWrapper
                         className={styles.missingMapsLogo}
                         src="img/missingmaps.png"
-                        alt="Missing Maps Logo"
+                        alt={t('missing-maps')}
                     />
                 </Link>
                 <div className={styles.partnersDescription}>

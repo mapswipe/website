@@ -267,6 +267,7 @@ function Data(props: Props) {
 
     const [items, setItems] = useState(PAGE_SIZE);
     const [searchText, setSearchText] = useState<string | undefined>();
+    const [locationSearchText, setLocationSearchText] = useState<string | undefined>();
     const [dateFrom, setDateFrom] = useState<string | undefined>();
     const [dateTo, setDateTo] = useState<string | undefined>();
     const [projectTypes, setProjectTypes] = useState<string[] | undefined>();
@@ -284,6 +285,7 @@ function Data(props: Props) {
     ), [projects]);
 
     const debouncedSearchText = useDebouncedValue(searchText);
+    const debouncedLocationSearchText = useDebouncedValue(locationSearchText);
 
     const { t } = useTranslation('data');
 
@@ -379,6 +381,14 @@ function Data(props: Props) {
                 )
                 : filteredProjects;
 
+            filteredProjects = debouncedLocationSearchText
+                ? rankedSearchOnList(
+                    filteredProjects,
+                    debouncedLocationSearchText,
+                    (project) => project.region ?? '',
+                )
+                : filteredProjects;
+
             filteredProjects = debouncedSearchText
                 ? rankedSearchOnList(
                     filteredProjects,
@@ -392,6 +402,7 @@ function Data(props: Props) {
         [
             dateFrom,
             dateTo,
+            debouncedLocationSearchText,
             projects,
             organization,
             projectStatuses,
@@ -423,11 +434,11 @@ function Data(props: Props) {
         (project: { area_sqkm: number | null, number_of_users: number | null }) => {
             if (bubble === 'area') {
                 return 4 + 16 * (((project.area_sqkm ?? minArea - minArea))
-                                 / (maxArea - minArea));
+                    / (maxArea - minArea));
             }
             if (bubble === 'contributors') {
                 return 4 + 16 * (((project.number_of_users ?? 0) - minContributors)
-                                 / (maxContributors - minContributors));
+                    / (maxContributors - minContributors));
             }
             return 4;
         },
@@ -445,6 +456,7 @@ function Data(props: Props) {
 
     const filtersApplied = searchText
         || dateFrom
+        || locationSearchText
         || dateTo
         || organization
         || projectTypes
@@ -462,7 +474,7 @@ function Data(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/data-banner.svg"
-                        alt="Placeholder"
+                        alt={t('data-banner-image')}
                     />
                 )}
             />
@@ -620,6 +632,13 @@ function Data(props: Props) {
                             name={undefined}
                             value={searchText}
                             onChange={setSearchText}
+                        />
+                        <RawInput
+                            className={styles.filter}
+                            placeholder={t('location-search-label') ?? undefined}
+                            name={undefined}
+                            value={locationSearchText}
+                            onChange={setLocationSearchText}
                         />
                         <SelectInput
                             name="org"

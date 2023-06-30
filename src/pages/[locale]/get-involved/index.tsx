@@ -41,7 +41,7 @@ function GetInvolved(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/get-involved-banner.svg"
-                        alt="Placeholder"
+                        alt={t('get-involved-banner')}
                     />
                 )}
             />
@@ -60,7 +60,7 @@ function GetInvolved(props: Props) {
                         <ImageWrapper
                             imageClassName={styles.image}
                             src="/img/playstore.png"
-                            alt="Download on playstore"
+                            alt={t('download-on-playstore')}
                         />
                     </Link>
                     <Link
@@ -71,7 +71,7 @@ function GetInvolved(props: Props) {
                         <ImageWrapper
                             imageClassName={styles.image}
                             src="/img/apple.png"
-                            alt="Download on Apple Store"
+                            alt={t('download-on-apple-store')}
                         />
                     </Link>
                 </div>
@@ -96,7 +96,7 @@ function GetInvolved(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/individual.svg"
-                        alt="Placeholder"
+                        alt={t('individual-heading-image')}
                     />
                 </div>
                 <div className={styles.cards}>
@@ -173,7 +173,7 @@ function GetInvolved(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/group.svg"
-                        alt="Placeholder"
+                        alt={t('group-heading-image')}
                     />
                 </div>
             </Section>
@@ -189,7 +189,7 @@ function GetInvolved(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/organization.svg"
-                        alt="Placeholder"
+                        alt={t('organization-logo')}
                     />
                 </div>
                 <CenteredCard
@@ -249,7 +249,7 @@ function GetInvolved(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/donate.svg"
-                        alt="Placeholder"
+                        alt={t('donation-logo')}
                     />
                 </div>
             </Section>
