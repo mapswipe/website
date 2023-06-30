@@ -4,7 +4,7 @@ publishedDate: 2023-08-17
 author: Laurie Boobier
 description: Between the 5th and 22nd of February 2022, tropical cyclones Batsirai and Emnati hit Madagascar’s east coast, destroying, and flooding numerous medical and...
 coverImage: /img/blogImages/placeholder.png
-featured: true
+featured: false
 ---
 
 ## Introduction
