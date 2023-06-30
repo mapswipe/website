@@ -76,7 +76,7 @@ function Blog(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src={blog.coverImage}
-                        alt="Placeholder"
+                        alt={blog.title}
                     />
                 ) : (
                     <div />

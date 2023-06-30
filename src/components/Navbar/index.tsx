@@ -43,7 +43,7 @@ function Navbar(props: Props) {
                 >
                     <Image
                         src="/logo.svg"
-                        alt="Mapswipe"
+                        alt={t('mapswipe-logo')}
                         fill
                     />
                 </Link>

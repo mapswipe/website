@@ -423,11 +423,11 @@ function Data(props: Props) {
         (project: { area_sqkm: number | null, number_of_users: number | null }) => {
             if (bubble === 'area') {
                 return 4 + 16 * (((project.area_sqkm ?? minArea - minArea))
-                                 / (maxArea - minArea));
+                    / (maxArea - minArea));
             }
             if (bubble === 'contributors') {
                 return 4 + 16 * (((project.number_of_users ?? 0) - minContributors)
-                                 / (maxContributors - minContributors));
+                    / (maxContributors - minContributors));
             }
             return 4;
         },
@@ -462,7 +462,7 @@ function Data(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src="/img/data-banner.svg"
-                        alt="Placeholder"
+                        alt={t('data-banner-image')}
                     />
                 )}
             />

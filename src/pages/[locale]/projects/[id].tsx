@@ -332,7 +332,7 @@ function Project(props: Props) {
                     <ImageWrapper
                         className={styles.illustration}
                         src={image}
-                        alt="Placeholder"
+                        alt={name}
                         nonOptimizedImage
                     />
                 ) : (
