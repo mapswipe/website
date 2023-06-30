@@ -155,7 +155,7 @@
                     flex-grow: 1;
                     border-radius: var(--border-radius-medium);
                     background-color: var(--color-background-leaflet);
-                    height: 32rem;
+                    height: 36rem;
 
                     .projectsMap {
                         border: var(--width-separator-thin) solid var(--color-separator);

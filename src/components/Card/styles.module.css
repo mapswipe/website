@@ -7,6 +7,7 @@
     background-color: var(--color-foreground);
 
     .coverImageWrapper {
+        flex-shrink: 0;
         width: 100%;
         height: 16rem;
 
@@ -22,7 +23,7 @@
             flex-direction: row;
 
             .coverImageWrapper {
-                width: 26rem;
+                width: 14rem;
                 height: 16rem;
 
                 .image {

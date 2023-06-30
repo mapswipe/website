@@ -89,7 +89,7 @@ function Blogs(props: Props) {
                     title={t('other-posts')}
                     contentClassName={styles.list}
                 >
-                    {featuredBlogs.map((blog) => (
+                    {otherBlogs.map((blog) => (
                         <Card
                             key={blog.name}
                             heading={blog.title}
