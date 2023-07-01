@@ -21,6 +21,7 @@ interface Props {
     imageClassName?: string;
     cardContentClassName?: string;
     coverImageUrl?: string;
+    coverImageContent?: React.ReactNode;
     coverImageOnSide?: boolean;
     borderless?: boolean;
     nonOptimizedImage?: boolean;
@@ -43,6 +44,7 @@ function Card(props: Props) {
         children,
         coverImageUrl,
         coverImageOnSide,
+        coverImageContent,
         borderless,
         nonOptimizedImage,
     } = props;
@@ -59,7 +61,7 @@ function Card(props: Props) {
                 borderless && styles.borderless,
             )}
         >
-            {coverImageUrl && (
+            {coverImageUrl && !coverImageContent && (
                 <ImageWrapper
                     className={_cs(styles.coverImageWrapper, imageClassName)}
                     imageClassName={styles.image}
@@ -67,6 +69,13 @@ function Card(props: Props) {
                     nonOptimizedImage={nonOptimizedImage}
                     alt="card-cover-image"
                 />
+            )}
+            {coverImageContent && (
+                <div
+                    className={_cs(styles.coverImageWrapper, imageClassName)}
+                >
+                    {coverImageContent}
+                </div>
             )}
             <div className={_cs(styles.cardContent, cardContentClassName)}>
                 {(showHeader || !!description) && (

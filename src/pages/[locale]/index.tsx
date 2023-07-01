@@ -98,12 +98,15 @@ function Home(props: Props) {
                 title={t('hero-title')}
                 description={t('hero-description')}
                 rightContent={(
-                    <ImageWrapper
+                    <video
                         className={styles.screenshot}
-                        imageClassName={styles.image}
-                        src="/img/banner.png"
-                        alt={t('hero-logo')}
-                    />
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    >
+                        <source src="/img/animation.mp4" type="video/mp4" />
+                    </video>
                 )}
                 actions={(
                     <>
@@ -199,9 +202,24 @@ function Home(props: Props) {
                 </Card>
                 <Card
                     className={styles.missionType}
-                    coverImageUrl="/img/compare.svg"
+                    imageClassName={_cs(styles.missionImage, styles.beforeAfterContainer)}
+                    coverImageContent={(
+                        <>
+                            <ImageWrapper
+                                imageClassName={styles.beforeImage}
+                                className={styles.beforeAfterImageWrapper}
+                                src="/img/before.svg"
+                                alt=""
+                            />
+                            <ImageWrapper
+                                imageClassName={styles.afterImage}
+                                className={styles.beforeAfterImageWrapper}
+                                src="/img/after.svg"
+                                alt=""
+                            />
+                        </>
+                    )}
                     heading={t('type-compare-title')}
-                    imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
                             type="3"

@@ -551,9 +551,24 @@ function Data(props: Props) {
                     />
                 </Card>
                 <Card
-                    coverImageUrl="/img/compare.svg"
                     heading={t('type-compare-title')}
-                    imageClassName={styles.missionImage}
+                    imageClassName={_cs(styles.missionImage, styles.beforeAfterContainer)}
+                    coverImageContent={(
+                        <>
+                            <ImageWrapper
+                                imageClassName={styles.beforeImage}
+                                className={styles.beforeAfterImageWrapper}
+                                src="/img/before.svg"
+                                alt=""
+                            />
+                            <ImageWrapper
+                                imageClassName={styles.afterImage}
+                                className={styles.beforeAfterImageWrapper}
+                                src="/img/after.svg"
+                                alt=""
+                            />
+                        </>
+                    )}
                     icons={(
                         <ProjectTypeIcon
                             type="3"
