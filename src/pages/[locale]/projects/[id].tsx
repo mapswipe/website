@@ -113,6 +113,7 @@ interface Props extends SSRConfig {
     region?: string | null;
     requestingOrganization?: string | null;
     created?: number | null;
+    buildDate: string | undefined;
 }
 
 function Project(props: Props) {
@@ -132,6 +133,7 @@ function Project(props: Props) {
         region,
         requestingOrganization,
         created,
+        buildDate,
     } = props;
 
     const svgRef = React.useRef<SVGSVGElement>(null);
@@ -379,6 +381,23 @@ function Project(props: Props) {
             <Section
                 className={styles.statsSection}
                 contentClassName={styles.content}
+                actionsClassName={styles.lastFetchedContainer}
+                containerClassName={styles.statsContainer}
+                actions={buildDate && (
+                    t('data-last-fetched', {
+                        date: new Date(buildDate).getTime(),
+                        formatParams: {
+                            date: {
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                            },
+                        },
+                    })
+                )}
             >
                 {projectGeoJSON && (
                     <div className={styles.mapContainer}>
@@ -664,6 +683,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         size: fileSizes?.[url.fileSizeCheckUrl] ?? 0,
     }));
 
+    const buildDate = process.env.MAPSWIPE_BUILD_DATE;
     const urlResponses = await Promise.all(urlResponsePromises);
 
     return {
@@ -698,6 +718,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             status: project.properties.status,
             projectGeoJSON: geojson ?? null,
             projectHistory: historyJSON,
+            buildDate,
             urls: urlResponses.filter((url) => url.size > 0),
         },
     };

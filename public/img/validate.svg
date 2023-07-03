@@ -1,18 +1,129 @@
-<svg width="520" height="520" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.288086" y="0.288086" width="519.424" height="519.424" rx="36" fill="#BCA992"/>
-<mask id="mask0_1574_436" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="520">
-<rect x="0.288086" y="0.288086" width="519.424" height="519.424" rx="36" fill="#D2C187"/>
-</mask>
-<g mask="url(#mask0_1574_436)">
-<rect opacity="0.5" x="378.575" y="341.427" width="43.8718" height="93.826" rx="7" transform="rotate(64.3052 378.575 341.427)" fill="white"/>
-<rect opacity="0.5" x="415.574" y="408.091" width="67.4283" height="93.826" rx="7" transform="rotate(64.3052 415.574 408.091)" fill="white"/>
-<rect opacity="0.5" x="509.266" y="360.881" width="67.4283" height="93.826" rx="7" transform="rotate(64.3052 509.266 360.881)" fill="white"/>
-<path d="M-181.689 920.111C-179.45 822.704 -98.389 597.995 207.941 478.419C444.174 386.205 518.822 354.099 481.876 177.296M-216.125 -112.704C-220.628 51.9882 438.871 -28.4938 481.876 177.296M481.876 177.296C421.876 177.296 442.876 287.296 306.876 260.296" stroke="#8B7555" stroke-width="18"/>
-<rect x="175.05" y="348.016" width="121.599" height="212.289" rx="10.5" transform="rotate(-106.211 175.05 348.016)" fill="#89836E" stroke="black"/>
-<path d="M244.842 200.661L250.935 222.213M269.214 286.869L257.028 243.765L153.473 275.027" stroke="black"/>
-<rect x="171.985" y="353.593" width="130.599" height="221.289" rx="15" transform="rotate(-106.211 171.985 353.593)" stroke="white" stroke-width="8" stroke-dasharray="17 17"/>
-</g>
-<rect x="304.445" y="190.791" width="37.3033" height="49.2732" rx="5.5" transform="rotate(-16.4021 304.445 190.791)" stroke="black"/>
-<rect x="164.289" y="295.171" width="17.4642" height="99.8058" rx="5.5" transform="rotate(-106.5 164.289 295.171)" stroke="black"/>
-<rect x="276.703" y="312.875" width="17.4642" height="99.8058" rx="5.5" transform="rotate(-106.5 276.703 312.875)" stroke="black"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="519.42407"
+   height="519.42407"
+   viewBox="0 0 519.42407 519.42407"
+   fill="none"
+   version="1.1"
+   id="svg487"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs491" />
+  <rect
+     width="800"
+     height="800"
+     fill="#ffffff"
+     id="rect456"
+     x="-140.28799"
+     y="-140.28799" />
+  <rect
+     x="0"
+     y="0"
+     width="519.42401"
+     height="519.42401"
+     fill="#bca992"
+     id="rect460" />
+  <mask
+     id="mask0_102_45"
+     maskUnits="userSpaceOnUse"
+     x="140"
+     y="140"
+     width="520"
+     height="520">
+    <rect
+       x="140.28799"
+       y="140.28799"
+       width="519.42401"
+       height="519.42401"
+       fill="#d2c187"
+       id="rect462" />
+  </mask>
+  <g
+     mask="url(#mask0_102_45)"
+     id="g479"
+     transform="translate(-140.28799,-140.28799)">
+    <rect
+       opacity="0.5"
+       x="518.57501"
+       y="481.427"
+       width="43.871799"
+       height="93.825996"
+       transform="rotate(64.3052,518.575,481.427)"
+       fill="#ffffff"
+       id="rect465" />
+    <rect
+       opacity="0.5"
+       x="555.57397"
+       y="548.091"
+       width="67.428299"
+       height="93.825996"
+       transform="rotate(64.3052,555.574,548.091)"
+       fill="#ffffff"
+       id="rect467" />
+    <rect
+       opacity="0.5"
+       x="649.26501"
+       y="500.88101"
+       width="67.428299"
+       height="93.825996"
+       transform="rotate(64.3052,649.265,500.881)"
+       fill="#ffffff"
+       id="rect469" />
+    <path
+       d="M -41.6891,1060.11 C -39.4498,962.704 41.611,737.995 347.941,618.419 584.174,526.205 658.822,494.099 621.876,317.296 M -76.1245,27.2964 C -80.6278,191.988 578.871,111.506 621.876,317.296 m 0,0 c -60,0 -39,110 -175,83"
+       stroke="#8b7555"
+       stroke-width="18"
+       id="path471" />
+    <rect
+       x="315.04999"
+       y="488.01599"
+       width="121.599"
+       height="212.289"
+       transform="rotate(-106.211,315.05,488.016)"
+       fill="#89836e"
+       stroke="#000000"
+       id="rect473" />
+    <path
+       d="m 384.842,340.661 6.093,21.552 m 18.279,64.656 -12.186,-43.104 -103.555,31.262"
+       stroke="#000000"
+       id="path475" />
+    <rect
+       x="311.98499"
+       y="493.59299"
+       width="130.599"
+       height="221.289"
+       transform="rotate(-106.211,311.985,493.593)"
+       stroke="#ffffff"
+       stroke-width="8"
+       stroke-dasharray="17, 17"
+       id="rect477" />
+  </g>
+  <rect
+     x="237.98534"
+     y="268.63702"
+     width="37.303299"
+     height="49.273201"
+     rx="5.5"
+     transform="rotate(-16.4021)"
+     stroke="#000000"
+     id="rect481" />
+  <rect
+     x="-329.31845"
+     y="73.496086"
+     width="17.464199"
+     height="99.805801"
+     rx="5.5"
+     transform="rotate(-106.5)"
+     stroke="#000000"
+     id="rect483" />
+  <rect
+     x="-378.22067"
+     y="176.25266"
+     width="17.464199"
+     height="99.805801"
+     rx="5.5"
+     transform="rotate(-106.5)"
+     stroke="#000000"
+     id="rect485" />
 </svg>

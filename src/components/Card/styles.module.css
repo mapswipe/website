@@ -3,7 +3,7 @@
     flex-direction: column;
     transition: .3s box-shadow ease-in-out;
     border: var(--width-separator-thin) solid var(--color-separator);
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius-medium);
     background-color: var(--color-foreground);
 
     .coverImageWrapper {
@@ -12,8 +12,8 @@
         height: 16rem;
 
         .image {
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
+            border-top-left-radius: var(--border-radius-medium);
+            border-top-right-radius: var(--border-radius-medium);
             object-fit: cover;
         }
     }
@@ -84,7 +84,7 @@
 
         .coverImageWrapper {
             .image {
-                border-radius: 0.5rem;
+                border-radius: var(--border-radius-medium);
             }
         }
 

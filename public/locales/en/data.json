@@ -6,6 +6,7 @@
   "change-detection": "Compare",
   "project-card-progress-text": "{{progress, number}}% completed",
   "project-card-last-update": "{{date, datetime}}",
+  "data-last-fetched": "Last updated: {{date, datetime}}",
   "project-card-contributors-text": "{{contributors}}",
   "download-projects-overview-heading": "Projects Overview",
   "download-projects-with-geometry-heading": "Projects with Geometry",

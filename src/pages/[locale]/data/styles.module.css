@@ -89,6 +89,27 @@
             .missionImage {
                 height: 20rem;
             }
+            .beforeAfterContainer {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-small);
+
+                .beforeAfterImageWrapper {
+                    height: calc(50% - var(--spacing-small) / 2);
+
+                    .beforeImage {
+                        border-top-left-radius: var(--border-radius-medium);
+                        border-top-right-radius: var(--border-radius-medium);
+                        object-position: top center;
+                        object-fit: cover;
+                    }
+
+                    .afterImage {
+                        object-position: top center;
+                        object-fit: cover;
+                    }
+                }
+            }
 
             .keyPointList {
                 display: flex;
@@ -99,6 +120,14 @@
     }
 
     .exploreSection {
+        .exploreHeadingContainer {
+            gap: 0;
+
+            .lastFetchedDate {
+                font-size: var(--font-size-small);
+            }
+        }
+
         .content {
             display: flex;
             flex-direction: column;

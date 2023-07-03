@@ -58,7 +58,17 @@
         }
     }
 
+    .statsContainer {
+        gap: var(--spacing-small);
+    }
+
     .statsSection {
+        .lastFetchedContainer {
+            display: flex;
+            justify-content: flex-end;
+            font-size: var(--font-size-small);
+        }
+
         .content {
             display: grid;
             grid-gap: var(--spacing-extra-large);

@@ -36,37 +36,37 @@ import styles from './styles.module.css';
 const partners = [
     {
         altText: 'American Red Cross Logo',
-        imageSrc: 'img/arc.svg',
+        imageSrc: '/img/arc.svg',
         link: 'https://www.redcross.org/',
     },
     {
         altText: 'British Red Cross Logo',
-        imageSrc: 'img/brc.svg',
+        imageSrc: '/img/brc.svg',
         link: 'https://www.redcross.org.uk/',
     },
     {
         altText: 'Canadian Red Cross Logo',
-        imageSrc: 'img/crc.svg',
+        imageSrc: '/img/crc.svg',
         link: 'https://www.redcross.ca/',
     },
     {
         altText: 'HeiGIT logo',
-        imageSrc: 'img/heigit.png',
+        imageSrc: '/img/heigit.png',
         link: 'https://heigit.org/',
     },
     {
         altText: 'HOT logo',
-        imageSrc: 'img/hot.png',
+        imageSrc: '/img/hot.png',
         link: 'https://www.hotosm.org/',
     },
     {
         altText: 'MSF logo',
-        imageSrc: 'img/msf.png',
+        imageSrc: '/img/msf.png',
         link: 'https://msf.org.uk/',
     },
     {
         altText: 'Togglecorp logo',
-        imageSrc: 'img/tc.png',
+        imageSrc: '/img/tc.png',
         link: 'https://togglecorp.com',
     },
 ];
@@ -98,12 +98,15 @@ function Home(props: Props) {
                 title={t('hero-title')}
                 description={t('hero-description')}
                 rightContent={(
-                    <ImageWrapper
+                    <video
                         className={styles.screenshot}
-                        imageClassName={styles.image}
-                        src="/img/banner.png"
-                        alt={t('hero-logo')}
-                    />
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    >
+                        <source src="/img/animation.mp4" type="video/mp4" />
+                    </video>
                 )}
                 actions={(
                     <>
@@ -131,21 +134,21 @@ function Home(props: Props) {
                     <ImageWrapper
                         className={_cs(styles.imageContainer, styles.single)}
                         imageClassName={styles.image}
-                        src="img/msf_mapping.jpg"
+                        src="/img/msf_mapping.jpg"
                         alt={t('mobilize-volunteer')}
                     />
                     <div className={styles.images}>
                         <ImageWrapper
                             className={_cs(styles.imageContainer, styles.double)}
                             imageClassName={styles.image}
-                            src="img/mapswipe_mapathon.jpg"
+                            src="/img/mapswipe_mapathon.jpg"
                             alt={t('mapathon')}
                             fill
                         />
                         <ImageWrapper
                             className={_cs(styles.imageContainer, styles.double)}
                             imageClassName={styles.image}
-                            src="img/field_mapping.jpg"
+                            src="/img/field_mapping.jpg"
                             alt={t('field-mapping')}
                         />
                     </div>
@@ -199,9 +202,24 @@ function Home(props: Props) {
                 </Card>
                 <Card
                     className={styles.missionType}
-                    coverImageUrl="/img/compare.svg"
+                    imageClassName={_cs(styles.missionImage, styles.beforeAfterContainer)}
+                    coverImageContent={(
+                        <>
+                            <ImageWrapper
+                                imageClassName={styles.beforeImage}
+                                className={styles.beforeAfterImageWrapper}
+                                src="/img/before.svg"
+                                alt=""
+                            />
+                            <ImageWrapper
+                                imageClassName={styles.afterImage}
+                                className={styles.beforeAfterImageWrapper}
+                                src="/img/after.svg"
+                                alt=""
+                            />
+                        </>
+                    )}
                     heading={t('type-compare-title')}
-                    imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
                             type="3"
@@ -243,7 +261,7 @@ function Home(props: Props) {
                             >
                                 <ImageWrapper
                                     imageClassName={styles.image}
-                                    src="img/playstore.png"
+                                    src="/img/playstore.png"
                                     alt={t('download-playstore')}
                                 />
                             </Link>
@@ -254,7 +272,7 @@ function Home(props: Props) {
                             >
                                 <ImageWrapper
                                     imageClassName={styles.image}
-                                    src="img/apple.png"
+                                    src="/img/apple.png"
                                     alt={t('download-apple-store')}
                                 />
                             </Link>
@@ -328,7 +346,7 @@ function Home(props: Props) {
                 >
                     <ImageWrapper
                         className={styles.missingMapsLogo}
-                        src="img/missingmaps.png"
+                        src="/img/missingmaps.png"
                         alt={t('missing-maps')}
                     />
                 </Link>
