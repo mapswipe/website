@@ -120,6 +120,14 @@
     }
 
     .exploreSection {
+        .exploreHeadingContainer {
+            gap: 0;
+
+            .lastFetchedDate {
+                font-size: var(--font-size-small);
+            }
+        }
+
         .content {
             display: flex;
             flex-direction: column;

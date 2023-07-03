@@ -70,6 +70,7 @@ type DownloadFileType = 'geojson' | 'csv';
 interface UrlInfo {
     name: DownloadType;
     type: DownloadFileType;
+    fileSizeCheckUrl: string;
     url: string;
     size: number;
 }
@@ -117,6 +118,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         }
     `;
     const value: Stats = await request(graphqlEndpoint, stats);
+    const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
     const {
         totalContributors,
@@ -163,20 +165,24 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const minArea = Math.min(...areas);
     const maxArea = Math.max(...areas);
 
+    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
     const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
         {
             name: 'projects_overview',
-            url: '/api/projects/projects.csv',
+            url: `${mapswipeApi}projects/projects.csv`,
+            fileSizeCheckUrl: '/api/projects/projects.csv',
             type: 'csv',
         },
         {
             name: 'projects_with_geometry',
-            url: '/api/projects/projects_geom.geojson',
+            url: `${mapswipeApi}projects/projects_geom.geojson`,
+            fileSizeCheckUrl: '/api/projects/projects_geom.geojson',
             type: 'geojson',
         },
         {
             name: 'projects_with_centroid',
-            url: '/api/projects/projects_centroid.geojson',
+            url: `${mapswipeApi}projects/projects_centroid.geojson`,
+            fileSizeCheckUrl: '/api/projects/projects_centroid.geojson',
             type: 'geojson',
         },
     ];
@@ -184,8 +190,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const fileSizes = await getFileSizes();
     const urlResponsePromises = urls.map(async (url) => ({
         ...url,
-        ...url,
-        size: fileSizes?.[url.url] ?? 0,
+        size: fileSizes?.[url.fileSizeCheckUrl] ?? 0,
     }));
 
     const urlResponses = await Promise.all(urlResponsePromises);
@@ -196,6 +201,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             projects: miniProjects,
             urls: urlResponses,
             minArea,
+            buildDate,
             maxArea,
             minContributors,
             maxContributors,
@@ -232,6 +238,7 @@ interface Props extends SSRConfig {
     maxArea: number,
     minContributors: number,
     maxContributors: number,
+    buildDate: string | undefined,
     projects: {
         image: string | null;
         project_id: string;
@@ -262,6 +269,7 @@ function Data(props: Props) {
         minContributors,
         maxContributors,
         totalContributors,
+        buildDate,
         totalSwipes,
     } = props;
 
@@ -611,7 +619,24 @@ function Data(props: Props) {
             <Section
                 title={t('explore-section-heading')}
                 className={styles.exploreSection}
+                headingContainerClassName={styles.exploreHeadingContainer}
                 contentClassName={styles.content}
+                descriptionClassName={styles.lastFetchedDate}
+                description={buildDate && (
+                    t('data-last-fetched', {
+                        date: new Date(buildDate).getTime(),
+                        formatParams: {
+                            date: {
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                            },
+                        },
+                    })
+                )}
                 actions={tableProjects.length !== visibleProjects.length && (
                     <Button
                         variant="border"

@@ -3,6 +3,7 @@
   "aggregated-results-with-geometry-title": "Aggregated Results (with Geometry)",
   "hot-tasking-manager-geometries-title": "HOT Tasking Manager Geometries",
   "moderate-to-high-agreement-yes-maybe-geometries-title": "Moderate to High Agreement Yes Maybe Geometries",
+  "data-last-fetched": "Last updated: {{date, datetime}}",
   "groups-title": "Groups",
   "history-title": "History",
   "results-title": "Results",

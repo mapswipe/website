@@ -58,7 +58,17 @@
         }
     }
 
+    .statsContainer {
+        gap: var(--spacing-small);
+    }
+
     .statsSection {
+        .lastFetchedContainer {
+            display: flex;
+            justify-content: flex-end;
+            font-size: var(--font-size-small);
+        }
+
         .content {
             display: grid;
             grid-gap: var(--spacing-extra-large);
@@ -112,8 +122,8 @@
                     gap: var(--spacing-small);
 
                     .timelineChart {
-                        width: 100%;
-                        height: 100%;
+                        width: 20rem;
+                        height: 20rem;
                         --path-stroke-width: 1pt;
 
                         .stopStart {

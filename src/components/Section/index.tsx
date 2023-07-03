@@ -16,7 +16,9 @@ interface Props {
     withAlternativeBackground?: boolean;
     smallHeading?: boolean;
     sectionId?: string;
+    actionsClassName?: string;
     descriptionClassName?: string;
+    headingContainerClassName?: string;
 }
 
 function Section(props: Props) {
@@ -27,9 +29,11 @@ function Section(props: Props) {
         title,
         description,
         descriptionClassName,
+        headingContainerClassName,
         children,
         sectionId,
         actions,
+        actionsClassName,
         smallHeading,
         withAlternativeBackground,
     } = props;
@@ -45,7 +49,7 @@ function Section(props: Props) {
         >
             <div className={_cs(styles.container, containerClassName)}>
                 {(title || description) && (
-                    <div className={styles.headingContainer}>
+                    <div className={_cs(styles.headingContainer, headingContainerClassName)}>
                         {title && (
                             <Heading
                                 className={styles.heading}
@@ -67,7 +71,7 @@ function Section(props: Props) {
                     </div>
                 )}
                 {actions && (
-                    <div className={styles.actions}>
+                    <div className={_cs(styles.actions, actionsClassName)}>
                         {actions}
                     </div>
                 )}

@@ -134,7 +134,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     }
 
     const processedContent = await remark()
-        .use(html)
+        .use(html, { sanitize: false })
         .use(remarkGfm)
         .process(selectedBlog.markdownContent);
     const contentHtml = processedContent.toString();

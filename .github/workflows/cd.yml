@@ -39,6 +39,10 @@ jobs:
         env:
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
 
+      - id: date
+        name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> "$GITHUB_ENV"
+
       - name: Build + Test
         run: yarn build
         timeout-minutes: 30
@@ -48,6 +52,8 @@ jobs:
           # App ENV
           MAPSWIPE_COMMUNITY_API_ENDPOINT: ${{ vars.MAPSWIPE_COMMUNITY_API_ENDPOINT }}
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
+          # Build Date
+          MAPSWIPE_BUILD_DATE: ${{ env.NOW }}
 
       - name: Upload GH artifacts
         uses: actions/upload-pages-artifact@v1

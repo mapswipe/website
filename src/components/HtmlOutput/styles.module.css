@@ -50,7 +50,20 @@
     }
 
     img {
-        max-width: 100%;
+        max-width: 60rem;
         object-fit: contain;
+    }
+
+    figure {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        margin: 0;
+
+        figcaption {
+            padding: var(--spacing-extra-small) 0;
+            max-width: 60rem;
+            font-style: italic;
+        }
     }
 }
