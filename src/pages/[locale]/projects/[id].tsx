@@ -101,7 +101,7 @@ interface Props extends SSRConfig {
     className?: string;
     totalProgress: number | null;
     totalArea: number | null;
-    image: string | undefined;
+    image: string | null;
     totalContributors: number | null;
     type: number | undefined | null;
     name: string;
@@ -712,7 +712,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             created: project.properties?.created
                 ? new Date(project.properties.created).getTime()
                 : null,
-            image: project.properties.image,
+            image: project.properties.image ?? null,
             type: project.properties.project_type,
             description: contentHtml,
             status: project.properties.status,
