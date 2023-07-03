@@ -1,4 +1,4 @@
 {
-  "blog-tab-head": "",
-  "date": ""
+  "blog-tab-head": "{{blogTitle}} | Mapswipe",
+  "date": "{{date, datetime}}"
 }
