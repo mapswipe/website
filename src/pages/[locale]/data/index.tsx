@@ -201,7 +201,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             projects: miniProjects,
             urls: urlResponses,
             minArea,
-            buildDate,
+            buildDate: buildDate ?? null,
             maxArea,
             minContributors,
             maxContributors,
@@ -238,7 +238,7 @@ interface Props extends SSRConfig {
     maxArea: number,
     minContributors: number,
     maxContributors: number,
-    buildDate: string | undefined,
+    buildDate: string | null,
     projects: {
         image: string | null;
         project_id: string;
