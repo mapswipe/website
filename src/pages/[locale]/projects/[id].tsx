@@ -385,7 +385,7 @@ function Project(props: Props) {
                 containerClassName={styles.statsContainer}
                 actions={buildDate && (
                     t('data-last-fetched', {
-                        date: new Date(buildDate).getTime(),
+                        date: (new Date(0).setUTCSeconds(Number(buildDate))),
                         formatParams: {
                             date: {
                                 year: 'numeric',
@@ -696,7 +696,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
                 && project.properties.progress !== undefined
             )
                 ? Math.round(project.properties.progress * 100)
-                : null,
+                : 0,
             totalArea: Math.round(project.properties.area_sqkm ?? 0),
             totalContributors: project.properties.number_of_users ?? null,
             name: project.properties.legacyName

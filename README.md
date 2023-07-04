@@ -72,6 +72,9 @@ module.exports = {
 };
 ```
 
+Language's title and abbreviation in the selected langauge, needs to be added
+in [languages.ts](https://github.com/mapswipe/community-website/blob/main/src/utils/langauges.ts).
+
 ## Adding 'News & Updates' or Blogs
 
 MapSwipe website supports 'News & Updates' or blogs in the form of markdown.

@@ -120,8 +120,3 @@ export function getFileSizeProperties(fileSize: number) {
         unit: 'kilobyte',
     };
 }
-
-export const languageTitleMap: Record<string, string> = {
-    ne: 'नेपाली',
-    en: 'English',
-};
