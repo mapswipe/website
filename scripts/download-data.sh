@@ -41,3 +41,13 @@ download_file $MAPSWIPE_API_ENDPOINT/projects/projects_centroid.geojson projects
 download_file $MAPSWIPE_API_ENDPOINT/projects/projects_geom.geojson projects_geom.geojson
 
 unzip -o $DESTINATION_DIR/project-history.zip -d $DESTINATION_DIR/project-history
+
+# Get last modified date
+LAST_MODIFIED_RAW=`curl --head -i $MAPSWIPE_API_ENDPOINT/website-data/overall-endpoints.csv 2>&1 | grep '^Last-Modified:'`
+LAST_MODIFIED=${LAST_MODIFIED_RAW:15}
+
+if ! [[ -z "${GITHUB_ENV}" ]]; then
+    # Set to github variable using MAPSWIPE_API_LAST_MODIFIED_EPOCH
+    echo "Setting env.MAPSWIPE_API_LAST_MODIFIED_EPOCH variable"
+    echo "MAPSWIPE_API_LAST_MODIFIED_EPOCH=$(date --date="$LAST_MODIFIED" +%s)" >> "$GITHUB_ENV"
+fi
