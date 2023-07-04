@@ -153,6 +153,10 @@
                         padding: var(--spacing-super-small) var(--spacing-medium);
                     }
 
+                    .dateFilter {
+                        min-width: 6rem;
+                    }
+
                     .row {
                         display: flex;
                         flex-wrap: wrap;
