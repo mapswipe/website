@@ -460,6 +460,7 @@ function Data(props: Props) {
         setDateFrom(undefined);
         setDateTo(undefined);
         setProjectTypes(undefined);
+        setLocationSearchText(undefined);
     }, []);
 
     const filtersApplied = searchText
@@ -898,9 +899,13 @@ function Data(props: Props) {
                 description={t('contact-section-description')}
                 withAlternativeBackground
                 actions={(
-                    <Button>
+                    <Link
+                        href="mailto:info@mapswipe.org"
+                        variant="button"
+                        target="_blank"
+                    >
                         {t('contact-link-label')}
-                    </Button>
+                    </Link>
                 )}
             />
         </Page>
