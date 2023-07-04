@@ -696,7 +696,7 @@ function Data(props: Props) {
                                     {t('date-from-label')}
                                 </div>
                                 <RawInput
-                                    className={styles.filter}
+                                    className={_cs(styles.filter, styles.dateFilter)}
                                     placeholder={t('search-label') ?? undefined}
                                     name={undefined}
                                     value={dateFrom}
@@ -709,7 +709,7 @@ function Data(props: Props) {
                                     {t('date-to-label')}
                                 </div>
                                 <RawInput
-                                    className={styles.filter}
+                                    className={_cs(styles.filter, styles.dateFilter)}
                                     placeholder={t('search-label') ?? undefined}
                                     name={undefined}
                                     value={dateTo}

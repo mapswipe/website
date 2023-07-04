@@ -35,13 +35,10 @@ jobs:
         run: yarn install
 
       - name: Download data
+        # NOTE: This will add env.MAPSWIPE_API_LAST_MODIFIED_EPOCH
         run: ./scripts/download-data.sh
         env:
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
-
-      - id: date
-        name: Set current date as env variable
-        run: echo "NOW=$(date +'%s')" >> "$GITHUB_ENV"
 
       - name: Build + Test
         run: yarn build
@@ -53,7 +50,7 @@ jobs:
           MAPSWIPE_COMMUNITY_API_ENDPOINT: ${{ vars.MAPSWIPE_COMMUNITY_API_ENDPOINT }}
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
           # Build Date
-          MAPSWIPE_BUILD_DATE: ${{ env.NOW }}
+          MAPSWIPE_BUILD_DATE: ${{ env.MAPSWIPE_API_LAST_MODIFIED_EPOCH }}
 
       - name: Upload GH artifacts
         uses: actions/upload-pages-artifact@v1
