@@ -168,7 +168,7 @@ function Home(props: Props) {
                                     normal
                                 />
                             )}
-                            label="Total Swipes"
+                            label={t('total-swipes')}
                         />
                         <KeyFigure
                             value={(
@@ -176,7 +176,7 @@ function Home(props: Props) {
                                     value={totalContributors}
                                 />
                             )}
-                            label="Total Contributors"
+                            label={t('total-contributors')}
                         />
                     </div>
                 </div>

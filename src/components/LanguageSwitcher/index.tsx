@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 
 import languageDetector from 'utils/languageDetector';
-import { languageTitleMap } from 'utils/common';
+import languageTitleMap from 'utils/languages';
 import styles from './styles.module.css';
 
 interface Props extends Omit<NextLinkProps, 'href' | 'locale'> {
@@ -53,7 +53,7 @@ function LanguageSwitcher(props: Props) {
                 }
             }}
         >
-            {languageTitleMap[locale]}
+            {languageTitleMap[locale]?.label ?? locale}
         </NextLink>
     );
 }

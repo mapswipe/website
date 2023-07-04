@@ -121,44 +121,49 @@
                     min-height: 20rem;
                     gap: var(--spacing-small);
 
-                    .timelineChart {
+                    .timelineChartContainer {
                         width: 100%;
                         height: 100%;
-                        --path-stroke-width: 1pt;
 
-                        .stopStart {
-                            stop-color: var(--color-accent);
-                            stop-opacity: 0.5;
-                        }
+                        .timelineChart {
+                            width: 100%;
+                            height: 100%;
+                            --path-stroke-width: 1pt;
 
-                        .stopEnd {
-                            stop-color: var(--color-accent);
-                            stop-opacity: 0;
-                        }
+                            .stopStart {
+                                stop-color: var(--color-accent);
+                                stop-opacity: 0.5;
+                            }
 
-                        .path {
-                            stroke: var(--color-accent);
-                            stroke-width: 2pt;
-                            fill: none;
-                        }
+                            .stopEnd {
+                                stop-color: var(--color-accent);
+                                stop-opacity: 0;
+                            }
 
-                        .yAxisTickText {
-                            text-anchor: middle;
-                            font-size: var(--font-size-extra-small);
-                        }
+                            .path {
+                                stroke: var(--color-accent);
+                                stroke-width: 2pt;
+                                fill: none;
+                            }
 
-                        .xAxisTickText {
-                            text-anchor: middle;
-                            transition: var(--duration-transition-medium) ease-in-out transform;
-                            font-size: var(--font-size-extra-small);
-                        }
+                            .yAxisTickText {
+                                text-anchor: middle;
+                                font-size: var(--font-size-extra-small);
+                            }
 
-                        .xAxisGridLine,
-                        .yAxisGridLine {
-                            stroke: var(--color-text);
-                            stroke-dasharray: 4 4;
-                            stroke-opacity: 0.2;
-                            transition: var(--duration-transition-medium) ease-in-out stroke-opacity;
+                            .xAxisTickText {
+                                text-anchor: middle;
+                                transition: var(--duration-transition-medium) ease-in-out transform;
+                                font-size: var(--font-size-extra-small);
+                            }
+
+                            .xAxisGridLine,
+                            .yAxisGridLine {
+                                stroke: var(--color-text);
+                                stroke-dasharray: 4 4;
+                                stroke-opacity: 0.2;
+                                transition: var(--duration-transition-medium) ease-in-out stroke-opacity;
+                            }
                         }
                     }
 

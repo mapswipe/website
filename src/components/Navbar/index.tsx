@@ -11,6 +11,7 @@ import Button from 'components/Button';
 import LanguageSwitcher from 'components/LanguageSwitcher';
 import DropdownMenu from 'components/DropdownMenu';
 import useBooleanState from 'hooks/useBooleanState';
+import languageTitleMap from 'utils/languages';
 
 import i18nextConfig from '../../../next-i18next.config';
 
@@ -84,7 +85,7 @@ function Navbar(props: Props) {
                             <>
                                 <IoEarthSharp />
                                 <span className={styles.currentLocale}>
-                                    {currentLocale}
+                                    {languageTitleMap[currentLocale]?.abbreviation ?? currentLocale}
                                 </span>
                             </>
                         )}

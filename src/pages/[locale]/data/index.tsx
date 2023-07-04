@@ -90,11 +90,6 @@ export interface BubbleTypeOption {
     label: string;
 }
 
-export const bubbleTypes: BubbleTypeOption[] = [
-    { key: 'area', label: 'Mapped Area' },
-    { key: 'contributors', label: 'Contributors' },
-];
-
 export const getStaticPaths = () => ({
     fallback: false,
     paths: getI18nPaths(),
@@ -140,7 +135,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             : feature.properties.requestingOrganization,
         progress: feature.properties.progress !== null && feature.properties.progress !== undefined
             ? Math.round(feature.properties.progress * 100)
-            : null,
+            : 0,
         number_of_users: feature.properties.number_of_users ?? null,
         area_sqkm: feature.properties.area_sqkm ?? null,
         coordinates: feature.geometry?.coordinates ?? null,
@@ -201,7 +196,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             projects: miniProjects,
             urls: urlResponses,
             minArea,
-            buildDate,
+            buildDate: buildDate ?? null,
             maxArea,
             minContributors,
             maxContributors,
@@ -238,7 +233,7 @@ interface Props extends SSRConfig {
     maxArea: number,
     minContributors: number,
     maxContributors: number,
-    buildDate: string | undefined,
+    buildDate: string | null,
     projects: {
         image: string | null;
         project_id: string;
@@ -296,6 +291,11 @@ function Data(props: Props) {
     const debouncedLocationSearchText = useDebouncedValue(locationSearchText);
 
     const { t } = useTranslation('data');
+
+    const bubbleTypes: BubbleTypeOption[] = useMemo(() => ([
+        { key: 'area', label: t('mapped-area') },
+        { key: 'contributors', label: t('contributors') },
+    ]), [t]);
 
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
@@ -624,7 +624,7 @@ function Data(props: Props) {
                 descriptionClassName={styles.lastFetchedDate}
                 description={buildDate && (
                     t('data-last-fetched', {
-                        date: new Date(buildDate).getTime(),
+                        date: (new Date(0).setUTCSeconds(Number(buildDate))),
                         formatParams: {
                             date: {
                                 year: 'numeric',
@@ -751,7 +751,7 @@ function Data(props: Props) {
                 </div>
                 <div className={styles.stats}>
                     <div>
-                        {t('finished-project-card-text', {
+                        {t('visible-projects-count', {
                             totalProjects: visibleProjects.length,
                         })}
                     </div>
