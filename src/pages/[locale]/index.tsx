@@ -209,13 +209,13 @@ function Home(props: Props) {
                                 imageClassName={styles.beforeImage}
                                 className={styles.beforeAfterImageWrapper}
                                 src="/img/before.svg"
-                                alt=""
+                                alt="before-image"
                             />
                             <ImageWrapper
                                 imageClassName={styles.afterImage}
                                 className={styles.beforeAfterImageWrapper}
                                 src="/img/after.svg"
-                                alt=""
+                                alt="after-image"
                             />
                         </>
                     )}
