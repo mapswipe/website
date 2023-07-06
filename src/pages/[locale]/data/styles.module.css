@@ -64,6 +64,7 @@
                 max-width: var(--width-heading-max);
                 text-align: center;
             }
+
             .sectionDescription {
                 display: flex;
                 align-self: center;
@@ -89,6 +90,7 @@
             .missionImage {
                 height: 20rem;
             }
+
             .beforeAfterContainer {
                 display: flex;
                 flex-direction: column;
@@ -281,6 +283,7 @@
                     .progressLabel {
                         align-self: flex-start;
                     }
+
                     .track {
                         border-radius: 0.25rem;
                         background-color: var(--color-separator);
@@ -349,5 +352,9 @@
                 }
             }
         }
+    }
+
+    @media screen and (max-width: 720px) {
+        gap: unset;
     }
 }

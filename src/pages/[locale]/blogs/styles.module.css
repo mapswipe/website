@@ -1,10 +1,6 @@
 .blogs {
     display: block;
 
-    .hero {
-        min-height: 24rem;
-    }
-
     .list {
         display: flex;
         flex-direction: column;

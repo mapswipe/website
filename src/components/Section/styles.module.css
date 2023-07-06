@@ -38,16 +38,4 @@
     &.withAlternativeBackground {
         background-color: var(--color-background-brand-light);
     }
-
-    @media screen and (max-width: 720px) {
-        .container {
-            display: flex;
-            flex-direction: column;
-            margin: 0 auto;
-            padding: var(--spacing-medium) var(--spacing-super-large);
-            width: 100%;
-            max-width: var(--width-page-max);
-            gap: var(--spacing-enourmous);
-        }
-    }
 }

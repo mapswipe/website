@@ -19,6 +19,10 @@
             .heroLeftContent {
                 padding-top: 0;
             }
+
+            @media screen and (max-width: 720px) {
+                padding-top: var(--spacing-enourmous);
+            }
         }
 
         .heroDescription {
@@ -29,6 +33,7 @@
                 padding: 0;
                 color: var(--color-text-on-dark-light);
                 font-size: var(--font-size-medium);
+
             }
         }
     }
