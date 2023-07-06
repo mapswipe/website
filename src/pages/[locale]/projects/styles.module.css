@@ -200,6 +200,7 @@
                         align-items: center;
                         justify-content: space-between;
                     }
+
                     .track {
                         border-radius: 0.25rem;
                         background-color: var(--color-separator);
@@ -314,5 +315,9 @@
         text-align: center;
         gap: var(--spacing-large);
         font-size: var(--font-size-medium);
+    }
+
+    @media screen and (max-width: 720px) {
+        gap: unset;
     }
 }
