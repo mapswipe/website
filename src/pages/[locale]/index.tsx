@@ -334,6 +334,14 @@ function Home(props: Props) {
                         </Link>
                     </Card>
                 ))}
+                <div className={styles.sectionDescription}>
+                    <Link
+                        href="/[locale]/blogs"
+                        variant="underline"
+                    >
+                        {t('see-more-pages')}
+                    </Link>
+                </div>
             </Section>
             <Section
                 className={styles.partners}

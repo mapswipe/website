@@ -29,6 +29,7 @@ export interface Props {
     variant?: Variant;
     spacing?: Spacing;
     children?: React.ReactNode;
+    tooltip?: string;
 }
 
 function Tag(props: Props) {
@@ -38,10 +39,12 @@ function Tag(props: Props) {
         variant = 'primary',
         spacing = 'medium',
         className,
+        tooltip,
     } = props;
 
     return (
         <div
+            title={tooltip}
             className={_cs(
                 className,
                 styles.tag,
