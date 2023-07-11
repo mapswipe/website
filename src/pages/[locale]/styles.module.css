@@ -253,6 +253,12 @@
                 grid-row: auto / span 2;
             }
 
+            .sectionDescription {
+                grid-column: 1 / -1;
+                text-align: center;
+                font-size: var(--font-size-medium);
+            }
+
             @media screen and (max-width: 800px) {
                 grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 

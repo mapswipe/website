@@ -815,6 +815,7 @@ function Data(props: Props) {
                                     <div className={styles.bottomTags}>
                                         {project.region && (
                                             <Tag
+                                                tooltip="Location"
                                                 className={styles.tag}
                                                 icon={<IoLocationOutline />}
                                                 variant="transparent"
@@ -824,6 +825,7 @@ function Data(props: Props) {
                                         )}
                                         {project.requestingOrganization && (
                                             <Tag
+                                                tooltip="Requesting organization"
                                                 className={styles.tag}
                                                 icon={<IoFlag />}
                                                 variant="transparent"
@@ -834,6 +836,7 @@ function Data(props: Props) {
                                         <div className={styles.projectDetailsRow}>
                                             {project.created && (
                                                 <Tag
+                                                    tooltip="Created date"
                                                     className={styles.tag}
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
@@ -843,6 +846,7 @@ function Data(props: Props) {
                                             )}
                                             {project.number_of_users && (
                                                 <Tag
+                                                    tooltip="Project contributors"
                                                     className={styles.tag}
                                                     icon={<IoPerson />}
                                                     variant="transparent"
