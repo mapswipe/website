@@ -815,7 +815,7 @@ function Data(props: Props) {
                                     <div className={styles.bottomTags}>
                                         {project.region && (
                                             <Tag
-                                                tooltip="Location"
+                                                tooltip={t('Location')}
                                                 className={styles.tag}
                                                 icon={<IoLocationOutline />}
                                                 variant="transparent"
@@ -825,7 +825,7 @@ function Data(props: Props) {
                                         )}
                                         {project.requestingOrganization && (
                                             <Tag
-                                                tooltip="Requesting organization"
+                                                tooltip={t('requesting-organization')}
                                                 className={styles.tag}
                                                 icon={<IoFlag />}
                                                 variant="transparent"
@@ -836,7 +836,7 @@ function Data(props: Props) {
                                         <div className={styles.projectDetailsRow}>
                                             {project.created && (
                                                 <Tag
-                                                    tooltip="Created date"
+                                                    tooltip={t('created-at')}
                                                     className={styles.tag}
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
@@ -846,7 +846,7 @@ function Data(props: Props) {
                                             )}
                                             {project.number_of_users && (
                                                 <Tag
-                                                    tooltip="Project contributors"
+                                                    tooltip={t('project-contributors')}
                                                     className={styles.tag}
                                                     icon={<IoPerson />}
                                                     variant="transparent"

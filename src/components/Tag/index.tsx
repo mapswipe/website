@@ -29,7 +29,7 @@ export interface Props {
     variant?: Variant;
     spacing?: Spacing;
     children?: React.ReactNode;
-    tooltip?: string;
+    tooltip?: string | null;
 }
 
 function Tag(props: Props) {
@@ -44,7 +44,7 @@ function Tag(props: Props) {
 
     return (
         <div
-            title={tooltip}
+            title={tooltip ?? undefined}
             className={_cs(
                 className,
                 styles.tag,

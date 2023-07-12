@@ -11,7 +11,10 @@ import {
     request,
 } from 'graphql-request';
 import Head from 'next/head';
-import { IoCalendarClearOutline } from 'react-icons/io5';
+import {
+    IoCalendarClearOutline,
+    IoArrowForwardSharp,
+} from 'react-icons/io5';
 
 import Page from 'components/Page';
 import Link from 'components/Link';
@@ -330,16 +333,17 @@ function Home(props: Props) {
                             className={styles.link}
                             href={`/[locale]/blogs/${blog.name}`}
                         >
-                            Read more
+                            {t('read-more')}
                         </Link>
                     </Card>
                 ))}
                 <div className={styles.sectionDescription}>
                     <Link
+                        className={styles.seeMoreLink}
                         href="/[locale]/blogs"
-                        variant="underline"
                     >
                         {t('see-more-pages')}
+                        <IoArrowForwardSharp />
                     </Link>
                 </div>
             </Section>

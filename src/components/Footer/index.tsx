@@ -6,7 +6,6 @@ import {
 import Link from 'components/Link';
 import { FaRegNewspaper } from 'react-icons/fa';
 import {
-    IoLogoSlack,
     IoLogoFacebook,
     IoLogoTwitter,
     IoLogoGithub,
@@ -133,14 +132,6 @@ function Footer(props: Props) {
                             title={t('email')}
                         >
                             <IoMail />
-                        </Link>
-                        <Link
-                            href="https://slack.openstreetmap.us/"
-                            variant="icon"
-                            target="_blank"
-                            title={t('slack')}
-                        >
-                            <IoLogoSlack />
                         </Link>
                     </div>
                 </div>

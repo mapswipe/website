@@ -302,7 +302,7 @@ function Project(props: Props) {
                         <div className={styles.bottomTags}>
                             {region && (
                                 <Tag
-                                    tooltip="Location"
+                                    tooltip={t('Location')}
                                     className={styles.heroTag}
                                     icon={<IoLocationOutline />}
                                     variant="transparent"
@@ -312,7 +312,7 @@ function Project(props: Props) {
                             )}
                             {requestingOrganization && (
                                 <Tag
-                                    tooltip="Requesting organization"
+                                    tooltip={t('requesting-organization')}
                                     className={styles.heroTag}
                                     icon={<IoFlag />}
                                     variant="transparent"
@@ -322,7 +322,7 @@ function Project(props: Props) {
                             )}
                             {created && (
                                 <Tag
-                                    tooltip="Created date"
+                                    tooltip={t('created-at')}
                                     className={styles.heroTag}
                                     icon={<IoCalendarClearOutline />}
                                     variant="transparent"
