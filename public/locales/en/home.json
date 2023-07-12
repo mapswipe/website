@@ -29,7 +29,8 @@
   "get-involved-link": "Get involved",
   "news-and-updates-title": "News & updates",
   "date": "{{date, datetime}}",
-  "see-more-pages": "See all blog posts",
+  "read-more": "Read more",
+  "see-more-pages": "See all posts",
   "partners": "Partners",
   "missing-maps": "Missing maps logo",
   "missing-map-description": "MapSwipe is part of the Missing Maps Project and is managed by a volunteer-led team with support from  these organizations."

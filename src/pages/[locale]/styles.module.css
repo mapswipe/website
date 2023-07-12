@@ -255,8 +255,16 @@
 
             .sectionDescription {
                 grid-column: 1 / -1;
-                text-align: center;
-                font-size: var(--font-size-medium);
+
+                .seeMoreLink {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    color: var(--color-accent);
+                    font-size: var(--font-size-medium);
+                    font-weight: var(--font-weight-bold);
+                    gap: var(--spacing-super-small);
+                }
             }
 
             @media screen and (max-width: 800px) {
