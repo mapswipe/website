@@ -16,6 +16,7 @@ Set these environment variables:
 MAPSWIPE_API_ENDPOINT=https://apps.mapswipe.org/api/
 MAPSWIPE_COMMUNITY_API_ENDPOINT=https://api.mapswipe.org/graphql/
 NEXT_PUBLIC_POSTHOG_KEY=<posthog-key>
+NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
 ```
 
 ### Running
