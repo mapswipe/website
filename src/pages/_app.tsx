@@ -10,9 +10,13 @@ import 'leaflet/dist/leaflet.css';
 import 'styles/globals.css';
 import 'styles/variables.css';
 
-if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+if (
+    typeof window !== 'undefined'
+    && process.env.NEXT_PUBLIC_POSTHOG_KEY
+    && process.env.NEXT_PUBLIC_POSTHOG_HOST_API
+) {
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-        api_host: 'https://app.posthog.com',
+        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST_API,
         // NOTE: Persistence in memory will not add any cookies
         persistence: 'memory',
         loaded: (loadedPosthog) => {
