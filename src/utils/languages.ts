@@ -10,6 +10,10 @@ const languageTitleMap: Record<string, {
         abbreviation: 'EN',
         label: 'English',
     },
+    hu: {
+        abbreviation: 'HU',
+        label: 'Hungarian',
+    },
 };
 
 export default languageTitleMap;
