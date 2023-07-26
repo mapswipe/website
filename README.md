@@ -76,6 +76,12 @@ module.exports = {
 Language's title and abbreviation in the selected langauge, needs to be added
 in [languages.ts](https://github.com/mapswipe/community-website/blob/main/src/utils/langauges.ts).
 
+After the language settings are added, user should generate the langauge files.
+
+```bash
+yarn generate:i18n
+```
+
 ## Adding 'News & Updates' or Blogs
 
 MapSwipe website supports 'News & Updates' or blogs in the form of markdown.
