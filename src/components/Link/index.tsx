@@ -20,6 +20,7 @@ interface Props extends Omit<NextLinkProps, 'locale'> {
     children?: React.ReactNode;
     className?: string;
     locale?: string;
+    rel?: string;
     target?: string;
     variant?: Variant;
     title?: React.ReactNode;
