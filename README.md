@@ -59,6 +59,34 @@ to configured github io page.
 2. Every day at UTC 00:01, deployment will be triggered with
 latest data from MapSwipe database.
 
+## Edit Website Texts
+
+### Edit Source Strings
+- Pull the latest changes from the `main` branch  
+- Checkout to a new branch  
+- Navigate to the source string files [here](https://github.com/mapswipe/website/tree/main/public/locales/en)  
+- Open appropriate file(s) and edit string(s) as per requirement  
+- Push the changes to the local branch  
+- Create a pull request to the main branch  
+
+### Translate Strings
+#### As Translator
+- Go to Transifex project  
+- Click on the language you are looking to translate the source into  
+- Open the file to translate the string  
+- Translate individual string and save changes  
+
+#### As Reviewer
+- Open individual strings, make sure they are correct, and click the 'Review' button  
+- Continue translating and reviewing the strings until all the strings are translated and approved  
+- **_NOTE: Reviewers must have appropriate permission_**
+
+### Update The Website
+- After all the strings are 100% translated and reviewed in Transifex, a pull request will be sent to the main branch  
+- Merging the pull request will trigger a latest build and the same will be deployed in production
+- **IF LANGUAGE IS NOT PRESENT IN THE WEBSITE**
+- Add the supported language as per the [supported languages](https://github.com/mapswipe/website#supported-languages) guide below
+
 ## Supported Languages
 
 Languages listed in [i18next-parser.config.js](https://github.com/mapswipe/community-website/blob/main/i18next-parser.config.js)
