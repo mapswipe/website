@@ -1,5 +1,5 @@
 {
-  "home-tab-head": "MapSwipe | Every swipe helps put families on the map",
+  "home-tab-head": "MapSwipe",
   "hero-title": "From Swipes to Solutions",
   "hero-description": "Join the MapSwipe community and make a meaningful impact on mapping and beyond.",
   "download-app-label": "Download the app",
@@ -15,7 +15,7 @@
   "explore-mission-types": "Explore our project types",
   "explore-mission-types-description": "Our volunteers contribute to three different project types.",
   "type-find-title": "Find",
-  "find-mission-type-description": "Swipe through satellite images to identify & select those that contain the requested features (ie: buildings, roadways, waterways, etc.)",
+  "find-mission-type-description": "Swipe through satellite images to identify & select those that contain the requested features such as buildings, roadways, waterways and more.",
   "type-compare-title": "Compare",
   "compare-mission-type-description": "Review before and after satellite images to detect changes in the environment that help inform damage assessment, climate change, or inaccurate data.",
   "type-validate-title": "Validate",
