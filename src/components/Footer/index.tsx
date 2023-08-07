@@ -7,7 +7,7 @@ import Link from 'components/Link';
 import { FaRegNewspaper } from 'react-icons/fa';
 import {
     IoLogoFacebook,
-    IoLogoTwitter,
+    IoLogoMastodon,
     IoLogoGithub,
     IoMail,
     IoLogoInstagram,
@@ -94,12 +94,13 @@ function Footer(props: Props) {
                             <IoLogoFacebook />
                         </Link>
                         <Link
-                            href="https://twitter.com/mapswipe"
+                            href="https://floss.social/@mapswipe"
+                            rel="me"
                             variant="icon"
                             target="_blank"
-                            title={t('twitter')}
+                            title={t('mastodon')}
                         >
-                            <IoLogoTwitter />
+                            <IoLogoMastodon />
                         </Link>
                         <Link
                             href="https://www.instagram.com/themissingmaps/"
