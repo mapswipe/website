@@ -275,6 +275,8 @@ function Project(props: Props) {
         <Page contentClassName={_cs(styles.project, className)}>
             <Head>
                 <title>{t('project-tab-head', { projectTitle: name })}</title>
+                <meta property="og:title" content={String(t('project-tab-head', { projectTitle: name }))} />
+                <meta property="twitter:title" content={String(t('project-tab-head', { projectTitle: name }))} />
             </Head>
             <Hero
                 className={styles.hero}
@@ -327,7 +329,7 @@ function Project(props: Props) {
                                     icon={<IoCalendarClearOutline />}
                                     variant="transparent"
                                 >
-                                    {t('date', { date: created })}
+                                    {t('date', { date: created, dateStyle: 'medium' })}
                                 </Tag>
                             )}
                         </div>
@@ -389,16 +391,8 @@ function Project(props: Props) {
                 actions={buildDate && (
                     t('data-last-fetched', {
                         date: (new Date(0).setUTCSeconds(Number(buildDate))),
-                        formatParams: {
-                            date: {
-                                year: 'numeric',
-                                month: 'numeric',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                second: 'numeric',
-                            },
-                        },
+                        dateStyle: 'medium',
+                        timeStyle: 'medium',
                     })
                 )}
             >
