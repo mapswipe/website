@@ -17,6 +17,7 @@ import {
     IoStatsChartSharp,
 } from 'react-icons/io5';
 
+import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import ImageWrapper from 'components/ImageWrapper';
@@ -274,9 +275,12 @@ function Project(props: Props) {
     return (
         <Page contentClassName={_cs(styles.project, className)}>
             <Head>
-                <title>{t('project-tab-head', { projectTitle: name })}</title>
-                <meta property="og:title" content={String(t('project-tab-head', { projectTitle: name }))} />
-                <meta property="twitter:title" content={String(t('project-tab-head', { projectTitle: name }))} />
+                <OgMeta
+                    title={String(t('project-tab-head', { projectTitle: name }))}
+                    // NOTE: we are not passing description as the description
+                    // is a markdown/html
+                    // description={description}
+                />
             </Head>
             <Hero
                 className={styles.hero}

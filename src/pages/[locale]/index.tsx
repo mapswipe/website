@@ -16,6 +16,7 @@ import {
     IoArrowForwardSharp,
 } from 'react-icons/io5';
 
+import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import Link from 'components/Link';
 import {
@@ -94,9 +95,9 @@ function Home(props: Props) {
     return (
         <Page contentClassName={_cs(styles.home, className)}>
             <Head>
-                <title>{t('home-tab-head')}</title>
-                <meta property="og:title" content={String(t('home-tab-head'))} />
-                <meta property="twitter:title" content={String(t('home-tab-head'))} />
+                <OgMeta
+                    title={String(t('home-tab-head'))}
+                />
             </Head>
             <Hero
                 className={styles.hero}

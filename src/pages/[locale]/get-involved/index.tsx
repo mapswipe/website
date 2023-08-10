@@ -5,6 +5,7 @@ import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
+import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import Hero from 'components/Hero';
 import Heading from 'components/Heading';
@@ -31,9 +32,9 @@ function GetInvolved(props: Props) {
     return (
         <Page contentClassName={_cs(styles.getInvolved, className)}>
             <Head>
-                <title>{t('get-involved-tab-head')}</title>
-                <meta property="og:title" content={String(t('get-involved-tab-head'))} />
-                <meta property="twitter:title" content={String(t('get-involved-tab-head'))} />
+                <OgMeta
+                    title={String(t('get-involved-tab-head'))}
+                />
             </Head>
             <Hero
                 className={styles.hero}

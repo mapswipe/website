@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation, SSRConfig } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
 import Image from 'next/image';
@@ -17,7 +17,7 @@ import i18nextConfig from '../../../next-i18next.config';
 
 import styles from './styles.module.css';
 
-interface Props extends SSRConfig {
+interface Props {
     className?: string;
 }
 
