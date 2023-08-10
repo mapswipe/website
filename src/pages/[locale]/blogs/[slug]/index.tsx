@@ -44,6 +44,8 @@ function Blog(props: Props) {
         <Page contentClassName={_cs(styles.blog, className)}>
             <Head>
                 <title>{t('blog-tab-head', { blogTitle: blog?.title })}</title>
+                <meta property="og:title" content={String(t('blog-tab-head', { blogTitle: blog?.title }))} />
+                <meta property="twitter:title" content={String(t('blog-tab-head', { blogTitle: blog?.title }))} />
             </Head>
             <Hero
                 className={styles.hero}

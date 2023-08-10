@@ -95,6 +95,8 @@ function Home(props: Props) {
         <Page contentClassName={_cs(styles.home, className)}>
             <Head>
                 <title>{t('home-tab-head')}</title>
+                <meta property="og:title" content={String(t('home-tab-head'))} />
+                <meta property="twitter:title" content={String(t('home-tab-head'))} />
             </Head>
             <Hero
                 className={styles.hero}

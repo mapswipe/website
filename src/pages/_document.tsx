@@ -15,6 +15,7 @@ class MyDocument extends Document {
         if (Array.isArray(currentLocale)) {
             [currentLocale] = currentLocale;
         }
+        const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
         return (
             <Html lang={currentLocale}>
@@ -23,6 +24,15 @@ class MyDocument extends Document {
                         rel="shortcut icon"
                         href="/logo-compact.svg"
                     />
+                    <meta property="og:title" content="MapSwipe" />
+                    <meta property="twitter:title" content="MapSwipe" />
+                    <meta property="og:type" content="website" />
+                    <meta property="og:description" content="Volunteer from your phone. Make a difference worldwide." />
+                    <meta property="og:image" content="/ms-website.png" />
+                    <meta property="og:updated_time" content={buildDate ?? '1691561444886'} />
+
+                    <meta property="twitter:description" content="Volunteer from your phone. Make a difference worldwide." />
+                    <meta property="og:image" content="/ms-website.png" />
                 </Head>
                 <body>
                     <Main />

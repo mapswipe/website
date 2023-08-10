@@ -32,6 +32,8 @@ function GetInvolved(props: Props) {
         <Page contentClassName={_cs(styles.getInvolved, className)}>
             <Head>
                 <title>{t('get-involved-tab-head')}</title>
+                <meta property="og:title" content={String(t('get-involved-tab-head'))} />
+                <meta property="twitter:title" content={String(t('get-involved-tab-head'))} />
             </Head>
             <Hero
                 className={styles.hero}
@@ -223,8 +225,8 @@ function GetInvolved(props: Props) {
                                 {t('interested-in-supporting-description-1')}
                             </p>
                             <Link
-                                className={styles.downloadLink}
                                 href="https://github.com/mapswipe/mapswipe/files/11629085/MapSwipe.2022.Financial.Report.-.20230204.pdf"
+                                variant="underline"
                                 target="_blank"
                             >
                                 {t('download-financial-report')}

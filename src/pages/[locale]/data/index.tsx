@@ -475,6 +475,8 @@ function Data(props: Props) {
         <Page contentClassName={_cs(styles.data, className)}>
             <Head>
                 <title>{t('data-tab-head')}</title>
+                <meta property="og:title" content={String(t('data-tab-head'))} />
+                <meta property="twitter:title" content={String(t('data-tab-head'))} />
             </Head>
             <Hero
                 title={t('data-page-heading')}
@@ -626,16 +628,8 @@ function Data(props: Props) {
                 description={buildDate && (
                     t('data-last-fetched', {
                         date: (new Date(0).setUTCSeconds(Number(buildDate))),
-                        formatParams: {
-                            date: {
-                                year: 'numeric',
-                                month: 'numeric',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                second: 'numeric',
-                            },
-                        },
+                        dateStyle: 'medium',
+                        timeStyle: 'medium',
                     })
                 )}
                 actions={tableProjects.length !== visibleProjects.length && (
@@ -841,7 +835,10 @@ function Data(props: Props) {
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-last-update', { date: project.created })}
+                                                    {t('project-card-last-update', {
+                                                        date: project.created,
+                                                        dateStyle: 'medium',
+                                                    })}
                                                 </Tag>
                                             )}
                                             {project.number_of_users && (

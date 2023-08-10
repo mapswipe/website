@@ -48,6 +48,8 @@ function Blogs(props: Props) {
         <Page contentClassName={_cs(styles.blogs, className)}>
             <Head>
                 <title>{t('blogs-tab-head')}</title>
+                <meta property="og:title" content={String(t('blogs-tab-head'))} />
+                <meta property="twitter:title" content={String(t('blogs-tab-head'))} />
             </Head>
             <Hero
                 className={styles.hero}
