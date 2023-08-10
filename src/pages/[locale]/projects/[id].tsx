@@ -5,7 +5,6 @@ import { SSRConfig, useTranslation } from 'next-i18next';
 import { _cs, bound } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { remark } from 'remark';
-import Head from 'next/head';
 import matter from 'gray-matter';
 import html from 'remark-html';
 import {
@@ -274,14 +273,12 @@ function Project(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.project, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('project-tab-head', { projectTitle: name }))}
-                    // NOTE: we are not passing description as the description
-                    // is a markdown/html
-                    // description={description}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('project-tab-head', { projectTitle: name }))}
+                // NOTE: we are not passing description as the description
+                // is a markdown/html
+                // description={description}
+            />
             <Hero
                 className={styles.hero}
                 mainContentClassName={styles.mainContent}

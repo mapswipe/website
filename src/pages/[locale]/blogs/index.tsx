@@ -6,7 +6,6 @@ import {
     compareDate,
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 import { IoCalendarClearOutline } from 'react-icons/io5';
 
 import Link from 'components/Link';
@@ -47,11 +46,9 @@ function Blogs(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.blogs, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('blogs-tab-head'))}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('blogs-tab-head'))}
+            />
             <Hero
                 title={t('blogs-hero-title')}
             />

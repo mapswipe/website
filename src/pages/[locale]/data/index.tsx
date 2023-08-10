@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import { GetStaticProps } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
 import { gql, request } from 'graphql-request';
-import Head from 'next/head';
 import {
     _cs,
     unique,
@@ -474,11 +473,9 @@ function Data(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.data, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('data-tab-head'))}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('data-tab-head'))}
+            />
             <Hero
                 title={t('data-page-heading')}
                 description={t('data-page-description')}
