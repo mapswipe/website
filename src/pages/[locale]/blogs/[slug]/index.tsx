@@ -4,7 +4,6 @@ import { SSRConfig, useTranslation } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { remark } from 'remark';
-import Head from 'next/head';
 import html from 'remark-html';
 import remarkGfm from 'remark-gfm';
 import {
@@ -43,12 +42,10 @@ function Blog(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.blog, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('blog-tab-head', { blogTitle: blog.title }))}
-                    description={blog.description}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('blog-tab-head', { blogTitle: blog.title }))}
+                description={blog.description}
+            />
             <Hero
                 className={styles.hero}
                 title={blog?.title}

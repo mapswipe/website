@@ -7,7 +7,6 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import matter from 'gray-matter';
 import html from 'remark-html';
-import Head from 'next/head';
 
 import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
@@ -112,11 +111,9 @@ function GetInvolved(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.privacy, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('privacy-tab-head'))}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('privacy-tab-head'))}
+            />
             <Hero
                 className={styles.hero}
                 title={t('privacy-hero-title')}

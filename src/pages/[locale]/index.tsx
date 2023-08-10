@@ -10,7 +10,6 @@ import {
     gql,
     request,
 } from 'graphql-request';
-import Head from 'next/head';
 import {
     IoCalendarClearOutline,
     IoArrowForwardSharp,
@@ -94,11 +93,9 @@ function Home(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.home, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('home-tab-head'))}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('home-tab-head'))}
+            />
             <Hero
                 className={styles.hero}
                 title={t('hero-title')}

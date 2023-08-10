@@ -3,7 +3,6 @@ import { GetStaticProps } from 'next';
 import { useTranslation, SSRConfig } from 'next-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 
 import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
@@ -31,11 +30,9 @@ function GetInvolved(props: Props) {
 
     return (
         <Page contentClassName={_cs(styles.getInvolved, className)}>
-            <Head>
-                <OgMeta
-                    title={String(t('get-involved-tab-head'))}
-                />
-            </Head>
+            <OgMeta
+                title={String(t('get-involved-tab-head'))}
+            />
             <Hero
                 className={styles.hero}
                 title={t('hero-title')}
