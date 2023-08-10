@@ -16,6 +16,7 @@ import Page from 'components/Page';
 import Hero from 'components/Hero';
 import Section from 'components/Section';
 import getBlogs, { Blog } from 'utils/requests/getBlogs';
+import OgMeta from 'components/OgMeta';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
@@ -47,12 +48,11 @@ function Blogs(props: Props) {
     return (
         <Page contentClassName={_cs(styles.blogs, className)}>
             <Head>
-                <title>{t('blogs-tab-head')}</title>
-                <meta property="og:title" content={String(t('blogs-tab-head'))} />
-                <meta property="twitter:title" content={String(t('blogs-tab-head'))} />
+                <OgMeta
+                    title={String(t('blogs-tab-head'))}
+                />
             </Head>
             <Hero
-                className={styles.hero}
                 title={t('blogs-hero-title')}
             />
             {featuredBlogs.length > 0 && (

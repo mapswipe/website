@@ -12,6 +12,7 @@ import {
     IoCalendarClearOutline,
 } from 'react-icons/io5';
 
+import OgMeta from 'components/OgMeta';
 import ImageWrapper from 'components/ImageWrapper';
 import Tag from 'components/Tag';
 import Page from 'components/Page';
@@ -43,9 +44,10 @@ function Blog(props: Props) {
     return (
         <Page contentClassName={_cs(styles.blog, className)}>
             <Head>
-                <title>{t('blog-tab-head', { blogTitle: blog?.title })}</title>
-                <meta property="og:title" content={String(t('blog-tab-head', { blogTitle: blog?.title }))} />
-                <meta property="twitter:title" content={String(t('blog-tab-head', { blogTitle: blog?.title }))} />
+                <OgMeta
+                    title={String(t('blog-tab-head', { blogTitle: blog.title }))}
+                    description={blog.description}
+                />
             </Head>
             <Hero
                 className={styles.hero}

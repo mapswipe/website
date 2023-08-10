@@ -24,6 +24,7 @@ import {
     IoEllipseSharp,
 } from 'react-icons/io5';
 
+import OgMeta from 'components/OgMeta';
 import Button from 'components/Button';
 import Tag from 'components/Tag';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
@@ -474,9 +475,9 @@ function Data(props: Props) {
     return (
         <Page contentClassName={_cs(styles.data, className)}>
             <Head>
-                <title>{t('data-tab-head')}</title>
-                <meta property="og:title" content={String(t('data-tab-head'))} />
-                <meta property="twitter:title" content={String(t('data-tab-head'))} />
+                <OgMeta
+                    title={String(t('data-tab-head'))}
+                />
             </Head>
             <Hero
                 title={t('data-page-heading')}
