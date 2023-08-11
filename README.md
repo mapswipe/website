@@ -82,7 +82,8 @@ latest data from MapSwipe database.
 - **_NOTE: Reviewers must have appropriate permission_**
 
 ### Update The Website
-- After all the strings are 100% translated and reviewed in Transifex, a pull request will be sent to the main branch  
+- After all the strings are 100% translated in Transifex, a pull request will be sent to the main branch
+- Each resource (file) will be committed in the same PR (if not merged) as soon as it is 100% translated  
 - Merging the pull request will trigger a latest build and the same will be deployed in production
 - **IF LANGUAGE IS NOT PRESENT IN THE WEBSITE**
 - Add the supported language as per the [supported languages](https://github.com/mapswipe/website#supported-languages) guide below
