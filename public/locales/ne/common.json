@@ -1,6 +1,6 @@
 {
   "footer-about-us-title": "हाम्रो बारे",
-  "footer-about-us-description": "MapSwipe एक बहुमुखी मोबाइल एप हो जसले स्वयंसेवकहरूको सामूहिक शक्तिलाई भू-स्थानिक डाटा परियोजनाहरूमा सक्रिय रूपमा प्रयोग गर्छ।",
+  "footer-about-us-description": "MapSwipe ले भू-स्थानिक डाटा परियोजनाहरूमा सक्रिय रूपमा योगदान गर्न स्वयंसेवकहरूको सामूहिक शक्तिको उपयोग गर्दछ।",
   "footer-quick-links": "द्रुत लिङ्कहरू",
   "home-link": "घर",
   "get-involved-link": "संलग्न हुनुहोस्",
@@ -8,16 +8,16 @@
   "blogs-link": "ब्लगहरू",
   "community-dashboard-link": "समुदाय",
   "footer-follow-us-title": "हामीलाई फलो गर्नुहोस् ",
-  "facebook": "Facebook",
-  "mastodon": "",
-  "instagram": "Instagram",
+  "facebook": "फेसबुक",
+  "mastodon": "मास्टोडन",
+  "instagram": "इन्स्टाग्राम",
   "github": "Github",
   "osm-wiki": "OSM Wiki",
-  "email": "Email",
-  "copyright": "Copyright © 2023 MapSwipe",
+  "email": "इमेल",
+  "copyright": "प्रतिलिपि अधिकार © 2023 MapSwipe",
   "privacy": "गोपनीयता",
-  "mapswipe-logo": "Mapswipe Logo",
+  "mapswipe-logo": "Mapswipe लोगो",
   "didnot-find-language": "छुटेको भाषा थप्नुहोस्",
-  "meta-page-title": "",
-  "meta-page-description": ""
+  "meta-page-title": "MapSwipe",
+  "meta-page-description": "आफ्नो फोनबाट स्वयंसेवक। विश्वव्यापी रूपमा फरक पार्नुहोस्।"
 }
