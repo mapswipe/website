@@ -90,22 +90,12 @@ latest data from MapSwipe database.
 
 ## Supported Languages
 
-Languages listed in [i18next-parser.config.js](https://github.com/mapswipe/community-website/blob/main/i18next-parser.config.js)
-are listed as options to view the website in that particular language.
+Languages are added to website via the configuration in [i18next-parser.config.js](https://github.com/mapswipe/community-website/blob/main/i18next-parser.config.js), which pulls the language list from [languages.ts](https://github.com/mapswipe/website/blob/main/src/utils/languages.ts).
 
 To add a new language option, user should add [ISO_639-1](https://en.wikipedia.org/wiki/ISO_639-1)
-code of that language to the list.
+code, title, and abbreviation to the list in `languages.ts` following the same format as the existing languages.
 
-```js
-module.exports = {
-    locales: ['en', 'ne'] // NOTE: add ISO code in this list,
-};
-```
-
-Language's title and abbreviation in the selected langauge, needs to be added
-in [languages.ts](https://github.com/mapswipe/community-website/blob/main/src/utils/langauges.ts).
-
-After the language settings are added, user should generate the langauge files.
+After the language settings are added, user should generate the language files.
 
 ```bash
 yarn generate:i18n
