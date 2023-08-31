@@ -29,13 +29,13 @@ The MapSwipe app is open source, which means that its code is made public under 
 
 Glad you asked! While artificial intelligence and machine learning hold great promise for accelerating mapping efforts, we have not yet reached the point where human insight and oversight is no longer needed. There is still a significant need for human judgment and discretion when validating map data, assessing quality, and ensuring responsible data practices. As AI and ML progress, our goal is to augment human abilities rather than replace them entirely. 
 
-![generic icon to represent artificial intelligence](/img/posts/2023-08-22-noun-5960267.png)
+![generic icon to represent artificial intelligence](/img/blogImages/2023-08-22-noun-5960267.png)
 
 ## MapSwipe Data Outputs
 
 MapSwipe provides volunteers with satellite imagery of specific areas of interest from around the world. Depending on a project's objectives, volunteers are asked to identify and locate various features on the ground, detect changes in environments or structures, or validate the accuracy of existing mapped data. Each completed project creates data that can be used for humanitarian mapping or research purposes. 
 
-![screen grab of the data page on the MapSwipe website](/img/posts/2023-08-22-data-page.png)
+![screen grab of the data page on the MapSwipe website](/img/blogImages/2023-08-22-data-page.png)
 
 All MapSwipe data outputs are open and available. They can be searched and downloaded from MapSwipe’s [data page](https://mapswipe.org/en/data/).
 
@@ -49,19 +49,19 @@ To bolster and expand that impact, the American Red Cross has supported upgrades
 
 As a community-driven platform that crowdsources results, MapSwipe relies on the dedication of its volunteers. MapSwipe volunteers and partners can now easily track their contribution stats, as well as see how their efforts fit into the bigger picture on the new [Community page](https://community.mapswipe.org/) launched earlier this year. Details such as the number of tasks completed, number of organizations supported, and other impact metrics are refreshed daily. In addition, a new functionality allows groups of volunteers to aggregate their collective contributions to app projects.
 
-![screen grab of the community page on the MapSwipe website](/img/posts/2023-08-22-community-page.jpg)
+![screen grab of the community page on the MapSwipe website](/img/blogImages/2023-08-22-community-page.jpg)
 
 ### MapSwipe website refresh
 
 The [MapSwipe website](https://mapswipe.org/en/) has been given a modern, visually-appealing makeover. The new design makes it easier for new volunteers to learn about the app and improved navigation and intuitive layouts help visitors find information relevant to them  whether they want to get involved at an individual or community level, partner as an organization with MapSwipe, or access all app data outputs.
 
-![screen grab of the landing page on the MapSwipe website](/img/posts/2023-08-22-website.png)
+![screen grab of the landing page on the MapSwipe website](/img/blogImages/2023-08-22-website.png)
 
 ### Enhanced customization of projects
 
 Behind the scenes, project creators can add more information into project tutorials, better supporting volunteers in their learning journey. Additionally, the Validate project type now has configurable answer options and sub-options, allowing more detailed quality assessment of mapped areas. These increases in flexibility expand the types of mapping MapSwipe supports. 
 
-![screen grabs from app showing validate project type with new sub options](/img/posts/2023-08-22-validate.png) 
+![screen grabs from app showing validate project type with new sub options](/img/blogImages/2023-08-22-validate.png) 
 
 ## How you can get involved!
 
