@@ -3,7 +3,7 @@ title: MapSwipe app lets public help deliver medical care to most vulnerable
 publishedDate: 2016-07-19
 author: Médecins Sans Frontières (MSF)
 description: Médecins Sans Frontières (MSF) unveils a first-of-its-kind mobile phone app in which people across the globe can locate communities in remote parts of the world affected by natural disasters, disease outbreaks or conflict.
-coverImage: /img/blogImages/
+coverImage: /img/blogImages/2016-07-19-MapSwipe-user.jpg
 featured: false
 ---
 
