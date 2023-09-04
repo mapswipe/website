@@ -12,7 +12,11 @@ const languageTitleMap: Record<string, {
     },
     hu: {
         abbreviation: 'HU',
-        label: 'Hungarian',
+        label: 'Magyar nyelv',
+    },
+    de: {
+        abbreviation: 'DE',
+        label: 'Deutsch',
     },
 };
 
