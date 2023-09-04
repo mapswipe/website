@@ -102,10 +102,10 @@ module.exports = {
 };
 ```
 
-Language's title and abbreviation in the selected langauge, needs to be added
-in [languages.ts](https://github.com/mapswipe/community-website/blob/main/src/utils/langauges.ts).
+Language's title and abbreviation in the selected language, needs to be added
+in [languages.ts](https://github.com/mapswipe/community-website/blob/main/src/utils/languages.ts).
 
-After the language settings are added, user should generate the langauge files.
+After the language settings are added, user should generate the language files.
 
 ```bash
 yarn generate:i18n
