@@ -416,7 +416,10 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const value: Stats = await request(graphqlEndpoint, stats);
     const blogs = await getBlogs();
 
-    const featuredBlogs = blogs
+    const sortedBlogs = [...blogs]
+        .sort((foo, bar) => compareDate(foo.publishedDate, bar.publishedDate, -1));
+
+    const featuredBlogs = sortedBlogs
         .filter((blog) => blog.featured)
         .slice(0, 3)
         .map((blog) => ({
@@ -429,15 +432,12 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             featured: blog.featured,
         }));
 
-    const sortedBlogs = [...featuredBlogs]
-        .sort((foo, bar) => compareDate(foo.publishedDate, bar.publishedDate, -1));
-
     return {
         props: {
             ...translations,
             totalContributors: value.communityStats?.totalContributors,
             totalSwipes: value.communityStats?.totalSwipes,
-            featuredBlogs: sortedBlogs,
+            featuredBlogs,
         },
     };
 };
