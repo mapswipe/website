@@ -24,7 +24,7 @@
   "build-area": "Finden",
   "footprint": "Bestätigen",
   "change-detection": "Vergleichen",
-  "project-tab-head": "{{ProjektTitel}} | MapSwipe",
+  "project-tab-head": "{{projectTitle}} | MapSwipe",
   "Location": "Standort",
   "requesting-organization": "Anfordernde Organisation",
   "created-at": "Erstellt in",
