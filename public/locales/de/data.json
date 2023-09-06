@@ -49,7 +49,7 @@
   "date-to-label": "Bis",
   "clear-filters": "Filter entfernen",
   "bubble-type": "Skala",
-  "visible-projects-count": "{{gesamtProjekte, Nummer}} Projekte",
+  "visible-projects-count": "{{totalProjects, number}} Projekte",
   "total-area-card-text": "{{Bereich, Nummer}} Kartografierter Bereich",
   "Location": "Standort",
   "requesting-organization": "Um Mithilfe bittende Organisation",
