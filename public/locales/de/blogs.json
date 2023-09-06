@@ -2,7 +2,7 @@
   "blogs-tab-head": "Blog | Mapswipe",
   "blogs-hero-title": "Blog",
   "featured-posts": "Vorgestellt",
-  "date": "{{Datum, Uhrzeit}}",
+  "date": "{{date, datetime}}",
   "read-more": "Weiter lesen",
   "other-posts": "Anderes"
 }
