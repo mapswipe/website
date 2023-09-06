@@ -33,7 +33,7 @@
   "project-contributors-text": "Mitwirkende",
   "data-last-fetched": "Zuletzt aktualisiert: {{date, datetime}}",
   "project-progress-label": "Projektabschluss",
-  "project-card-progress-text": "{{Prozess, Nummer}}% beendet",
+  "project-card-progress-text": "{{progress, number}}% beendet",
   "data-section-heading": "Daten herunterladen",
   "data-section-description": "Unten findest du die heruntergeladenen Dateien für das MapSwipe Projekt, inklusive einer GeoJSON Datei die für detaillierteres Kartieren des Bereichs in den HOT Tasking Manager importiert werden kann. Wenn du weitere Informationen benötigst oder eine spezielle Anfrage zu den MapSwipe-Daten hast, wende dich bitte an das Team des Heidelberger Instituts für Geoinformationstechnik.",
   "download-size": "{{Größe, Nummer}}",
