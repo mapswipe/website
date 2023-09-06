@@ -28,7 +28,7 @@
   "get-involved-description": "Erfahre mehr darüber, wie Einzelpersonen, Gruppen und Organisationen einen Beitrag zur Gemeinschaft leisten können.",
   "get-involved-link": "Sei dabei!",
   "news-and-updates-title": "Neuigkeiten & Updates",
-  "date": "{{Datum, Uhrzeit}}",
+  "date": "{{date, datetime}}",
   "read-more": "Weiterlesen",
   "see-more-pages": "Alle Beiträge ansehen",
   "partners": "Partner",
