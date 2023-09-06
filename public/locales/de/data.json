@@ -38,7 +38,7 @@
   "type-validate-key-point-2": "Identifiziere korrekt und falsch zugeordnete Merkmale",
   "type-validate-key-point-3": "Fokussiere dich auf Zukünftige Features die verbessert werden müssen",
   "explore-section-heading": "Erkunde die Daten",
-  "data-last-fetched": "zuletzt aktualisiert: {{Datum, Uhrzeit}}",
+  "data-last-fetched": "zuletzt aktualisiert: {{date, datetime}}",
   "see-more-button": "Mehr anzeigen",
   "project-status": "Projektstatus",
   "project-type": "Projekttyp",
