@@ -3,7 +3,7 @@ title: "The early history of MapSwipe"
 publishedDate: 2023-11-14
 author: Ivan Gayton, Pete Masters, and Dan Joseph
 description: "The real story of MapSwipe is the volunteers who give their time to improve humanitarian mapping, the agencies that use the data to save and improve lives, and the incredible developers who continue to build and maintain MapSwipe and make it a key tool in the open mapping ecosystem. However, we hope people sometimes remember how we originally built MapSwipe."
-coverImage: /img/blogImages/2023-11-14-cover.jpg
+coverImage: /img/blogImages/2023-11-14-cover.jpeg
 featured: false
 ---
 
