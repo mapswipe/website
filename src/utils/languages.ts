@@ -18,6 +18,10 @@ const languageTitleMap: Record<string, {
         abbreviation: 'DE',
         label: 'Deutsch',
     },
+    cs: {
+        abbreviation: 'CS',
+        label: 'Čeština',
+    },
 };
 
 export default languageTitleMap;
