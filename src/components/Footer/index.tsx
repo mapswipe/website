@@ -140,7 +140,11 @@ function Footer(props: Props) {
             <div className={styles.bottomContainer}>
                 <div className={styles.content}>
                     <div className={styles.leftContainer}>
-                        {t('copyright')}
+                        Copyright &copy;
+                        {' '}
+                        {new Date().getFullYear()}
+                        {' '}
+                        MapSwipe
                     </div>
                     <div className={styles.rightContainer}>
                         <Link
