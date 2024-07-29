@@ -1,3 +1,3 @@
 module.exports = {
-    locales: ['en', 'ne', 'hu', 'de', 'cs'],
+    locales: ['en', 'ne', 'hu', 'de', 'cs', 'pt'],
 };
