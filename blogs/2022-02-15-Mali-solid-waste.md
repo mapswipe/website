@@ -4,7 +4,7 @@ publishedDate: 2022-02-15
 author: Jessica Bergmann
 description: To support economic livelihoods and resilience, the World Bank partnered with MapSwipe to identify solid waste in Bamako, Mali.
 coverImage: /img/blogImages/2022-02-15-Mali-solid-waste.jpg
-featured: true
+featured: false
 ---
 
 ## Summary
