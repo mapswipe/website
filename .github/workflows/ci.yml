@@ -14,14 +14,14 @@ jobs:
     name: Lint + Type Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
           cache: 'yarn'
 
       # Pre-commit
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
       - name: Install pre-commit
         run: pip install pre-commit
 
