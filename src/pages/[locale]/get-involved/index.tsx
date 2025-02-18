@@ -223,7 +223,7 @@ function GetInvolved(props: Props) {
                                 {t('interested-in-supporting-description-1')}
                             </p>
                             <Link
-                                href="https://github.com/mapswipe/mapswipe/files/11629085/MapSwipe.2022.Financial.Report.-.20230204.pdf"
+                                href="https://github.com/user-attachments/files/18838540/MapSwipe.2024.Financial.Report.pdf"
                                 variant="underline"
                                 target="_blank"
                             >
