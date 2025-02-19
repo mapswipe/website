@@ -27,6 +27,7 @@ function Footer(props: Props) {
     } = props;
 
     const { t } = useTranslation('common');
+    const currentYear = new Date().getFullYear();
 
     return (
         <div className={_cs(className, styles.footer)}>
@@ -140,7 +141,7 @@ function Footer(props: Props) {
             <div className={styles.bottomContainer}>
                 <div className={styles.content}>
                     <div className={styles.leftContainer}>
-                        {t('copyright')}
+                        {t('copyright', { year: currentYear })}
                     </div>
                     <div className={styles.rightContainer}>
                         <Link
