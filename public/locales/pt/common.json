@@ -14,7 +14,7 @@
   "github": "Github",
   "osm-wiki": "Wiki OSM",
   "email": "Email",
-  "copyright": "Direitos de autor © {year} MapSwipe",
+  "copyright": "Direitos de autor © {{year}} MapSwipe",
   "privacy": "Privacidade",
   "mapswipe-logo": "Logótipo Mapswipe",
   "didnot-find-language": "Adicionar idioma em falta",

@@ -14,7 +14,7 @@
   "github": "Github",
   "osm-wiki": "OSM Wiki",
   "email": "E-mail",
-  "copyright": "Copyright © {year} MapSwipe",
+  "copyright": "Copyright © {{year}} MapSwipe",
   "privacy": "Soukromí",
   "mapswipe-logo": "Mapswipe Logo",
   "didnot-find-language": "Přidat chybějící jazyk",

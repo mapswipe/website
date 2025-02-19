@@ -14,7 +14,7 @@
   "github": "Github",
   "osm-wiki": "OSM Wiki",
   "email": "इमेल",
-  "copyright": "प्रतिलिपि अधिकार © {year} MapSwipe",
+  "copyright": "प्रतिलिपि अधिकार © {{year}} MapSwipe",
   "privacy": "गोपनीयता",
   "mapswipe-logo": "Mapswipe लोगो",
   "didnot-find-language": "छुटेको भाषा थप्नुहोस्",
