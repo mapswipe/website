@@ -1,6 +1,6 @@
 {
   "footer-about-us-title": "À propos de nous",
-  "footer-about-us-description": "MapSwipe concentre les forces des bénévoles pour contribuer activement aux projets de données géospatiales.",
+  "footer-about-us-description": "MapSwipe exploite la force collective des bénévoles pour contribuer activement aux projets de données géospatiales.",
   "footer-quick-links": "Liens rapides",
   "home-link": "Accueil",
   "get-involved-link": "Participez",
@@ -11,13 +11,13 @@
   "facebook": "Facebook",
   "mastodon": "Mastodon",
   "instagram": "Instagram",
-  "github": "GitHub",
+  "github": "Github",
   "osm-wiki": "OSM Wiki",
-  "email": "E-mail",
-  "copyright": "Copyright © 2023 MapSwipe",
+  "email": "Courriel",
+  "copyright": "Copyright © {year} MapSwipe",
   "privacy": "Confidentialité",
   "mapswipe-logo": "Logo Mapswipe",
   "didnot-find-language": "Ajouter une langue manquante",
   "meta-page-title": "MapSwipe",
-  "meta-page-description": "Contribuez depuis votre téléphone. Faites une différence dans le monde entier."
+  "meta-page-description": "Bénévole depuis votre téléphone. Faites une différence dans le monde entier."
 }
