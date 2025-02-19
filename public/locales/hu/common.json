@@ -14,7 +14,7 @@
   "github": "GitHub",
   "osm-wiki": "OSM Wiki",
   "email": "E-mail",
-  "copyright": "Copyright © 2023 MapSwipe",
+  "copyright": "Copyright © {year} MapSwipe",
   "privacy": "Adatvédelem",
   "mapswipe-logo": "Mapswipe logo",
   "didnot-find-language": "Hiányzó nyelv hozzáadása",
