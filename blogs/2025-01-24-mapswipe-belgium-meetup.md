@@ -3,7 +3,7 @@ title: MapSwipe Belgium Meetup
 publishedDate: 2025-02-20
 author: Amar Shahi
 description: This article summarizes the key highlights of Mapswipe Belgium meetup 2024.
-coverImage: /img/blogImages/2025-01-25-mapswipe-belgium-meetup-1.jpeg
+coverImage: /img/blogImages/2025-01-24-mapswipe-belgium-meetup-1.jpg
 featured: true
 ---
 
@@ -13,7 +13,7 @@ In mid-November 2024, the MapSwipe community gathered in Brussels for a four-day
 ## Day 1: Reflecting on Technology and Challenges
 The meetup kicked off with a deep dive into MapSwipe’s history and memories. From its beginnings in 2015 as a crowdsourcing tool to its current role in global humanitarian mapping, The group then revisited the platform’s history, reflecting on milestones such as its 2015 prototype, the 2016 app launch, and the evolution of the app, website refresh and now [MapSwipe for Web](https://web.mapswipe.org/#/en).
 
-![Meetup Image One](/img/blogImages/2025-01-25-mapswipe-belgium-meetup-1.jpeg)
+![Meetup Image One](/img/blogImages/2025-01-24-mapswipe-belgium-meetup-1.jpg)
 
 After reflecting on Mapswipe’s history from a prototype in 2015 to the mobile and web apps it is today, the latter half of the day was dedicated to examining the technical aspects of MapSwipe. The group reflected on the platform’s evolution from a web-based prototype in 2015 to the current app and web versions. The group also discussed various technical challenges that currently exist. Key technical topics included:
 * **System Complexity:** Participants discussed how the platform’s growing features have increased complexity, creating challenges in onboarding developers and maintaining the ecosystem.
@@ -40,7 +40,7 @@ The third day of the meetup was dedicated to MapSwipe’s sustainability—fundi
 
 The day began with Amar presenting a recap of the financial overview of MapSwipe for the year 2024. The presentation also focused on the detailed contributions made by each organization and a check on MapSwipe financial health. There was also a discussion on any potential funding that the participants are willing to make in 2025. Check the detailed presentation [here](https://docs.google.com/presentation/d/1lWwv82gemDybxFjAF_vUJ4H58tpI1Vwh/edit#slide=id.g3145f004ab7_0_172).
 
-![Meetup Image Two](/img/blogImages/2025-01-25-mapswipe-belgium-meetup-2.jpeg)
+![Meetup Image Two](/img/blogImages/2025-01-24-mapswipe-belgium-meetup-2.jpg)
 
 The second half of Day 3 focused on a brainstorming session on funding ideas. The participants were divided into 3 groups:
 
@@ -81,12 +81,12 @@ The roadmap was divided into 2 sections:
 
 Through rigorous discussion and voting, the participants decided on the following [roadmap](https://app.mural.co/t/katkinzer9715/m/katkinzer9715/1731585514072/0423daffb9fc8a287f3591a4db711e8c90474c8f):
 
-![Meetup Image Three](/img/blogImages/2025-01-25-mapswipe-belgium-meetup-3.jpeg)
-![Meetup Image Four](/img/blogImages/2025-01-25-mapswipe-belgium-meetup-4.jpeg)
+![Meetup Image Three](/img/blogImages/2025-01-24-mapswipe-belgium-meetup-3.jpg)
+![Meetup Image Four](/img/blogImages/2025-01-24-mapswipe-belgium-meetup-4.jpg)
 
 ## In Conclusion
 As we look to the future, the insights and plans generated during this workshop will help shape MapSwipe’s trajectory. Whether you’re a mapper, an organization, or a supporter, there’s a place for you in this journey. Together, we can continue to map what matters and make every swipe count.
-![Meetup Image Five](/img/blogImages/2025-01-25-mapswipe-belgium-meetup-5.jpeg)
+![Meetup Image Five](/img/blogImages/2025-01-24-mapswipe-belgium-meetup-5.jpg)
 
 #### Important Links from the MapSwipe Meetup 2024
 Here are all the key resources and links shared during the meetup:
