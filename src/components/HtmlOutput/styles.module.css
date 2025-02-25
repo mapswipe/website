@@ -33,14 +33,15 @@
         font-size: var(--font-size-extra-small);
     }
 
-    p {
+    p, li {
         max-width: 60rem;
         color: var(--color-text);
         font-size: var(--font-size-medium);
     }
 
     a {
-        max-width: 60rem;
+        max-width: clamp(100%, 60rem, 100%);
+        word-break: break-word;
         color: var(--color-link);
         font-size: var(--font-size-medium);
 
@@ -50,7 +51,7 @@
     }
 
     img {
-        max-width: 60rem;
+        max-width: clamp(100%, 60rem, 100%);
         object-fit: contain;
     }
 
