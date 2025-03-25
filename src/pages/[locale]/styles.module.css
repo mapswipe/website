@@ -193,8 +193,14 @@
                         }
                     }
 
-                    .downloadLink {
-                        color: var(--color-link);
+                    .downloadLinksContainer {
+                        display: flex;
+                        justify-content: center;
+                        gap: var(--spacing-medium);
+
+                        .downloadLink {
+                            color: var(--color-link);
+                        }
                     }
                 }
             }

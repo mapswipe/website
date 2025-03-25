@@ -280,13 +280,23 @@ function Home(props: Props) {
                                 />
                             </Link>
                         </div>
-                        <Link
-                            className={styles.downloadLink}
-                            href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
-                            target="_blank"
-                        >
-                            {t('download-apk-label')}
-                        </Link>
+                        <div className={styles.downloadLinksContainer}>
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://web.mapswipe.org/"
+                                target="_blank"
+                            >
+                                {t('mapswipe-web-link')}
+                            </Link>
+                            |
+                            <Link
+                                className={styles.downloadLink}
+                                href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
+                                target="_blank"
+                            >
+                                {t('download-apk-label')}
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.getInvolved}>
