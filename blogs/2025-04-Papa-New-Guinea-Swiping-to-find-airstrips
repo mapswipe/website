@@ -12,10 +12,10 @@ Many settlements on the islands of Papua New Guinea are in areas so remote that 
 
 PICTURE
 
-Médecins Sans Frontières, a humanitarian medical organization and a founding member of the Missing Maps project, uses small airstrips to deliver supplies and personnel to remote regions. For Médecins Sans Frontières (MSF), it is thus essential to know whether there are existing airstrips and where they are located. In a MapSwipe project, MSF asked volunteers to identify rural airstrips in the Jiwaka province, where aid can be delivered to and from.
+[Médecins Sans Frontières](https://www.msf.org/), a humanitarian medical organization and a founding member of the [Missing Maps ](https://www.missingmaps.org/)project, uses small airstrips to deliver supplies and personnel to remote regions. For Médecins Sans Frontières (MSF), it is thus essential to know whether there are existing airstrips and where they are located. In a MapSwipe project, MSF asked volunteers to identify rural airstrips in the Jiwaka province, where aid can be delivered to and from.
 
 ## Inputs for Mapswipe to get airstrips as outputs
-The first MapSwipe project covering the extent of Jiwaka Province (4,864 km2) was released on June 14, 2024. Since this was the first time MapSwipe was used to identify airstrips, a new tutorial was created by MSF’s Missing Maps team. Examples were shown of easily identifiable airstrips, moderately identifiable airstrips, rivers, towns, and cloud-covered tiles of imagery. Each imagery tile on MapSwipe was shown to three different contributors before it was considered completed. This number is referred to as 'Validation Size'. On the mobile app, 52 users contributed, and completed the project within one day. They swiped on high-resolution Bing Imagery at Zoom Level 16, producing this data, accessible on the MapSwipe website: Airstrips in Jiwaka Province (1). 
+The first MapSwipe project covering the extent of Jiwaka Province (4,864 km2) was released on June 14, 2024. Since this was the first time MapSwipe was used to identify airstrips, a new tutorial was created by MSF’s Missing Maps team. Examples were shown of easily identifiable airstrips, moderately identifiable airstrips, rivers, towns, and cloud-covered tiles of imagery. Each imagery tile on MapSwipe was shown to three different contributors before it was considered completed. This number is referred to as 'Validation Size'. On the mobile app, 52 users contributed, and completed the project within one day. They swiped on high-resolution Bing Imagery at Zoom Level 16, producing this data, accessible on the MapSwipe website: [Airstrips in Jiwaka Province (1) ](https://mapswipe.org/en/projects/-O-LCZ_RYUtjvm-PZOKa/). 
 Volunteers marked tiles as Green or Yellow 21 times, which were subsequently classified via visual interpretation by two MSF staff members as
 Airstrips: 6
 Potential airstrip: 1
@@ -24,11 +24,11 @@ Farmland: 3
 River: 1
 Cloud covered: 1
 The contributors seemed to be confused with other features, misidentifying forested land, farmland, and cloud-covered areas as airstrips.
-The study compared the findings from the Mapswipe dataset against four different data sources: OpenStreetMap (OSM), MAF in Papua New Guinea database, OurAirports, and an internal MSF database. From analysing these datasets, it could be concluded that there are a total of 11 unique airstrips in Jiwaka Province. OSM was the most comprehensive dataset and contained 10 out of 11 airstrips. 
+The study compared the findings from the Mapswipe dataset against four different data sources: OpenStreetMap (OSM), [MAF in Papua New Guinea database, OurAirports](https://data.humdata.org/dataset/papua-new-guinea-airports?), and an internal MSF database. From analysing these datasets, it could be concluded that there are a total of 11 unique airstrips in Jiwaka Province. OSM was the most comprehensive dataset and contained 10 out of 11 airstrips. 
 
 PICTURE
 
-Adapting the validation size to increase the number of contributors seeing each tile to five helped to improve accuracy. In the second project iteration, the contributors managed to detect all 11 airstrips within Jiwaka province, including four airstrips that were missed in the first project. The results of Project 2 are accessible on the MapSwipe website here: Find - Airstrips in Jiwaka Province (2) | MapSwipe 
+Adapting the validation size to increase the number of contributors seeing each tile to five helped to improve accuracy. In the second project iteration, the contributors managed to detect all 11 airstrips within Jiwaka province, including four airstrips that were missed in the first project. The results of Project 2 are accessible on the MapSwipe website here: [Find - Airstrips in Jiwaka Province (2) | MapSwipe ](https://mapswipe.org/en/projects/-O-k29apT1Q8V8IAMrkS/)
 The one airstrip identified that was still missing from OSM was added to OSM via JOSM.
 There is one caveat: in Project 2, one airstrip was missed, the Kombaku airstrip that lies outside of the Jiwaka Province but was included within the MapSwipe geometries. Taking this airstrip into account as well, the MapSwipe contributors found 11 out of 12 airstrips, which is 91.7% of the airstrips in the area studied.
 
