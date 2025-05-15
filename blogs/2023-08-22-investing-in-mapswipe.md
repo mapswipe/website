@@ -4,7 +4,7 @@ publishedDate: 2023-08-22
 author: Kat Kinzer
 description: To bolster and expand the impact of MapSwipe, the American Red Cross has supported upgrades to the app.
 coverImage: /img/blogImages/2023-08-22-cover.jpg
-featured: true
+featured: false
 ---
 
 ## Data Everywhere

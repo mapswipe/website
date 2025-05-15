@@ -4,7 +4,7 @@ publishedDate: 2023-01-31
 author: Dan Joseph and Kat Kinzer
 description: We are excited that the American Red Cross has supported the development and launch of new functionalities for contribution analytics including the concept of groups which allow users to aggregate tallies of their efforts.
 coverImage: /img/blogImages/2023-01-31-tallying-community-contributions.jpg
-featured: true
+featured: false
 ---
 
 ## Summary
