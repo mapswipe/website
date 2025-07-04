@@ -340,6 +340,13 @@ function Data(props: Props) {
                 <ProjectTypeIcon type="3" size="small" />
             ),
         },
+        {
+            key: '10',
+            label: t('validate-image'),
+            icon: (
+                <ProjectTypeIcon type="10" size="small" />
+            ),
+        },
     ]), [t]);
 
     const projectTypeOptionsMap = useMemo(() => (

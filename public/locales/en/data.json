@@ -4,6 +4,7 @@
   "build-area": "Find",
   "footprint": "Validate",
   "change-detection": "Compare",
+  "validate-image": "Validate Image",
   "project-card-progress-text": "{{progress, number}}% completed",
   "project-card-last-update": "{{date, datetime}}",
   "project-card-contributors-text": "{{contributors}}",

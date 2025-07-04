@@ -7,6 +7,7 @@ import {
     ProjectStatus,
     ProjectType,
     parseProjectName,
+    supportedProjectTypes,
 } from 'utils/common';
 
 const readFile = util.promisify(fs.readFile);
@@ -81,10 +82,10 @@ const getProjectCentroids = memoize(async (): Promise<ProjectResponse> => {
     const filteredProjects = {
         ...projects,
         features: projects.features.filter((feature) => {
-            if (!feature.geometry) {
+            if (!supportedProjectTypes.includes(feature.properties.project_type)) {
                 return false;
             }
-            if (feature.properties.project_type > 3) {
+            if (feature.properties.project_type !== 10 && !feature.geometry) {
                 return false;
             }
             return (

@@ -24,6 +24,7 @@
   "build-area": "Find",
   "footprint": "Validate",
   "change-detection": "Compare",
+  "validate-image": "Validate Image",
   "project-tab-head": "{{projectTitle}} | MapSwipe",
   "Location": "Location",
   "requesting-organization": "Requesting organization",
