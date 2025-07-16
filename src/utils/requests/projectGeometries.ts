@@ -7,6 +7,7 @@ import {
     ProjectType,
     timeIt,
     parseProjectName,
+    supportedProjectTypes,
 } from 'utils/common';
 
 const readFile = util.promisify(fs.readFile);
@@ -77,7 +78,7 @@ const getProjectGeometries = memoize(async (): Promise<ProjectGeometryResponse> 
             if (!feature.geometry) {
                 return false;
             }
-            if (feature.properties.project_type > 3) {
+            if (!supportedProjectTypes.includes(feature.properties.project_type)) {
                 return false;
             }
             return (
