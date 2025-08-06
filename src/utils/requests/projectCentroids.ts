@@ -85,9 +85,6 @@ const getProjectCentroids = memoize(async (): Promise<ProjectResponse> => {
             if (!supportedProjectTypes.includes(feature.properties.project_type)) {
                 return false;
             }
-            if (feature.properties.project_type !== 10 && !feature.geometry) {
-                return false;
-            }
             return (
                 feature.properties.status === 'private_active'
                 || feature.properties.status === 'archived'

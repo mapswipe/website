@@ -341,10 +341,24 @@ function Data(props: Props) {
             ),
         },
         {
-            key: '10',
+            key: '4',
+            label: t('completeness'),
+            icon: (
+                <ProjectTypeIcon type="4" size="small" />
+            ),
+        },
+        {
+            key: '5',
             label: t('validate-image'),
             icon: (
-                <ProjectTypeIcon type="10" size="small" />
+                <ProjectTypeIcon type="5" size="small" />
+            ),
+        },
+        {
+            key: '6',
+            label: t('street'),
+            icon: (
+                <ProjectTypeIcon type="6" size="small" />
             ),
         },
     ]), [t]);
@@ -621,6 +635,69 @@ function Data(props: Props) {
                     />
                     <ListItem
                         label={t('type-validate-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/completeness.png"
+                    heading={t('type-completeness-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="4"
+                        />
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-completeness-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-completeness-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-completeness-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/validate_image.png"
+                    heading={t('type-validate-image-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="5"
+                        />
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-validate-image-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-validate-image-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-validate-image-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/street_image.png"
+                    heading={t('type-street-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="6"
+                        />
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-street-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-street-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-street-key-point-3')}
                     />
                 </Card>
             </Section>
