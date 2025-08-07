@@ -264,7 +264,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="5"
+                            type="10"
                         />
                     )}
                 >
@@ -277,7 +277,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="6"
+                            type="7"
                         />
                     )}
                 >

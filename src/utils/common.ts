@@ -6,7 +6,7 @@ import {
 
 export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
 
-export const supportedProjectTypes = [1, 2, 3, 4, 5, 6];
+export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
 
 export interface Stats {
     communityStats: {
@@ -86,7 +86,7 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
 
 export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
 
-export type ProjectType = 1 | 2 | 3 | 4 | 5 | 6;
+export type ProjectType = 1 | 2 | 3 | 4 | 10 | 7;
 
 export interface ProjectStatusOption {
     key: ProjectStatus;
@@ -107,8 +107,8 @@ export const projectNameMapping: {
     2: 'Footprint',
     3: 'Change Detection',
     4: 'Completeness',
-    5: 'Validate Image',
-    6: 'Street',
+    10: 'Validate Image',
+    7: 'Street',
 };
 
 const mb = 1024 * 1024;

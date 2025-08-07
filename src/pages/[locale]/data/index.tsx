@@ -348,17 +348,17 @@ function Data(props: Props) {
             ),
         },
         {
-            key: '5',
+            key: '10',
             label: t('validate-image'),
             icon: (
-                <ProjectTypeIcon type="5" size="small" />
+                <ProjectTypeIcon type="10" size="small" />
             ),
         },
         {
-            key: '6',
+            key: '7',
             label: t('street'),
             icon: (
-                <ProjectTypeIcon type="6" size="small" />
+                <ProjectTypeIcon type="7" size="small" />
             ),
         },
     ]), [t]);
@@ -664,7 +664,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="5"
+                            type="10"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -685,7 +685,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="6"
+                            type="7"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
