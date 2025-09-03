@@ -14,7 +14,9 @@ jobs:
     name: Lint + Type Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
       - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
@@ -24,10 +26,6 @@ jobs:
       - uses: actions/setup-python@v5
       - name: Install pre-commit
         run: pip install pre-commit
-
-      - name: Pull submodules (Server)
-        run:
-          git submodule update --init --recursive
 
       - name: Install dependencies
         run: yarn install --prefer-online
