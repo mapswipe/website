@@ -1,0 +1,10 @@
+{
+  "ready-to-process": "Ready to Process",
+  "draft": "Draft",
+  "discarded": "Discarded",
+  "processing-failed": "Proccessing Failed",
+  "processed": "Processed",
+  "ready-to-published": "Ready to Publish",
+  "publishing-failed": "Publishing Failed",
+  "paused": "Paused"
+}

@@ -1,0 +1,13 @@
+{
+  "users-title": "Felhasználók",
+  "users-description": "Ez az adatkészlet az egyes felhasználók egyedi közreműködéseit tartalmazza. Ebből lehet felismerni például a projekt legaktívabb felhasználóit. (Ne feledje, hogy használat előtt ki kell tömörítenie a .gz fájlt.)",
+  "date": "{{date, datetime}}",
+  "active-projects": "Aktív",
+  "finished-projects": "Befejezett",
+  "build-area": "Keresés",
+  "footprint": "Érvényesítés",
+  "change-detection": "Összehasonlítás",
+  "completeness": "",
+  "validate-image": "",
+  "street": ""
+}

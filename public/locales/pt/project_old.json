@@ -1,0 +1,13 @@
+{
+  "users-title": "Utilizadores",
+  "users-description": "Este conjunto de dados contém informações sobre as contribuições individuais por utilizador. Isto indica-lhe, por exemplo, os utilizadores mais ativos deste projeto. (Note que é necessário descompactar este ficheiro .gz antes de o poder utilizar).",
+  "date": "{{date, datetime}}",
+  "active-projects": "Ativo",
+  "finished-projects": "Terminado",
+  "build-area": "Encontrar",
+  "footprint": "Validar",
+  "change-detection": "Comparar",
+  "completeness": "",
+  "validate-image": "",
+  "street": ""
+}

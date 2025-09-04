@@ -3,9 +3,40 @@ import {
     caseInsensitiveSubmatch,
     compareStringSearch,
 } from '@togglecorp/fujs';
+import { gql } from 'graphql-request';
+import { graphqlRequest } from 'utils/requests/graphqlRequest';
 
+export const enumsQuery = gql`
+    query Enums {
+        enums {
+            ProjectTypeEnum {
+                key
+                label
+            }
+            ProjectStatusEnum {
+                key
+                label
+            }
+        }
+    }
+`;
+
+export interface EnumResponse {
+    enums: {
+        ProjectTypeEnum: {
+            key: string;
+            label: string;
+        }[];
+        ProjectStatusEnum: {
+            key: string;
+            label: string;
+        }[];
+    };
+  }
+  
 export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
 
+// FIXME: Find the value of supported project type
 export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
 
 export interface Stats {
@@ -84,9 +115,30 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
     };
 }
 
-export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
-
-export type ProjectType = 1 | 2 | 3 | 4 | 10 | 7;
+export async function fetchEnums() {
+    const data: EnumResponse = await graphqlRequest<EnumResponse>(
+        graphqlEndpoint,
+        enumsQuery
+    );
+  
+    const projectTypes = data.enums.ProjectTypeEnum.map((item) => ({
+        key: item.key,
+        label: item.label,
+    }));
+  
+    const projectStatuses = data.enums.ProjectStatusEnum.map((item) => ({
+        key: item.key,
+        label: item.label,
+    }));
+  
+    return {
+        projectTypes,
+        projectStatuses,
+    };
+}
+  
+export type ProjectStatus = EnumResponse['enums']['ProjectStatusEnum'][number]['key'];
+export type ProjectType = EnumResponse['enums']['ProjectTypeEnum'][number]['key'];
 
 export interface ProjectStatusOption {
     key: ProjectStatus;
@@ -100,16 +152,14 @@ export interface ProjectTypeOption {
     icon?: React.ReactNode;
 }
 
-export const projectNameMapping: {
-    [key in ProjectTypeOption['key']]: string
-} = {
-    1: 'Build Area',
-    2: 'Footprint',
-    3: 'Change Detection',
-    4: 'Completeness',
-    10: 'Validate Image',
-    7: 'Street',
-};
+export async function getProjectNameMapping() {
+    const { projectTypes } = await fetchEnums();
+  
+    return projectTypes.reduce((acc, type) => {
+      acc[type.key as ProjectType] = type.label;
+      return acc;
+    }, {} as Record<ProjectType, string>);
+}  
 
 const mb = 1024 * 1024;
 export function getFileSizeProperties(fileSize: number) {
