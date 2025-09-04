@@ -2,11 +2,8 @@ import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
-import { _cs, bound } from '@togglecorp/fujs';
+import { _cs, bound, listToMap } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { remark } from 'remark';
-import matter from 'gray-matter';
-import html from 'remark-html';
 import {
     IoDownloadOutline,
     IoEllipseSharp,
@@ -28,24 +25,32 @@ import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
 import Link from 'components/Link';
+import { request } from 'graphql-request';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 
-import getProjectCentroids from 'utils/requests/projectCentroids';
-import getProjectGeometries from 'utils/requests/projectGeometries';
-import getFileSizes from 'utils/requests/fileSizes';
 import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
 import {
     ProjectStatus,
     ProjectStatusOption,
+    ProjectType,
     ProjectTypeOption,
     getFileSizeProperties,
+    graphqlEndpoint,
 } from 'utils/common';
 import {
     getBounds,
     getPathData,
     getScaleFunction,
 } from 'utils/chart';
+import {
+    projectList,
+    ProjectProperties,
+    ProjectsData,
+    projectsData,
+    UrlInfo,
+} from 'pages/queries';
+import { graphqlRequest } from 'utils/requests/graphqlRequest';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
@@ -72,68 +77,74 @@ const xAxisFormatter = (date: Date) => date.toLocaleString(
     },
 );
 
-type DownloadType = (
-    'aggregated_results'
-    | 'aggregated_results_with_geometry'
-    | 'hot_tasking_manager_geometries'
-    | 'moderate_to_high_agreement_yes_maybe_geometries'
-    | 'groups'
-    | 'history'
-    | 'results'
-    | 'tasks'
-    | 'users'
-    | 'area_of_interest'
-);
-
-type DownloadFileType = 'geojson' | 'csv';
-
-interface UrlInfo {
-    name: DownloadType;
-    type: DownloadFileType;
-    url: string;
-    fileSizeCheckUrl: string;
-    size: number;
-}
-
 const DynamicProjectMap = dynamic(() => import('components/ProjectMap'), { ssr: false });
 
 interface Props extends SSRConfig {
-    className?: string;
-    totalProgress: number | null;
-    totalArea: number | null;
-    image: string | null;
-    totalContributors: number | null;
-    type: number | undefined | null;
+    className: string;
+    id: string;
     name: string;
+    projectType?: ProjectType;
     description: string;
-    status: ProjectStatus;
+    status?: ProjectStatus;
+    createdAt?: string;
+    modifiedAt?: string;
+    image?: {
+        id: string;
+        file: {
+            name: string;
+            url: string;
+        };
+        createdAt: string;
+    };
+    requestingOrganizationId?: string;
+    progress?: string;
     projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
+    requestingOrganization?: {
+        id: string;
+        name: string;
+    };
+    region: string;
+    exportAggregatedResults: UrlInfo;
+    exportAggregatedResultsWithGeometry: UrlInfo;
+    exportGroups: UrlInfo;
+    exportHistory: UrlInfo;
+    exportAreaOfInterest: UrlInfo;
+    exportResults: UrlInfo;
+    exportTasks: UrlInfo;
+    exportUsers: UrlInfo;
+    exportHotTaskingManagerGeometries: UrlInfo;
+    exportModerateToHighAgreementYesMaybeGeometries: UrlInfo;
     projectHistory: ProjectHistory[];
-    urls: UrlInfo[];
-    region?: string | null;
-    requestingOrganization?: string | null;
-    created?: number | null;
-    buildDate: string | null;
+    totalArea: number | null;
+    numberOfContributorUsers: number | null;
 }
 
 function Project(props: Props) {
     const {
         className,
-        totalProgress,
         image,
-        totalArea,
-        totalContributors,
         name,
-        type,
+        projectType,
         description,
         status,
-        projectGeoJSON,
-        urls,
-        projectHistory,
-        region,
         requestingOrganization,
-        created,
-        buildDate,
+        createdAt,
+        progress,
+        region,
+        exportAggregatedResults,
+        exportAggregatedResultsWithGeometry,
+        exportGroups,
+        exportHistory,
+        exportAreaOfInterest,
+        exportResults,
+        exportTasks,
+        exportUsers,
+        projectGeoJSON,
+        projectHistory,
+        exportHotTaskingManagerGeometries,
+        exportModerateToHighAgreementYesMaybeGeometries,
+        totalArea,
+        numberOfContributorUsers,
     } = props;
 
     const svgContainerRef = React.useRef<HTMLDivElement>(null);
@@ -144,153 +155,152 @@ function Project(props: Props) {
         chartPointsForArea,
         xAxisTicks,
         yAxisTicks,
-    ] = React.useMemo(
-        () => {
-            const timestamps = projectHistory.map((ph) => ph.timestamp);
-            const initialTimeBounds = getBounds(timestamps);
+    ] = React.useMemo(() => {
+        if (!projectHistory || projectHistory.length === 0) {
+            return [[], [], [], []];
+        }
 
-            const NUM_BREAKPOINT_X = 5;
-            const timeDiff = initialTimeBounds.max - initialTimeBounds.min;
-            const tickDuration = Math.ceil(timeDiff / NUM_BREAKPOINT_X);
+        const timestamps = projectHistory.map((ph) => ph.timestamp);
+        const initialTimeBounds = getBounds(timestamps);
 
-            const timeBounds = {
-                min: initialTimeBounds.min,
-                max: initialTimeBounds.min + (tickDuration * NUM_BREAKPOINT_X),
+        const NUM_BREAKPOINT_X = 5;
+        const timeDiff = initialTimeBounds.max - initialTimeBounds.min;
+        const tickDuration = Math.ceil(timeDiff / NUM_BREAKPOINT_X);
+
+        const timeBounds = {
+            min: initialTimeBounds.min,
+            max: initialTimeBounds.min + (tickDuration * NUM_BREAKPOINT_X),
+        };
+
+        const xScale = getScaleFunction(
+            timeBounds,
+            { min: 0, max: svgBounds.width },
+            { start: chartMargin.left, end: chartMargin.right },
+        );
+
+        const percentageBound = { min: 0, max: 100 };
+        const yScale = getScaleFunction(
+            percentageBound,
+            { min: 0, max: svgBounds.height },
+            { start: chartMargin.top, end: chartMargin.bottom },
+            true,
+        );
+
+        const percentageTicks = [0, 20, 40, 60, 80, 100].map((percentage) => ({
+            value: percentage,
+            y: yScale(percentage),
+        }));
+
+        const points = (projectHistory ?? []).map((hist) => ({
+            x: xScale(hist.timestamp),
+            y: yScale(bound(100 * hist.progress, 0, 100)),
+        }));
+
+        const timeTicks = Array.from(Array(NUM_BREAKPOINT_X + 1)).map((_, i) => {
+            const timestamp = initialTimeBounds.min + tickDuration * i;
+            const date = new Date(timestamp);
+
+            return {
+                date,
+                timestamp,
+                x: xScale(timestamp),
             };
+        });
 
-            const xScale = getScaleFunction(
-                timeBounds,
-                { min: 0, max: svgBounds.width },
-                { start: chartMargin.left, end: chartMargin.right },
-            );
-
-            const percentageBound = { min: 0, max: 100 };
-            const yScale = getScaleFunction(
-                percentageBound,
-                { min: 0, max: svgBounds.height },
-                { start: chartMargin.top, end: chartMargin.bottom },
-                true,
-            );
-            const percentageTicks = [0, 20, 40, 60, 80, 100].map(
-                (percentage) => ({
-                    value: percentage,
-                    y: yScale(percentage),
-                }),
-            );
-
-            const points = projectHistory.map((hist) => ({
-                x: xScale(hist.timestamp),
-                y: yScale(bound(100 * hist.progress, 0, 100)),
-            }));
-
-            const timeTicks = Array.from(Array(NUM_BREAKPOINT_X + 1)).map((_, i) => {
-                const timestamp = initialTimeBounds.min + tickDuration * i;
-                const date = new Date(timestamp);
-
-                return {
-                    date,
-                    timestamp,
-                    x: xScale(timestamp),
-                };
-            });
-
-            return [
-                points,
-                [
-                    { x: xScale(timeBounds.min), y: svgBounds.height },
-                    ...points,
-                    { x: xScale(timeBounds.max), y: svgBounds.height },
-                ],
-                timeTicks,
-                percentageTicks,
-            ];
-        },
-        [projectHistory, svgBounds],
-    );
+        return [
+            points,
+            [
+                { x: xScale(timeBounds.min), y: svgBounds.height },
+                ...points,
+                { x: xScale(timeBounds.max), y: svgBounds.height },
+            ],
+            timeTicks,
+            percentageTicks,
+        ];
+    }, [projectHistory, svgBounds]);
 
     const { t } = useTranslation('project');
-    const dataHeadingMap: Record<DownloadType, string> = {
-        aggregated_results: t('aggregated-results-title'),
-        aggregated_results_with_geometry: t('aggregated-results-with-geometry-title'),
-        hot_tasking_manager_geometries: t('hot-tasking-manager-geometries-title'),
-        moderate_to_high_agreement_yes_maybe_geometries: t('moderate-to-high-agreement-yes-maybe-geometries-title'),
-        groups: t('groups-title'),
-        history: t('history-title'),
-        results: t('results-title'),
-        tasks: t('tasks-title'),
-        users: t('users-title'),
-        area_of_interest: t('area-of-interest-title'),
-    };
-    const dataDescriptionMap: Record<DownloadType, string> = {
-        aggregated_results: t('aggregated-results-description'),
-        aggregated_results_with_geometry: t('aggregated-results-with-geometry-description'),
-        hot_tasking_manager_geometries: t('hot-tasking-manager-geometries-description'),
-        moderate_to_high_agreement_yes_maybe_geometries: t('moderate-to-high-agreement-yes-maybe-geometries-description'),
-        groups: t('groups-description'),
-        history: t('history-description'),
-        results: t('results-description'),
-        tasks: t('tasks-description'),
-        users: t('users-description'),
-        area_of_interest: t('area-of-interest-description'),
-    };
 
-    const projectStatusOptions: Record<string, ProjectStatusOption> = useMemo(() => ({
-        active: {
-            key: 'active',
-            label: t('active-projects'),
-            icon: (<IoEllipseSharp className={styles.active} />),
+    const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
+        {
+            key: 'PUBLISHED',
+            label: t('published'),
+            icon: (<IoEllipseSharp />),
         },
-        finished: {
-            key: 'finished',
-            label: t('finished-projects'),
+        {
+            key: 'WITHDRAWN',
+            label: t('withdrawn'),
+            icon: (<IoEllipseSharp  />),
+        },
+        {
+            key: 'FINISHED',
+            label: t('finished'),
             icon: (<IoEllipseSharp className={styles.finished} />),
         },
-    }), [t]);
+    ]), [t]);
 
-    const projectTypeOptions: Record<string, ProjectTypeOption> = useMemo(() => ({
-        1: {
-            key: '1',
-            label: t('build-area'),
+    const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
+        {
+            key: 'FIND',
+            label: t('type-find-title'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
-        2: {
-            key: '2',
-            label: t('footprint'),
+        {
+            key: 'VALIDATE',
+            label: t('type-validate-title'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
-        3: {
-            key: '3',
-            label: t('change-detection'),
+        {
+            key: 'COMPARE',
+            label: t('type-compare-title'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
             ),
         },
-        4: {
-            key: '4',
-            label: t('completeness'),
+        {
+            key: 'COMPLETENESS',
+            label: t('type-completeness-title'),
             icon: (
-                <ProjectTypeIcon type="4" size="small" />
+                <ProjectTypeIcon type="COMPLETENESS" size="small" />
             ),
         },
-        7: {
-            key: '7',
-            label: t('street'),
+        {
+            key: 'VALIDATE_IMAGE',
+            label: t('type-validate-image-title'),
             icon: (
-                <ProjectTypeIcon type="7" size="small" />
+                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
             ),
         },
-        10: {
-            key: '10',
-            label: t('validate-image'),
+        {
+            key: 'STREET',
+            label: t('type-streets-view-title'),
             icon: (
-                <ProjectTypeIcon type="10" size="small" />
+                <ProjectTypeIcon type="STREET" size="small" />
             ),
         },
-    }), [t]);
+    ]), [t]);
+
+    const projectTypeOptionsMap = useMemo(() => (
+        listToMap(
+            projectTypeOptions,
+            (item) => item.key,
+            (item) => item,
+        )
+    ), [projectTypeOptions]);
+
+    const projectStatusOptionMap = useMemo(() => (
+        listToMap(
+            projectStatusOptions,
+            (item) => item.key,
+            (item) => item,
+        )
+    ), [projectStatusOptions]);
+
+    const roundedTotalArea = Math.round(totalArea ?? 0);
 
     return (
         <Page contentClassName={_cs(styles.project, className)}>
@@ -307,19 +317,19 @@ function Project(props: Props) {
                 description={(
                     <div className={styles.heroDescription}>
                         <div className={styles.topTags}>
-                            {type && (
+                            {projectType && (
                                 <Tag
                                     spacing="medium"
-                                    icon={projectTypeOptions[type].icon}
+                                    icon={projectTypeOptionsMap[projectType]?.icon}
                                 >
-                                    {projectTypeOptions[type].label}
+                                    {projectType}
                                 </Tag>
                             )}
                             {status && (
                                 <Tag
-                                    icon={projectStatusOptions[status].icon}
+                                    icon={projectStatusOptionMap[status]?.icon}
                                 >
-                                    {projectStatusOptions[status].label}
+                                    {status}
                                 </Tag>
                             )}
                         </div>
@@ -341,17 +351,21 @@ function Project(props: Props) {
                                     icon={<IoFlag />}
                                     variant="transparent"
                                 >
-                                    {requestingOrganization}
+                                    {requestingOrganization.name}
                                 </Tag>
                             )}
-                            {created && (
+                            {createdAt && (
                                 <Tag
                                     tooltip={t('created-at')}
                                     className={styles.heroTag}
                                     icon={<IoCalendarClearOutline />}
                                     variant="transparent"
-                                >
-                                    {t('date', { date: created, dateStyle: 'medium' })}
+                                    >
+                                    {new Date(createdAt).toLocaleDateString(undefined, {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    })}
                                 </Tag>
                             )}
                         </div>
@@ -360,7 +374,7 @@ function Project(props: Props) {
                 rightContent={image ? (
                     <ImageWrapper
                         className={styles.illustration}
-                        src={image}
+                        src={image.file?.url}
                         alt={name}
                         nonOptimizedImage
                     />
@@ -375,16 +389,17 @@ function Project(props: Props) {
                             {t('overview-section-title')}
                         </Heading>
                         <div className={styles.description}>
+                            {description}
                             <HtmlOutput
                                 className={styles.description}
-                                content={description}
+                                content={description ?? ''}
                             />
                         </div>
                     </div>
                     <div className={styles.stats}>
                         <KeyFigure
                             className={_cs(styles.largeFigure, styles.figure)}
-                            value={totalArea}
+                            value={roundedTotalArea}
                             variant="circle"
                             label={(
                                 <span>
@@ -399,7 +414,7 @@ function Project(props: Props) {
                             className={styles.figure}
                             variant="circle"
                             circleColor="complement"
-                            value={totalContributors}
+                            value={numberOfContributorUsers}
                             label={t('project-contributors-text')}
                         />
                     </div>
@@ -410,11 +425,13 @@ function Project(props: Props) {
                 contentClassName={styles.content}
                 actionsClassName={styles.lastFetchedContainer}
                 containerClassName={styles.statsContainer}
-                actions={buildDate && (
+                actions={exportHistory?.modifiedAt && (
                     t('data-last-fetched', {
-                        date: (new Date(0).setUTCSeconds(Number(buildDate))),
-                        dateStyle: 'medium',
-                        timeStyle: 'medium',
+                        date: new Date(exportHistory.modifiedAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                        }),
                     })
                 )}
             >
@@ -430,11 +447,11 @@ function Project(props: Props) {
                     <div className={styles.progressBar}>
                         <div className={styles.progressLabel}>
                             <div>{t('project-progress-label')}</div>
-                            <div>{t('project-card-progress-text', { progress: totalProgress })}</div>
+                            <div>{t('project-card-progress-text', { progress: progress })}</div>
                         </div>
                         <div className={styles.track}>
                             <div
-                                style={{ width: `${totalProgress}%` }}
+                                style={{ width: `${progress}%` }}
                                 className={styles.progress}
                             />
                         </div>
@@ -533,23 +550,26 @@ function Project(props: Props) {
                 contentClassName={styles.urlList}
                 withAlternativeBackground
             >
-                {urls.map((url) => (
+                {exportAggregatedResults && (
                     <Card
                         childrenContainerClassName={styles.downloadCard}
-                        key={url.type}
-                        heading={dataHeadingMap[url.name]}
-                        description={dataDescriptionMap[url.name]}
+                        key={exportAggregatedResults?.id}
+                        heading={t('aggregated-results-title')}
+                        description={t('aggregated-results-description')}
                     >
                         <div className={styles.fileDetails}>
                             <Tag>
-                                {url.type}
+                                {exportAggregatedResults?.mimetype}
                             </Tag>
                             <div>
-                                {t('download-size', { size: getFileSizeProperties(url.size).size, formatParams: { size: { style: 'unit', unit: getFileSizeProperties(url.size).unit, maximumFractionDigits: 1 } } })}
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportAggregatedResults?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAggregatedResults?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
                             </div>
                         </div>
                         <Link
-                            href={url.url}
+                            href={exportAggregatedResults?.file?.url}
                             variant="buttonTransparent"
                             className={styles.link}
                         >
@@ -557,7 +577,259 @@ function Project(props: Props) {
                             {t('download')}
                         </Link>
                     </Card>
-                ))}
+                )}
+                {exportAggregatedResultsWithGeometry && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportAggregatedResultsWithGeometry?.id}
+                        heading={t('aggregated-results-with-geometry-title')}
+                        description={t('aggregated-results-with-geometry-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportAggregatedResultsWithGeometry?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportAggregatedResultsWithGeometry?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAggregatedResultsWithGeometry?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportAggregatedResultsWithGeometry?.file?.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportGroups && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportGroups?.id}
+                        heading={t('groups-title')}
+                        description={t('groups-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportGroups?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportGroups?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportGroups?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportGroups?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportHistory && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportHistory?.id}
+                        heading={t('history-title')}
+                        description={t('history-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportHistory?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportHistory?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportHistory?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportHistory?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportResults && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportResults?.id}
+                        heading={t('results-title')}
+                        description={t('results-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportResults?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportResults?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportResults?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportResults?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportTasks && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportTasks?.id}
+                        heading={t('tasks-title')}
+                        description={t('tasks-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportTasks?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportTasks?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportTasks?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportTasks?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportUsers && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportUsers?.id}
+                        heading="Users"
+                        description="This dataset contains information on the individual contributions per user. This tells you for instance the most active users of this project. (Note that you need to unzip this .gz file before you can use it.)"
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportUsers?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportUsers?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportUsers?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportUsers?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportAreaOfInterest && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportAreaOfInterest?.id}
+                        heading={t('area-of-interest-title')}
+                        description={t('area-of-interest-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportAreaOfInterest?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportAreaOfInterest?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAreaOfInterest?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportAreaOfInterest?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportHotTaskingManagerGeometries && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportHotTaskingManagerGeometries?.id}
+                        heading={t('hot-tasking-manager-geometries-title')}
+                        description={t('hot-tasking-manager-geometries-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportHotTaskingManagerGeometries?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportHotTaskingManagerGeometries?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportHotTaskingManagerGeometries?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportHotTaskingManagerGeometries?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
+                {exportModerateToHighAgreementYesMaybeGeometries && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        key={exportModerateToHighAgreementYesMaybeGeometries?.id}
+                        heading={t('moderate-to-high-agreement-yes-maybe-geometries-title')}
+                        description={t('moderate-to-high-agreement-yes-maybe-geometries-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>
+                                {exportModerateToHighAgreementYesMaybeGeometries?.mimetype}
+                            </Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(exportModerateToHighAgreementYesMaybeGeometries?.fileSize).size,
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportModerateToHighAgreementYesMaybeGeometries?.fileSize).unit, maximumFractionDigits: 1 } },
+                                })}
+                            </div>
+                        </div>
+                        <Link
+                            href={exportModerateToHighAgreementYesMaybeGeometries?.file.url}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Link>
+                    </Card>
+                )}
             </Section>
             <Section
                 title={t('license-section-heading')}
@@ -584,18 +856,17 @@ export const getI18nPaths = () => (
     }))
 );
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const projects = await getProjectCentroids();
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+    const data: ProjectsData = await request(graphqlEndpoint, projectsData, { includeAll: true });
+    const projects = data?.projects?.results ?? [];
 
-    const pathsWithParams = projects.features.flatMap((feature) => {
-        const withLocales = i18nextConfig.i18n.locales.map((lng) => ({
-            params: {
-                id: feature.properties.project_id,
+    const pathsWithParams =
+        projects.flatMap((project: { id: string }) =>
+            (locales ?? []).map((lng: string) => ({
+                params: { id: project.id.toString() },
                 locale: lng,
-            },
-        }));
-        return withLocales;
-    });
+            }))
+        );
 
     return {
         paths: pathsWithParams,
@@ -603,144 +874,40 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
-    const locale = context?.params?.locale;
-    const projectId = context?.params?.id;
+export const getStaticProps: GetStaticProps<ProjectProperties> = async (context) => {
+    const locale = context.locale ?? 'en';
+    const projectId = context.params?.id as string;
 
-    const translations = await serverSideTranslations(locale as string, [
-        'project',
-        'common',
-    ]);
-
-    const projects = await getProjectCentroids();
-    const project = projects.features.find(
-        (feature) => feature.properties.project_id === projectId,
+    const data = await graphqlRequest<{ project: ProjectProperties }>(
+        graphqlEndpoint,
+        projectList,
+        { id: projectId },
     );
-    if (!project) {
-        throw new Error(`Could not get project ${projectId}`);
+
+    const project = data?.project;
+    if (!project?.id) throw new Error(`Could not get project ${projectId}`);
+
+    const translations = await serverSideTranslations(locale, ['project', 'common']);
+
+    let projectGeoJSON = null;
+    const aoiUrl = project.exportAreaOfInterest?.file?.url;
+    if (aoiUrl) {
+        try {
+            const res = await fetch(aoiUrl);
+            projectGeoJSON = await res.json();
+        } catch (err) {
+            console.error(`Failed to fetch GeoJSON from ${aoiUrl}`, err);
+        }
     }
 
-    const geojsons = await getProjectGeometries();
-    const geojson = geojsons.features.find(
-        (feature) => feature.properties.project_id === projectId,
-    )?.geometry;
-
-    const historyJSON = await getProjectHistory(project.properties.project_id);
-
-    const matterResult = matter(project.properties.project_details);
-
-    const processedContent = await remark()
-        .use(html)
-        .process(matterResult.content.replace(/\\n/g, '\n'));
-    const contentHtml = processedContent.toString();
-
-    const mapswipeApi = process.env.MAPSWIPE_API_ENDPOINT;
-    const urls: Omit<UrlInfo, 'size' | 'ok'>[] = [
-        {
-            name: 'aggregated_results',
-            url: `${mapswipeApi}agg_results/agg_results_${projectId}.csv.gz`,
-            fileSizeCheckUrl: `/api/agg_results/agg_results_${projectId}.csv.gz`,
-            type: 'csv',
-        },
-        {
-            name: 'aggregated_results_with_geometry',
-            url: `${mapswipeApi}agg_results/agg_results_${projectId}_geom.geojson.gz`,
-            fileSizeCheckUrl: `/api/agg_results/agg_results_${projectId}_geom.geojson.gz`,
-            type: 'geojson',
-        },
-        {
-            name: 'hot_tasking_manager_geometries',
-            url: `${mapswipeApi}hot_tm/hot_tm_${projectId}.geojson`,
-            fileSizeCheckUrl: `/api/hot_tm/hot_tm_${projectId}.geojson`,
-            type: 'geojson',
-        },
-        {
-            name: 'moderate_to_high_agreement_yes_maybe_geometries',
-            url: `${mapswipeApi}yes_maybe/yes_maybe_${projectId}.geojson`,
-            fileSizeCheckUrl: `/api/yes_maybe/yes_maybe_${projectId}.geojson`,
-            type: 'geojson',
-        },
-        {
-            name: 'groups',
-            url: `${mapswipeApi}groups/groups_${projectId}.csv.gz`,
-            fileSizeCheckUrl: `/api/groups/groups_${projectId}.csv.gz`,
-            type: 'csv',
-        },
-        {
-            name: 'history',
-            url: `${mapswipeApi}history/history_${projectId}.csv`,
-            fileSizeCheckUrl: `/api/history/history_${projectId}.csv`,
-            type: 'geojson',
-        },
-        {
-            name: 'results',
-            url: `${mapswipeApi}results/results_${projectId}.csv.gz`,
-            fileSizeCheckUrl: `/api/results/results_${projectId}.csv.gz`,
-            type: 'csv',
-        },
-        {
-            name: 'tasks',
-            url: `${mapswipeApi}tasks/tasks_${projectId}.csv.gz`,
-            fileSizeCheckUrl: `/api/tasks/tasks_${projectId}.csv.gz`,
-            type: 'csv',
-        },
-        {
-            name: 'users',
-            url: `${mapswipeApi}users/users_${projectId}.csv.gz`,
-            fileSizeCheckUrl: `/api/users/users_${projectId}.csv.gz`,
-            type: 'csv',
-        },
-        {
-            name: 'area_of_interest',
-            url: `${mapswipeApi}project_geometries/project_geom_${projectId}.geojson`,
-            fileSizeCheckUrl: `/api/project_geometries/project_geom_${projectId}.geojson`,
-            type: 'geojson',
-        },
-    ];
-
-    const fileSizes = await getFileSizes();
-    const urlResponsePromises = urls.map((url) => ({
-        ...url,
-        size: fileSizes?.[url.fileSizeCheckUrl] ?? 0,
-    }));
-
-    const buildDate = process.env.MAPSWIPE_BUILD_DATE ?? null;
-    const urlResponses = await Promise.all(urlResponsePromises);
+    const projectHistory = await getProjectHistory(projectId, project.exportHistory?.file?.url);
 
     return {
         props: {
             ...translations,
-            totalProgress: (
-                project.properties.progress !== null
-                && project.properties.progress !== undefined
-            )
-                ? Math.round(project.properties.progress * 100)
-                : 0,
-            totalArea: Math.round(project.properties.area_sqkm ?? 0),
-            totalContributors: project.properties.number_of_users ?? null,
-            name: project.properties.legacyName
-                ? project.properties.name
-                : `${project.properties.topic} (${project.properties.taskNumber})`,
-            region: project.properties.legacyName
-                ? null
-                : project.properties.region,
-            requestingOrganization: project.properties.legacyName
-                ? null
-                : project.properties.requestingOrganization,
-            day: project.properties?.day
-                ? new Date(project.properties.day).getTime()
-                : null,
-            created: project.properties?.created
-                ? new Date(project.properties.created).getTime()
-                : null,
-            image: project.properties.image ?? null,
-            type: project.properties.project_type,
-            description: contentHtml,
-            status: project.properties.status,
-            projectGeoJSON: geojson ?? null,
-            projectHistory: historyJSON,
-            buildDate,
-            urls: urlResponses.filter((url) => url.size > 0),
+            ...project,
+            projectGeoJSON,
+            projectHistory,
         },
     };
 };

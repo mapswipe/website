@@ -1,120 +1,103 @@
-import util from 'util';
-import fs from 'fs';
-
 import {
     memoize,
     ProjectStatus,
     ProjectType,
-    timeIt,
     parseProjectName,
-    supportedProjectTypes,
+    graphqlEndpoint,
 } from 'utils/common';
+import request from 'graphql-request';
+import { projectsData, ProjectsData, UrlInfo } from 'pages/queries';
 
-const readFile = util.promisify(fs.readFile);
-
-interface CommonProperties {
-    idx: number;
-    url: string | undefined;
-    project_id: string;
-    project_details: string;
-    look_for: string;
-    project_type: ProjectType;
-    tile_server_names: string;
+interface ProjectProperties {
+    id: string;
+    name: string;
+    projectType: ProjectType;
     status: ProjectStatus;
-    area_sqkm: number | undefined;
-    centroid: string;
-    progress: number | undefined;
-    number_of_users: number | undefined;
-    number_of_results: number | undefined;
-    number_of_results_progress: number | undefined;
-    day: string | undefined;
-    image: string | undefined;
+    exportAreaOfInterest: UrlInfo;
 }
 
-interface PropertiesWithLegacyName extends CommonProperties {
+interface PropertiesWithLegacyName extends ProjectProperties {
     name: string;
     legacyName: true;
 }
 
-interface PropertiesWithName extends CommonProperties {
+interface PropertiesWithName extends ProjectProperties {
     topic: string;
     region: string;
     taskNumber: string;
-    requestingOrganization: string;
     legacyName?: false;
 }
 
-interface RawProjectGeometryResponse {
-    type: 'FeatureCollection',
-    name: 'projects',
-    features: {
-        type: 'Feature',
-        properties: PropertiesWithLegacyName,
-        geometry: GeoJSON.FeatureCollection<GeoJSON.Polygon>,
-    }[],
-}
-
 export interface ProjectGeometryResponse {
-    type: 'FeatureCollection',
-    name: 'projects',
+    type: 'FeatureCollection';
+    name: 'projects';
     features: {
-        type: 'Feature',
-        properties: PropertiesWithName | PropertiesWithLegacyName,
-        geometry: GeoJSON.FeatureCollection<GeoJSON.Polygon>,
-    }[],
+        type: 'Feature';
+        properties: PropertiesWithName | PropertiesWithLegacyName;
+        geometry: GeoJSON.Geometry | null;
+    }[];
 }
 
-const getProjectGeometries = memoize(async (): Promise<ProjectGeometryResponse> => {
-    const cacheFileContent = await timeIt(
-        'project_geom',
-        'read cache from disk',
-        () => readFile('cache/projects_geom.geojson'),
+export interface ProjectResponse extends ProjectGeometryResponse {}
+
+async function fetchGeometryFromUrl(url: string): Promise<GeoJSON.Geometry | null> {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) {
+            console.error(`Failed to fetch GeoJSON from ${url}: ${res.statusText}`);
+            return null;
+        }
+        const data = await res.json();
+        return data?.features?.[0]?.geometry ?? null;
+    } catch (err) {
+        console.error("Error fetching geometry:", err);
+        return null;
+    }
+}
+
+const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
+    const value: ProjectsData = await request(graphqlEndpoint, projectsData);
+
+    const features = await Promise.all(
+        value.projects.results
+            .filter((feature) => {
+                if (!feature.exportAreaOfInterest?.file?.url) {
+                    return false;
+                }
+
+                return (
+                    feature.status === 'FINISHED' ||
+                    feature.status === 'PUBLISHED' ||
+                    feature.status === 'WITHDRAWN'
+                );
+            })
+            .map(async (feature) => {
+                const geometry = await fetchGeometryFromUrl(feature?.exportAreaOfInterest.file.url);
+
+                const projectName = parseProjectName(feature.name);
+                let { status } = feature;
+
+                if (status === 'FINISHED') status = 'FINISHED';
+                if (status === 'PUBLISHED') status = 'PUBLISHED';
+
+                const properties: PropertiesWithLegacyName | PropertiesWithName = projectName
+                    ? { ...feature, ...projectName, status }
+                    : { ...feature, status, legacyName: true };
+
+                return {
+                    type: 'Feature' as const,
+                    properties,
+                    geometry,
+                };
+            })
     );
-    const projects = JSON.parse(cacheFileContent.toString()) as RawProjectGeometryResponse;
 
-    const filteredProjects = {
-        ...projects,
-        features: projects.features.filter((feature) => {
-            if (!feature.geometry) {
-                return false;
-            }
-            if (!supportedProjectTypes.includes(feature.properties.project_type)) {
-                return false;
-            }
-            return (
-                feature.properties.status === 'private_active'
-                || feature.properties.status === 'archived'
-                || feature.properties.status === 'finished'
-                || feature.properties.status === 'active'
-            );
-        }).map((feature) => {
-            const projectName = parseProjectName(feature.properties.name);
-            let { status } = feature.properties;
-            if (status === 'private_active') {
-                status = 'active';
-            }
-            if (status === 'archived') {
-                status = 'finished';
-            }
-
-            const properties: PropertiesWithLegacyName | PropertiesWithName = projectName ? {
-                ...feature.properties,
-                ...projectName,
-                status,
-            } : {
-                ...feature.properties,
-                status,
-                legacyName: true,
-            };
-
-            return {
-                ...feature,
-                properties,
-            };
-        }),
+    return {
+        type: 'FeatureCollection',
+        name: 'projects',
+        features,
     };
-
-    return filteredProjects;
 });
 
 export default getProjectGeometries;
+

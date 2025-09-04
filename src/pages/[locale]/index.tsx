@@ -197,7 +197,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="1"
+                            type="FIND"
                         />
                     )}
                 >
@@ -225,7 +225,7 @@ function Home(props: Props) {
                     heading={t('type-compare-title')}
                     icons={(
                         <ProjectTypeIcon
-                            type="3"
+                            type="COMPARE"
                         />
                     )}
                 >
@@ -238,7 +238,7 @@ function Home(props: Props) {
                     heading={t('type-validate-title')}
                     icons={(
                         <ProjectTypeIcon
-                            type="2"
+                            type="VALIDATE"
                         />
                     )}
                 >
@@ -251,7 +251,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="4"
+                            type="COMPLETENESS"
                         />
                     )}
                 >
@@ -264,7 +264,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="10"
+                            type="VALIDATE_IMAGE"
                         />
                     )}
                 >
@@ -277,7 +277,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="7"
+                            type="STREET"
                         />
                     )}
                 >
