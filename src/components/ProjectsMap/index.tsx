@@ -31,6 +31,7 @@ import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
 
 import styles from './styles.module.css';
+import { ProjectProperties } from 'pages/queries';
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
@@ -67,25 +68,11 @@ const defaultPathOptions: CircleMarkerOptions = {
     fillOpacity: 0.9,
 };
 
-interface Project {
-    project_id: string;
-    project_type: ProjectType,
-    name: string;
-    status: ProjectStatus;
-    progress: number | null;
-    number_of_users: number | null;
-    coordinates: [number, number] | null;
-    day: number | null;
-    area_sqkm: number | null;
-    region: string | null;
-    requestingOrganization: string | null;
-}
-
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    projects: Project[];
-    radiusSelector: (project: Project) => number;
+    projects: ProjectProperties[];
+    radiusSelector: (project: ProjectProperties) => number;
 }
 
 function ProjectMap(props: Props) {
@@ -100,12 +87,12 @@ function ProjectMap(props: Props) {
 
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
-            key: 'active',
+            key: 'READY',
             label: t('active-projects'),
             icon: (<IoEllipseSharp className={styles.active} />),
         },
         {
-            key: 'finished',
+            key: 'PUBLISHED',
             label: t('finished-projects'),
             icon: (<IoEllipseSharp className={styles.finished} />),
         },
@@ -121,21 +108,21 @@ function ProjectMap(props: Props) {
 
     const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
         {
-            key: '1',
+            key: 'FIND',
             label: t('build-area'),
             icon: (
                 <ProjectTypeIcon type="1" size="small" />
             ),
         },
         {
-            key: '2',
+            key: 'VALIDATE',
             label: t('footprint'),
             icon: (
                 <ProjectTypeIcon type="2" size="small" />
             ),
         },
         {
-            key: '3',
+            key: 'COMPARE',
             label: t('change-detection'),
             icon: (
                 <ProjectTypeIcon type="3" size="small" />
@@ -152,7 +139,7 @@ function ProjectMap(props: Props) {
     ), [projectTypeOptions]);
 
     const sanitizedProjects = projects
-        .map((project) => (isDefined(project.coordinates) ? {
+        .map((project) => (isDefined(project.exportHotTaskingManagerGeometries) ? {
             ...project,
             coordinates: [project.coordinates[1], project.coordinates[0]] as LatLngTuple,
         } : undefined))
@@ -170,7 +157,7 @@ function ProjectMap(props: Props) {
         >
             {sanitizedProjects.map((project) => (
                 <CircleMarker
-                    key={project.project_id}
+                    key={project.id}
                     center={project.coordinates}
                     radius={radiusSelector(project)}
                     pathOptions={pathOptions[project.status] ?? defaultPathOptions}
@@ -178,8 +165,8 @@ function ProjectMap(props: Props) {
                     <Popup>
                         <Link
                             className={styles.cardLink}
-                            key={project.project_id}
-                            href={`/[locale]/projects/${project.project_id}`}
+                            key={project.id}
+                            href={`/[locale]/projects/${project.id}`}
                         >
                             <Card
                                 className={styles.project}
@@ -188,14 +175,14 @@ function ProjectMap(props: Props) {
                                 heading={project.name}
                                 description={(
                                     <div className={styles.row}>
-                                        {project.project_type && (
+                                        {project.projectType && (
                                             <Tag
                                                 spacing="small"
-                                                icon={(
-                                                    projectTypeOptionsMap[project.project_type].icon
-                                                )}
+                                                // icon={(
+                                                //     projectTypeOptionsMap[project.project_type].icon
+                                                // )}
                                             >
-                                                {projectTypeOptionsMap[project.project_type].label}
+                                                {project?.projectType}
                                             </Tag>
                                         )}
                                         {project.status && (
@@ -239,10 +226,11 @@ function ProjectMap(props: Props) {
                                                 icon={<IoFlag />}
                                                 variant="transparent"
                                             >
-                                                {project.requestingOrganization}
+                                                {project.requestingOrganization.name}
                                             </Tag>
                                         )}
-                                        <div className={styles.row}>
+                                        {/* // TODO: Add these value */}
+                                        {/* <div className={styles.row}>
                                             {project.day && (
                                                 <Tag
                                                     className={styles.tag}
@@ -261,7 +249,7 @@ function ProjectMap(props: Props) {
                                                     {t('project-card-contributors-text', { contributors: project.number_of_users })}
                                                 </Tag>
                                             )}
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </Card>

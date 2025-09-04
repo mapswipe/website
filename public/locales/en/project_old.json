@@ -1,0 +1,5 @@
+{
+  "users-title": "Users",
+  "users-description": "This dataset contains information on the individual contributions per user. This tells you for instance the most active users of this project. (Note that you need to unzip this .gz file before you can use it.)",
+  "date": "{{date, datetime}}"
+}

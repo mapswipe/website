@@ -1,6 +1,5 @@
-import util from 'util';
-import fs from 'fs';
-
+import { request } from 'graphql-request';
+import { ProjectProperties, projectsData, ProjectsData, UrlInfo } from 'pages/queries';
 import {
     timeIt,
     memoize,
@@ -8,117 +7,112 @@ import {
     ProjectType,
     parseProjectName,
     supportedProjectTypes,
+    graphqlEndpoint,
 } from 'utils/common';
 
-const readFile = util.promisify(fs.readFile);
-
-interface CommonProperties {
-    idx: number;
-    url: string | undefined;
-    project_id: string;
-    project_details: string;
-    look_for: string;
-    project_type: ProjectType;
-    tile_server_names: string;
-    status: ProjectStatus;
-    area_sqkm: number | undefined;
-    centroid: string;
-    progress: number | undefined;
-    number_of_users: number | undefined;
-    number_of_results: number | undefined;
-    number_of_results_progress: number | undefined;
-    day: string | undefined;
-    created: string | undefined;
-    image: string | undefined;
-}
-
-interface PropertiesWithLegacyName extends CommonProperties {
+interface PropertiesWithLegacyName extends ProjectProperties {
     name: string;
     legacyName: true;
 }
 
-interface PropertiesWithName extends CommonProperties {
+interface PropertiesWithName extends ProjectProperties {
     topic: string;
     region: string;
     taskNumber: string;
-    requestingOrganization: string;
     legacyName?: false;
 }
 
-interface RawProjectResponse {
-    type: 'FeatureCollection',
-    name: 'projects',
-    features: {
-        type: 'Feature',
-        properties: PropertiesWithLegacyName,
-        geometry: {
-            type: 'Point',
-            coordinates: [number, number] | undefined,
-        },
-    }[],
-}
-
 export interface ProjectResponse {
-    type: 'FeatureCollection',
-    name: 'projects',
+    type: 'FeatureCollection';
+    name: 'projects';
     features: {
-        type: 'Feature',
-        properties: PropertiesWithName | PropertiesWithLegacyName,
+        type: 'Feature';
+        properties: PropertiesWithName | PropertiesWithLegacyName;
         geometry: {
-            type: 'Point',
-            coordinates: [number, number] | undefined,
-        },
-    }[],
+            type: string;
+            coordinates: [ number, number ] | undefined;
+        } | null;
+    }[];
 }
 
 const getProjectCentroids = memoize(async (): Promise<ProjectResponse> => {
-    const cacheFileContent = await timeIt(
-        'project_centriods',
-        'read cache from disk',
-        () => readFile('cache/projects_centroid.geojson'),
-    );
-    const projects = JSON.parse(cacheFileContent.toString()) as RawProjectResponse;
+	const value: ProjectsData = await request(
+    	graphqlEndpoint,
+    	projectsData,
+    	{
+        	includeAll: true,
+    	}
+	);
+    const filteredProjects: ProjectResponse = {
+        type: 'FeatureCollection',
+        name: 'projects',
+        features: await Promise.all(
+            value.projects.results
+                .filter((feature) => {
+                    if (!supportedProjectTypes.includes(feature.projectType)) {
+                        return false;
+                    }
+                    if (
+                        feature.projectType !== 'VALIDATE_IMAGE' &&
+                        !feature.exportHotTaskingManagerGeometries?.file?.url
+                    ) {
+                        return false;
+                    }
+                    return (
+                        feature.status === 'READY' ||
+                        feature.status === 'ARCHIVED' ||
+                        feature.status === 'PUBLISHED' ||
+                        feature.status === 'MARKED_AS_READY'
+                    );
+                })
+                .map(async (feature) => {
+                    let geometry = null;
 
-    const filteredProjects = {
-        ...projects,
-        features: projects.features.filter((feature) => {
-            if (!supportedProjectTypes.includes(feature.properties.project_type)) {
-                return false;
-            }
-            if (feature.properties.project_type !== 10 && !feature.geometry) {
-                return false;
-            }
-            return (
-                feature.properties.status === 'private_active'
-                || feature.properties.status === 'archived'
-                || feature.properties.status === 'finished'
-                || feature.properties.status === 'active'
-            );
-        }).map((feature) => {
-            const projectName = parseProjectName(feature.properties.name);
-            let { status } = feature.properties;
-            if (status === 'private_active') {
-                status = 'active';
-            }
-            if (status === 'archived') {
-                status = 'finished';
-            }
+                    // 🔑 Fetch geometry from exportHotTaskingManagerGeometries URL
+                    if (feature.exportHotTaskingManagerGeometries?.file?.url) {
+                        try {
+                            const res = await fetch(
+                                feature.exportHotTaskingManagerGeometries.file.url
+                            );
+                            const geojson = await res.json();
+                            geometry = geojson.features?.[0]?.geometry ?? null;
+                        } catch (err) {
+                            console.error(
+                                `Failed to fetch geometry for project ${feature.id}`,
+                                err
+                            );
+                        }
+                    }
 
-            const properties: PropertiesWithLegacyName | PropertiesWithName = projectName ? {
-                ...feature.properties,
-                ...projectName,
-                status,
-            } : {
-                ...feature.properties,
-                status,
-                legacyName: true,
-            };
+                    const projectName = parseProjectName(feature.name);
+                    let { status } = feature;
+                    if (status === 'MARKED_AS_READY') {
+                        status = 'MARKED_AS_READY';
+                    }
+                    if (status === 'PUBLISHED') {
+                        status = 'PUBLISHED';
+                    }
 
-            return {
-                ...feature,
-                properties,
-            };
-        }),
+                    const properties: PropertiesWithLegacyName | PropertiesWithName =
+                        projectName
+                            ? {
+                                  ...feature,
+                                  ...projectName,
+                                  status,
+                              }
+                            : {
+                                  ...feature,
+                                  status,
+                                  legacyName: true,
+                              };
+
+                    return {
+                        type: 'Feature',
+                        properties,
+                        geometry,
+                    };
+                })
+        ),
     };
 
     return filteredProjects;

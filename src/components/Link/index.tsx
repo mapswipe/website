@@ -51,7 +51,7 @@ function Link(props: Props) {
         } else {
             href = {
                 ...href,
-                pathname: href.pathname?.replace('[locale]', locale),
+                pathname: href?.pathname?.replace('[locale]', locale),
             };
         }
     }
