@@ -4,9 +4,6 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
 import { _cs, bound } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { remark } from 'remark';
-import matter from 'gray-matter';
-import html from 'remark-html';
 import {
     IoDownloadOutline,
     IoEllipseSharp,
@@ -28,11 +25,10 @@ import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
 import Link from 'components/Link';
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 
-import getProjectCentroids from 'utils/requests/projectCentroids';
 import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
 import {
     ProjectStatus,
@@ -47,7 +43,13 @@ import {
     getPathData,
     getScaleFunction,
 } from 'utils/chart';
-import { projectList, ProjectProperties, projectsData, ProjectsData, UrlInfo } from 'pages/queries';
+import {
+    projectList,
+    ProjectProperties,
+    ProjectsData,
+    projectsData,
+    UrlInfo,
+} from 'pages/queries';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
@@ -152,25 +154,25 @@ function Project(props: Props) {
         if (!projectHistory || projectHistory.length === 0) {
             return [[], [], [], []];
         }
-    
+
         const timestamps = projectHistory.map((ph) => ph.timestamp);
         const initialTimeBounds = getBounds(timestamps);
-    
+
         const NUM_BREAKPOINT_X = 5;
         const timeDiff = initialTimeBounds.max - initialTimeBounds.min;
         const tickDuration = Math.ceil(timeDiff / NUM_BREAKPOINT_X);
-    
+
         const timeBounds = {
             min: initialTimeBounds.min,
             max: initialTimeBounds.min + (tickDuration * NUM_BREAKPOINT_X),
         };
-    
+
         const xScale = getScaleFunction(
             timeBounds,
             { min: 0, max: svgBounds.width },
             { start: chartMargin.left, end: chartMargin.right },
         );
-    
+
         const percentageBound = { min: 0, max: 100 };
         const yScale = getScaleFunction(
             percentageBound,
@@ -178,28 +180,28 @@ function Project(props: Props) {
             { start: chartMargin.top, end: chartMargin.bottom },
             true,
         );
-    
+
         const percentageTicks = [0, 20, 40, 60, 80, 100].map((percentage) => ({
             value: percentage,
             y: yScale(percentage),
         }));
-    
+
         const points = (projectHistory ?? []).map((hist) => ({
             x: xScale(hist.timestamp),
             y: yScale(bound(100 * hist.progress, 0, 100)),
         }));
-    
+
         const timeTicks = Array.from(Array(NUM_BREAKPOINT_X + 1)).map((_, i) => {
             const timestamp = initialTimeBounds.min + tickDuration * i;
             const date = new Date(timestamp);
-    
+
             return {
                 date,
                 timestamp,
                 x: xScale(timestamp),
             };
         });
-    
+
         return [
             points,
             [
@@ -210,7 +212,7 @@ function Project(props: Props) {
             timeTicks,
             percentageTicks,
         ];
-    }, [projectHistory, svgBounds]);    
+    }, [projectHistory, svgBounds]);
 
     const { t } = useTranslation('project');
 
@@ -232,28 +234,28 @@ function Project(props: Props) {
             key: 'FIND',
             label: t('build-area'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
         2: {
             key: 'VALIDATE',
             label: t('footprint'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
         3: {
             key: 'COMPARE',
             label: t('change-detection'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
             ),
         },
         10: {
             key: 'COMPLETENESS',
             label: t('validate-image'),
             icon: (
-                <ProjectTypeIcon type="10" size="small" />
+                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
             ),
         },
     }), [t]);
@@ -390,7 +392,7 @@ function Project(props: Props) {
                             day: 'numeric',
                         }),
                     })
-                )}                
+                )}
             >
                 {projectGeoJSON && (
                     <div className={styles.mapContainer}>
@@ -408,7 +410,7 @@ function Project(props: Props) {
                         </div>
                         <div className={styles.track}>
                             <div
-                                style={{ width: `${process}%` }}
+                                style={{ width: `${progress}%` }}
                                 className={styles.progress}
                             />
                         </div>
@@ -813,18 +815,17 @@ export const getI18nPaths = () => (
     }))
 );
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const projects = await getProjectCentroids();
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+    const data: ProjectsData = await request(graphqlEndpoint, projectsData, { includeAll: true });
+    const projects = data?.projects?.results ?? [];
 
-    const pathsWithParams = projects?.features.flatMap((feature) => {
-        const withLocales = i18nextConfig.i18n.locales.map((lng) => ({
-            params: {
-                id: feature.properties.id,
+    const pathsWithParams =
+        projects.flatMap((project: { id: string }) =>
+            (locales ?? []).map((lng: string) => ({
+                params: { id: project.id.toString() },
                 locale: lng,
-            },
-        }));
-        return withLocales;
-    });
+            }))
+        );
 
     return {
         paths: pathsWithParams,
@@ -833,10 +834,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<ProjectProperties> = async (context) => {
-    const locale = context?.params?.locale as string;
-    const projectId = context?.params?.id as string;
+    const locale = context.locale ?? 'en';
+    const projectId = context.params?.id as string;
 
-    const data = await request(
+    const data: ProjectProperties = await request(
         graphqlEndpoint,
         projectList,
         { id: projectId },

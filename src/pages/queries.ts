@@ -6,16 +6,16 @@ export interface ProjectProperties {
 	name: string;
 	projectType: ProjectType;
 	description?: string | null;
-	status?: ProjectStatus;
+	status: ProjectStatus;
 	createdAt?: string;
 	modifiedAt?: string;
 	image?: {
-    	id: string;
-    	file: {
+        id: string;
+        file: {
         	name: string;
         	url: string;
-    	};
-    	createdAt: string;
+        };
+        createdAt: string;
 	};
 	requestingOrganizationId?: string;
 	progress?: string | null;
@@ -27,13 +27,16 @@ export interface ProjectProperties {
 	exportAggregatedResults?: UrlInfo;
 	exportAggregatedResultsWithGeometry?: UrlInfo;
 	exportGroups?: UrlInfo;
-	exportHistory: UrlInfo;
+	exportHistory?: UrlInfo;
 	exportAreaOfInterest?: UrlInfo;
 	exportResults?: UrlInfo;
 	exportTasks?: UrlInfo;
 	exportUsers?: UrlInfo;
     exportHotTaskingManagerGeometries?: UrlInfo;
     coordinates?: [number, number] | undefined;
+    area_sqkm?: number;
+    number_of_users?: number;
+    day?: string;
 }
 
 export interface ProjectsData {
@@ -81,35 +84,9 @@ export interface FeatureCollection {
     features: Feature[];
 }
 
-
-export const organizationsList = gql`
-    query Organizations {
-        organizations {
-            results {
-                id
-                name
-            }
-        }
-    }
-`;
-
 export const projectsData = gql`
-    query Projects(
-        $includeAll: Boolean!,
-        $projectType: ProjectTypeEnum,
-        $status: ProjectStatusEnum,
-        $requestingOrganizationId: ID,
-        $pagination: OffsetPaginationInput
-    ) {
-        projects(
-            includeAll: $includeAll,
-            pagination: $pagination,
-            filters: {
-                projectType: { exact: $projectType },
-                status: { exact: $status },
-                requestingOrganizationId: { exact: $requestingOrganizationId }
-            }
-        ) {
+    query Projects {
+        projects {
             totalCount
             results {
                 id
@@ -228,17 +205,17 @@ export const projectsData = gql`
                 requestingOrganizationId
             }
         }
-        organizations {
-            results {
-                id
-                name
-            }
-        }
         communityStats {
             id
             totalContributors
             totalUserGroups
             totalSwipes
+        }
+        organizations {
+            results {
+                id
+                name
+            }
         }
     }
 `;
@@ -361,3 +338,4 @@ export const projectList = gql`
         }
     }
 `;
+

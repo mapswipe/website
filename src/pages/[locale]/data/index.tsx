@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import {
     _cs,
     unique,
@@ -52,22 +52,18 @@ import {
     Stats,
     getFileSizeProperties,
 } from 'utils/common';
-import getProjectCentroids from 'utils/requests/projectCentroids';
 import useDebouncedValue from 'hooks/useDebouncedValue';
 import { ProjectProperties, ProjectsData, projectsData } from 'pages/queries';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
-import Pager from 'components/Pager';
 
 type DownloadType = (
     'projects_overview'
     | 'projects_with_geometry'
     | 'projects_with_centroid'
 );
-
-const PAGE_SIZE = 100;
 
 type DownloadFileType = 'geojson' | 'csv';
 
@@ -116,21 +112,20 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 	const value: ProjectsData = await request(
     	graphqlEndpoint,
     	projectsData,
-    	{
-        	includeAll: true,
-            pagination: {
-                limit: PAGE_SIZE,
-                offset: 0,
-            }
-    	}
 	);
 
     const {
+        communityStats,
+        projects,
+        organizations,
+    } = value ?? {};
+    
+    const {
         totalContributors,
         totalSwipes,
-    } = value?.communityStats ?? {};
-
-    const miniProjects = value?.projects.results.map((feature) => ({
+    } = communityStats ?? {};
+    
+    const miniProjects = projects?.results.map((feature) => ({
         id: feature.id ?? null,
         projectType: feature.projectType,
         name: feature.name,
@@ -142,12 +137,11 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         progress: feature.progress !== null && feature.progress !== undefined
             ? Math.round(Number(feature?.progress) * 100)
             : 0,
-        // number_of_users: feature.properties.number_of_users ?? null,
-        // area_sqkm: feature.properties.area_sqkm ?? null,
+            // TODO: Add data from project
+        number_of_users: 10,
+        area_sqkm: 500,
+        day: '10 Aug 2025',
         exportAreaOfInterest: feature.exportAreaOfInterest?.file.url ?? null,
-        // day: feature.properties?.day
-        //     ? new Date(feature.properties.day).getTime()
-        //     : null,
         createdAt: feature?.createdAt
             ? new Date(feature.createdAt).getTime()
             : null,
@@ -232,6 +226,8 @@ function iconSelector<K extends { icon?: React.ReactNode }>(option: K) {
     return option.icon;
 }
 
+const PAGE_SIZE = 9;
+
 interface Props extends SSRConfig {
     className?: string;
     minArea: number,
@@ -258,7 +254,6 @@ function Data(props: Props) {
         totalContributors,
         buildDate,
         totalSwipes,
-        totalCount,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
@@ -270,9 +265,6 @@ function Data(props: Props) {
     const [organization, setOrganization] = useState<string | undefined>();
     const [projectStatuses, setProjectStatuses] = useState<string[] | undefined>();
     const [bubble, setBubble] = useState<string | undefined>();
-
-    const [activePage, setActivePage] = useState(1);
-    const [pagePerItem, setPagePerItem] = useState(PAGE_SIZE);
 
     const organizationOptions = useMemo(() => (
         unique(
@@ -319,28 +311,28 @@ function Data(props: Props) {
             key: 'FIND',
             label: t('build-area'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
         {
             key: 'VALIDATE',
             label: t('footprint'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
         {
             key: 'COMPARE',
             label: t('change-detection'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
             ),
         },
         {
             key: 'COMPLETENESS',
             label: t('validate-image'),
             icon: (
-                <ProjectTypeIcon type="10" size="small" />
+                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
             ),
         },
     ]), [t]);
@@ -604,7 +596,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="2"
+                            type="VALIDATE"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -627,12 +619,16 @@ function Data(props: Props) {
                 contentClassName={styles.content}
                 descriptionClassName={styles.lastFetchedDate}
                 description={buildDate && (
-                    t('data-last-fetched', {
-                        date: (new Date(0).setUTCSeconds(Number(buildDate))),
-                        dateStyle: 'medium',
-                        timeStyle: 'medium',
-                    })
-                )}
+                    <>
+                        {t('data-last-fetched', {
+                            date: (new Date(0).setUTCSeconds(Number(buildDate))),
+                            dateStyle: 'medium',
+                            timeStyle: 'medium',
+                        })}
+                        <br />
+                        {t('explore-section-heading-description')}
+                    </>
+                )}                
                 actions={tableProjects.length !== visibleProjects.length && (
                     <Button
                         variant="border"
@@ -775,9 +771,9 @@ function Data(props: Props) {
                                         {project.projectType && (
                                             <Tag
                                                 spacing="small"
-                                                // icon={
-                                                //    projectTypeOptionsMap[project.projectType]?.icon
-                                                // }
+                                                icon={
+                                                   projectTypeOptionsMap[project.projectType]?.icon
+                                                }
                                             >
                                                 {project.projectType}
                                             </Tag>
@@ -785,7 +781,7 @@ function Data(props: Props) {
                                         {project.status && (
                                             <Tag
                                                 spacing="small"
-                                                // icon={projectStatusOptionMap[project.status].icon}
+                                                icon={projectStatusOptionMap[project.status].icon}
                                             >
                                                 {project.status}
                                             </Tag>
@@ -843,7 +839,7 @@ function Data(props: Props) {
                                                     })}
                                                 </Tag>
                                             )}
-                                            {/* {project.number_of_users && (
+                                            {project.number_of_users && (
                                                 <Tag
                                                     tooltip={t('project-contributors')}
                                                     className={styles.tag}
@@ -852,7 +848,7 @@ function Data(props: Props) {
                                                 >
                                                     {t('project-card-contributors-text', { contributors: project.number_of_users })}
                                                 </Tag>
-                                            )} */}
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -860,18 +856,6 @@ function Data(props: Props) {
                         </Link>
                     ))}
                 </div>
-                {/* // FIX ME: Do we need a pagination
-                    <div className={styles.pager}>
-                        <Pager
-                            pagePerItemOptions={PAGE_SIZE}
-                            onPagePerItemChange={setPagePerItem}
-                            pagePerItem={pagePerItem}
-                            totalItems={totalCount}
-                            activePage={activePage}
-                            onActivePageChange={setActivePage}
-                        />
-                    </div>
-                */}
             </Section>
             {/* // FIXME: We need API for this */}
             <Section
@@ -929,3 +913,4 @@ function Data(props: Props) {
 }
 
 export default Data;
+

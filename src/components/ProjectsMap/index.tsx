@@ -111,21 +111,21 @@ function ProjectMap(props: Props) {
             key: 'FIND',
             label: t('build-area'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
         {
             key: 'VALIDATE',
             label: t('footprint'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
         {
             key: 'COMPARE',
             label: t('change-detection'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
             ),
         },
     ]), [t]);
@@ -139,7 +139,7 @@ function ProjectMap(props: Props) {
     ), [projectTypeOptions]);
 
     const sanitizedProjects = projects
-        .map((project) => (isDefined(project.exportHotTaskingManagerGeometries) ? {
+        .map((project) => (isDefined(project.coordinates) ? {
             ...project,
             coordinates: [project.coordinates[1], project.coordinates[0]] as LatLngTuple,
         } : undefined))
@@ -178,9 +178,9 @@ function ProjectMap(props: Props) {
                                         {project.projectType && (
                                             <Tag
                                                 spacing="small"
-                                                // icon={(
-                                                //     projectTypeOptionsMap[project.project_type].icon
-                                                // )}
+                                                icon={(
+                                                    projectTypeOptionsMap[project.projectType].icon
+                                                )}
                                             >
                                                 {project?.projectType}
                                             </Tag>
@@ -226,11 +226,10 @@ function ProjectMap(props: Props) {
                                                 icon={<IoFlag />}
                                                 variant="transparent"
                                             >
-                                                {project.requestingOrganization.name}
+                                                {project?.requestingOrganization.name}
                                             </Tag>
                                         )}
-                                        {/* // TODO: Add these value */}
-                                        {/* <div className={styles.row}>
+                                        <div className={styles.row}>
                                             {project.day && (
                                                 <Tag
                                                     className={styles.tag}
@@ -249,7 +248,7 @@ function ProjectMap(props: Props) {
                                                     {t('project-card-contributors-text', { contributors: project.number_of_users })}
                                                 </Tag>
                                             )}
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </div>
                             </Card>

@@ -88,8 +88,6 @@ export const supportedProjectTypes = ['FIND', 'COMPARE', 'VALIDATE', 'ANALYZE', 
 
 export type ProjectType = 'FIND' | 'VALIDATE' | 'VALIDATE_IMAGE' | 'COMPARE' | 'COMPLETENESS';
 
-// export type ProjectType = 1 | 2 | 3 | 4 | 10;
-
 export interface ProjectStatusOption {
     key: ProjectStatus;
     label: string | React.ReactNode;

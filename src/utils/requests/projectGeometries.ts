@@ -2,7 +2,6 @@ import {
     memoize,
     ProjectStatus,
     ProjectType,
-    timeIt,
     parseProjectName,
     supportedProjectTypes,
     graphqlEndpoint,
@@ -109,3 +108,4 @@ const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
 });
 
 export default getProjectGeometries;
+
