@@ -35,12 +35,12 @@ const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) =
 	  console.warn(`No exportHistoryUrl for project ${projectId}`);
 	  return [];
 	}
-  
+
 	let csvContent: string;
 	try {
 	  csvContent = await timeIt(
-		projectId,
-		'fetch project history from exportHistory url',
+	    projectId,
+	    'fetch project history from exportHistory url',
 		async () => {
 		  const res = await fetch(exportHistoryUrl);
 		  if (!res.ok) {
@@ -48,22 +48,22 @@ const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) =
 		  }
 		  return res.text();
 		},
-	  );
+	    );
 	} catch (e) {
 	  console.warn(`Could not fetch history for project ${projectId}.`);
 	  console.warn(e);
 	  return [];
 	}
 
-  const parsedContent = await new Promise((resolve, reject) => {
-	Papa.parse(csvContent ?? '', {
-  	delimiter: ',',
-  	newline: '\n',
-  	header: true,
-  	complete: (results: any) => resolve(results),
-  	error: (error: any) => reject(error),
-	});
-  });
+    const parsedContent = await new Promise((resolve, reject) => {
+	    Papa.parse(csvContent ?? '', {
+      	delimiter: ',',
+  	    newline: '\n',
+      	header: true,
+      	complete: (results: any) => resolve(results),
+  	    error: (error: any) => reject(error),
+	    });
+    });
 
   const histories = (parsedContent as any).data as ProjectHistoryRaw[];
 

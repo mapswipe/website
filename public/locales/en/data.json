@@ -5,6 +5,8 @@
   "footprint": "Validate Footprints",
   "change-detection": "Compare Dates",
   "project-card-progress-text": "{{progress, number}}% completed",
+  "project-card-last-update": "{{date, datetime}}",
+  "project-card-contributors-text": "{{contributors}}",
   "mapped-area": "Mapped area",
   "contributors": "Contributors",
   "validate-image": "Assess Image",
@@ -53,7 +55,7 @@
   "Location": "Location",
   "requesting-organization": "Requesting organization",
   "created-at": "Created at",
-  "project-card-last-update": "{{date, datetime}}",
+  "project-contributors": "Project contributors",
   "download-section-heading": "Download all projects",
   "download-size": "{{size, number}}",
   "download": "Download",
@@ -61,5 +63,6 @@
   "license-section-description": "MapSwipe data  is released under a \"liberal\" non-reciprocal license (Creative Commons Attribution). This only requires that users acknowledge the source. You can do whatever you want with the data, just make sure to credit the MapSwipe contributors",
   "contact-section-heading": "Have other questions?",
   "contact-section-description": "Get in touch with us! Share feedback, explore project types, or dive into MapSwipe analytics. We're here to assist you!",
-  "contact-link-label": "Contact us"
+  "contact-link-label": "Contact us",
+  "explore-section-heading-description": "The data files always contain the most up-to-date data."
 }

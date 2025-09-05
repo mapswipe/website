@@ -82,13 +82,27 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
     };
 }
 
-export type ProjectStatus = 'DRAFT' | 'MARKED_AS_READY' | 'FAILED' | 'READY' | 'PUBLISHED' | 'PAUSED' | 'ARCHIVED' | 'DISCARDED';
+export type ProjectStatus =
+    | 'DRAFT'
+    | 'READY_TO_PROCESS'
+    | 'DISCARDED'
+    | 'PROCESSING_FAILED'
+    | 'PROCESSED'
+    | 'READY_TO_PUBLISH'
+    | 'PUBLISHING_FAILED'
+    | 'PUBLISHED'
+    | 'PAUSED'
+    | 'WITHDRAWN'
+    | 'FINISHED';
+
+export type ProjectType =
+    | 'FIND'
+    | 'VALIDATE'
+    | 'VALIDATE_IMAGE'
+    | 'COMPARE'
+    | 'COMPLETENESS';
 
 export const supportedProjectTypes = ['FIND', 'COMPARE', 'VALIDATE', 'ANALYZE', 'OTHER'];
-
-export type ProjectType = 'FIND' | 'VALIDATE' | 'VALIDATE_IMAGE' | 'COMPARE' | 'COMPLETENESS';
-
-// export type ProjectType = 1 | 2 | 3 | 4 | 10;
 
 export interface ProjectStatusOption {
     key: ProjectStatus;

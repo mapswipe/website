@@ -16,7 +16,7 @@ const sizeToStyleMap: {
 
 export interface Props {
     className?: string;
-    type: '1' | '2' | '3' | '10';
+    type: 'FIND' | 'VALIDATE' | 'VALIDATE_IMAGE' | 'COMPARE' | 'COMPLETENESS';
     size?: SizeTypes;
 }
 function ProjectTypeIcon(props: Props) {
@@ -34,7 +34,7 @@ function ProjectTypeIcon(props: Props) {
 
     return (
         <>
-            {type === '1' && (
+            {type === 'FIND' && (
                 <svg
                     className={className}
                     id="Layer_2"
@@ -47,7 +47,7 @@ function ProjectTypeIcon(props: Props) {
                     </g>
                 </svg>
             )}
-            {type === '2' && (
+            {type === 'VALIDATE' && (
                 <svg
                     className={className}
                     id="Layer_2"
@@ -60,7 +60,7 @@ function ProjectTypeIcon(props: Props) {
                     </g>
                 </svg>
             )}
-            {type === '3' && (
+            {type === 'COMPARE' && (
                 <svg
                     className={className}
                     id="Layer_2"
@@ -73,7 +73,7 @@ function ProjectTypeIcon(props: Props) {
                     </g>
                 </svg>
             )}
-            {type === '10' && (
+            {type === 'VALIDATE_IMAGE' && (
                 <IoImagesOutline />
             )}
         </>

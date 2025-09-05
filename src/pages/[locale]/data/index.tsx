@@ -2,10 +2,9 @@ import React, { useState, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import {
     _cs,
-    unique,
     listToMap,
     compareDate,
     sum,
@@ -52,22 +51,19 @@ import {
     Stats,
     getFileSizeProperties,
 } from 'utils/common';
-import getProjectCentroids from 'utils/requests/projectCentroids';
 import useDebouncedValue from 'hooks/useDebouncedValue';
 import { ProjectProperties, ProjectsData, projectsData } from 'pages/queries';
+import { graphqlRequest } from 'utils/requests/graphqlRequest';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
-import Pager from 'components/Pager';
 
 type DownloadType = (
     'projects_overview'
     | 'projects_with_geometry'
     | 'projects_with_centroid'
 );
-
-const PAGE_SIZE = 100;
 
 type DownloadFileType = 'geojson' | 'csv';
 
@@ -113,55 +109,60 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
-	const value: ProjectsData = await request(
-    	graphqlEndpoint,
-    	projectsData,
-    	{
-        	includeAll: true,
-            pagination: {
-                limit: PAGE_SIZE,
-                offset: 0,
-            }
-    	}
-	);
+    const value: ProjectsData = await graphqlRequest<ProjectsData>(
+        graphqlEndpoint,
+        projectsData,
+        { includeAll: true },
+    );
+
+    const {
+        communityStats,
+        projects,
+        organizations,
+    } = value ?? {};
 
     const {
         totalContributors,
         totalSwipes,
-    } = value?.communityStats ?? {};
+    } = communityStats ?? {};
 
-    const miniProjects = value?.projects.results.map((feature) => ({
+    const miniProjects = projects?.results.map((feature) => ({
         id: feature.id ?? null,
         projectType: feature.projectType,
         name: feature.name,
         status: feature.status ?? null,
         region: feature.region ?? null,
-        requestingOrganization: feature.name
-            ? null
-            : feature.requestingOrganization.name,
+        requestingOrganizationId: feature.requestingOrganization?.id ?? null,
+        requestingOrganization: feature.requestingOrganization ?? null,  
         progress: feature.progress !== null && feature.progress !== undefined
             ? Math.round(Number(feature?.progress) * 100)
             : 0,
-        // number_of_users: feature.properties.number_of_users ?? null,
-        // area_sqkm: feature.properties.area_sqkm ?? null,
-        exportAreaOfInterest: feature.exportAreaOfInterest?.file.url ?? null,
-        // day: feature.properties?.day
-        //     ? new Date(feature.properties.day).getTime()
-        //     : null,
+        numberOfContributorUsers: feature?.numberOfContributorUsers,
+        totalArea: feature?.totalArea ?? null,
         createdAt: feature?.createdAt
             ? new Date(feature.createdAt).getTime()
             : null,
         image: feature?.image ?? null,
-    }));
+        aoiGeometry: feature?.aoiGeometry
+            ? {
+                id: feature.aoiGeometry.id,
+                centroid: feature.aoiGeometry.centroid,
+                totalArea: feature.aoiGeometry.totalArea ?? 0,
+            }
+            : null,
+        modifiedAt: feature?.modifiedAt
+            ? new Date(feature.modifiedAt).getTime()
+            : null,
+    })).sort((foo, bar) => ((bar?.modifiedAt ?? 0) - (foo?.modifiedAt ?? 0)));;
 
     const contributors = miniProjects
-        .map((proj) => proj.number_of_users)
+        .map((proj) => proj.numberOfContributorUsers)
         .filter(isDefined);
     const minContributors = Math.min(...contributors);
     const maxContributors = Math.max(...contributors);
 
     const areas = miniProjects
-        .map((proj) => proj.area_sqkm)
+        .map((proj) => proj.totalArea)
         .filter(isDefined);
     const minArea = Math.min(...areas);
     const maxArea = Math.max(...areas);
@@ -209,6 +210,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             totalContributors,
             totalSwipes,
             totalCount: value.projects.totalCount,
+            organizations: organizations?.results ?? [],
         },
     };
 };
@@ -232,6 +234,8 @@ function iconSelector<K extends { icon?: React.ReactNode }>(option: K) {
     return option.icon;
 }
 
+const PAGE_SIZE = 9;
+
 interface Props extends SSRConfig {
     className?: string;
     minArea: number,
@@ -244,6 +248,12 @@ interface Props extends SSRConfig {
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
     totalCount: number;
+    organizations: Organization[];
+    aoiGeometry: {
+        id: string;
+        centroid: [number, number] | null;
+        totalArea: number | null;
+    };
 }
 
 function Data(props: Props) {
@@ -258,7 +268,7 @@ function Data(props: Props) {
         totalContributors,
         buildDate,
         totalSwipes,
-        totalCount,
+        organizations,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
@@ -267,24 +277,14 @@ function Data(props: Props) {
     const [dateFrom, setDateFrom] = useState<string | undefined>();
     const [dateTo, setDateTo] = useState<string | undefined>();
     const [projectTypes, setProjectTypes] = useState<string[] | undefined>();
-    const [organization, setOrganization] = useState<string | undefined>();
     const [projectStatuses, setProjectStatuses] = useState<string[] | undefined>();
     const [bubble, setBubble] = useState<string | undefined>();
-
-    const [activePage, setActivePage] = useState(1);
-    const [pagePerItem, setPagePerItem] = useState(PAGE_SIZE);
-
-    const organizationOptions = useMemo(() => (
-        unique(
-            projects
-                .map((project) => project?.requestingOrganization?.name)
-                .filter(isDefined),
-            (item) => item,
-        ).map((org) => ({ label: org }))
-    ), [projects]);
+    const [organization, setOrganization] = useState<string | undefined>();
 
     const debouncedSearchText = useDebouncedValue(searchText);
     const debouncedLocationSearchText = useDebouncedValue(locationSearchText);
+
+    const organizationOptions = useMemo(() => organizations ?? [], [organizations]);
 
     const { t } = useTranslation('data');
 
@@ -295,7 +295,7 @@ function Data(props: Props) {
 
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
-            key: 'READY',
+            key: 'READY_TO_PROCESS',
             label: t('active-projects'),
             icon: (<IoEllipseSharp className={styles.active} />),
         },
@@ -319,28 +319,28 @@ function Data(props: Props) {
             key: 'FIND',
             label: t('build-area'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
         {
             key: 'VALIDATE',
             label: t('footprint'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
         {
             key: 'COMPARE',
             label: t('change-detection'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
             ),
         },
         {
             key: 'COMPLETENESS',
             label: t('validate-image'),
             icon: (
-                <ProjectTypeIcon type="10" size="small" />
+                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
             ),
         },
     ]), [t]);
@@ -421,12 +421,12 @@ function Data(props: Props) {
         ],
     );
 
-    const totalArea = sum(
+    const totalAreaSum = sum(
         visibleProjects.map(
-            (feature) => feature.area_sqkm ?? 0,
+            (feature) => feature.totalArea ?? 0,
         ).filter(isDefined),
     );
-    const roundedTotalArea = Math.round((totalArea / 1000)) * 1000;
+    const roundedTotalArea = Math.round((totalAreaSum / 1000)) * 1000;
 
     const tableProjects = visibleProjects.slice(0, items);
     const downloadHeadingMap: Record<DownloadType, string> = {
@@ -440,15 +440,14 @@ function Data(props: Props) {
         projects_with_centroid: t('download-projects-with-centroid-description'),
     };
 
-    // TODO: Add area_sqkm data from project
     const radiusSelector = useCallback(
-        (project: { area_sqkm: number | null, number_of_users: number | null }) => {
+        (project: { totalArea: number | null, numberOfContributorUsers: number | null }) => {
             if (bubble === 'area') {
-                return 4 + 16 * (((project.area_sqkm ?? minArea - minArea))
+                return 4 + 16 * (((project.totalArea ?? minArea - minArea))
                     / (maxArea - minArea));
             }
             if (bubble === 'contributors') {
-                return 4 + 16 * (((project.number_of_users ?? 0) - minContributors)
+                return 4 + 16 * (((project.numberOfContributorUsers ?? 0) - minContributors)
                     / (maxContributors - minContributors));
             }
             return 4;
@@ -547,7 +546,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="1"
+                            type="FIND"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -583,7 +582,7 @@ function Data(props: Props) {
                     )}
                     icons={(
                         <ProjectTypeIcon
-                            type="3"
+                            type="COMPARE"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -604,7 +603,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="2"
+                            type="VALIDATE"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -627,11 +626,15 @@ function Data(props: Props) {
                 contentClassName={styles.content}
                 descriptionClassName={styles.lastFetchedDate}
                 description={buildDate && (
-                    t('data-last-fetched', {
-                        date: (new Date(0).setUTCSeconds(Number(buildDate))),
-                        dateStyle: 'medium',
-                        timeStyle: 'medium',
-                    })
+                    <>
+                        {t('data-last-fetched', {
+                            date: (new Date(0).setUTCSeconds(Number(buildDate))),
+                            dateStyle: 'medium',
+                            timeStyle: 'medium',
+                        })}
+                        <br />
+                        {t('explore-section-heading-description')}
+                    </>
                 )}
                 actions={tableProjects.length !== visibleProjects.length && (
                     <Button
@@ -775,9 +778,9 @@ function Data(props: Props) {
                                         {project.projectType && (
                                             <Tag
                                                 spacing="small"
-                                                // icon={
-                                                //    projectTypeOptionsMap[project.projectType]?.icon
-                                                // }
+                                                icon={
+                                                   projectTypeOptionsMap[project.projectType]?.icon
+                                                }
                                             >
                                                 {project.projectType}
                                             </Tag>
@@ -785,7 +788,7 @@ function Data(props: Props) {
                                         {project.status && (
                                             <Tag
                                                 spacing="small"
-                                                // icon={projectStatusOptionMap[project.status].icon}
+                                                icon={projectStatusOptionMap[project.status]?.icon}
                                             >
                                                 {project.status}
                                             </Tag>
@@ -843,16 +846,16 @@ function Data(props: Props) {
                                                     })}
                                                 </Tag>
                                             )}
-                                            {/* {project.number_of_users && (
+                                            {project.numberOfContributorUsers && (
                                                 <Tag
                                                     tooltip={t('project-contributors')}
                                                     className={styles.tag}
                                                     icon={<IoPerson />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                                    {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers })}
                                                 </Tag>
-                                            )} */}
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -860,20 +863,7 @@ function Data(props: Props) {
                         </Link>
                     ))}
                 </div>
-                {/* // FIX ME: Do we need a pagination
-                    <div className={styles.pager}>
-                        <Pager
-                            pagePerItemOptions={PAGE_SIZE}
-                            onPagePerItemChange={setPagePerItem}
-                            pagePerItem={pagePerItem}
-                            totalItems={totalCount}
-                            activePage={activePage}
-                            onActivePageChange={setActivePage}
-                        />
-                    </div>
-                */}
             </Section>
-            {/* // FIXME: We need API for this */}
             <Section
                 title={t('download-section-heading')}
                 className={styles.downloadSection}
@@ -929,3 +919,4 @@ function Data(props: Props) {
 }
 
 export default Data;
+
