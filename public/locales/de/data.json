@@ -9,6 +9,7 @@
   "project-card-contributors-text": "{{contributors}}",
   "mapped-area": "Kartografierter Bereich",
   "contributors": "Mitwirkende ",
+  "validate-image": "",
   "download-projects-overview-heading": "Projektübersicht",
   "download-projects-with-geometry-heading": "Projekte mit Geometrie",
   "download-projects-with-centroid-heading": "Projekte mit Schwerpunkt",

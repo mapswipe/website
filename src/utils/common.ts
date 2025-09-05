@@ -6,8 +6,6 @@ import {
 
 export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
 
-export const supportedProjectTypes = [1, 2, 3, 10];
-
 export interface Stats {
     communityStats: {
         totalContributors: number | null | undefined;
@@ -84,9 +82,11 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
     };
 }
 
-export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
+export type ProjectStatus = 'DRAFT' | 'MARKED_AS_READY' | 'FAILED' | 'READY' | 'PUBLISHED' | 'PAUSED' | 'ARCHIVED' | 'DISCARDED';
 
-export type ProjectType = 1 | 2 | 3 | 4 | 10;
+export const supportedProjectTypes = ['FIND', 'COMPARE', 'VALIDATE', 'ANALYZE', 'OTHER'];
+
+export type ProjectType = 'FIND' | 'VALIDATE' | 'VALIDATE_IMAGE' | 'COMPARE' | 'COMPLETENESS';
 
 export interface ProjectStatusOption {
     key: ProjectStatus;
@@ -103,11 +103,11 @@ export interface ProjectTypeOption {
 export const projectNameMapping: {
     [key in ProjectTypeOption['key']]: string
 } = {
-    1: 'Build Area',
-    2: 'Footprint',
-    3: 'Change Detection',
-    4: 'Completeness',
-    10: 'Validate Image',
+    FIND: 'Build Area',
+    VALIDATE: 'Footprint',
+    COMPARE: 'Change Detection',
+    COMPLETENESS: 'Completeness',
+    VALIDATE_IMAGE: 'Validate Image',
 };
 
 const mb = 1024 * 1024;

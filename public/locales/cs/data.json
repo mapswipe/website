@@ -9,6 +9,7 @@
   "project-card-contributors-text": "{{contributors}}",
   "mapped-area": "Zmapovaná oblast",
   "contributors": "Přispěvatelé",
+  "validate-image": "",
   "download-projects-overview-heading": "Přehled projektů",
   "download-projects-with-geometry-heading": "Projekty s geometrií",
   "download-projects-with-centroid-heading": "Projekty s centroidem",
