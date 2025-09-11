@@ -1,0 +1,5 @@
+{
+  "users-title": "Benutzer",
+  "users-description": "Dieser Datensatz enthält Informationen zu den einzelnen Beiträgen pro Benutzer. Dadurch erfahren Sie beispielsweise die aktivsten Benutzer dieses Projekts. (Beachte das du die .gz Dateien erst entpacken musst bevor du sie verwenden kannst.)",
+  "date": "{{date, datetime}}"
+}

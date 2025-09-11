@@ -1,79 +1,88 @@
-import util from 'util';
-import fs from 'fs';
 import Papa from 'papaparse';
 import { isFalsyString, isDefined } from '@togglecorp/fujs';
-
 import { timeIt } from 'utils/common';
 
-export type ProjectHistoryRaw = {
-    day: string,
-    number_of_results: string, // number
-    number_of_results_progress: string, // number
-    cum_number_of_results: string, // number
-    cum_number_of_results_progress: string, // number
-    progress: string, // number
-    cum_progress: string, // number
-    number_of_users: string, // number
-    number_of_new_users: string, // number
-    cum_number_of_users: string, // number
-    project_id: string;
-};
+interface ProjectHistoryRaw {
+  day: string;
+  number_of_results: string;
+  number_of_results_progress: string;
+  cum_number_of_results: string;
+  cum_number_of_results_progress: string;
+  progress: string;
+  cum_progress: string;
+  number_of_users: string;
+  number_of_new_users: string;
+  cum_number_of_users: string;
+  project_id: string;
+}
 
 export interface ProjectHistory {
-    timestamp: number;
-    progress: number;
+  timestamp: number;
+  numberOfResults: number;
+  numberOfResultsProgress: number;
+  cumNumberOfResults: number;
+  cumNumberOfResultsProgress: number;
+  progress: number;
+  cumProgress: number;
+  numberOfUsers: number;
+  numberOfNewUsers: number;
+  cumNumberOfUsers: number;
+  projectId: string;
 }
-const readFile = util.promisify(fs.readFile);
 
-function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is ProjectHistoryRaw {
-    if (isFalsyString(hist.day)) {
-        return false;
-    }
+const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) => {
+	if (!exportHistoryUrl) {
+	  console.warn(`No exportHistoryUrl for project ${projectId}`);
+	  return [];
+	}
 
-    return true;
-}
-
-const getProjectHistory = async (projectId: string) => {
-    let cacheFileContent: Buffer;
-    try {
-        cacheFileContent = await timeIt(
-            projectId,
-            'read cache from disk',
-            () => readFile(`cache/project-history/history_${projectId}.csv`),
-        );
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.warn(`Could not read history file for project ${projectId}.`);
-        // eslint-disable-next-line no-console
-        console.warn(e);
-        return [];
-    }
+	let csvContent: string;
+	try {
+	  csvContent = await timeIt(
+	    projectId,
+	    'fetch project history from exportHistory url',
+		async () => {
+		  const res = await fetch(exportHistoryUrl);
+		  if (!res.ok) {
+			throw new Error(`Failed to fetch history: ${res.status}`);
+		  }
+		  return res.text();
+		},
+	    );
+	} catch (e) {
+	  console.warn(`Could not fetch history for project ${projectId}.`);
+	  console.warn(e);
+	  return [];
+	}
 
     const parsedContent = await new Promise((resolve, reject) => {
-        Papa.parse((cacheFileContent?.toString() ?? ''), {
-            delimiter: ',',
-            newline: '\n',
-            header: true,
-            complete: (results: any) => {
-                resolve(results);
-            },
-            error: (error: any) => {
-                reject(error);
-            },
-        });
+	    Papa.parse(csvContent ?? '', {
+      	delimiter: ',',
+  	    newline: '\n',
+      	header: true,
+      	complete: (results: any) => resolve(results),
+  	    error: (error: any) => reject(error),
+	    });
     });
-    const histories = (parsedContent as any).data as (ProjectHistoryRaw | { day: '' })[];
 
-    return histories.filter(isValidHistoryData).map((hist) => {
-        if (isFalsyString(hist.cum_progress)) {
-            return undefined;
-        }
+  const histories = (parsedContent as any).data as ProjectHistoryRaw[];
 
-        return {
-            timestamp: new Date(hist.day).getTime(),
-            progress: Number(hist.cum_progress),
-        };
-    }).filter(isDefined);
+  return histories
+	.filter((row) => !isFalsyString(row.day))
+	.map((row): ProjectHistory => ({
+  	timestamp: new Date(row.day).getTime(),
+  	numberOfResults: Number(row.number_of_results) || 0,
+  	numberOfResultsProgress: Number(row.number_of_results_progress) || 0,
+  	cumNumberOfResults: Number(row.cum_number_of_results) || 0,
+  	cumNumberOfResultsProgress: Number(row.cum_number_of_results_progress) || 0,
+  	progress: Number(row.progress) || 0,
+  	cumProgress: Number(row.cum_progress) || 0,
+  	numberOfUsers: Number(row.number_of_users) || 0,
+  	numberOfNewUsers: Number(row.number_of_new_users) || 0,
+  	cumNumberOfUsers: Number(row.cum_number_of_users) || 0,
+  	projectId: row.project_id,
+	}))
+	.filter(isDefined);
 };
 
 export default getProjectHistory;

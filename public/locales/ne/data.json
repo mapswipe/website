@@ -9,6 +9,7 @@
   "project-card-contributors-text": "{{contributors}}",
   "mapped-area": "नक्सा गरिएको क्षेत्र",
   "contributors": "योगदानकर्ताहरू",
+  "validate-image": "",
   "download-projects-overview-heading": "परियोजनाहरू अवलोकन",
   "download-projects-with-geometry-heading": "ज्यामिति का साथ परियोजनाहरू",
   "download-projects-with-centroid-heading": "सेन्ट्रोइड संग परियोजनाहरू",

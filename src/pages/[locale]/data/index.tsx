@@ -2,10 +2,9 @@ import React, { useState, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps } from 'next';
 import { SSRConfig, useTranslation } from 'next-i18next';
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import {
     _cs,
-    unique,
     listToMap,
     compareDate,
     sum,
@@ -52,8 +51,9 @@ import {
     Stats,
     getFileSizeProperties,
 } from 'utils/common';
-import getProjectCentroids from 'utils/requests/projectCentroids';
 import useDebouncedValue from 'hooks/useDebouncedValue';
+import { ProjectProperties, ProjectsData, projectsData } from 'pages/queries';
+import { graphqlRequest } from 'utils/requests/graphqlRequest';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
@@ -73,6 +73,11 @@ interface UrlInfo {
     fileSizeCheckUrl: string;
     url: string;
     size: number;
+}
+
+interface Organization {
+    id: string;
+    name: string;
 }
 
 const DynamicProjectsMap = dynamic(() => import('components/ProjectsMap'), { ssr: false });
@@ -102,60 +107,62 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         'common',
     ]);
 
-    const projects = await getProjectCentroids();
-    const stats = gql`
-        query CommunityStats {
-            communityStats {
-                totalContributors
-                totalUserGroups
-                totalSwipes
-            }
-        }
-    `;
-    const value: Stats = await request(graphqlEndpoint, stats);
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
+
+    const value: ProjectsData = await graphqlRequest<ProjectsData>(
+        graphqlEndpoint,
+        projectsData,
+        { includeAll: true },
+    );
+
+    const {
+        communityStats,
+        projects,
+        organizations,
+    } = value ?? {};
 
     const {
         totalContributors,
         totalSwipes,
-    } = value?.communityStats ?? {};
+    } = communityStats ?? {};
 
-    const miniProjects = projects.features.map((feature) => ({
-        project_id: feature.properties.project_id ?? null,
-        project_type: feature.properties.project_type,
-        name: feature.properties.legacyName
-            ? feature.properties.name
-            : `${feature.properties.topic} (${feature.properties.taskNumber})`,
-        status: feature.properties.status ?? null,
-        region: feature.properties.legacyName
-            ? null
-            : feature.properties.region,
-        requestingOrganization: feature.properties.legacyName
-            ? null
-            : feature.properties.requestingOrganization,
-        progress: feature.properties.progress !== null && feature.properties.progress !== undefined
-            ? Math.round(feature.properties.progress * 100)
+    const miniProjects = projects?.results.map((feature) => ({
+        id: feature.id ?? null,
+        projectType: feature.projectType,
+        name: feature.name,
+        status: feature.status ?? null,
+        region: feature.region ?? null,
+        requestingOrganizationId: feature.requestingOrganization?.id ?? null,
+        requestingOrganization: feature.requestingOrganization ?? null,  
+        progress: feature.progress !== null && feature.progress !== undefined
+            ? Math.round(Number(feature?.progress) * 100)
             : 0,
-        number_of_users: feature.properties.number_of_users ?? null,
-        area_sqkm: feature.properties.area_sqkm ?? null,
-        coordinates: feature.geometry?.coordinates ?? null,
-        day: feature.properties?.day
-            ? new Date(feature.properties.day).getTime()
+        numberOfContributorUsers: feature?.numberOfContributorUsers,
+        totalArea: feature?.totalArea ?? null,
+        createdAt: feature?.createdAt
+            ? new Date(feature.createdAt).getTime()
             : null,
-        created: feature.properties?.created
-            ? new Date(feature.properties.created).getTime()
+        image: feature?.image ?? null,
+        aoiGeometry: feature?.aoiGeometry
+            ? {
+                id: feature.aoiGeometry.id,
+                centroid: feature.aoiGeometry.centroid,
+                totalArea: feature.aoiGeometry.totalArea ?? 0,
+            }
             : null,
-        image: feature.properties?.image ?? null,
-    })).sort((foo, bar) => ((bar.day ?? 0) - (foo.day ?? 0)));
+        modifiedAt: feature?.modifiedAt
+            ? new Date(feature.modifiedAt).getTime()
+            : null,
+    })).sort((foo, bar) => ((bar?.modifiedAt ?? 0) - (foo?.modifiedAt ?? 0)));;
 
     const contributors = miniProjects
-        .map((proj) => proj.number_of_users)
+        .map((proj) => proj.numberOfContributorUsers)
         .filter(isDefined);
     const minContributors = Math.min(...contributors);
     const maxContributors = Math.max(...contributors);
 
     const areas = miniProjects
-        .map((proj) => proj.area_sqkm)
+        .map((proj) => proj.totalArea)
         .filter(isDefined);
     const minArea = Math.min(...areas);
     const maxArea = Math.max(...areas);
@@ -202,16 +209,18 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             maxContributors,
             totalContributors,
             totalSwipes,
+            totalCount: value.projects.totalCount,
+            organizations: organizations?.results ?? [],
         },
     };
 };
 
-function organizationKeySelector<K extends { label: string }>(option: K) {
-    return option.label;
+function organizationKeySelector(option: Organization) {
+    return option.id;
 }
 
-function organizationLabelSelector<K extends { label: string }>(option: K) {
-    return option.label;
+function organizationLabelSelector(option: Organization) {
+    return option.name;
 }
 
 function keySelector<K extends { key: string }>(option: K) {
@@ -234,24 +243,17 @@ interface Props extends SSRConfig {
     minContributors: number,
     maxContributors: number,
     buildDate: string | null,
-    projects: {
-        image: string | null;
-        project_id: string;
-        project_type: ProjectType,
-        name: string;
-        status: ProjectStatus;
-        progress: number | null;
-        number_of_users: number | null;
-        coordinates: [number, number] | null;
-        area_sqkm: number | null;
-        day: number | null;
-        created: number | null;
-        region: string | null;
-        requestingOrganization: string | null;
-    }[];
+    projects: ProjectProperties[];
     urls: UrlInfo[];
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
+    totalCount: number;
+    organizations: Organization[];
+    aoiGeometry: {
+        id: string;
+        centroid: [number, number] | null;
+        totalArea: number | null;
+    };
 }
 
 function Data(props: Props) {
@@ -266,6 +268,7 @@ function Data(props: Props) {
         totalContributors,
         buildDate,
         totalSwipes,
+        organizations,
     } = props;
 
     const [items, setItems] = useState(PAGE_SIZE);
@@ -274,21 +277,14 @@ function Data(props: Props) {
     const [dateFrom, setDateFrom] = useState<string | undefined>();
     const [dateTo, setDateTo] = useState<string | undefined>();
     const [projectTypes, setProjectTypes] = useState<string[] | undefined>();
-    const [organization, setOrganization] = useState<string | undefined>();
     const [projectStatuses, setProjectStatuses] = useState<string[] | undefined>();
     const [bubble, setBubble] = useState<string | undefined>();
-
-    const organizationOptions = useMemo(() => (
-        unique(
-            projects
-                .map((project) => project.requestingOrganization)
-                .filter(isDefined),
-            (item) => item,
-        ).map((org) => ({ label: org }))
-    ), [projects]);
+    const [organization, setOrganization] = useState<string | undefined>();
 
     const debouncedSearchText = useDebouncedValue(searchText);
     const debouncedLocationSearchText = useDebouncedValue(locationSearchText);
+
+    const organizationOptions = useMemo(() => organizations ?? [], [organizations]);
 
     const { t } = useTranslation('data');
 
@@ -299,12 +295,12 @@ function Data(props: Props) {
 
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
-            key: 'active',
+            key: 'READY_TO_PROCESS',
             label: t('active-projects'),
             icon: (<IoEllipseSharp className={styles.active} />),
         },
         {
-            key: 'finished',
+            key: 'PUBLISHED',
             label: t('finished-projects'),
             icon: (<IoEllipseSharp className={styles.finished} />),
         },
@@ -320,31 +316,31 @@ function Data(props: Props) {
 
     const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
         {
-            key: '1',
+            key: 'FIND',
             label: t('build-area'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
         {
-            key: '2',
+            key: 'VALIDATE',
             label: t('footprint'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
         {
-            key: '3',
+            key: 'COMPARE',
             label: t('change-detection'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
             ),
         },
         {
-            key: '10',
+            key: 'COMPLETENESS',
             label: t('validate-image'),
             icon: (
-                <ProjectTypeIcon type="10" size="small" />
+                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
             ),
         },
     ]), [t]);
@@ -374,25 +370,25 @@ function Data(props: Props) {
 
             filteredProjects = projectTypes
                 ? filteredProjects.filter(
-                    (project) => projectTypes.includes(String(project.project_type)),
+                    (project) => projectTypes.includes(String(project.projectType)),
                 )
                 : filteredProjects;
 
             filteredProjects = dateFrom
                 ? filteredProjects.filter(
-                    (project) => compareDate(project.created, dateFrom) >= 0,
+                    (project) => compareDate(project.createdAt, dateFrom) >= 0,
                 )
                 : filteredProjects;
 
             filteredProjects = dateTo
                 ? filteredProjects.filter(
-                    (project) => compareDate(dateTo, project.created) >= 0,
+                    (project) => compareDate(dateTo, project.createdAt) >= 0,
                 )
                 : filteredProjects;
 
             filteredProjects = organization
                 ? filteredProjects.filter(
-                    (project) => project.requestingOrganization === organization,
+                    (project) => project.requestingOrganizationId === organization,
                 )
                 : filteredProjects;
 
@@ -411,7 +407,6 @@ function Data(props: Props) {
                     (project) => project.name,
                 )
                 : filteredProjects;
-
             return filteredProjects;
         },
         [
@@ -426,12 +421,12 @@ function Data(props: Props) {
         ],
     );
 
-    const totalArea = sum(
+    const totalAreaSum = sum(
         visibleProjects.map(
-            (feature) => feature.area_sqkm,
+            (feature) => feature.totalArea ?? 0,
         ).filter(isDefined),
     );
-    const roundedTotalArea = Math.round((totalArea / 1000)) * 1000;
+    const roundedTotalArea = Math.round((totalAreaSum / 1000)) * 1000;
 
     const tableProjects = visibleProjects.slice(0, items);
     const downloadHeadingMap: Record<DownloadType, string> = {
@@ -446,13 +441,13 @@ function Data(props: Props) {
     };
 
     const radiusSelector = useCallback(
-        (project: { area_sqkm: number | null, number_of_users: number | null }) => {
+        (project: { totalArea: number | null, numberOfContributorUsers: number | null }) => {
             if (bubble === 'area') {
-                return 4 + 16 * (((project.area_sqkm ?? minArea - minArea))
+                return 4 + 16 * (((project.totalArea ?? minArea - minArea))
                     / (maxArea - minArea));
             }
             if (bubble === 'contributors') {
-                return 4 + 16 * (((project.number_of_users ?? 0) - minContributors)
+                return 4 + 16 * (((project.numberOfContributorUsers ?? 0) - minContributors)
                     / (maxContributors - minContributors));
             }
             return 4;
@@ -551,7 +546,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="1"
+                            type="FIND"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -587,7 +582,7 @@ function Data(props: Props) {
                     )}
                     icons={(
                         <ProjectTypeIcon
-                            type="3"
+                            type="COMPARE"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -608,7 +603,7 @@ function Data(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="2"
+                            type="VALIDATE"
                         />
                     )}
                     childrenContainerClassName={styles.keyPointList}
@@ -631,11 +626,15 @@ function Data(props: Props) {
                 contentClassName={styles.content}
                 descriptionClassName={styles.lastFetchedDate}
                 description={buildDate && (
-                    t('data-last-fetched', {
-                        date: (new Date(0).setUTCSeconds(Number(buildDate))),
-                        dateStyle: 'medium',
-                        timeStyle: 'medium',
-                    })
+                    <>
+                        {t('data-last-fetched', {
+                            date: (new Date(0).setUTCSeconds(Number(buildDate))),
+                            dateStyle: 'medium',
+                            timeStyle: 'medium',
+                        })}
+                        <br />
+                        {t('explore-section-heading-description')}
+                    </>
                 )}
                 actions={tableProjects.length !== visibleProjects.length && (
                     <Button
@@ -757,6 +756,7 @@ function Data(props: Props) {
                     </div>
                     <IoEllipseSharp className={styles.circle} />
                     <div>
+                        {/* // FIXME: Add roundedTotalArea Here */}
                         {t('total-area-card-text', { area: roundedTotalArea })}
                     </div>
                 </div>
@@ -764,33 +764,33 @@ function Data(props: Props) {
                     {tableProjects.map((project) => (
                         <Link
                             className={styles.cardLink}
-                            key={project.project_id}
-                            href={`/[locale]/projects/${project.project_id}`}
+                            key={project.id}
+                            href={`/[locale]/projects/${project.id}`}
                         >
                             <Card
                                 className={styles.project}
-                                coverImageUrl={project.image ?? undefined}
+                                coverImageUrl={project.image?.file.url}
                                 imageClassName={styles.projectImage}
                                 headingFont="normal"
                                 heading={project.name}
                                 description={(
                                     <div className={styles.projectDetailsRow}>
-                                        {project.project_type && (
+                                        {project.projectType && (
                                             <Tag
                                                 spacing="small"
-                                                icon={(
-                                                    projectTypeOptionsMap[project.project_type].icon
-                                                )}
+                                                icon={
+                                                   projectTypeOptionsMap[project.projectType]?.icon
+                                                }
                                             >
-                                                {projectTypeOptionsMap[project.project_type].label}
+                                                {project.projectType}
                                             </Tag>
                                         )}
                                         {project.status && (
                                             <Tag
                                                 spacing="small"
-                                                icon={projectStatusOptionMap[project.status].icon}
+                                                icon={projectStatusOptionMap[project.status]?.icon}
                                             >
-                                                {projectStatusOptionMap[project.status].label}
+                                                {project.status}
                                             </Tag>
                                         )}
                                     </div>
@@ -829,11 +829,11 @@ function Data(props: Props) {
                                                 icon={<IoFlag />}
                                                 variant="transparent"
                                             >
-                                                {project.requestingOrganization}
+                                                {project.requestingOrganization.name}
                                             </Tag>
                                         )}
                                         <div className={styles.projectDetailsRow}>
-                                            {project.created && (
+                                            {project.createdAt && (
                                                 <Tag
                                                     tooltip={t('created-at')}
                                                     className={styles.tag}
@@ -841,19 +841,19 @@ function Data(props: Props) {
                                                     variant="transparent"
                                                 >
                                                     {t('project-card-last-update', {
-                                                        date: project.created,
+                                                        date: project.createdAt,
                                                         dateStyle: 'medium',
                                                     })}
                                                 </Tag>
                                             )}
-                                            {project.number_of_users && (
+                                            {project.numberOfContributorUsers && (
                                                 <Tag
                                                     tooltip={t('project-contributors')}
                                                     className={styles.tag}
                                                     icon={<IoPerson />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
+                                                    {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers })}
                                                 </Tag>
                                             )}
                                         </div>
@@ -919,3 +919,4 @@ function Data(props: Props) {
 }
 
 export default Data;
+
