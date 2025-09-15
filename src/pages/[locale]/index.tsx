@@ -244,6 +244,45 @@ function Home(props: Props) {
                 >
                     {t('validate-mission-type-description')}
                 </Card>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/completeness.png"
+                    heading={t('type-completeness-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="4"
+                        />
+                    )}
+                >
+                    {t('completeness-type-description')}
+                </Card>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/validate_image.png"
+                    heading={t('type-validate-image-type')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="10"
+                        />
+                    )}
+                >
+                    {t('validate-image-type-description')}
+                </Card>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/street_image.png"
+                    heading={t('type-street-type')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="7"
+                        />
+                    )}
+                >
+                    {t('street-type-description')}
+                </Card>
             </Section>
             <Section
                 sectionId="startMapswiping"

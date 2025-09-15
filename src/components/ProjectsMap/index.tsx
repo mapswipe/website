@@ -141,6 +141,34 @@ function ProjectMap(props: Props) {
                 <ProjectTypeIcon type="3" size="small" />
             ),
         },
+        {
+            key: '3',
+            label: t('change-detection'),
+            icon: (
+                <ProjectTypeIcon type="3" size="small" />
+            ),
+        },
+        {
+            key: '4',
+            label: t('completeness'),
+            icon: (
+                <ProjectTypeIcon type="4" size="small" />
+            ),
+        },
+        {
+            key: '7',
+            label: t('street'),
+            icon: (
+                <ProjectTypeIcon type="7" size="small" />
+            ),
+        },
+        {
+            key: '10',
+            label: t('validate-image'),
+            icon: (
+                <ProjectTypeIcon type="10" size="small" />
+            ),
+        },
     ]), [t]);
 
     const projectTypeOptionsMap = useMemo(() => (

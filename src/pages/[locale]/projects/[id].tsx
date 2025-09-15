@@ -269,6 +269,20 @@ function Project(props: Props) {
                 <ProjectTypeIcon type="3" size="small" />
             ),
         },
+        4: {
+            key: '4',
+            label: t('completeness'),
+            icon: (
+                <ProjectTypeIcon type="4" size="small" />
+            ),
+        },
+        7: {
+            key: '7',
+            label: t('street'),
+            icon: (
+                <ProjectTypeIcon type="7" size="small" />
+            ),
+        },
         10: {
             key: '10',
             label: t('validate-image'),
