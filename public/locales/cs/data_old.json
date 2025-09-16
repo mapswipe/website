@@ -8,5 +8,8 @@
   "change-detection": "Porovnání",
   "completeness": "",
   "validate-image": "",
-  "street": ""
+  "street": "",
+  "published": "",
+  "withdrawn": "",
+  "download-projects-with-geometry-heading": "Projekty s geometrií"
 }

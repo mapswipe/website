@@ -8,5 +8,8 @@
   "change-detection": "तुलना",
   "completeness": "",
   "validate-image": "",
-  "street": ""
+  "street": "",
+  "published": "",
+  "withdrawn": "",
+  "download-projects-with-geometry-heading": "ज्यामिति का साथ परियोजनाहरू"
 }

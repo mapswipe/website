@@ -12,7 +12,12 @@
     "plugins": [
         "postcss-modules"
     ],
-    "ignorePatterns": ["./server/"],
+    "ignorePatterns": [
+        "./server/",
+        "src/generated/**",
+        "**/*.generated.ts",
+        "**/*.gen.ts"
+    ],
     "rules": {
         "strict": 1,
 

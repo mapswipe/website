@@ -8,5 +8,8 @@
   "change-detection": "Comparar",
   "completeness": "",
   "validate-image": "",
-  "street": ""
+  "street": "",
+  "published": "",
+  "withdrawn": "",
+  "download-projects-with-geometry-heading": "Projetos com geometria"
 }

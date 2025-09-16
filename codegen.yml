@@ -1,14 +1,15 @@
 overwrite: true
 schema:
-  - "./server/django/schema.graphql"
+  - "./backend/schema.graphql"
 documents:
-  - "pages/**/*.tsx"
-  - "pages/**/*.ts"
+  - "src/**/*.tsx"
+  - "src/**/*.ts"
+  - "src/**/*.graphql"
 generates:
-  ./src/generated/types.ts:
+  ./generated/types.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
-  ./src/generated/schema.json:
+  ./generated/schema.json:
     plugins:
       - "introspection"

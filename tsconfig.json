@@ -27,7 +27,8 @@
     },
     "exclude": [
         "node_modules",
-        "server"
+        "server",
+        "backend"
     ],
     "include": [
         "next-env.d.ts",

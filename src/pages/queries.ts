@@ -2,35 +2,35 @@ import { gql } from 'graphql-request';
 import { ProjectStatus, ProjectType } from 'utils/common';
 
 export interface ProjectProperties {
-	id: string;
-	name: string;
-	projectType: ProjectType;
-	description?: string | null;
-	status: ProjectStatus;
-	createdAt?: number | null;
-	modifiedAt?: string | null;
-	image: {
+    id: string;
+    name: string;
+    projectType: ProjectType;
+    description?: string | null;
+    status: ProjectStatus;
+    createdAt?: number | null;
+    modifiedAt?: string | null;
+    image: {
         id: string;
         file: {
-        	name: string;
-        	url: string;
+            name: string;
+            url: string;
         };
         createdAt: string;
-	};
-	requestingOrganizationId?: string;
-	progress?: number;
-	requestingOrganization: {
-    	id: string;
-    	name: string;
-	};
-	region?: string | null;
-	exportAggregatedResults?: UrlInfo;
-	exportAggregatedResultsWithGeometry?: UrlInfo;
-	exportGroups?: UrlInfo;
-	exportHistory?: UrlInfo;
-	exportResults?: UrlInfo;
-	exportTasks?: UrlInfo;
-	exportUsers?: UrlInfo;
+    };
+    requestingOrganizationId?: string;
+    progress?: number;
+    requestingOrganization: {
+        id: string;
+        name: string;
+    };
+    region?: string | null;
+    exportAggregatedResults?: UrlInfo;
+    exportAggregatedResultsWithGeometry?: UrlInfo;
+    exportGroups?: UrlInfo;
+    exportHistory?: UrlInfo;
+    exportResults?: UrlInfo;
+    exportTasks?: UrlInfo;
+    exportUsers?: UrlInfo;
     exportAreaOfInterest: UrlInfo;
     exportHotTaskingManagerGeometries?: UrlInfo;
     totalArea: number | null;
@@ -50,25 +50,6 @@ export interface GlobalExportAssets {
         name: string;
         url: string;
     };
-}
-
-export interface ProjectsData {
-    projects: {
-        totalCount: number;
-        results: ProjectProperties[];
-    };
-    organizations: {
-        results: {
-            id: string;
-            name: string;
-        }[];
-    };
-    communityStats: {
-        totalSwipes?: number;
-        totalUserGroups?: number;
-        totalContributors?: number;
-    };
-    globalExportAssets: GlobalExportAssets[];
 }
 
 export interface UrlInfo {
@@ -99,9 +80,11 @@ export interface FeatureCollection {
 }
 
 export const projectsData = gql`
-    query Projects($includeAll: Boolean!) {
-        projects(includeAll: $includeAll) {
-            totalCount
+    query Projects($includeAll: Boolean!, $filters: ProjectFilter) {
+        publicProjects(
+           filters: $filters,
+            includeAll: $includeAll
+        ) {
             results {
                 id
                 exportAggregatedResultsWithGeometry {
@@ -218,9 +201,11 @@ export const projectsData = gql`
                 region
                 requestingOrganizationId
                 numberOfContributorUsers
+                totalArea
                 aoiGeometry {
                     centroid
                     id
+                    totalArea
                 }
             }
         }
@@ -230,7 +215,7 @@ export const projectsData = gql`
             totalUserGroups
             totalSwipes
         }
-        organizations {
+        publicOrganizations {
             results {
                 id
                 name
@@ -250,7 +235,7 @@ export const projectsData = gql`
 
 export const projectList = gql`
     query Project($id: ID!) {
-        project(id: $id) {
+        publicProject(id: $id) {
             id
             exportAggregatedResultsWithGeometry {
                 id
@@ -365,6 +350,14 @@ export const projectList = gql`
             region
             totalArea
             numberOfContributorUsers
+            projectType
+            requestingOrganizationId
+            aoiGeometry {
+                bbox
+                centroid
+                id
+                totalArea
+            }
         }
     }
 `;

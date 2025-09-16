@@ -44,13 +44,15 @@ async function fetchGeometryFromUrl(url: string): Promise<GeoJSON.Geometry | nul
     try {
         const res = await fetch(url);
         if (!res.ok) {
+            // eslint-disable-next-line no-console
             console.error(`Failed to fetch GeoJSON from ${url}: ${res.statusText}`);
             return null;
         }
         const data = await res.json();
         return data?.features?.[0]?.geometry ?? null;
     } catch (err) {
-        console.error("Error fetching geometry:", err);
+        // eslint-disable-next-line no-console
+        console.error('Error fetching geometry:', err);
         return null;
     }
 }
@@ -66,9 +68,9 @@ const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
                 }
 
                 return (
-                    feature.status === 'FINISHED' ||
-                    feature.status === 'PUBLISHED' ||
-                    feature.status === 'WITHDRAWN'
+                    feature.status === 'FINISHED'
+                    || feature.status === 'PUBLISHED'
+                    || feature.status === 'WITHDRAWN'
                 );
             })
             .map(async (feature) => {
@@ -89,7 +91,7 @@ const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
                     properties,
                     geometry,
                 };
-            })
+            }),
     );
 
     return {
@@ -100,4 +102,3 @@ const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
 });
 
 export default getProjectGeometries;
-

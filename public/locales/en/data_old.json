@@ -6,5 +6,6 @@
   "processed": "Processed",
   "ready-to-published": "Ready to Publish",
   "publishing-failed": "Publishing Failed",
-  "paused": "Paused"
+  "paused": "Paused",
+  "download-projects-with-geometry-heading": "Projects with Geometry"
 }

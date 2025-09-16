@@ -70,10 +70,10 @@ function MyApp(props: AppProps) {
                 }
                 `}
             </style>
-            <PostHogProvider client={posthog}>
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Component {...pageProps} />
-            </PostHogProvider>
+                <PostHogProvider client={posthog}>
+                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                    <Component {...pageProps} />
+                </PostHogProvider>
         </>
     );
 }

@@ -45,16 +45,16 @@ import {
 } from 'utils/chart';
 import {
     projectList,
-    ProjectProperties,
-    ProjectsData,
+    ProjectQuery,
     projectsData,
     UrlInfo,
 } from 'pages/queries';
-import { graphqlRequest } from 'utils/requests/graphqlRequest';
+import graphqlRequest from 'utils/requests/graphqlRequest';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
+import { ProjectsQuery } from 'generated/types';
 
 const X_AXIS_HEIGHT = 20;
 const Y_AXIS_WIDTH = 10;
@@ -96,7 +96,6 @@ interface Props extends SSRConfig {
         };
         createdAt: string;
     };
-    requestingOrganizationId?: string;
     progress?: string;
     projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
     requestingOrganization?: {
@@ -224,13 +223,8 @@ function Project(props: Props) {
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
             key: 'PUBLISHED',
-            label: t('published'),
-            icon: (<IoEllipseSharp />),
-        },
-        {
-            key: 'WITHDRAWN',
-            label: t('withdrawn'),
-            icon: (<IoEllipseSharp  />),
+            label: t('active'),
+            icon: (<IoEllipseSharp className={styles.active} />),
         },
         {
             key: 'FINISHED',
@@ -322,14 +316,14 @@ function Project(props: Props) {
                                     spacing="medium"
                                     icon={projectTypeOptionsMap[projectType]?.icon}
                                 >
-                                    {projectType}
+                                    {projectTypeOptionsMap[projectType].label}
                                 </Tag>
                             )}
                             {status && (
                                 <Tag
                                     icon={projectStatusOptionMap[status]?.icon}
                                 >
-                                    {status}
+                                    {projectStatusOptionMap[status]?.label}
                                 </Tag>
                             )}
                         </div>
@@ -360,7 +354,7 @@ function Project(props: Props) {
                                     className={styles.heroTag}
                                     icon={<IoCalendarClearOutline />}
                                     variant="transparent"
-                                    >
+                                >
                                     {new Date(createdAt).toLocaleDateString(undefined, {
                                         year: 'numeric',
                                         month: 'short',
@@ -447,7 +441,7 @@ function Project(props: Props) {
                     <div className={styles.progressBar}>
                         <div className={styles.progressLabel}>
                             <div>{t('project-progress-label')}</div>
-                            <div>{t('project-card-progress-text', { progress: progress })}</div>
+                            <div>{t('project-card-progress-text', { progress })}</div>
                         </div>
                         <div className={styles.track}>
                             <div
@@ -563,7 +557,9 @@ function Project(props: Props) {
                             </Tag>
                             <div>
                                 {t('download-size', {
-                                    size: getFileSizeProperties(exportAggregatedResults?.fileSize).size,
+                                    size: getFileSizeProperties(
+                                        exportAggregatedResults?.fileSize,
+                                    ).size,
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAggregatedResults?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
@@ -591,7 +587,9 @@ function Project(props: Props) {
                             </Tag>
                             <div>
                                 {t('download-size', {
-                                    size: getFileSizeProperties(exportAggregatedResultsWithGeometry?.fileSize).size,
+                                    size: getFileSizeProperties(
+                                        exportAggregatedResultsWithGeometry?.fileSize,
+                                    ).size,
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAggregatedResultsWithGeometry?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
@@ -759,7 +757,9 @@ function Project(props: Props) {
                             </Tag>
                             <div>
                                 {t('download-size', {
-                                    size: getFileSizeProperties(exportAreaOfInterest?.fileSize).size,
+                                    size: getFileSizeProperties(
+                                        exportAreaOfInterest?.fileSize,
+                                    ).size,
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAreaOfInterest?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
@@ -787,7 +787,9 @@ function Project(props: Props) {
                             </Tag>
                             <div>
                                 {t('download-size', {
-                                    size: getFileSizeProperties(exportHotTaskingManagerGeometries?.fileSize).size,
+                                    size: getFileSizeProperties(
+                                        exportHotTaskingManagerGeometries?.fileSize,
+                                    ).size,
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportHotTaskingManagerGeometries?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
@@ -815,7 +817,9 @@ function Project(props: Props) {
                             </Tag>
                             <div>
                                 {t('download-size', {
-                                    size: getFileSizeProperties(exportModerateToHighAgreementYesMaybeGeometries?.fileSize).size,
+                                    size: getFileSizeProperties(
+                                        exportModerateToHighAgreementYesMaybeGeometries?.fileSize,
+                                    ).size,
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportModerateToHighAgreementYesMaybeGeometries?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
@@ -857,16 +861,15 @@ export const getI18nPaths = () => (
 );
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-    const data: ProjectsData = await request(graphqlEndpoint, projectsData, { includeAll: true });
+    const data: ProjectsQuery = await request(graphqlEndpoint, projectsData, { includeAll: true });
     const projects = data?.projects?.results ?? [];
 
-    const pathsWithParams =
-        projects.flatMap((project: { id: string }) =>
-            (locales ?? []).map((lng: string) => ({
-                params: { id: project.id.toString() },
-                locale: lng,
-            }))
-        );
+    const pathsWithParams = projects.flatMap(
+        (project: { id: string }) => (locales ?? []).map((lng: string) => ({
+            params: { id: project.id.toString() },
+            locale: lng,
+        })),
+    );
 
     return {
         paths: pathsWithParams,
@@ -874,17 +877,17 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     };
 };
 
-export const getStaticProps: GetStaticProps<ProjectProperties> = async (context) => {
+export const getStaticProps: GetStaticProps<ProjectQuery> = async (context) => {
     const locale = context.locale ?? 'en';
     const projectId = context.params?.id as string;
 
-    const data = await graphqlRequest<{ project: ProjectProperties }>(
+    const data = await graphqlRequest<{ publicProject: ProjectQuery }>(
         graphqlEndpoint,
         projectList,
         { id: projectId },
     );
 
-    const project = data?.project;
+    const project = data?.publicProject;
     if (!project?.id) throw new Error(`Could not get project ${projectId}`);
 
     const translations = await serverSideTranslations(locale, ['project', 'common']);
@@ -896,6 +899,7 @@ export const getStaticProps: GetStaticProps<ProjectProperties> = async (context)
             const res = await fetch(aoiUrl);
             projectGeoJSON = await res.json();
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(`Failed to fetch GeoJSON from ${aoiUrl}`, err);
         }
     }

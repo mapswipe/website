@@ -9,5 +9,7 @@
   "change-detection": "Compare Dates",
   "completeness": "Check Completeness",
   "validate-image": "Access Images",
-  "street": "View Streets"
+  "street": "View Streets",
+  "published": "Published",
+  "withdrawn": "Withdrawn"
 }
