@@ -1,6 +1,5 @@
 {
-  "published": "Published",
-  "withdrawn": "Withdrawn",
+  "active": "",
   "finished": "Finished",
   "type-find-title": "Find Features",
   "type-validate-title": "Validate Footprints",

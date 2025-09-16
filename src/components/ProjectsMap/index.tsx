@@ -24,33 +24,25 @@ import {
     ProjectTypeOption,
     ProjectStatusOption,
     ProjectStatus,
-    ProjectType,
 } from 'utils/common';
 
 import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
+import { ProjectQuery } from 'generated/types';
 
 import styles from './styles.module.css';
-import { ProjectProperties } from 'pages/queries';
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
 } = {
-    'PUBLISHED': {
+    PUBLISHED: {
         fillColor: '#F69143',
         color: '#0F193F',
         weight: 1,
         opacity: 0.2,
         fillOpacity: 0.9,
     },
-    'FINISHED': {
-        fillColor: '#AABE5D',
-        color: '#0F193F',
-        weight: 1,
-        opacity: 0.2,
-        fillOpacity: 0.9,
-    },
-    'WITHDRAWN': {
+    FINISHED: {
         fillColor: '#AABE5D',
         color: '#0F193F',
         weight: 1,
@@ -70,8 +62,8 @@ const defaultPathOptions: CircleMarkerOptions = {
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    projects: ProjectProperties[];
-    radiusSelector: (project: ProjectProperties) => number;
+    projects: ProjectQuery[];
+    radiusSelector: (project: ProjectQuery) => number;
 }
 
 function ProjectMap(props: Props) {
@@ -87,13 +79,8 @@ function ProjectMap(props: Props) {
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
             key: 'PUBLISHED',
-            label: t('published'),
+            label: t('active'),
             icon: (<IoEllipseSharp className={styles.active} />),
-        },
-        {
-            key: 'WITHDRAWN',
-            label: t('withdrawn'),
-            icon: (<IoEllipseSharp className={styles.finished} />),
         },
         {
             key: 'FINISHED',
@@ -164,11 +151,11 @@ function ProjectMap(props: Props) {
     ), [projectTypeOptions]);
 
     const sanitizedProjects = projects
-        .map((project) => (isDefined(project.aoiGeometry?.centroid) ? {
+        .map((project) => (isDefined(project?.aoiGeometry?.centroid) ? {
             ...project,
             centroid: [
-                project.aoiGeometry.centroid[1],
-                project.aoiGeometry.centroid[0],
+                project.aoiGeometry?.centroid[1],
+                project.aoiGeometry?.centroid[0],
             ] as LatLngTuple,
         } : undefined))
         .filter(isDefined);
@@ -201,7 +188,7 @@ function ProjectMap(props: Props) {
                                 headingFont="normal"
                                 heading={project.name}
                                 description={(
-                                    <div className={styles.row}>
+                                    <div className={styles.types}>
                                         {project.projectType && (
                                             <Tag
                                                 spacing="small"
@@ -209,15 +196,15 @@ function ProjectMap(props: Props) {
                                                     projectTypeOptionsMap[project.projectType].icon
                                                 )}
                                             >
-                                                {project?.projectType}
+                                                {projectTypeOptionsMap[project.projectType]?.label}
                                             </Tag>
                                         )}
                                         {project.status && (
                                             <Tag
                                                 spacing="small"
-                                                icon={projectStatusOptionMap[project.status].icon}
+                                                icon={projectStatusOptionMap[project.status]?.icon}
                                             >
-                                                {project?.status}
+                                                {projectStatusOptionMap[project.status]?.label}
                                             </Tag>
                                         )}
                                     </div>
@@ -263,7 +250,14 @@ function ProjectMap(props: Props) {
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-last-update', { date: project.modifiedAt })}
+                                                    {t('project-card-last-update',
+                                                        { date: project.modifiedAt
+                                                        ? new Date(project.modifiedAt).toLocaleDateString(undefined, {
+                                                        year: 'numeric',
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                    }) : null }
+                                                    )}
                                                 </Tag>
                                             )}
                                             <Tag

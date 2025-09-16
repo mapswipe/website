@@ -16,6 +16,13 @@
         height: 100%;
     }
 
+    .types {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-extra-small);
+        width: fit-content;
+    }
+
     .row {
         display: flex;
         align-items: center;

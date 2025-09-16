@@ -1,6 +1,3 @@
-[submodule "server"]
-	path = server
-	url = git@github.com:mapswipe/python-mapswipe-workers.git
 [submodule "backend"]
 	path = backend
 	url = https://github.com/mapswipe/mapswipe-backend

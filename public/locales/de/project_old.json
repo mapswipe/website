@@ -9,5 +9,7 @@
   "change-detection": "Vergleichen",
   "completeness": "",
   "validate-image": "",
-  "street": ""
+  "street": "",
+  "published": "",
+  "withdrawn": ""
 }

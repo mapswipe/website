@@ -50,14 +50,14 @@ import useDebouncedValue from 'hooks/useDebouncedValue';
 import {
     GlobalExportAssets,
     ProjectProperties,
-    ProjectsData,
     projectsData,
 } from 'pages/queries';
-import { graphqlRequest } from 'utils/requests/graphqlRequest';
+import graphqlRequest from 'utils/requests/graphqlRequest';
 
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
+import { ProjectQuery, ProjectsQuery } from 'generated/types';
 
 interface Organization {
     id: string;
@@ -93,16 +93,23 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
-    const value: ProjectsData = await graphqlRequest<ProjectsData>(
+    const value: ProjectsQuery = await graphqlRequest<ProjectsQuery>(
         graphqlEndpoint,
         projectsData,
-        { includeAll: true },
+        {
+            includeAll: true,
+            filters: {
+                status: {
+                    inList: ['PUBLISHED', 'FINISHED'],
+                },
+            },
+        },
     );
 
     const {
         communityStats,
-        projects,
-        organizations,
+        publicProjects,
+        publicOrganizations,
         globalExportAssets,
     } = value ?? {};
 
@@ -111,47 +118,45 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         totalSwipes,
     } = communityStats ?? {};
 
-    const miniProjects = projects?.results.map((feature) => ({
-        id: feature.id ?? null,
+    const miniProjects: ProjectQuery[] = publicProjects?.results.map((feature) => ({
+        id: feature.id ?? '',
         projectType: feature.projectType,
         name: feature.name,
         status: feature.status ?? null,
         region: feature.region ?? null,
         requestingOrganizationId: feature.requestingOrganization?.id ?? null,
-        requestingOrganization: feature.requestingOrganization ?? null,  
-        progress: feature.progress !== null && feature.progress !== undefined
-            ? Math.round(Number(feature?.progress) * 100)
-            : 0,
+        requestingOrganization: feature.requestingOrganization ?? null,
+        progress: feature.progress,
         numberOfContributorUsers: feature?.numberOfContributorUsers,
         totalArea: feature?.totalArea ?? null,
         createdAt: feature?.createdAt
-            ? new Date(feature.createdAt).getTime()
+            ? new Date(feature.createdAt).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            })
             : null,
         image: feature?.image ?? null,
         exportAreaOfInterest: feature?.exportAreaOfInterest ?? null,
-        aoiGeometry: feature?.aoiGeometry
-            ? {
-                id: feature.aoiGeometry.id,
-                centroid: feature.aoiGeometry.centroid,
-                totalArea: feature.aoiGeometry.totalArea ?? 0,
-            }
-            : null,
+        aoiGeometry: feature?.aoiGeometry,
         modifiedAt: feature?.modifiedAt
-            ? new Date(feature.modifiedAt).getTime()
-            : null,
-    })).sort((foo, bar) => ((bar?.modifiedAt ?? 0) - (foo?.modifiedAt ?? 0)));
+            ? new Date(feature.modifiedAt).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            })
+            : null,    
+    })) ?? [];
 
-    const contributors = miniProjects
-        .map((proj) => proj.numberOfContributorUsers)
+    const contributors = miniProjects?.map((proj) => proj.numberOfContributorUsers)
         .filter(isDefined);
-    const minContributors = Math.min(...contributors);
-    const maxContributors = Math.max(...contributors);
+    const minContributors = contributors?.length > 0 ? Math.min(...contributors) : 0;
+    const maxContributors = contributors?.length > 0 ? Math.max(...contributors) : 0;
 
-    const areas = miniProjects
-        .map((proj) => proj.totalArea)
+    const areas = miniProjects?.map((proj) => proj.totalArea)
         .filter(isDefined);
-    const minArea = Math.min(...areas);
-    const maxArea = Math.max(...areas);
+    const minArea = areas?.length > 0 ? Math.min(...areas) : 0;
+    const maxArea = areas?.length > 0 ? Math.max(...areas) : 0;
 
     return {
         props: {
@@ -164,8 +169,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             maxContributors,
             totalContributors,
             totalSwipes,
-            totalCount: value.projects.totalCount,
-            organizations: organizations?.results ?? [],
+            organizations: publicOrganizations?.results ?? [],
             globalExportAssets: globalExportAssets ?? [],
         },
     };
@@ -199,10 +203,9 @@ interface Props extends SSRConfig {
     minContributors: number,
     maxContributors: number,
     buildDate: string | null,
-    projects: ProjectProperties[];
+    projects: ProjectQuery[];
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
-    totalCount: number;
     organizations: Organization[];
     globalExportAssets: GlobalExportAssets[];
 }
@@ -247,13 +250,8 @@ function Data(props: Props) {
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
             key: 'PUBLISHED',
-            label: t('published'),
+            label: t('active'),
             icon: (<IoEllipseSharp className={styles.active} />),
-        },
-        {
-            key: 'WITHDRAWN',
-            label: t('withdrawn'),
-            icon: (<IoEllipseSharp className={styles.finished} />),
         },
         {
             key: 'FINISHED',
@@ -391,6 +389,33 @@ function Data(props: Props) {
         ],
     );
 
+    const assetConfig: Record<string, {
+        heading: string;
+        description: string;
+        fileLabel: string;
+    }> = {
+        PROJECT_STATS_BY_TYPES: {
+            heading: t('download-projects-overview-heading'),
+            description: t('download-projects-overview-description'),
+            fileLabel: 'csv',
+        },
+        PROJECTS_CSV: {
+            heading: t('download-projects-csv-heading'),
+            description: t('download-projects-csv-description'),
+            fileLabel: 'csv',
+        },
+        PROJECTS_CENTROID_GEOJSON: {
+            heading: t('download-projects-with-centroid-heading'),
+            description: t('download-projects-with-centroid-description'),
+            fileLabel: 'geojson',
+        },
+        PROJECTS_GEOM_GEOJSON: {
+            heading: t('download-projects-with-geometry-headingdownload-projects-geometry-heading'),
+            description: t('download-projects-with-geometry-description'),
+            fileLabel: 'geojson',
+        },
+    };
+
     const totalAreaSum = sum(
         visibleProjects.map(
             (feature) => feature.totalArea ?? 0,
@@ -399,25 +424,6 @@ function Data(props: Props) {
     const roundedTotalArea = Math.round((totalAreaSum / 1000)) * 1000;
 
     const tableProjects = visibleProjects.slice(0, items);
-    type DownloadType =
-        | 'PROJECT_STATS_BY_TYPES'
-        | 'PROJECTS_CSV'
-        | 'PROJECTS_CENTROID_GEOJSON'
-        | 'PROJECTS_GEOM_GEOJSON';
-
-    const downloadHeadingMap: Record<DownloadType, string> = {
-        PROJECT_STATS_BY_TYPES: t('download-projects-overview-heading'),
-        PROJECTS_CSV: t('download-projects-csv-heading'),
-        PROJECTS_CENTROID_GEOJSON: t('download-projects-with-centroid-heading'),
-        PROJECTS_GEOM_GEOJSON: t('download-projects-with-geometry-heading'),
-    };
-
-    const downloadDescriptionMap: Record<DownloadType, string> = {
-        PROJECT_STATS_BY_TYPES: t('download-projects-overview-description'),
-        PROJECTS_CSV: t('download-projects-csv-description'),
-        PROJECTS_CENTROID_GEOJSON: t('download-projects-with-centroid-description'),
-        PROJECTS_GEOM_GEOJSON: t('download-projects-with-geometry-description'),
-    };
 
     const radiusSelector = useCallback(
         (project: { totalArea: number | null, numberOfContributorUsers: number | null }) => {
@@ -821,10 +827,10 @@ function Data(props: Props) {
                                             <Tag
                                                 spacing="small"
                                                 icon={
-                                                   projectTypeOptionsMap[project.projectType]?.icon
+                                                    projectTypeOptionsMap[project.projectType]?.icon
                                                 }
                                             >
-                                                {project.projectType}
+                                                {projectTypeOptionsMap[project.projectType]?.label}
                                             </Tag>
                                         )}
                                         {project.status && (
@@ -832,7 +838,7 @@ function Data(props: Props) {
                                                 spacing="small"
                                                 icon={projectStatusOptionMap[project.status]?.icon}
                                             >
-                                                {project.status}
+                                                {projectStatusOptionMap[project.status]?.label}
                                             </Tag>
                                         )}
                                     </div>
@@ -910,26 +916,19 @@ function Data(props: Props) {
                 withAlternativeBackground
                 contentClassName={styles.urlList}
             >
-            {globalExportAssets.map((asset) => {
-                const fileLabel = asset.type.includes('GEOJSON') ? 'GEOJSON' : 'CSV';
+                {globalExportAssets.map((asset) => {
+                    const config = assetConfig[asset.type];
+                    if (!config) return null;
 
                     return (
                         <Card
                             key={asset.type}
                             childrenContainerClassName={styles.downloadCard}
-                            heading={
-                                asset.type.includes('GEOJSON')
-                                    ? t('download-projects-with-geometry-heading')
-                                    : t('download-projects-overview-heading')
-                            }
-                            description={
-                                asset.type.includes('GEOJSON')
-                                    ? t('download-projects-with-geometry-description')
-                                    : t('download-projects-overview-description')
-                            }
+                            heading={config.heading}
+                            description={config.description}
                         >
                             <div className={styles.fileDetails}>
-                                <Tag>{fileLabel}</Tag>
+                                <Tag>{config.fileLabel}</Tag>
                                 <div>
                                     {t('download-size', {
                                         size: getFileSizeProperties(asset.fileSize).size,
@@ -978,4 +977,3 @@ function Data(props: Props) {
 }
 
 export default Data;
-

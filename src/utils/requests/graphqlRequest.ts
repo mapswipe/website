@@ -1,6 +1,6 @@
 import { request, Variables, RequestDocument } from 'graphql-request';
 
-export async function graphqlRequest<T>(
+export default async function graphqlRequest<T>(
     endpoint: string,
     query: RequestDocument,
     variables?: Variables,
