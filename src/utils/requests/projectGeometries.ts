@@ -3,10 +3,16 @@ import {
     ProjectStatus,
     ProjectType,
     parseProjectName,
-    graphqlEndpoint,
 } from 'utils/common';
-import request from 'graphql-request';
-import { projectsData, ProjectsData, UrlInfo } from 'pages/queries';
+import graphqlRequest from 'utils/requests/graphqlRequest';
+import {
+    projectsData,
+    UrlInfo,
+} from 'pages/queries';
+
+import {
+    ProjectsQuery,
+} from '../../../generated/types';
 
 interface ProjectProperties {
     id: string;
@@ -58,10 +64,10 @@ async function fetchGeometryFromUrl(url: string): Promise<GeoJSON.Geometry | nul
 }
 
 const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
-    const value: ProjectsData = await request(graphqlEndpoint, projectsData);
+    const value: ProjectsQuery = await graphqlRequest(projectsData);
 
     const features = await Promise.all(
-        value.projects.results
+        value.publicProjects.results
             .filter((feature) => {
                 if (!feature.exportAreaOfInterest?.file?.url) {
                     return false;
@@ -77,10 +83,7 @@ const getProjectGeometries = memoize(async (): Promise<ProjectResponse> => {
                 const geometry = await fetchGeometryFromUrl(feature?.exportAreaOfInterest.file.url);
 
                 const projectName = parseProjectName(feature.name);
-                let { status } = feature;
-
-                if (status === 'FINISHED') status = 'FINISHED';
-                if (status === 'PUBLISHED') status = 'PUBLISHED';
+                const { status } = feature;
 
                 const properties: PropertiesWithLegacyName | PropertiesWithName = projectName
                     ? { ...feature, ...projectName, status }

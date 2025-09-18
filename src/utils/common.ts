@@ -3,9 +3,9 @@ import {
     caseInsensitiveSubmatch,
     compareStringSearch,
 } from '@togglecorp/fujs';
-import { EnumsQuery } from 'generated/types';
 import { gql } from 'graphql-request';
 import graphqlRequest from 'utils/requests/graphqlRequest';
+import { EnumsQuery } from '../../generated/types';
 
 export const enumsQuery = gql`
     query Enums {

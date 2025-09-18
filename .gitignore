@@ -33,5 +33,7 @@ pnpm-debug.log*
 .vscode/
 
 # generated types
-src/generated/
+generated
+
 cache/
+server/

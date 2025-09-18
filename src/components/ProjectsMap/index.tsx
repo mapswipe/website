@@ -28,7 +28,7 @@ import {
 
 import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
-import { ProjectQuery } from 'generated/types';
+import { ProjectQuery } from '../../../generated/types';
 
 import styles from './styles.module.css';
 
@@ -250,13 +250,17 @@ function ProjectMap(props: Props) {
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-last-update',
-                                                        { date: project.modifiedAt
-                                                        ? new Date(project.modifiedAt).toLocaleDateString(undefined, {
-                                                        year: 'numeric',
-                                                        month: 'short',
-                                                        day: 'numeric',
-                                                    }) : null }
+                                                    {t(
+                                                        'project-card-last-update',
+                                                        {
+                                                            date: project.modifiedAt
+                                                                ? new Date(project.modifiedAt)
+                                                                    .toLocaleDateString(undefined, {
+                                                                        year: 'numeric',
+                                                                        month: 'short',
+                                                                        day: 'numeric',
+                                                                    }) : null,
+                                                        },
                                                     )}
                                                 </Tag>
                                             )}

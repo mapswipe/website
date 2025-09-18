@@ -80,10 +80,9 @@ export interface FeatureCollection {
 }
 
 export const projectsData = gql`
-    query Projects($includeAll: Boolean!, $filters: ProjectFilter) {
+    query Projects($filters: ProjectFilter) {
         publicProjects(
-           filters: $filters,
-            includeAll: $includeAll
+           filters: $filters
         ) {
             results {
                 id

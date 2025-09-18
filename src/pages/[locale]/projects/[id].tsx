@@ -25,7 +25,6 @@ import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
 import Link from 'components/Link';
-import { request } from 'graphql-request';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 
@@ -36,7 +35,6 @@ import {
     ProjectType,
     ProjectTypeOption,
     getFileSizeProperties,
-    graphqlEndpoint,
 } from 'utils/common';
 import {
     getBounds,
@@ -45,7 +43,6 @@ import {
 } from 'utils/chart';
 import {
     projectList,
-    ProjectQuery,
     projectsData,
     UrlInfo,
 } from 'pages/queries';
@@ -54,7 +51,7 @@ import graphqlRequest from 'utils/requests/graphqlRequest';
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
-import { ProjectsQuery } from 'generated/types';
+import { ProjectsQuery } from '../../../../generated/types';
 
 const X_AXIS_HEIGHT = 20;
 const Y_AXIS_WIDTH = 10;
@@ -861,7 +858,9 @@ export const getI18nPaths = () => (
 );
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-    const data: ProjectsQuery = await request(graphqlEndpoint, projectsData, { includeAll: true });
+    const data: ProjectsQuery = await graphqlRequest(
+        projectsData,
+    );
     const projects = data?.projects?.results ?? [];
 
     const pathsWithParams = projects.flatMap(
@@ -882,7 +881,6 @@ export const getStaticProps: GetStaticProps<ProjectQuery> = async (context) => {
     const projectId = context.params?.id as string;
 
     const data = await graphqlRequest<{ publicProject: ProjectQuery }>(
-        graphqlEndpoint,
         projectList,
         { id: projectId },
     );

@@ -43,13 +43,11 @@ import {
     rankedSearchOnList,
     ProjectTypeOption,
     ProjectStatusOption,
-    graphqlEndpoint,
     getFileSizeProperties,
 } from 'utils/common';
 import useDebouncedValue from 'hooks/useDebouncedValue';
 import {
     GlobalExportAssets,
-    ProjectProperties,
     projectsData,
 } from 'pages/queries';
 import graphqlRequest from 'utils/requests/graphqlRequest';
@@ -57,7 +55,10 @@ import graphqlRequest from 'utils/requests/graphqlRequest';
 import i18nextConfig from '../../../../next-i18next.config';
 
 import styles from './styles.module.css';
-import { ProjectQuery, ProjectsQuery } from 'generated/types';
+import {
+    ProjectQuery,
+    ProjectsQuery,
+} from '../../../../generated/types';
 
 interface Organization {
     id: string;
@@ -94,10 +95,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
     const value: ProjectsQuery = await graphqlRequest<ProjectsQuery>(
-        graphqlEndpoint,
         projectsData,
         {
-            includeAll: true,
             filters: {
                 status: {
                     inList: ['PUBLISHED', 'FINISHED'],
@@ -145,7 +144,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
                 month: 'short',
                 day: 'numeric',
             })
-            : null,    
+            : null,
     })) ?? [];
 
     const contributors = miniProjects?.map((proj) => proj.numberOfContributorUsers)
