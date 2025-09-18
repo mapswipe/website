@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import languageDetector from './languageDetector';
+import i18nextConfig from '@/next-i18next.config';
 
-import i18nextConfig from '../../next-i18next.config';
+import languageDetector from './languageDetector';
 
 export function useRedirect(toFromProps?: string) {
     const router = useRouter();

@@ -5,7 +5,7 @@ import {
 } from '@togglecorp/fujs';
 import { gql } from 'graphql-request';
 import graphqlRequest from 'utils/requests/graphqlRequest';
-import { EnumsQuery } from '../../generated/types';
+import { EnumsQuery } from 'generated/types';
 
 export const enumsQuery = gql`
     query Enums {
@@ -104,17 +104,16 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
 }
 
 export async function fetchEnums() {
-    const data: EnumsQuery = await graphqlRequest<EnumsQuery>(
+    const data = await graphqlRequest<{ enums: EnumsQuery['enums'] }>(
         graphqlEndpoint,
-        enumsQuery,
     );
 
-    const projectTypes = data.enums.ProjectTypeEnum.map((item) => ({
+    const projectTypes = data?.enums.ProjectTypeEnum.map((item) => ({
         key: item.key,
         label: item.label,
     }));
 
-    const projectStatuses = data.enums.ProjectStatusEnum.map((item) => ({
+    const projectStatuses = data?.enums.ProjectStatusEnum.map((item) => ({
         key: item.key,
         label: item.label,
     }));
@@ -143,7 +142,7 @@ export interface ProjectTypeOption {
 export async function getProjectNameMapping() {
     const { projectTypes } = await fetchEnums();
 
-    return projectTypes.reduce((acc, type) => {
+    return projectTypes?.reduce((acc, type) => {
         acc[type.key as ProjectType] = type.label;
         return acc;
     }, {} as Record<ProjectType, string>);

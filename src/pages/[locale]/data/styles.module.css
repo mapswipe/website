@@ -142,7 +142,7 @@
 
                 .filters {
                     display: flex;
-                    flex-basis: 24rem;
+                    flex-basis: 25rem;
                     flex-direction: column;
                     border: var(--width-separator-thin) solid var(--color-border-light);
                     border-radius: var(--border-radius-medium);
@@ -190,7 +190,7 @@
                     flex-grow: 1;
                     border-radius: var(--border-radius-medium);
                     background-color: var(--color-background-leaflet);
-                    height: 36rem;
+                    height: auto;
 
                     .projectsMap {
                         border: var(--width-separator-thin) solid var(--color-separator);
