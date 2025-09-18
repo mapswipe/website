@@ -1,46 +1,4 @@
 import { gql } from 'graphql-request';
-import { ProjectStatus, ProjectType } from 'utils/common';
-
-export interface ProjectProperties {
-    id: string;
-    name: string;
-    projectType: ProjectType;
-    description?: string | null;
-    status: ProjectStatus;
-    createdAt?: number | null;
-    modifiedAt?: string | null;
-    image: {
-        id: string;
-        file: {
-            name: string;
-            url: string;
-        };
-        createdAt: string;
-    };
-    requestingOrganizationId?: string;
-    progress?: number;
-    requestingOrganization: {
-        id: string;
-        name: string;
-    };
-    region?: string | null;
-    exportAggregatedResults?: UrlInfo;
-    exportAggregatedResultsWithGeometry?: UrlInfo;
-    exportGroups?: UrlInfo;
-    exportHistory?: UrlInfo;
-    exportResults?: UrlInfo;
-    exportTasks?: UrlInfo;
-    exportUsers?: UrlInfo;
-    exportAreaOfInterest: UrlInfo;
-    exportHotTaskingManagerGeometries?: UrlInfo;
-    totalArea: number | null;
-    numberOfContributorUsers: number | null;
-    aoiGeometry?: {
-        id: string;
-        centroid: [number, number] | null;
-        totalArea: number | null;
-    };
-}
 
 export interface GlobalExportAssets {
     type: string;
@@ -80,10 +38,8 @@ export interface FeatureCollection {
 }
 
 export const projectsData = gql`
-    query Projects($filters: ProjectFilter) {
-        publicProjects(
-           filters: $filters
-        ) {
+    query PublicProjects($filters: ProjectFilter) {
+        publicProjects(filters: $filters) {
             results {
                 id
                 exportAggregatedResultsWithGeometry {
@@ -233,7 +189,7 @@ export const projectsData = gql`
 `;
 
 export const projectList = gql`
-    query Project($id: ID!) {
+    query PublicProject($id: ID!) {
         publicProject(id: $id) {
             id
             exportAggregatedResultsWithGeometry {

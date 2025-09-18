@@ -1,7 +1,7 @@
 const withExportImages = require('next-export-optimize-images');
 
 const nextConfig = withExportImages({
-    output: 'export',
+    // output: 'export',
     trailingSlash: true,
     reactStrictMode: true,
     images: {

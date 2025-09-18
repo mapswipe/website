@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import { SSRConfig, useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { _cs, bound, listToMap } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
@@ -30,9 +30,7 @@ import useSizeTracking from 'hooks/useSizeTracking';
 
 import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
 import {
-    ProjectStatus,
     ProjectStatusOption,
-    ProjectType,
     ProjectTypeOption,
     getFileSizeProperties,
 } from 'utils/common';
@@ -48,10 +46,10 @@ import {
 } from 'pages/queries';
 import graphqlRequest from 'utils/requests/graphqlRequest';
 
-import i18nextConfig from '../../../../next-i18next.config';
+import { PublicProjectQuery, PublicProjectsQuery } from 'generated/types';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
-import { ProjectsQuery } from '../../../../generated/types';
 
 const X_AXIS_HEIGHT = 20;
 const Y_AXIS_WIDTH = 10;
@@ -76,30 +74,9 @@ const xAxisFormatter = (date: Date) => date.toLocaleString(
 
 const DynamicProjectMap = dynamic(() => import('components/ProjectMap'), { ssr: false });
 
-interface Props extends SSRConfig {
+type Props = {
     className: string;
-    id: string;
-    name: string;
-    projectType?: ProjectType;
-    description: string;
-    status?: ProjectStatus;
-    createdAt?: string;
-    modifiedAt?: string;
-    image?: {
-        id: string;
-        file: {
-            name: string;
-            url: string;
-        };
-        createdAt: string;
-    };
-    progress?: string;
     projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
-    requestingOrganization?: {
-        id: string;
-        name: string;
-    };
-    region: string;
     exportAggregatedResults: UrlInfo;
     exportAggregatedResultsWithGeometry: UrlInfo;
     exportGroups: UrlInfo;
@@ -111,9 +88,7 @@ interface Props extends SSRConfig {
     exportHotTaskingManagerGeometries: UrlInfo;
     exportModerateToHighAgreementYesMaybeGeometries: UrlInfo;
     projectHistory: ProjectHistory[];
-    totalArea: number | null;
-    numberOfContributorUsers: number | null;
-}
+} & PublicProjectQuery['publicProject'];
 
 function Project(props: Props) {
     const {
@@ -362,15 +337,13 @@ function Project(props: Props) {
                         </div>
                     </div>
                 )}
-                rightContent={image ? (
+                rightContent={image && (
                     <ImageWrapper
                         className={styles.illustration}
-                        src={image.file?.url}
+                        src={image.file?.url ?? ''}
                         alt={name}
                         nonOptimizedImage
                     />
-                ) : (
-                    <div />
                 )}
             />
             <Section className={styles.overviewSection}>
@@ -858,10 +831,10 @@ export const getI18nPaths = () => (
 );
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-    const data: ProjectsQuery = await graphqlRequest(
+    const data = await graphqlRequest<{ publicProjects: PublicProjectsQuery['publicProjects'] }>(
         projectsData,
     );
-    const projects = data?.projects?.results ?? [];
+    const projects = data?.publicProjects?.results ?? [];
 
     const pathsWithParams = projects.flatMap(
         (project: { id: string }) => (locales ?? []).map((lng: string) => ({
@@ -876,22 +849,21 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     };
 };
 
-export const getStaticProps: GetStaticProps<ProjectQuery> = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
     const locale = context.locale ?? 'en';
     const projectId = context.params?.id as string;
 
-    const data = await graphqlRequest<{ publicProject: ProjectQuery }>(
+    const data = await graphqlRequest<{ publicProject: PublicProjectQuery['publicProject'] }>(
         projectList,
         { id: projectId },
     );
 
     const project = data?.publicProject;
-    if (!project?.id) throw new Error(`Could not get project ${projectId}`);
 
     const translations = await serverSideTranslations(locale, ['project', 'common']);
 
     let projectGeoJSON = null;
-    const aoiUrl = project.exportAreaOfInterest?.file?.url;
+    const aoiUrl = project?.exportAreaOfInterest?.file?.url;
     if (aoiUrl) {
         try {
             const res = await fetch(aoiUrl);
@@ -902,7 +874,7 @@ export const getStaticProps: GetStaticProps<ProjectQuery> = async (context) => {
         }
     }
 
-    const projectHistory = await getProjectHistory(projectId, project.exportHistory?.file?.url);
+    const projectHistory = await getProjectHistory(projectId, project?.exportHistory?.file?.url);
 
     return {
         props: {

@@ -32,7 +32,7 @@ import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
 import getBlogs, { Blog } from 'utils/requests/getBlogs';
 
-import i18nextConfig from '../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 

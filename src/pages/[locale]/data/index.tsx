@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps } from 'next';
-import { SSRConfig, useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import {
     _cs,
     listToMap,
@@ -52,13 +52,13 @@ import {
 } from 'pages/queries';
 import graphqlRequest from 'utils/requests/graphqlRequest';
 
-import i18nextConfig from '../../../../next-i18next.config';
+import {
+    PublicProjectQuery,
+    PublicProjectsQuery,
+} from 'generated/types';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
-import {
-    ProjectQuery,
-    ProjectsQuery,
-} from '../../../../generated/types';
 
 interface Organization {
     id: string;
@@ -85,7 +85,7 @@ export const getStaticPaths = () => ({
     paths: getI18nPaths(),
 });
 
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
     const locale = context?.params?.locale;
     const translations = await serverSideTranslations(locale as string, [
         'data',
@@ -94,7 +94,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
-    const value: ProjectsQuery = await graphqlRequest<ProjectsQuery>(
+    const value = await graphqlRequest<PublicProjectsQuery>(
         projectsData,
         {
             filters: {
@@ -110,14 +110,14 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         publicProjects,
         publicOrganizations,
         globalExportAssets,
-    } = value ?? {};
+    } = value || {};
 
     const {
-        totalContributors,
-        totalSwipes,
-    } = communityStats ?? {};
+        totalContributors = null,
+        totalSwipes = null,
+    } = communityStats || {};
 
-    const miniProjects: ProjectQuery[] = publicProjects?.results.map((feature) => ({
+    const miniProjects = publicProjects?.results.map((feature) => ({
         id: feature.id ?? '',
         projectType: feature.projectType,
         name: feature.name,
@@ -185,6 +185,7 @@ function organizationLabelSelector(option: Organization) {
 function keySelector<K extends { key: string }>(option: K) {
     return option.key;
 }
+
 function labelSelector<K extends { label: string | React.ReactNode }>(option: K) {
     return option.label;
 }
@@ -195,14 +196,14 @@ function iconSelector<K extends { icon?: React.ReactNode }>(option: K) {
 
 const PAGE_SIZE = 9;
 
-interface Props extends SSRConfig {
+interface Props {
     className?: string;
     minArea: number,
     maxArea: number,
     minContributors: number,
     maxContributors: number,
     buildDate: string | null,
-    projects: ProjectQuery[];
+    projects: PublicProjectQuery['publicProject'][];
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
     organizations: Organization[];
@@ -396,22 +397,22 @@ function Data(props: Props) {
         PROJECT_STATS_BY_TYPES: {
             heading: t('download-projects-overview-heading'),
             description: t('download-projects-overview-description'),
-            fileLabel: 'csv',
+            fileLabel: 'CSV',
         },
         PROJECTS_CSV: {
             heading: t('download-projects-csv-heading'),
             description: t('download-projects-csv-description'),
-            fileLabel: 'csv',
+            fileLabel: 'CSV',
         },
         PROJECTS_CENTROID_GEOJSON: {
             heading: t('download-projects-with-centroid-heading'),
             description: t('download-projects-with-centroid-description'),
-            fileLabel: 'geojson',
+            fileLabel: 'GEOJSON',
         },
         PROJECTS_GEOM_GEOJSON: {
             heading: t('download-projects-with-geometry-headingdownload-projects-geometry-heading'),
             description: t('download-projects-with-geometry-description'),
-            fileLabel: 'geojson',
+            fileLabel: 'GEOJSON',
         },
     };
 
@@ -425,14 +426,14 @@ function Data(props: Props) {
     const tableProjects = visibleProjects.slice(0, items);
 
     const radiusSelector = useCallback(
-        (project: { totalArea: number | null, numberOfContributorUsers: number | null }) => {
+        (project: PublicProjectQuery['publicProject']) => {
             if (bubble === 'area') {
-                return 4 + 16 * (((project.totalArea ?? minArea - minArea))
-                    / (maxArea - minArea));
+                return 4 + 16 * (((project.totalArea ?? 0) - minArea)
+                    / (maxArea - minArea || 1));
             }
             if (bubble === 'contributors') {
                 return 4 + 16 * (((project.numberOfContributorUsers ?? 0) - minContributors)
-                    / (maxContributors - minContributors));
+                    / (maxContributors - minContributors || 1));
             }
             return 4;
         },
@@ -816,7 +817,7 @@ function Data(props: Props) {
                         >
                             <Card
                                 className={styles.project}
-                                coverImageUrl={project.image?.file.url}
+                                coverImageUrl={project.image?.file?.url}
                                 imageClassName={styles.projectImage}
                                 headingFont="normal"
                                 heading={project.name}
