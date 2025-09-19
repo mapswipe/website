@@ -1,0 +1,15 @@
+{
+  "users-title": "Users",
+  "users-description": "This dataset contains information on the individual contributions per user. This tells you for instance the most active users of this project. (Note that you need to unzip this .gz file before you can use it.)",
+  "date": "{{date, datetime}}",
+  "active-projects": "Active",
+  "finished-projects": "Finished",
+  "build-area": "Find Features",
+  "footprint": "Validate Footprints",
+  "change-detection": "Compare Dates",
+  "completeness": "Check Completeness",
+  "validate-image": "Access Images",
+  "street": "View Streets",
+  "published": "Published",
+  "withdrawn": "Withdrawn"
+}

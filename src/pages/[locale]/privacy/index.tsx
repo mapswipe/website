@@ -14,7 +14,7 @@ import Hero from 'components/Hero';
 import Section from 'components/Section';
 import HtmlOutput from 'components/HtmlOutput';
 
-import i18nextConfig from '../../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 

@@ -21,7 +21,7 @@ import Hero from 'components/Hero';
 
 import getBlogs, { Blog as BlogType } from 'utils/requests/getBlogs';
 
-import i18nextConfig from '../../../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 

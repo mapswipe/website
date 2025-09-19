@@ -13,7 +13,7 @@ import DropdownMenu from 'components/DropdownMenu';
 import useBooleanState from 'hooks/useBooleanState';
 import languageTitleMap from 'utils/languages';
 
-import i18nextConfig from '../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 
