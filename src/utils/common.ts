@@ -139,15 +139,6 @@ export interface ProjectTypeOption {
     icon?: React.ReactNode;
 }
 
-export async function getProjectNameMapping() {
-    const { projectTypes } = await fetchEnums();
-
-    return projectTypes?.reduce((acc, type) => {
-        acc[type.key as ProjectType] = type.label;
-        return acc;
-    }, {} as Record<ProjectType, string>);
-}
-
 const mb = 1024 * 1024;
 export function getFileSizeProperties(fileSize: number) {
     if (fileSize > (mb / 10)) {

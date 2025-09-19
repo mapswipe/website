@@ -33,6 +33,7 @@ async function getCsrfTokenValue() {
 
         return __internal__csrfTokenValue;
     } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('failed to do the healthcheck', healthcheckUrl);
     }
 
