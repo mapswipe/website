@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --prefer-online
 
+      - name: Generate typings
+        run: yarn generate:type
+
       - name: Check
         run: pre-commit run -vvv --all-files
 
