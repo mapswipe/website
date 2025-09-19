@@ -49,7 +49,7 @@ import useDebouncedValue from 'hooks/useDebouncedValue';
 import {
     GlobalExportAssets,
     projectsData,
-} from 'pages/queries';
+} from 'utils/queries';
 import graphqlRequest from 'utils/requests/graphqlRequest';
 
 import {

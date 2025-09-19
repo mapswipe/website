@@ -6,10 +6,7 @@ import {
     compareDate,
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import {
-    gql,
-    request,
-} from 'graphql-request';
+import { gql } from 'graphql-request';
 import {
     IoCalendarClearOutline,
     IoArrowForwardSharp,
@@ -18,10 +15,7 @@ import {
 import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import Link from 'components/Link';
-import {
-    graphqlEndpoint,
-    Stats,
-} from 'utils/common';
+import { type Stats } from 'utils/common';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Tag from 'components/Tag';
 import ImageWrapper from 'components/ImageWrapper';
@@ -34,6 +28,7 @@ import getBlogs, { Blog } from 'utils/requests/getBlogs';
 
 import i18nextConfig from '@/next-i18next.config';
 
+import graphqlRequest from '@/src/utils/requests/graphqlRequest';
 import styles from './styles.module.css';
 
 const partners = [
@@ -462,7 +457,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
             }
         }
     `;
-    const value: Stats = await request(graphqlEndpoint, stats);
+
+    const value = await graphqlRequest<Stats>(stats);
     const blogs = await getBlogs();
 
     const sortedBlogs = [...blogs]
@@ -484,8 +480,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     return {
         props: {
             ...translations,
-            totalContributors: value.communityStats?.totalContributors,
-            totalSwipes: value.communityStats?.totalSwipes,
+            totalContributors: value?.communityStats?.totalContributors ?? null,
+            totalSwipes: value?.communityStats?.totalSwipes ?? null,
             featuredBlogs,
         },
     };

@@ -43,7 +43,7 @@ import {
     projectList,
     projectsData,
     UrlInfo,
-} from 'pages/queries';
+} from 'utils/queries';
 import graphqlRequest from 'utils/requests/graphqlRequest';
 
 import { PublicProjectQuery, PublicProjectsQuery } from 'generated/types';
