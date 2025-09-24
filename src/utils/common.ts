@@ -4,7 +4,6 @@ import {
     compareStringSearch,
 } from '@togglecorp/fujs';
 import { gql } from 'graphql-request';
-import graphqlRequest from 'utils/requests/graphqlRequest';
 import { EnumsQuery } from 'generated/types';
 
 export const enumsQuery = gql`
@@ -21,8 +20,6 @@ export const enumsQuery = gql`
         }
     }
 `;
-
-export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
 
 // FIXME: Find the value of supported project type
 export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
@@ -100,27 +97,6 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
         lastResponse = func(...newArgs);
         lastArgs = newArgs;
         return lastResponse;
-    };
-}
-
-export async function fetchEnums() {
-    const data = await graphqlRequest<{ enums: EnumsQuery['enums'] }>(
-        graphqlEndpoint,
-    );
-
-    const projectTypes = data?.enums.ProjectTypeEnum.map((item) => ({
-        key: item.key,
-        label: item.label,
-    }));
-
-    const projectStatuses = data?.enums.ProjectStatusEnum.map((item) => ({
-        key: item.key,
-        label: item.label,
-    }));
-
-    return {
-        projectTypes,
-        projectStatuses,
     };
 }
 
