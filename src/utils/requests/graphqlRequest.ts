@@ -10,7 +10,14 @@ const COOKIE_NAME = `MAPSWIPE-${process.env.APP_ENVIRONMENT}-CSRFTOKEN`;
 // FIXME: Validate the urls in env
 const baseUrl = process.env.MAPSWIPE_API_ENDPOINT;
 const apiEndpoint = `${baseUrl}graphql/`;
-const graphQLClient = new GraphQLClient(apiEndpoint);
+const graphQLClient = new GraphQLClient(apiEndpoint, {
+    /*
+    fetch: async (url, options) => {
+        console.log('>>> Fetch URL:', options);
+        return fetch(url, options);
+    },
+    */
+});
 
 // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
 let __internal__csrfTokenValue: string;

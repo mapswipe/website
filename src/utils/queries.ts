@@ -37,9 +37,10 @@ export interface FeatureCollection {
     features: Feature[];
 }
 
+// FIXME: Update this properly, implement recursive fetch
 export const projectsData = gql`
     query PublicProjects($filters: ProjectFilter) {
-        publicProjects(filters: $filters) {
+        publicProjects(filters: $filters, pagination: { limit: 9999 }) {
             results {
                 id
                 exportAggregatedResultsWithGeometry {
@@ -163,6 +164,7 @@ export const projectsData = gql`
                     totalArea
                 }
             }
+            totalCount
         }
         communityStats {
             id
@@ -170,7 +172,7 @@ export const projectsData = gql`
             totalUserGroups
             totalSwipes
         }
-        publicOrganizations {
+        publicOrganizations(pagination: { limit: 9999 }) {
             results {
                 id
                 name
