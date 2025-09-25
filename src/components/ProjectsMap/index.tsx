@@ -28,9 +28,11 @@ import {
 
 import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
-import { PublicProjectQuery } from 'generated/types';
+import { AllProjectsQuery } from 'generated/types';
 
 import styles from './styles.module.css';
+
+type PublicProject = NonNullable<NonNullable<AllProjectsQuery['publicProjects']>['results']>[number];
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
@@ -62,8 +64,8 @@ const defaultPathOptions: CircleMarkerOptions = {
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    projects: PublicProjectQuery['publicProject'][];
-    radiusSelector: (project: PublicProjectQuery['publicProject']) => number;
+    projects: PublicProject[];
+    radiusSelector: (project: PublicProject) => number;
 }
 
 function ProjectMap(props: Props) {

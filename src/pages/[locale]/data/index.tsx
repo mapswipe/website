@@ -51,14 +51,23 @@ import {
     projectsData,
 } from 'utils/queries';
 import graphqlRequest from 'utils/requests/graphqlRequest';
+import data from 'data/staticData.json';
 
 import {
-    PublicProjectQuery,
+    AllProjectsQuery,
     PublicProjectsQuery,
 } from 'generated/types';
 import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
+
+type PublicProjects = NonNullable<NonNullable<AllProjectsQuery['publicProjects']>['results']>;
+type PublicProject = PublicProjects[number];
+
+async function getAllProjects() {
+    // FIXME: This should be inferred
+    return (data as AllProjectsQuery)?.publicProjects?.results as unknown as PublicProjects;
+}
 
 interface Organization {
     id: string;
@@ -94,20 +103,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
-    const value = await graphqlRequest<PublicProjectsQuery>(
-        projectsData,
-        {
-            filters: {
-                status: {
-                    inList: ['PUBLISHED', 'FINISHED'],
-                },
-            },
-        },
-    );
+    const value = await graphqlRequest<PublicProjectsQuery>(projectsData);
+    const publicProjects = await getAllProjects();
 
     const {
         communityStats,
-        publicProjects,
         publicOrganizations,
         globalExportAssets,
     } = value || {};
@@ -117,7 +117,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         totalSwipes = null,
     } = communityStats || {};
 
-    const miniProjects = publicProjects?.results.map((feature) => ({
+    const miniProjects = publicProjects?.map((feature) => ({
         id: feature.id ?? '',
         projectType: feature.projectType,
         name: feature.name,
@@ -203,7 +203,7 @@ interface Props {
     minContributors: number,
     maxContributors: number,
     buildDate: string | null,
-    projects: PublicProjectQuery['publicProject'][];
+    projects: PublicProjects;
     totalContributors?: number | null | undefined;
     totalSwipes?: number | null | undefined;
     organizations: Organization[];
@@ -426,7 +426,7 @@ function Data(props: Props) {
     const tableProjects = visibleProjects.slice(0, items);
 
     const radiusSelector = useCallback(
-        (project: PublicProjectQuery['publicProject']) => {
+        (project: PublicProject) => {
             if (bubble === 'area') {
                 return 4 + 16 * (((project.totalArea ?? 0) - minArea)
                     / (maxArea - minArea || 1));

@@ -4,6 +4,7 @@ schema:
 documents:
   - "src/**/*.tsx"
   - "src/**/*.ts"
+  - "scripts/**/*.ts"
   - "src/**/*.graphql"
 generates:
   ./generated/types.ts:

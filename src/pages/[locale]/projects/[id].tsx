@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -25,6 +25,7 @@ import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
 import Link from 'components/Link';
+import data from 'data/staticData.json';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 
@@ -39,17 +40,24 @@ import {
     getPathData,
     getScaleFunction,
 } from 'utils/chart';
-import {
-    projectList,
-    projectsData,
-    UrlInfo,
-} from 'utils/queries';
-import graphqlRequest from 'utils/requests/graphqlRequest';
+import { UrlInfo } from 'utils/queries';
 
-import { PublicProjectQuery, PublicProjectsQuery } from 'generated/types';
+import { AllProjectsQuery } from 'generated/types';
 import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
+
+type PublicProjects = NonNullable<NonNullable<AllProjectsQuery['publicProjects']>['results']>;
+async function getAllProjects() {
+    return (data as AllProjectsQuery)?.publicProjects?.results as unknown as PublicProjects;
+}
+
+async function getProjectData(id: string) {
+    const projects = (
+        data as AllProjectsQuery
+    )?.publicProjects?.results as unknown as PublicProjects;
+    return projects?.find((item) => String(item.id) === id);
+}
 
 const X_AXIS_HEIGHT = 20;
 const Y_AXIS_WIDTH = 10;
@@ -76,7 +84,6 @@ const DynamicProjectMap = dynamic(() => import('components/ProjectMap'), { ssr: 
 
 type Props = {
     className: string;
-    projectGeoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon> | null;
     exportAggregatedResults: UrlInfo;
     exportAggregatedResultsWithGeometry: UrlInfo;
     exportGroups: UrlInfo;
@@ -87,8 +94,7 @@ type Props = {
     exportUsers: UrlInfo;
     exportHotTaskingManagerGeometries: UrlInfo;
     exportModerateToHighAgreementYesMaybeGeometries: UrlInfo;
-    projectHistory: ProjectHistory[];
-} & PublicProjectQuery['publicProject'];
+} & PublicProjects[number];
 
 function Project(props: Props) {
     const {
@@ -110,16 +116,37 @@ function Project(props: Props) {
         exportResults,
         exportTasks,
         exportUsers,
-        projectGeoJSON,
-        projectHistory,
         exportHotTaskingManagerGeometries,
         exportModerateToHighAgreementYesMaybeGeometries,
         totalArea,
         numberOfContributorUsers,
+        id: projectId,
     } = props;
 
     const svgContainerRef = React.useRef<HTMLDivElement>(null);
     const svgBounds = useSizeTracking(svgContainerRef);
+    const [projectGeoJSON, setProjectGeoJSON] = useState(null);
+    const [projectHistory, setProjectHistory] = useState<ProjectHistory[] | undefined>();
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                if (exportAreaOfInterest?.file?.url) {
+                    const res = await fetch(exportAreaOfInterest.file.url);
+                    setProjectGeoJSON(await res.json());
+                }
+
+                if (exportHistory?.file?.url) {
+                    const history = await getProjectHistory(projectId, exportHistory.file.url);
+                    setProjectHistory(history);
+                }
+            } catch (err) {
+                // eslint-disable-next-line no-console
+                console.error('Failed fetching project data', err);
+            }
+        }
+        fetchData();
+    }, [exportAreaOfInterest, exportHistory, projectId]);
 
     const [
         chartPoints,
@@ -830,16 +857,15 @@ export const getI18nPaths = () => (
     }))
 );
 
-export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-    const data = await graphqlRequest<{ publicProjects: PublicProjectsQuery['publicProjects'] }>(
-        projectsData,
-    );
-    const projects = data?.publicProjects?.results ?? [];
+export const getStaticPaths: GetStaticPaths = async () => {
+    const projects = await getAllProjects() ?? [];
 
     const pathsWithParams = projects.flatMap(
-        (project: { id: string }) => (locales ?? []).map((lng: string) => ({
-            params: { id: project.id.toString() },
-            locale: lng,
+        (project: { id: string }) => i18nextConfig.i18n.locales.map((lng: string) => ({
+            params: {
+                id: project.id.toString(),
+                locale: lng,
+            },
         })),
     );
 
@@ -853,35 +879,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const locale = context.locale ?? 'en';
     const projectId = context.params?.id as string;
 
-    const data = await graphqlRequest<{ publicProject: PublicProjectQuery['publicProject'] }>(
-        projectList,
-        { id: projectId },
-    );
-
-    const project = data?.publicProject;
+    const project = await getProjectData(projectId);
 
     const translations = await serverSideTranslations(locale, ['project', 'common']);
-
-    let projectGeoJSON = null;
-    const aoiUrl = project?.exportAreaOfInterest?.file?.url;
-    if (aoiUrl) {
-        try {
-            const res = await fetch(aoiUrl);
-            projectGeoJSON = await res.json();
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(`Failed to fetch GeoJSON from ${aoiUrl}`, err);
-        }
-    }
-
-    const projectHistory = await getProjectHistory(projectId, project?.exportHistory?.file?.url);
 
     return {
         props: {
             ...translations,
             ...project,
-            projectGeoJSON,
-            projectHistory,
         },
     };
 };
