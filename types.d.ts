@@ -1,7 +1,7 @@
 /* eslint-ignore */
-import { AllProjectsQuery } from './generated/types';
+import { AllDataQuery } from './generated/types';
 
 declare module './data/staticData.json' {
-    const value: AllProjectsQuery;
+    const value: AllDataQuery;
     export default value;
 }

@@ -6,7 +6,6 @@ import {
     compareDate,
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { gql } from 'graphql-request';
 import {
     IoCalendarClearOutline,
     IoArrowForwardSharp,
@@ -15,7 +14,6 @@ import {
 import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import Link from 'components/Link';
-import { type Stats } from 'utils/common';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Tag from 'components/Tag';
 import ImageWrapper from 'components/ImageWrapper';
@@ -25,11 +23,18 @@ import Hero from 'components/Hero';
 import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
 import getBlogs, { Blog } from 'utils/requests/getBlogs';
+import data from 'data/staticData.json';
 
 import i18nextConfig from '@/next-i18next.config';
 
-import graphqlRequest from '@/src/utils/requests/graphqlRequest';
+import { AllDataQuery } from 'generated/types';
+
 import styles from './styles.module.css';
+
+async function getAllData() {
+    // FIXME: This should be inferred
+    return data as AllDataQuery;
+}
 
 const partners = [
     {
@@ -448,17 +453,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         'home',
         'common',
     ]);
-    const stats = gql`
-        query CommunityStats {
-            communityStats {
-                totalContributors
-                totalUserGroups
-                totalSwipes
-            }
-        }
-    `;
 
-    const value = await graphqlRequest<Stats>(stats);
+    const value = await getAllData();
     const blogs = await getBlogs();
 
     const sortedBlogs = [...blogs]

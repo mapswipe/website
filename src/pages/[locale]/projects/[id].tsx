@@ -42,19 +42,19 @@ import {
 } from 'utils/chart';
 import { UrlInfo } from 'utils/queries';
 
-import { AllProjectsQuery } from 'generated/types';
+import { AllDataQuery } from 'generated/types';
 import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 
-type PublicProjects = NonNullable<NonNullable<AllProjectsQuery['publicProjects']>['results']>;
+type PublicProjects = NonNullable<NonNullable<AllDataQuery['publicProjects']>['results']>;
 async function getAllProjects() {
-    return (data as AllProjectsQuery)?.publicProjects?.results as unknown as PublicProjects;
+    return (data as AllDataQuery)?.publicProjects?.results as unknown as PublicProjects;
 }
 
 async function getProjectData(id: string) {
     const projects = (
-        data as AllProjectsQuery
+        data as AllDataQuery
     )?.publicProjects?.results as unknown as PublicProjects;
     return projects?.find((item) => String(item.id) === id);
 }

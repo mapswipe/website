@@ -1,5 +1,3 @@
-import { gql } from 'graphql-request';
-
 export interface GlobalExportAssets {
     type: string;
     lastUpdatedAt: string;
@@ -36,29 +34,3 @@ export interface FeatureCollection {
     type: 'FeatureCollection';
     features: Feature[];
 }
-
-export const projectsData = gql`
-    query PublicProjects {
-        communityStats {
-            id
-            totalContributors
-            totalUserGroups
-            totalSwipes
-        }
-        publicOrganizations(pagination: { limit: 9999 }) {
-            results {
-                id
-                name
-            }
-        }
-        globalExportAssets {
-            type
-            lastUpdatedAt
-            fileSize
-            file {
-                url
-                name
-            }
-        }
-    }
-`;
