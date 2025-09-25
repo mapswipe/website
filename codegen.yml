@@ -2,7 +2,6 @@ overwrite: true
 schema:
   - "./backend/schema.graphql"
 documents:
-  - "src/**/*.tsx"
   - "src/**/*.ts"
   - "scripts/**/*.ts"
   - "src/**/*.graphql"

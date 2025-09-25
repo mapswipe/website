@@ -28,11 +28,11 @@ import {
 
 import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
-import { AllProjectsQuery } from 'generated/types';
+import { AllDataQuery } from 'generated/types';
 
 import styles from './styles.module.css';
 
-type PublicProject = NonNullable<NonNullable<AllProjectsQuery['publicProjects']>['results']>[number];
+type PublicProject = NonNullable<NonNullable<AllDataQuery['publicProjects']>['results']>[number];
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions

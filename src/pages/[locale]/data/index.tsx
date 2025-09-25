@@ -46,27 +46,24 @@ import {
     getFileSizeProperties,
 } from 'utils/common';
 import useDebouncedValue from 'hooks/useDebouncedValue';
-import {
-    GlobalExportAssets,
-    projectsData,
-} from 'utils/queries';
-import graphqlRequest from 'utils/requests/graphqlRequest';
+import { GlobalExportAssets } from 'utils/queries';
 import data from 'data/staticData.json';
 
-import {
-    AllProjectsQuery,
-    PublicProjectsQuery,
-} from 'generated/types';
+import { AllDataQuery } from 'generated/types';
 import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 
-type PublicProjects = NonNullable<NonNullable<AllProjectsQuery['publicProjects']>['results']>;
+type PublicProjects = NonNullable<NonNullable<AllDataQuery['publicProjects']>['results']>;
 type PublicProject = PublicProjects[number];
 
 async function getAllProjects() {
     // FIXME: This should be inferred
-    return (data as AllProjectsQuery)?.publicProjects?.results as unknown as PublicProjects;
+    return (data as AllDataQuery)?.publicProjects?.results as unknown as PublicProjects;
+}
+async function getAllData() {
+    // FIXME: This should be inferred
+    return data as AllDataQuery;
 }
 
 interface Organization {
@@ -103,7 +100,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const buildDate = process.env.MAPSWIPE_BUILD_DATE;
 
-    const value = await graphqlRequest<PublicProjectsQuery>(projectsData);
+    const value = await getAllData();
     const publicProjects = await getAllProjects();
 
     const {

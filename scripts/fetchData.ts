@@ -18,7 +18,7 @@ const dummyData = {
 };
 
 const query = gql`
-    query AllProjects {
+    query AllData {
         publicProjects(
             filters: {
                 status: {
@@ -152,6 +152,27 @@ const query = gql`
                 }
             }
             totalCount
+        }
+        communityStats {
+            id
+            totalContributors
+            totalUserGroups
+            totalSwipes
+        }
+        publicOrganizations(pagination: { limit: 9999 }) {
+            results {
+                id
+                name
+            }
+        }
+        globalExportAssets {
+            type
+            lastUpdatedAt
+            fileSize
+            file {
+                url
+                name
+            }
         }
     }
 `;
