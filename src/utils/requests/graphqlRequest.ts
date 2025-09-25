@@ -60,6 +60,7 @@ export default async function graphqlRequest<T>(
     if (csrfTokenValue) {
         graphQLClient.setHeader('X-CSRFToken', __internal__csrfTokenValue);
         graphQLClient.setHeader('Cookie', `${COOKIE_NAME}=${__internal__csrfTokenValue}`);
+        graphQLClient.setHeader('Referer', process.env.MAPSWIPE_REFERER_ENDPOINT ?? '');
     }
 
     const data = await graphQLClient.request<T>(query, variables);
