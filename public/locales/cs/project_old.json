@@ -1,0 +1,15 @@
+{
+  "users-title": "Uživatelé",
+  "users-description": "Tento datový soubor obsahuje informace o jednotlivých příspěvcích jednotlivých uživatelů. Dozvíte se tak například o nejaktivnějších uživatelích tohoto projektu. (Všimněte si, že před použitím tohoto souboru .gz jej musíte rozbalit.)",
+  "date": "{{date, datetime}}",
+  "active-projects": "Aktivní",
+  "finished-projects": "Dokončeno",
+  "build-area": "Hledat",
+  "footprint": "Validovat",
+  "change-detection": "Porovnat",
+  "completeness": "",
+  "validate-image": "",
+  "street": "",
+  "published": "",
+  "withdrawn": ""
+}

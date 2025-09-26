@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { _cs } from '@togglecorp/fujs';
-import Image from 'next/image';
 import { MdMenu } from 'react-icons/md';
 import { IoEarthSharp } from 'react-icons/io5';
 
@@ -12,8 +11,9 @@ import LanguageSwitcher from 'components/LanguageSwitcher';
 import DropdownMenu from 'components/DropdownMenu';
 import useBooleanState from 'hooks/useBooleanState';
 import languageTitleMap from 'utils/languages';
+import ImageWrapper from 'components/ImageWrapper';
 
-import i18nextConfig from '../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 
@@ -42,10 +42,9 @@ function Navbar(props: Props) {
                     className={styles.logo}
                     href="/[locale]/"
                 >
-                    <Image
+                    <ImageWrapper
                         src="/logo.svg"
                         alt={t('mapswipe-logo')}
-                        fill
                     />
                 </Link>
                 <div

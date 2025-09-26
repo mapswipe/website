@@ -3,9 +3,25 @@ import {
     caseInsensitiveSubmatch,
     compareStringSearch,
 } from '@togglecorp/fujs';
+import { gql } from 'graphql-request';
+import { EnumsQuery } from 'generated/types';
 
-export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
+export const enumsQuery = gql`
+    query Enums {
+        enums {
+            ProjectTypeEnum {
+                key
+                label
+            }
+            ProjectStatusEnum {
+                key
+                label
+            }
+        }
+    }
+`;
 
+// FIXME: Find the value of supported project type
 export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
 
 export interface Stats {
@@ -84,12 +100,11 @@ export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
     };
 }
 
-export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
-
-export type ProjectType = 1 | 2 | 3 | 4 | 10 | 7;
+export type ProjectStatus = EnumsQuery['enums']['ProjectStatusEnum'][number]['key'];
+export type ProjectType = EnumsQuery['enums']['ProjectTypeEnum'][number]['key'];
 
 export interface ProjectStatusOption {
-    key: ProjectStatus;
+    key: `${ProjectStatus}`;
     label: string | React.ReactNode;
     icon?: React.ReactNode;
 }
@@ -99,17 +114,6 @@ export interface ProjectTypeOption {
     label: string;
     icon?: React.ReactNode;
 }
-
-export const projectNameMapping: {
-    [key in ProjectTypeOption['key']]: string
-} = {
-    1: 'Build Area',
-    2: 'Footprint',
-    3: 'Change Detection',
-    4: 'Completeness',
-    10: 'Validate Image',
-    7: 'Street',
-};
 
 const mb = 1024 * 1024;
 export function getFileSizeProperties(fileSize: number) {

@@ -7,10 +7,6 @@ import {
 } from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
-    gql,
-    request,
-} from 'graphql-request';
-import {
     IoCalendarClearOutline,
     IoArrowForwardSharp,
 } from 'react-icons/io5';
@@ -18,10 +14,6 @@ import {
 import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import Link from 'components/Link';
-import {
-    graphqlEndpoint,
-    Stats,
-} from 'utils/common';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import Tag from 'components/Tag';
 import ImageWrapper from 'components/ImageWrapper';
@@ -31,10 +23,18 @@ import Hero from 'components/Hero';
 import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
 import getBlogs, { Blog } from 'utils/requests/getBlogs';
+import data from 'data/staticData.json';
 
-import i18nextConfig from '../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
+
+import { AllDataQuery } from 'generated/types';
 
 import styles from './styles.module.css';
+
+async function getAllData() {
+    // FIXME: This should be inferred
+    return data as AllDataQuery;
+}
 
 const partners = [
     {
@@ -197,7 +197,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="1"
+                            type="FIND"
                         />
                     )}
                 >
@@ -225,7 +225,7 @@ function Home(props: Props) {
                     heading={t('type-compare-title')}
                     icons={(
                         <ProjectTypeIcon
-                            type="3"
+                            type="COMPARE"
                         />
                     )}
                 >
@@ -238,7 +238,7 @@ function Home(props: Props) {
                     heading={t('type-validate-title')}
                     icons={(
                         <ProjectTypeIcon
-                            type="2"
+                            type="VALIDATE"
                         />
                     )}
                 >
@@ -251,7 +251,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="4"
+                            type="COMPLETENESS"
                         />
                     )}
                 >
@@ -264,7 +264,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="10"
+                            type="VALIDATE_IMAGE"
                         />
                     )}
                 >
@@ -277,7 +277,7 @@ function Home(props: Props) {
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
-                            type="7"
+                            type="STREET"
                         />
                     )}
                 >
@@ -453,16 +453,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
         'home',
         'common',
     ]);
-    const stats = gql`
-        query CommunityStats {
-            communityStats {
-                totalContributors
-                totalUserGroups
-                totalSwipes
-            }
-        }
-    `;
-    const value: Stats = await request(graphqlEndpoint, stats);
+
+    const value = await getAllData();
     const blogs = await getBlogs();
 
     const sortedBlogs = [...blogs]
@@ -484,8 +476,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     return {
         props: {
             ...translations,
-            totalContributors: value.communityStats?.totalContributors,
-            totalSwipes: value.communityStats?.totalSwipes,
+            totalContributors: value?.communityStats?.totalContributors ?? null,
+            totalSwipes: value?.communityStats?.totalSwipes ?? null,
             featuredBlogs,
         },
     };
