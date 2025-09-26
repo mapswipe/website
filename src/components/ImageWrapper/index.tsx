@@ -21,11 +21,21 @@ function ImageWrapper(props: Props) {
         ...otherProps
     } = props;
 
+    const basePrefix = process.env.NEXT_PUBLIC_BASE_PREFIX ?? '';
+    const isExternal = src.startsWith('http://') || src.startsWith('https://');
+
+    let modifiedSrc = src;
+
+    const isBasePrefixAvailable = basePrefix !== undefined && basePrefix.trim().length > 0;
+    if (isBasePrefixAvailable) {
+        modifiedSrc = isExternal ? src : `/${basePrefix}/${src.replace(/^\/+/, '')}`;
+    }
+
     return (
         <div className={_cs(className, styles.imageWrapper)}>
-            {!nonOptimizedImage ? (
+            {(!nonOptimizedImage && !isBasePrefixAvailable) ? (
                 <Image
-                    src={src}
+                    src={modifiedSrc}
                     className={_cs(imageClassName, styles.image)}
                     fill
                     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -34,7 +44,7 @@ function ImageWrapper(props: Props) {
             ) : (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                    src={src}
+                    src={modifiedSrc}
                     className={_cs(imageClassName, styles.image, styles.nonOptimizedImage)}
                     alt={otherProps.alt}
                 />
