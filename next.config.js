@@ -1,6 +1,6 @@
 const withExportImages = require('next-export-optimize-images');
 
-const basePrefix = process.env.BASE_PREFIX;
+const basePrefix = process.env.NEXT_PUBLIC_BASE_PREFIX;
 const isBasePrefixAvailable = basePrefix !== undefined && basePrefix.trim().length > 0;
 
 const nextConfig = withExportImages({
