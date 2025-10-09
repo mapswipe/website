@@ -673,7 +673,7 @@ function Data(props: Props) {
                 description={buildDate && (
                     <>
                         {t('data-last-fetched', {
-                            date: (new Date(0).setUTCSeconds(Number(buildDate))),
+                            date: (new Date(Number(buildDate))),
                             dateStyle: 'medium',
                             timeStyle: 'medium',
                         })}
