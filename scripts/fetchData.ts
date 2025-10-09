@@ -224,7 +224,7 @@ async function fetchAndWriteData() {
     console.log(`Data written to ${outputPath}`);
     console.log(`Top-level keys: ${Object.keys(data ?? {}).join(', ')}`);
 
-    const lastModifiedEpoch = Date.now(); // fallback
+    const lastModifiedEpoch = Date.now();
     if (process.env.GITHUB_ENV) {
         console.log(
             'Setting MAPSWIPE_API_LAST_MODIFIED_EPOCH in GitHub Actions environment',
