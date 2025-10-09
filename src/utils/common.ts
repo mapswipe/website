@@ -31,21 +31,6 @@ export interface Stats {
     } | null | undefined;
 }
 
-const matchRegex = /^(?<topic>.+)\s+-\s+(?<region>.+)\((?<taskNumber>\d+)\)\s+(?<requestingOrganization>.+)$/;
-interface ParseRes {
-    topic: string;
-    region: string;
-    taskNumber: string;
-    requestingOrganization: string;
-}
-export function parseProjectName(name: string): ParseRes | undefined {
-    const match = name.match(matchRegex);
-    if (!match) {
-        return undefined;
-    }
-    return match.groups as unknown as ParseRes;
-}
-
 export function rankedSearchOnList<T>(
     list: T[],
     searchString: string | undefined,
@@ -71,33 +56,6 @@ export async function timeIt<R>(_: string, __: string, func: (() => Promise<R>))
     // const endTime = new Date().getTime();
     // console.log(`END: ${key}: Took ${endTime - startTime}ms`);
     return resp;
-}
-
-function compareArray<T extends Array<any>>(foo: T, bar: T): boolean {
-    if (foo.length !== bar.length) {
-        return false;
-    }
-    for (let i = 0; i < foo.length; i += 1) {
-        if (foo[i] !== bar[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
-    let lastArgs: A;
-    let lastResponse: R;
-    return (...newArgs: A): R => {
-        if (lastArgs && compareArray(lastArgs, newArgs)) {
-            // console.log('CACHE: hit', lastArgs, newArgs);
-            return lastResponse;
-        }
-        // console.log('CACHE: miss', lastArgs, newArgs);
-        lastResponse = func(...newArgs);
-        lastArgs = newArgs;
-        return lastResponse;
-    };
 }
 
 export type ProjectStatus = EnumsQuery['enums']['ProjectStatusEnum'][number]['key'];

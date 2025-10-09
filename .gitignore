@@ -34,8 +34,7 @@ pnpm-debug.log*
 
 # generated types
 generated
-data/
-data/staticData.json
+fullData/
 
 cache/
 server/

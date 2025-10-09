@@ -5,12 +5,14 @@
     "ignoreUnresolved": [],
     "ignoreUnimported": ["**/*.d.ts"],
     "ignoreUnused": [],
-    "rootDir": "./src",
+    "rootDir": ".",
+    "typescript": true,
     "aliases": {
-        "components/*": ["./components/*"],
-        "utils/*": ["./utils/*"],
-        "hooks/*": ["./hooks/*"],
-        "styles/*": ["./styles/*"],
-        "generated/*": ["./generated/*"]
+        "components/*": ["src/components/*"],
+        "fullData/*": ["fullData/*"],
+        "utils/*": ["src/utils/*"],
+        "hooks/*": ["src/hooks/*"],
+        "styles/*": ["src/styles/*"],
+        "generated/*": ["src/generated/*"]
     }
 }

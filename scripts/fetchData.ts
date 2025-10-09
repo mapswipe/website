@@ -1,8 +1,9 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import fs from 'fs';
 import path from 'path';
+import { AllDataQuery } from '../generated/types';
 
-const datadir = path.join(__dirname, '../data');
+const datadir = path.join(__dirname, '../fullData');
 const baseUrl = process.env.MAPSWIPE_API_ENDPOINT || 'http://localhost:8000/';
 const GRAPHQL_ENDPOINT = `${baseUrl}graphql/`;
 // TODO: Validate the app environment env to be 'DEV', 'ALPHA-X' or 'PROD'
@@ -11,10 +12,21 @@ const pipelineType = process.env.PIPELINE_TYPE;
 
 const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT);
 
-const dummyData = {
+const dummyData: AllDataQuery = {
     publicProjects: {
         results: [],
+        totalCount: 0,
     },
+    communityStats: {
+        id: '0',
+        totalContributors: 1,
+        totalUserGroups: 1,
+        totalSwipes: 1,
+    },
+    publicOrganizations: {
+        results: [],
+    },
+    globalExportAssets: [],
 };
 
 const query = gql`
@@ -199,19 +211,20 @@ async function getCsrfTokenValue() {
 }
 
 async function fetchAndWriteData() {
-    console.log('Fetching data from GraphQL endpoint from ', GRAPHQL_ENDPOINT);
-
-    const csrfTokenValue = await getCsrfTokenValue();
-    graphQLClient.setHeader('X-CSRFToken', csrfTokenValue);
-    graphQLClient.setHeader('Cookie', `${COOKIE_NAME}=${csrfTokenValue}`);
-    graphQLClient.setHeader('Referer', process.env.MAPSWIPE_REFERER_ENDPOINT ?? '');
     let data = {};
     if (pipelineType === 'ci') {
         data = dummyData;
-    } else if (pipelineType === 'cd') {
-        data = await graphQLClient.request(query);
     } else {
-        // fallback to local dev behavior
+        console.log('Fetching data from GraphQL endpoint from ', GRAPHQL_ENDPOINT);
+
+        const csrfTokenValue = await getCsrfTokenValue();
+        if (!csrfTokenValue) {
+            console.error('Could not fetch crsf token');
+            return;
+        }
+        graphQLClient.setHeader('X-CSRFToken', csrfTokenValue);
+        graphQLClient.setHeader('Cookie', `${COOKIE_NAME}=${csrfTokenValue}`);
+        graphQLClient.setHeader('Referer', process.env.MAPSWIPE_REFERER_ENDPOINT ?? '');
         data = await graphQLClient.request(query);
     }
 
@@ -219,7 +232,7 @@ async function fetchAndWriteData() {
     if (!fs.existsSync(datadir)) {
         fs.mkdirSync(datadir, { recursive: true });
     }
-    const outputPath = path.join(__dirname, '../data/staticData.json');
+    const outputPath = path.join(__dirname, '../fullData/staticData.json');
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
     console.log(`Data written to ${outputPath}`);
     console.log(`Top-level keys: ${Object.keys(data ?? {}).join(', ')}`);
