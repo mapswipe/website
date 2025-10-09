@@ -25,7 +25,7 @@ import Section from 'components/Section';
 import Heading from 'components/Heading';
 import KeyFigure from 'components/KeyFigure';
 import Link from 'components/Link';
-import data from 'data/staticData.json';
+import data from 'fullData/staticData.json';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 

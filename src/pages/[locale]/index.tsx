@@ -23,7 +23,7 @@ import Hero from 'components/Hero';
 import NumberOutput from 'components/NumberOutput';
 import Section from 'components/Section';
 import getBlogs, { Blog } from 'utils/requests/getBlogs';
-import data from 'data/staticData.json';
+import data from 'fullData/staticData.json';
 
 import i18nextConfig from '@/next-i18next.config';
 

@@ -47,7 +47,7 @@ import {
 } from 'utils/common';
 import useDebouncedValue from 'hooks/useDebouncedValue';
 import { GlobalExportAssets } from 'utils/queries';
-import data from 'data/staticData.json';
+import data from 'fullData/staticData.json';
 
 import { AllDataQuery } from 'generated/types';
 import i18nextConfig from '@/next-i18next.config';

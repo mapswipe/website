@@ -9,7 +9,7 @@
         ],
         "paths": {
             "@/*": ["./*"],
-            "data/*": ["data/*"],
+            "fullData/*": ["fullData/*"],
             "components/*": ["src/components/*"],
             "utils/*": ["src/utils/*"],
             "hooks/*": ["src/hooks/*"],
@@ -45,6 +45,7 @@
         "types.d.ts",
         "**/*.ts",
         "**/*.tsx",
+        "fullData/**/*",
         ".next/types/**/*.ts"
     ]
 }

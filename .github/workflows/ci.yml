@@ -13,6 +13,9 @@ jobs:
   ci:
     name: Lint + Type Checks
     runs-on: ubuntu-latest
+    env:
+      PIPELINE_TYPE: ci
+
     steps:
       - uses: actions/checkout@v5
         with:
@@ -32,6 +35,9 @@ jobs:
 
       - name: Generate typings
         run: yarn generate:type
+
+      - name: Prefetch dummy data
+        run: yarn fetch-data
 
       - name: Check
         run: pre-commit run -vvv --all-files
