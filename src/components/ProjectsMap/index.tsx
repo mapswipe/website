@@ -24,39 +24,33 @@ import {
     ProjectTypeOption,
     ProjectStatusOption,
     ProjectStatus,
-    ProjectType,
 } from 'utils/common';
 
 import GestureHandler from 'components/LeafletGestureHandler';
 import Link from 'components/Link';
+import { AllDataQuery } from 'generated/types';
 
 import styles from './styles.module.css';
+
+type PublicProject = NonNullable<NonNullable<AllDataQuery['publicProjects']>['results']>[number];
 
 const pathOptions: {
     [key in ProjectStatus]?: CircleMarkerOptions
 } = {
-    active: {
+    PUBLISHED: {
         fillColor: '#F69143',
         color: '#0F193F',
         weight: 1,
         opacity: 0.2,
         fillOpacity: 0.9,
     },
-    finished: {
+    FINISHED: {
         fillColor: '#AABE5D',
         color: '#0F193F',
         weight: 1,
         opacity: 0.2,
         fillOpacity: 0.9,
     },
-};
-
-const sortValue: {
-    [key in ProjectStatus]?: number
-} = {
-    active: 3,
-    finished: 2,
-    archived: 1,
 };
 
 const defaultPathOptions: CircleMarkerOptions = {
@@ -67,25 +61,11 @@ const defaultPathOptions: CircleMarkerOptions = {
     fillOpacity: 0.9,
 };
 
-interface Project {
-    project_id: string;
-    project_type: ProjectType,
-    name: string;
-    status: ProjectStatus;
-    progress: number | null;
-    number_of_users: number | null;
-    coordinates: [number, number] | null;
-    day: number | null;
-    area_sqkm: number | null;
-    region: string | null;
-    requestingOrganization: string | null;
-}
-
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    projects: Project[];
-    radiusSelector: (project: Project) => number;
+    projects: PublicProject[];
+    radiusSelector: (project: PublicProject) => number;
 }
 
 function ProjectMap(props: Props) {
@@ -100,13 +80,13 @@ function ProjectMap(props: Props) {
 
     const projectStatusOptions: ProjectStatusOption[] = useMemo(() => ([
         {
-            key: 'active',
-            label: t('active-projects'),
+            key: 'PUBLISHED',
+            label: t('active'),
             icon: (<IoEllipseSharp className={styles.active} />),
         },
         {
-            key: 'finished',
-            label: t('finished-projects'),
+            key: 'FINISHED',
+            label: t('finished'),
             icon: (<IoEllipseSharp className={styles.finished} />),
         },
     ]), [t]);
@@ -121,24 +101,45 @@ function ProjectMap(props: Props) {
 
     const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
         {
-            key: '1',
-            label: t('build-area'),
+            key: 'FIND',
+            label: t('type-find-title'),
             icon: (
-                <ProjectTypeIcon type="1" size="small" />
+                <ProjectTypeIcon type="FIND" size="small" />
             ),
         },
         {
-            key: '2',
-            label: t('footprint'),
+            key: 'VALIDATE',
+            label: t('type-validate-title'),
             icon: (
-                <ProjectTypeIcon type="2" size="small" />
+                <ProjectTypeIcon type="VALIDATE" size="small" />
             ),
         },
         {
-            key: '3',
-            label: t('change-detection'),
+            key: 'COMPARE',
+            label: t('type-compare-title'),
             icon: (
-                <ProjectTypeIcon type="3" size="small" />
+                <ProjectTypeIcon type="COMPARE" size="small" />
+            ),
+        },
+        {
+            key: 'COMPLETENESS',
+            label: t('type-completeness-title'),
+            icon: (
+                <ProjectTypeIcon type="COMPLETENESS" size="small" />
+            ),
+        },
+        {
+            key: 'VALIDATE_IMAGE',
+            label: t('type-validate-image-title'),
+            icon: (
+                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
+            ),
+        },
+        {
+            key: 'STREET',
+            label: t('type-streets-view-title'),
+            icon: (
+                <ProjectTypeIcon type="STREET" size="small" />
             ),
         },
     ]), [t]);
@@ -152,12 +153,14 @@ function ProjectMap(props: Props) {
     ), [projectTypeOptions]);
 
     const sanitizedProjects = projects
-        .map((project) => (isDefined(project.coordinates) ? {
+        .map((project) => (isDefined(project?.aoiGeometry?.centroid) ? {
             ...project,
-            coordinates: [project.coordinates[1], project.coordinates[0]] as LatLngTuple,
+            centroid: [
+                project.aoiGeometry?.centroid[1],
+                project.aoiGeometry?.centroid[0],
+            ] as LatLngTuple,
         } : undefined))
-        .filter(isDefined)
-        .sort((foo, bar) => ((sortValue[foo.status] ?? 0) - (sortValue[bar.status] ?? 0)));
+        .filter(isDefined);
 
     return (
         <MapContainer
@@ -170,16 +173,16 @@ function ProjectMap(props: Props) {
         >
             {sanitizedProjects.map((project) => (
                 <CircleMarker
-                    key={project.project_id}
-                    center={project.coordinates}
+                    key={project.id}
+                    center={project.centroid}
                     radius={radiusSelector(project)}
                     pathOptions={pathOptions[project.status] ?? defaultPathOptions}
                 >
                     <Popup>
                         <Link
                             className={styles.cardLink}
-                            key={project.project_id}
-                            href={`/[locale]/projects/${project.project_id}`}
+                            key={project.id}
+                            href={`/[locale]/projects/${project.id}`}
                         >
                             <Card
                                 className={styles.project}
@@ -187,23 +190,23 @@ function ProjectMap(props: Props) {
                                 headingFont="normal"
                                 heading={project.name}
                                 description={(
-                                    <div className={styles.row}>
-                                        {project.project_type && (
+                                    <div className={styles.types}>
+                                        {project.projectType && (
                                             <Tag
                                                 spacing="small"
                                                 icon={(
-                                                    projectTypeOptionsMap[project.project_type].icon
+                                                    projectTypeOptionsMap[project.projectType].icon
                                                 )}
                                             >
-                                                {projectTypeOptionsMap[project.project_type].label}
+                                                {projectTypeOptionsMap[project.projectType]?.label}
                                             </Tag>
                                         )}
                                         {project.status && (
                                             <Tag
                                                 spacing="small"
-                                                icon={projectStatusOptionMap[project.status].icon}
+                                                icon={projectStatusOptionMap[project.status]?.icon}
                                             >
-                                                {projectStatusOptionMap[project.status].label}
+                                                {projectStatusOptionMap[project.status]?.label}
                                             </Tag>
                                         )}
                                     </div>
@@ -239,28 +242,37 @@ function ProjectMap(props: Props) {
                                                 icon={<IoFlag />}
                                                 variant="transparent"
                                             >
-                                                {project.requestingOrganization}
+                                                {project?.requestingOrganization.name}
                                             </Tag>
                                         )}
                                         <div className={styles.row}>
-                                            {project.day && (
+                                            {project.modifiedAt && (
                                                 <Tag
                                                     className={styles.tag}
                                                     icon={<IoCalendarClearOutline />}
                                                     variant="transparent"
                                                 >
-                                                    {t('project-card-last-update', { date: project.day })}
+                                                    {t(
+                                                        'project-card-last-update',
+                                                        {
+                                                            date: project.modifiedAt
+                                                                ? new Date(project.modifiedAt)
+                                                                    .toLocaleDateString(undefined, {
+                                                                        year: 'numeric',
+                                                                        month: 'short',
+                                                                        day: 'numeric',
+                                                                    }) : null,
+                                                        },
+                                                    )}
                                                 </Tag>
                                             )}
-                                            {project.number_of_users && (
-                                                <Tag
-                                                    className={styles.tag}
-                                                    icon={<IoPerson />}
-                                                    variant="transparent"
-                                                >
-                                                    {t('project-card-contributors-text', { contributors: project.number_of_users })}
-                                                </Tag>
-                                            )}
+                                            <Tag
+                                                className={styles.tag}
+                                                icon={<IoPerson />}
+                                                variant="transparent"
+                                            >
+                                                {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers })}
+                                            </Tag>
                                         </div>
                                     </div>
                                 </div>

@@ -1,29 +1,34 @@
-import util from 'util';
-import fs from 'fs';
 import Papa from 'papaparse';
 import { isFalsyString, isDefined } from '@togglecorp/fujs';
-
 import { timeIt } from 'utils/common';
 
-export type ProjectHistoryRaw = {
-    day: string,
-    number_of_results: string, // number
-    number_of_results_progress: string, // number
-    cum_number_of_results: string, // number
-    cum_number_of_results_progress: string, // number
-    progress: string, // number
-    cum_progress: string, // number
-    number_of_users: string, // number
-    number_of_new_users: string, // number
-    cum_number_of_users: string, // number
+interface ProjectHistoryRaw {
+    day: string;
+    number_of_results: string;
+    number_of_results_progress: string;
+    cum_number_of_results: string;
+    cum_number_of_results_progress: string;
+    progress: string;
+    cum_progress: string;
+    number_of_users: string;
+    number_of_new_users: string;
+    cum_number_of_users: string;
     project_id: string;
-};
+}
 
 export interface ProjectHistory {
     timestamp: number;
+    numberOfResults: number;
+    numberOfResultsProgress: number;
+    cumNumberOfResults: number;
+    cumNumberOfResultsProgress: number;
     progress: number;
+    cumProgress: number;
+    numberOfUsers: number;
+    numberOfNewUsers: number;
+    cumNumberOfUsers: number;
+    projectId: string;
 }
-const readFile = util.promisify(fs.readFile);
 
 function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is ProjectHistoryRaw {
     if (isFalsyString(hist.day)) {
@@ -33,24 +38,34 @@ function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is Proj
     return true;
 }
 
-const getProjectHistory = async (projectId: string) => {
-    let cacheFileContent: Buffer;
+const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) => {
+    if (!exportHistoryUrl) {
+        // eslint-disable-next-line no-console
+        console.warn(`No exportHistoryUrl for project ${projectId}`);
+        return [];
+    }
+
+    let csvContent: string;
     try {
-        cacheFileContent = await timeIt(
+        csvContent = await timeIt(
             projectId,
-            'read cache from disk',
-            () => readFile(`cache/project-history/history_${projectId}.csv`),
+            'fetch project history from exportHistory url',
+            async () => {
+                const res = await fetch(exportHistoryUrl);
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch history: ${res.status}`);
+                }
+                return res.text();
+            },
         );
     } catch (e) {
         // eslint-disable-next-line no-console
-        console.warn(`Could not read history file for project ${projectId}.`);
-        // eslint-disable-next-line no-console
-        console.warn(e);
+        console.warn(`Could not fetch history for project ${projectId}.`);
         return [];
     }
 
     const parsedContent = await new Promise((resolve, reject) => {
-        Papa.parse((cacheFileContent?.toString() ?? ''), {
+        Papa.parse((csvContent?.toString() ?? ''), {
             delimiter: ',',
             newline: '\n',
             header: true,
@@ -62,7 +77,8 @@ const getProjectHistory = async (projectId: string) => {
             },
         });
     });
-    const histories = (parsedContent as any).data as (ProjectHistoryRaw | { day: '' })[];
+
+    const histories = (parsedContent as any).data as (ProjectHistoryRaw | { day: '', cum_progress: 0 })[];
 
     return histories.filter(isValidHistoryData).map((hist) => {
         if (isFalsyString(hist.cum_progress)) {

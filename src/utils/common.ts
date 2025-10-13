@@ -3,31 +3,32 @@ import {
     caseInsensitiveSubmatch,
     compareStringSearch,
 } from '@togglecorp/fujs';
+import { gql } from 'graphql-request';
+import { EnumsQuery } from 'generated/types';
 
-export const graphqlEndpoint = process.env.MAPSWIPE_COMMUNITY_API_ENDPOINT as string;
+export const enumsQuery = gql`
+    query Enums {
+        enums {
+            ProjectTypeEnum {
+                key
+                label
+            }
+            ProjectStatusEnum {
+                key
+                label
+            }
+        }
+    }
+`;
 
-export const supportedProjectTypes = [1, 2, 3, 10];
+// FIXME: Find the value of supported project type
+export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
 
 export interface Stats {
     communityStats: {
         totalContributors: number | null | undefined;
         totalSwipes: number | null | undefined;
     } | null | undefined;
-}
-
-const matchRegex = /^(?<topic>.+)\s+-\s+(?<region>.+)\((?<taskNumber>\d+)\)\s+(?<requestingOrganization>.+)$/;
-interface ParseRes {
-    topic: string;
-    region: string;
-    taskNumber: string;
-    requestingOrganization: string;
-}
-export function parseProjectName(name: string): ParseRes | undefined {
-    const match = name.match(matchRegex);
-    if (!match) {
-        return undefined;
-    }
-    return match.groups as unknown as ParseRes;
 }
 
 export function rankedSearchOnList<T>(
@@ -57,39 +58,11 @@ export async function timeIt<R>(_: string, __: string, func: (() => Promise<R>))
     return resp;
 }
 
-function compareArray<T extends Array<any>>(foo: T, bar: T): boolean {
-    if (foo.length !== bar.length) {
-        return false;
-    }
-    for (let i = 0; i < foo.length; i += 1) {
-        if (foo[i] !== bar[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-export function memoize<A extends Array<any>, R>(func: (...args: A) => R) {
-    let lastArgs: A;
-    let lastResponse: R;
-    return (...newArgs: A): R => {
-        if (lastArgs && compareArray(lastArgs, newArgs)) {
-            // console.log('CACHE: hit', lastArgs, newArgs);
-            return lastResponse;
-        }
-        // console.log('CACHE: miss', lastArgs, newArgs);
-        lastResponse = func(...newArgs);
-        lastArgs = newArgs;
-        return lastResponse;
-    };
-}
-
-export type ProjectStatus = 'private_active' | 'private_inactive' | 'private_finished' | 'active' | 'inactive' | 'finished' | 'archived' | 'tutorial';
-
-export type ProjectType = 1 | 2 | 3 | 4 | 10;
+export type ProjectStatus = EnumsQuery['enums']['ProjectStatusEnum'][number]['key'];
+export type ProjectType = EnumsQuery['enums']['ProjectTypeEnum'][number]['key'];
 
 export interface ProjectStatusOption {
-    key: ProjectStatus;
+    key: `${ProjectStatus}`;
     label: string | React.ReactNode;
     icon?: React.ReactNode;
 }
@@ -99,16 +72,6 @@ export interface ProjectTypeOption {
     label: string;
     icon?: React.ReactNode;
 }
-
-export const projectNameMapping: {
-    [key in ProjectTypeOption['key']]: string
-} = {
-    1: 'Build Area',
-    2: 'Footprint',
-    3: 'Change Detection',
-    4: 'Completeness',
-    10: 'Validate Image',
-};
 
 const mb = 1024 * 1024;
 export function getFileSizeProperties(fileSize: number) {

@@ -14,10 +14,15 @@ jobs:
   test_build:
     name: Run Tests + Build
     runs-on: ubuntu-latest
+    environment: 'prod'
+    env:
+      PIPELINE_TYPE: cd
 
     steps:
       # NOTE: This uses default branch which is `main`
       - uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - uses: actions/setup-node@v4
         with:
@@ -34,11 +39,16 @@ jobs:
       - name: Run yarn install
         run: yarn install
 
+      - name: Generate typings
+        run: yarn generate:type
+
       - name: Download data
         # NOTE: This will add env.MAPSWIPE_API_LAST_MODIFIED_EPOCH
-        run: ./scripts/download-data.sh
+        run: yarn fetch-data
         env:
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
+          MAPSWIPE_REFERER_ENDPOINT: ${{ vars.MAPSWIPE_REFERER_ENDPOINT }}
+          APP_ENVIRONMENT: ${{ vars.APP_ENVIRONMENT }}
 
       - name: Build + Test
         run: yarn build
@@ -47,12 +57,12 @@ jobs:
           # Common
           NODE_OPTIONS: --max_old_space_size=4096
           # App ENV
-          MAPSWIPE_COMMUNITY_API_ENDPOINT: ${{ vars.MAPSWIPE_COMMUNITY_API_ENDPOINT }}
           MAPSWIPE_API_ENDPOINT: ${{ vars.MAPSWIPE_API_ENDPOINT }}
           NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
           NEXT_PUBLIC_POSTHOG_HOST_API: ${{ vars.NEXT_PUBLIC_POSTHOG_HOST_API }}
           # Build Date
           MAPSWIPE_BUILD_DATE: ${{ env.MAPSWIPE_API_LAST_MODIFIED_EPOCH }}
+          NEXT_PUBLIC_BASE_PREFIX: ${{ vars.NEXT_PUBLIC_BASE_PREFIX }}
 
       - name: Upload GH artifacts
         uses: actions/upload-pages-artifact@v3

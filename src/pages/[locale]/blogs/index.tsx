@@ -17,7 +17,7 @@ import Section from 'components/Section';
 import getBlogs, { Blog } from 'utils/requests/getBlogs';
 import OgMeta from 'components/OgMeta';
 
-import i18nextConfig from '../../../../next-i18next.config';
+import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
 

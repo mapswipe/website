@@ -11,10 +11,12 @@
         "start": "next start",
         "generate:i18n": "i18next 'src/**/*.{jsx,tsx}' -o 'public/locales/$LOCALE/$NAMESPACE.json'",
         "lint": "next lint",
-        "fetch-data": "env-cmd -f .env.local ./scripts/download-data.sh",
+        "fetch-data": "ts-node -P tsconfig.scripts.json scripts/fetchData.ts",
+        "fetch-data:local": "env-cmd -f .env.local ts-node -P tsconfig.scripts.json scripts/fetchData.ts",
         "css-lint": "stylelint 'src/**/*.css'",
         "typecheck": "tsc",
-        "check-unused": "unimported"
+        "check-unused": "unimported",
+        "generate:type": "graphql-codegen --require dotenv/config --config codegen.yml"
     },
     "dependencies": {
         "@togglecorp/fujs": "^2.0.0",
@@ -44,7 +46,6 @@
         "@graphql-codegen/introspection": "^2.2.3",
         "@graphql-codegen/typescript-operations": "^2.5.12",
         "@types/leaflet": "^1.9.3",
-        "next-sitemap": "^4.1.8",
         "@types/node": "^18.11.9",
         "@types/papaparse": "^5.3.7",
         "@types/react": "^18.0.25",
@@ -63,6 +64,7 @@
         "eslint-plugin-react-hooks": "^4.6.0",
         "i18next-parser": "^8.0.0",
         "next-export-optimize-images": "^2.1.0",
+        "next-sitemap": "^4.1.8",
         "postcss-flexbugs-fixes": "^5.0.2",
         "postcss-nested": "^6.0.0",
         "postcss-normalize": "^10.0.1",
