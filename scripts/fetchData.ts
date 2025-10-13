@@ -34,7 +34,7 @@ const query = gql`
         publicProjects(
             filters: {
                 status: {
-                    inList: [PUBLISHED, FINISHED],
+                    inList: [PUBLISHED, FINISHED, WITHDRAWN],
                 },
             },
             pagination: { limit: 9999 },

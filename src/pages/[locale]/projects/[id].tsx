@@ -29,7 +29,7 @@ import data from 'fullData/staticData.json';
 
 import useSizeTracking from 'hooks/useSizeTracking';
 
-import getProjectHistory, { ProjectHistory } from 'utils/requests/projectHistory';
+import getProjectHistory from 'utils/requests/projectHistory';
 import {
     ProjectStatusOption,
     ProjectTypeOption,
@@ -118,15 +118,17 @@ function Project(props: Props) {
         exportUsers,
         exportHotTaskingManagerGeometries,
         exportModerateToHighAgreementYesMaybeGeometries,
-        totalArea,
         numberOfContributorUsers,
+        aoiGeometry,
         id: projectId,
     } = props;
 
     const svgContainerRef = React.useRef<HTMLDivElement>(null);
     const svgBounds = useSizeTracking(svgContainerRef);
     const [projectGeoJSON, setProjectGeoJSON] = useState(null);
-    const [projectHistory, setProjectHistory] = useState<ProjectHistory[] | undefined>();
+    const [projectHistory, setProjectHistory] = useState<{
+        timestamp: number; progress: number
+    }[] | undefined>();
 
     useEffect(() => {
         async function fetchData() {
@@ -293,7 +295,7 @@ function Project(props: Props) {
         )
     ), [projectStatusOptions]);
 
-    const roundedTotalArea = Math.round(totalArea ?? 0);
+    const roundedTotalArea = Math.round(aoiGeometry?.totalArea ?? 0);
 
     return (
         <Page contentClassName={_cs(styles.project, className)}>
@@ -380,7 +382,6 @@ function Project(props: Props) {
                             {t('overview-section-title')}
                         </Heading>
                         <div className={styles.description}>
-                            {description}
                             <HtmlOutput
                                 className={styles.description}
                                 content={description ?? ''}
@@ -438,11 +439,11 @@ function Project(props: Props) {
                     <div className={styles.progressBar}>
                         <div className={styles.progressLabel}>
                             <div>{t('project-progress-label')}</div>
-                            <div>{t('project-card-progress-text', { progress })}</div>
+                            <div>{t('project-card-progress-text', { progress: (progress * 100) })}</div>
                         </div>
                         <div className={styles.track}>
                             <div
-                                style={{ width: `${progress}%` }}
+                                style={{ width: `${progress * 100}%` }}
                                 className={styles.progress}
                             />
                         </div>

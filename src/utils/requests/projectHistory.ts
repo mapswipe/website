@@ -30,6 +30,14 @@ export interface ProjectHistory {
     projectId: string;
 }
 
+function isValidHistoryData(hist: ProjectHistoryRaw | { day: '' }): hist is ProjectHistoryRaw {
+    if (isFalsyString(hist.day)) {
+        return false;
+    }
+
+    return true;
+}
+
 const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) => {
     if (!exportHistoryUrl) {
         // eslint-disable-next-line no-console
@@ -57,33 +65,31 @@ const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) =
     }
 
     const parsedContent = await new Promise((resolve, reject) => {
-        Papa.parse(csvContent ?? '', {
+        Papa.parse((csvContent?.toString() ?? ''), {
             delimiter: ',',
             newline: '\n',
             header: true,
-            complete: (results: any) => resolve(results),
-            error: (error: any) => reject(error),
+            complete: (results: any) => {
+                resolve(results);
+            },
+            error: (error: any) => {
+                reject(error);
+            },
         });
     });
 
-    const histories = (parsedContent as any).data as ProjectHistoryRaw[];
+    const histories = (parsedContent as any).data as (ProjectHistoryRaw | { day: '', cum_progress: 0 })[];
 
-    return histories
-        .filter((row) => !isFalsyString(row.day))
-        .map((row): ProjectHistory => ({
-            timestamp: new Date(row.day).getTime(),
-            numberOfResults: Number(row.number_of_results) || 0,
-            numberOfResultsProgress: Number(row.number_of_results_progress) || 0,
-            cumNumberOfResults: Number(row.cum_number_of_results) || 0,
-            cumNumberOfResultsProgress: Number(row.cum_number_of_results_progress) || 0,
-            progress: Number(row.progress) || 0,
-            cumProgress: Number(row.cum_progress) || 0,
-            numberOfUsers: Number(row.number_of_users) || 0,
-            numberOfNewUsers: Number(row.number_of_new_users) || 0,
-            cumNumberOfUsers: Number(row.cum_number_of_users) || 0,
-            projectId: row.project_id,
-        }))
-        .filter(isDefined);
+    return histories.filter(isValidHistoryData).map((hist) => {
+        if (isFalsyString(hist.cum_progress)) {
+            return undefined;
+        }
+
+        return {
+            timestamp: new Date(hist.day).getTime(),
+            progress: Number(hist.cum_progress),
+        };
+    }).filter(isDefined);
 };
 
 export default getProjectHistory;

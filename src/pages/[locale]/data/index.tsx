@@ -124,7 +124,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         requestingOrganization: feature.requestingOrganization ?? null,
         progress: feature.progress,
         numberOfContributorUsers: feature?.numberOfContributorUsers,
-        totalArea: feature?.totalArea ?? null,
         createdAt: feature?.createdAt
             ? new Date(feature.createdAt).toLocaleDateString(undefined, {
                 year: 'numeric',
@@ -149,7 +148,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const minContributors = contributors?.length > 0 ? Math.min(...contributors) : 0;
     const maxContributors = contributors?.length > 0 ? Math.max(...contributors) : 0;
 
-    const areas = miniProjects?.map((proj) => proj.totalArea)
+    const sortedProjects = [...miniProjects];
+    sortedProjects.sort((a, b) => compareDate(a.createdAt, b.createdAt, -1));
+
+    const areas = miniProjects?.map((proj) => proj.aoiGeometry?.totalArea)
         .filter(isDefined);
     const minArea = areas?.length > 0 ? Math.min(...areas) : 0;
     const maxArea = areas?.length > 0 ? Math.max(...areas) : 0;
@@ -157,7 +159,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {
         props: {
             ...translations,
-            projects: miniProjects,
+            projects: sortedProjects,
             minArea,
             buildDate: buildDate ?? null,
             maxArea,
@@ -415,7 +417,7 @@ function Data(props: Props) {
 
     const totalAreaSum = sum(
         visibleProjects.map(
-            (feature) => feature.totalArea ?? 0,
+            (feature) => feature.aoiGeometry?.totalArea ?? 0,
         ).filter(isDefined),
     );
     const roundedTotalArea = Math.round((totalAreaSum / 1000)) * 1000;
@@ -425,7 +427,7 @@ function Data(props: Props) {
     const radiusSelector = useCallback(
         (project: PublicProject) => {
             if (bubble === 'area') {
-                return 4 + 16 * (((project.totalArea ?? 0) - minArea)
+                return 4 + 16 * (((project.aoiGeometry?.totalArea ?? 0) - minArea)
                     / (maxArea - minArea || 1));
             }
             if (bubble === 'contributors') {
@@ -844,12 +846,12 @@ function Data(props: Props) {
                                     <div className={styles.progressBar}>
                                         <div className={styles.track}>
                                             <div
-                                                style={{ width: `${project.progress}%` }}
+                                                style={{ width: `${project.progress * 100}%` }}
                                                 className={styles.progress}
                                             />
                                         </div>
                                         <div className={styles.progressLabel}>
-                                            {t('project-card-progress-text', { progress: project.progress })}
+                                            {t('project-card-progress-text', { progress: (project.progress * 100) })}
                                         </div>
                                     </div>
                                 )}
