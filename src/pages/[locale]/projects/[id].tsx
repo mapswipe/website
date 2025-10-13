@@ -56,7 +56,7 @@ async function getProjectData(id: string) {
     const projects = (
         data as AllDataQuery
     )?.publicProjects?.results as unknown as PublicProjects;
-    return projects?.find((item) => String(item.id) === id);
+    return projects?.find((item) => String(item.firebaseId) === id);
 }
 
 const X_AXIS_HEIGHT = 20;
@@ -862,9 +862,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const projects = await getAllProjects() ?? [];
 
     const pathsWithParams = projects.flatMap(
-        (project: { id: string }) => i18nextConfig.i18n.locales.map((lng: string) => ({
+        (project: { firebaseId: string }) => i18nextConfig.i18n.locales.map((lng: string) => ({
             params: {
-                id: project.id.toString(),
+                id: project.firebaseId.toString(),
                 locale: lng,
             },
         })),

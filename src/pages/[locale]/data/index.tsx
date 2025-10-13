@@ -118,6 +118,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         id: feature.id ?? '',
         projectType: feature.projectType,
         name: feature.name,
+        firebaseId: feature.firebaseId,
         status: feature.status ?? null,
         region: feature.region ?? null,
         requestingOrganizationId: feature.requestingOrganization?.id ?? null,
@@ -812,7 +813,7 @@ function Data(props: Props) {
                         <Link
                             className={styles.cardLink}
                             key={project.id}
-                            href={`/[locale]/projects/${project.id}`}
+                            href={`/[locale]/projects/${project.firebaseId}`}
                         >
                             <Card
                                 className={styles.project}

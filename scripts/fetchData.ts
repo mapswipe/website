@@ -133,6 +133,7 @@ const query = gql`
                     fileSize
                 }
                 name
+                firebaseId
                 image {
                     id
                     file {
