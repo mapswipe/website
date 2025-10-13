@@ -1,0 +1,11 @@
+{
+  "ready-to-process": "Listo para procesar",
+  "draft": "Borrador",
+  "discarded": "Descartado",
+  "processing-failed": "Error al procesar",
+  "processed": "Procesado",
+  "ready-to-published": "Listo para publicar",
+  "publishing-failed": "Error al publicar",
+  "paused": "Pausado",
+  "download-projects-with-geometry-heading": "Proyectos con geometría"
+}
