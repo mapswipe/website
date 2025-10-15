@@ -1,7 +1,7 @@
 {
   "users-title": "使用者",
   "users-description": "這個資料集含有個別貢獻者的資訊，因此你能知道這個專案最活躍的使用者 。(你需要先解壓縮這個 .gz 檔案後才能使用。)",
-  "date": "[[日期，日期時間]]",
+  "date": "{{日期，日期時間}}",
   "active-projects": "活躍",
   "finished-projects": "已完成",
   "build-area": "尋找圖徵",
