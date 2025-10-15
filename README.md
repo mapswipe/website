@@ -13,8 +13,9 @@ touch .env.local
 Set these environment variables:
 
 ```env
-MAPSWIPE_API_ENDPOINT=https://apps.mapswipe.org/api/
-MAPSWIPE_COMMUNITY_API_ENDPOINT=https://api.mapswipe.org/graphql/
+APP_ENVIRONMENT=DEV
+MAPSWIPE_API_ENDPOINT=https://backend.mapswipe.org/
+MAPSWIPE_REFERRER_ENDPOINT=https://website.mapswipe.org/
 NEXT_PUBLIC_POSTHOG_KEY=<posthog-key>
 NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
 ```
@@ -24,7 +25,9 @@ NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
 ```bash
 yarn install
 # This fetches latest data from MapSwipe database for projects
-yarn fetch-data
+yarn fetch-data:local
+
+> NOTE: Currently the platform runs smoothly in node 16, so developers might have to switch to node 16 for development.
 yarn dev
 ```
 
@@ -50,7 +53,35 @@ yarn unimported
 yarn build
 ```
 
-### Automatic Deployment
+### Staging Deployment
+
+The **staging environment** is used to test new changes before they are deployed to production.
+You can view the live staging site here:
+🔗 [https://website-stage.mapswipe.org/](https://website-stage.mapswipe.org/)
+
+### Steps to Deploy to Staging
+
+1. **Rebase your branch onto the staging branch:**
+
+```bash
+git checkout stage
+git rebase <branch-you-want-to-deploy>
+git push
+```
+
+This rebases your feature branch onto the `stage` branch and pushes the updated staging branch.
+
+2. **Trigger the staging deployment:**
+
+The staging deployment is managed through this repository:
+🔗 [https://github.com/mapswipe/stage-website/](https://github.com/mapswipe/stage-website/)
+
+You can manually trigger the deployment workflow here:
+🔗 [Staging Workflow – stage.yml](https://github.com/mapswipe/stage-website/actions/workflows/stage.yml)
+
+> **Note:** The staging environment also auto-deploys every day at **01:00 UTC**.
+
+### Production Deployment
 
 Deployments will be triggered in 2 ways:
 
