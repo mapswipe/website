@@ -182,7 +182,7 @@ function ProjectMap(props: Props) {
                         <Link
                             className={styles.cardLink}
                             key={project.id}
-                            href={`/[locale]/projects/${project.id}`}
+                            href={`/[locale]/projects/${project.firebaseId}`}
                         >
                             <Card
                                 className={styles.project}
@@ -215,12 +215,12 @@ function ProjectMap(props: Props) {
                                     <div className={styles.progressBar}>
                                         <div className={styles.track}>
                                             <div
-                                                style={{ width: `${project.progress}%` }}
+                                                style={{ width: `${project.progress * 100}%` }}
                                                 className={styles.progress}
                                             />
                                         </div>
                                         <div className={styles.progressLabel}>
-                                            {t('project-card-progress-text', { progress: project.progress })}
+                                            {t('project-card-progress-text', { progress: (project.progress * 100) })}
                                         </div>
                                     </div>
                                 )}

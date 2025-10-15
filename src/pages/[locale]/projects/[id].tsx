@@ -2,7 +2,12 @@ import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { useTranslation } from 'next-i18next';
-import { _cs, bound, listToMap } from '@togglecorp/fujs';
+import {
+    _cs,
+    bound,
+    listToMap,
+    isDefined,
+} from '@togglecorp/fujs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
     IoDownloadOutline,
@@ -449,11 +454,11 @@ function Project(props: Props) {
                         </div>
                     </div>
                     <div className={styles.chartContainer}>
-                        {chartPoints.length > 1 ? (
-                            <div
-                                ref={svgContainerRef}
-                                className={styles.timelineChartContainer}
-                            >
+                        <div
+                            ref={svgContainerRef}
+                            className={styles.timelineChartContainer}
+                        >
+                            {(isDefined(projectHistory) && chartPoints.length > 1) ? (
                                 <svg className={styles.timelineChart}>
                                     <defs>
                                         <linearGradient
@@ -522,15 +527,15 @@ function Project(props: Props) {
                                         d={getPathData(chartPoints)}
                                     />
                                 </svg>
-                            </div>
-                        ) : (
-                            <div className={styles.emptyChart}>
-                                <IoStatsChartSharp className={styles.chartIcon} />
-                                <div className={styles.message}>
-                                    Not enough data points for the chart!
+                            ) : (
+                                <div className={styles.emptyChart}>
+                                    <IoStatsChartSharp className={styles.chartIcon} />
+                                    <div className={styles.message}>
+                                        Not enough data points for the chart!
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
             </Section>
