@@ -212,7 +212,7 @@ async function getCsrfTokenValue() {
 }
 
 async function fetchAndWriteData() {
-    let data = {};
+    let data = {} as AllDataQuery;
     if (pipelineType === 'ci') {
         data = dummyData;
     } else {
@@ -226,7 +226,7 @@ async function fetchAndWriteData() {
         graphQLClient.setHeader('X-CSRFToken', csrfTokenValue);
         graphQLClient.setHeader('Cookie', `${COOKIE_NAME}=${csrfTokenValue}`);
         graphQLClient.setHeader('Referer', process.env.MAPSWIPE_REFERER_ENDPOINT ?? '');
-        data = await graphQLClient.request(query);
+        data = (await graphQLClient.request(query)) as AllDataQuery;
     }
 
     // ensure the `data` directory exists
@@ -237,6 +237,7 @@ async function fetchAndWriteData() {
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
     console.log(`Data written to ${outputPath}`);
     console.log(`Top-level keys: ${Object.keys(data ?? {}).join(', ')}`);
+    console.log(`Total projects count: ${data?.publicProjects?.totalCount}`);
 
     const lastModifiedEpoch = Date.now();
     if (process.env.GITHUB_ENV) {
