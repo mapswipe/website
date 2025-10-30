@@ -394,12 +394,12 @@ function Data(props: Props) {
         description: string;
         fileLabel: string;
     }> = {
-        PROJECT_STATS_BY_TYPES: {
+        PROJECTS_CSV: {
             heading: t('download-projects-overview-heading'),
             description: t('download-projects-overview-description'),
             fileLabel: 'CSV',
         },
-        PROJECTS_CSV: {
+        PROJECT_STATS_BY_TYPES: {
             heading: t('download-projects-csv-heading'),
             description: t('download-projects-csv-description'),
             fileLabel: 'CSV',
