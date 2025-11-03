@@ -1,0 +1,15 @@
+{
+  "users-title": "Pengguna",
+  "users-description": "Dataset ini berisi informasi tentang kontribusi individual perpengguna. Dengan mengekstrak berkas .gz, anda bisa mendapatkan berbagai informasi, contohnya seperti pengguna paling aktif dalam proyek ini.",
+  "date": "{{date, datetime}}",
+  "active-projects": "Aktif",
+  "finished-projects": "Selesai",
+  "build-area": "Cari Fitur",
+  "footprint": "Validasi Jejak",
+  "change-detection": "Membandingkan Tanggal",
+  "completeness": "Periksa Kelengkapan",
+  "validate-image": "Akses Gambar",
+  "street": "Tampilan Jalan",
+  "published": "Diterbitkan",
+  "withdrawn": "Dibatalkan"
+}
