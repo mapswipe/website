@@ -1,0 +1,11 @@
+{
+  "ready-to-process": "Siap untuk Diproses",
+  "draft": "Rancangan",
+  "discarded": "Dibuang",
+  "processing-failed": "Pemrosesan Gagal",
+  "processed": "Diproses",
+  "ready-to-published": "Siap dipublikasi",
+  "publishing-failed": "Gagal Diterbitkan",
+  "paused": "Jeda",
+  "download-projects-with-geometry-heading": "Proyek dengan Geometri"
+}
