@@ -1,0 +1,11 @@
+{
+  "ready-to-process": "Připraveno ke zpracování",
+  "draft": "Návrh",
+  "discarded": "Zahozeno",
+  "processing-failed": "Zpracování selhalo",
+  "processed": "Zppracováno",
+  "ready-to-published": "Připraveno k publikování",
+  "publishing-failed": "Publikování selhalo",
+  "paused": "Přerušeno",
+  "download-projects-with-geometry-heading": "Projekty s geometrií"
+}
