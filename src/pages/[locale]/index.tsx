@@ -72,6 +72,11 @@ const partners = [
         imageSrc: '/img/tc.png',
         link: 'https://togglecorp.com',
     },
+    {
+        altText: 'Uptime Robot',
+        imageSrc: '/img/uptime.png',
+        link: 'https://uptimerobot.com/',
+    },
 ];
 
 interface Props extends SSRConfig {

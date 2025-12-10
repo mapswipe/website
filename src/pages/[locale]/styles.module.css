@@ -316,8 +316,8 @@
                 gap: var(--spacing-mega-large);
 
                 .partnerLogo {
-                    width: 8rem;
-                    height: 4rem;
+                    width: 10rem;
+                    height: 5rem;
                 }
             }
         }
