@@ -31,7 +31,7 @@
   "results-title": "Eredmények",
   "results-description": "Ezek a szűretlen MapSwipe-eredmények. (Ne feledd, hogy használat előtt ki kell tömörítened a .gz fájlt.)",
   "tasks-title": "Feladatok",
-  "tasks-description": "Feladatok. (Ne feledje, hogy használat előtt ki kell tömörítenie a .gz fájlt.)",
+  "tasks-description": "Feladatok. (Ne feledd, hogy használat előtt ki kell tömörítened a .gz fájlt.)",
   "area-of-interest-title": "Érintett terület",
   "area-of-interest-description": "Ez az adatkészlet a projekt térségéről tájékoztat.",
   "hot-tasking-manager-geometries-title": "HOT Tasking Manager feladatkezelő alakzatok",
