@@ -6,7 +6,7 @@
   "finished-projects": "Befejezett",
   "build-area": "Keresés",
   "footprint": "Érvényesítés",
-  "change-detection": "Összehasonlítás",
+  "change-detection": "Időállapotok összehasonlítása",
   "completeness": "Teljesség ellenőrzése",
   "validate-image": "Képek elérése",
   "street": "Utcák megtekintése",
