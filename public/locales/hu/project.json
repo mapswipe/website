@@ -19,7 +19,7 @@
   "data-section-heading": "Adatok letöltése",
   "data-section-description": "Az alábbiakban megtalálod a MapSwipe-projekt adatainak letölthető fájljait, többek között egy GeoJSON fájlt, amelyet a terület részletesebb feltérképezéséhez importálhatsz a HOT Tasking Manager feladatkezelőbe. Ha további információra van szükséged, vagy különleges kérésed van a MapSwipe-adatokkal kapcsolatban, vedd fel a kapcsolatot a Heidelbergi Geoinformatikai Intézet (Heidelberg Institute for Geoinformation Technology) csapatával.",
   "aggregated-results-title": "Összesített eredmények",
-  "aggregated-results-description": "A MapSwipe szűretlen, feladatszinten összesített eredményei. Ez a legmegfelelőbb, ha a MapSwipe-adatokat egyénileg szeretné feldolgozni, például csak bizonyos feladatokat szeretne kiválasztani. További részletekért tekintse meg dokumentációnkat. (Ne feledje, hogy használat előtt ki kell tömörítenie a .gz fájlt.)",
+  "aggregated-results-description": "A MapSwipe szűretlen, feladatszinten összesített eredményei. Ez a legmegfelelőbb, ha a MapSwipe-adatokat egyénileg szeretnéd feldolgozni, például csak bizonyos feladatokat szeretnél kiválasztani. További részletekért tekintsd meg dokumentációnkat. (Ne feledd, hogy használat előtt ki kell tömörítened a .gz fájlt.)",
   "download-size": "{{size, number}}",
   "download": "Letöltés",
   "aggregated-results-with-geometry-title": "Összesített eredmnyek (alakzatokkal)",
