@@ -1,0 +1,11 @@
+{
+  "ready-to-process": "Feldolgozásra kész",
+  "draft": "Vázlat",
+  "discarded": "Elvetve",
+  "processing-failed": "Feldolgozás sikertelen",
+  "processed": "Feldolgozva",
+  "ready-to-published": "Közzétételre kész",
+  "publishing-failed": "Közzététel sikertelen",
+  "paused": "Felfüggesztve",
+  "download-projects-with-geometry-heading": "Projektek alakzatfájllal"
+}
