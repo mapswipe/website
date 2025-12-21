@@ -4,7 +4,7 @@
   "date": "{{date, datetime}}",
   "active-projects": "Aktív",
   "finished-projects": "Befejezett",
-  "build-area": "Keresés",
+  "build-area": "Térképelemek keresése",
   "footprint": "Érvényesítés",
   "change-detection": "Időállapotok összehasonlítása",
   "completeness": "Teljesség ellenőrzése",
