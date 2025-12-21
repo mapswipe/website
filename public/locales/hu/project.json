@@ -39,6 +39,6 @@
   "moderate-to-high-agreement-yes-maybe-geometries-title": "Moderálás „széles körű egyetértés”, „igen” és „talán” alakzatokra",
   "moderate-to-high-agreement-yes-maybe-geometries-description": "Ez az adatkészlet az összes olyan eredményt tartalmazza, ahol a felhasználók legalább 35%-a „igen” vagy „talán” minősítést adott. A kimeneti adatkészlet az összes kiválasztott eredmény unióját mutatja.",
   "license-section-heading": "Licenc",
-  "license-section-description-1": "Ez a projekt az OpenStreetMap közösség része. A cél a kiváló minőségű, szabadon hozzáférhető és mindenki számára elérhető földrajzi adatok létrehozása. Az adatokat az OSM kölcsönös licenc védi attól, hogy olyan olyan szolgáltatások sajátítsák ki őket, amelyek nem osztják őket vissza az OSM felé.",
+  "license-section-description-1": "Ez a projekt az OpenStreetMap közösség része. A cél a kiváló minőségű, szabadon hozzáférhető és mindenki számára elérhető földrajzi adatok létrehozása. Az adatokat az OSM kölcsönös licence védi attól, hogy kisajátítsák őket olyan szolgáltatások, amelyek nem osztják meg őket vissza, az OSM felé.",
   "license-section-description-2": "A MapSwipe „liberális”, nem kölcsönös licenc (Creative Commons Attribution) alatt van kiadva. Ha szeretnéd felhasználni az adatokat, csupán arra figyelj, hogy tüntesd fel a MapSwipe közreműködőit."
 }
