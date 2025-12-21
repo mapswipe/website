@@ -12,7 +12,7 @@
   "requesting-organization": "Kérelmező szervezet",
   "created-at": "Létrehozva",
   "overview-section-title": "Projekt áttekintése",
-  "project-contributors-text": "Közreműködők",
+  "project-contributors-text": "közreműködő",
   "data-last-fetched": "Legutóbbi frissítés: {{date, datetime}}",
   "project-progress-label": "Projekt készültségi foka",
   "project-card-progress-text": "{{progress, number}}% elkészült",
