@@ -10,7 +10,7 @@
   "project-tab-head": "{{projectTitle}} | MapSwipe",
   "Location": "Helyszín",
   "requesting-organization": "Kérelmező szervezet",
-  "created-at": "Létrehozva:",
+  "created-at": "Létrehozva",
   "overview-section-title": "Projekt áttekintése",
   "project-contributors-text": "Közreműködők",
   "data-last-fetched": "Legutóbbi frissítés: {{date, datetime}}",
