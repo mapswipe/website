@@ -35,7 +35,7 @@
   "area-of-interest-title": "Érintett terület",
   "area-of-interest-description": "Ez az adatkészlet a projekt térségéről tájékoztat.",
   "hot-tasking-manager-geometries-title": "HOT Tasking Manager feladatkezelő alakzatok",
-  "hot-tasking-manager-geometries-description": "Ez az adatkészlet olyan alakzatokat tartalmaz, amelyek készen állnak a HOT Tasking Managerben való használatra. Jelenleg a geometriai alakzatok legfeljebb 15 olyan MapSwipe-feladatból állnak, amelyeknél az összes felhasználó legalább 35%-a „igennel” vagy „talánnal” jelezte egy épület jelenlétét.",
+  "hot-tasking-manager-geometries-description": "Ez az adatkészlet olyan alakzatokat tartalmaz, amelyek közvetlenül felhasználhatók a HOT Tasking Managerben. Jelenleg a geometriai alakzatok legfeljebb 15 olyan MapSwipe-feladatból állnak, amelyeknél az összes felhasználó legalább 35%-a „igennel” vagy „talánnal” jelezte egy épület jelenlétét.",
   "moderate-to-high-agreement-yes-maybe-geometries-title": "Moderálás „széles körű egyetértés”, „igen” és „talán” alakzatokra",
   "moderate-to-high-agreement-yes-maybe-geometries-description": "Ez az adatkészlet az összes olyan eredményt tartalmazza, ahol a felhasználók legalább 35%-a „igen” vagy „talán” minősítést adott. A kimeneti adatkészlet az összes kiválasztott eredmény unióját mutatja.",
   "license-section-heading": "Licenc",
