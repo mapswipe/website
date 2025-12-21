@@ -23,7 +23,7 @@
   "download-size": "{{size, number}}",
   "download": "Letöltés",
   "aggregated-results-with-geometry-title": "Összesített eredmnyek (alakzatokkal)",
-  "aggregated-results-with-geometry-description": "A MapSwipe szűretlen, feladatszinten összesített eredményei. Ez a legmegfelelőbb, ha a MapSwipe-adatokat egyénileg szeretnéd feldolgozni, például csak bizonyos feladatokat szeretnél kiválasztani. További részletekért tekintsd meg dokumentációnkat. (Ne feledje, hogy használat előtt ki kell tömörítenie a .gz fájlt.)",
+  "aggregated-results-with-geometry-description": "A MapSwipe szűretlen, feladatszinten összesített eredményei. Ez a legmegfelelőbb, ha a MapSwipe-adatokat egyedi módon szeretnéd feldolgozni, például csak bizonyos feladatokat szeretnél kiválasztani. További részletekért tekintsd meg dokumentációnkat. (Ne feledje, hogy használat előtt ki kell tömörítenie a .gz fájlt.)",
   "groups-title": "Csoportok",
   "groups-description": "Csoportok. (Ne feledd, hogy használat előtt ki kell tömörítened a a .gz fájlt.)",
   "history-title": "Előzmények",
