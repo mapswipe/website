@@ -1,6 +1,6 @@
 {
   "users-title": "Felhasználók",
-  "users-description": "Ez az adatkészlet az egyes felhasználók egyedi közreműködéseit tartalmazza. Ebből lehet felismerni például a projekt legaktívabb felhasználóit. (Ne feledd, hogy használat előtt ki kell tömörítened a .gz fájlt.)",
+  "users-description": "Ez az adatkészlet az egyes felhasználók egyedi szerkesztéseit tartalmazza. Ebből lehet felismerni például a projekt legaktívabb felhasználóit. (Ne feledd, hogy használat előtt ki kell tömörítened a .gz fájlt.)",
   "date": "{{date, datetime}}",
   "active-projects": "Aktív",
   "finished-projects": "Befejezett",
