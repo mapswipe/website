@@ -71,7 +71,7 @@
   "download-size": "{{size, number}}",
   "download": "Letöltés",
   "license-section-heading": "Licenc",
-  "license-section-description": "A MapSwipe-adatok „liberális”, nem kölcsönös licenc (Creative Commons Attribution) alatt kerülnek kiadásra. Ez csak azt követeli meg, hogy a felhasználó ismerje el a forrást. Bármit tehet az adatokkal, amit csak szeretne, csak tüntesse fel a MapSwipe közreműködőinek a nevét.",
+  "license-section-description": "A MapSwipe-adatok „liberális”, nem kölcsönös licenc (Creative Commons Attribution) alatt vannak közzétéve. Ez csak azt követeli meg, hogy a felhasználó ismerje el a forrást. Bármit tehet az adatokkal, amit csak szeretne, csak tüntesse fel a MapSwipe-közreműködőket.",
   "contact-section-heading": "További kérdések?",
   "contact-section-description": "Vegye fel velünk a kapcsolatot! Ossza meg visszajelzéseit, ismerjen meg projekttípusokat, vagy merüljön el a MapSwipe elemzésében. Azért vagyunk itt, hogy segítsünk!",
   "contact-link-label": "Kapcsolat"
