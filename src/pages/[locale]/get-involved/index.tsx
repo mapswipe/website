@@ -75,13 +75,23 @@ function GetInvolved(props: Props) {
                         />
                     </Link>
                 </div>
-                <Link
-                    className={styles.downloadLink}
-                    href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
-                    target="_blank"
-                >
-                    {t('download-apk-label')}
-                </Link>
+                <div className={styles.linkContainer}>
+                    <Link
+                        className={styles.downloadLink}
+                        href="https://web.mapswipe.org/"
+                        target="_blank"
+                    >
+                        {t('use-web-app-label')}
+                    </Link>
+                    |
+                    <Link
+                        className={styles.downloadLink}
+                        href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
+                        target="_blank"
+                    >
+                        {t('download-apk-label')}
+                    </Link>
+                </div>
             </Section>
             <Section
                 sectionId="individual"
