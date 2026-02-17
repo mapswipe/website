@@ -14,6 +14,7 @@ import {
 } from 'react-icons/io5';
 
 import Heading from 'components/Heading';
+import ImageWrapper from 'components/ImageWrapper';
 
 import styles from './styles.module.css';
 
@@ -142,6 +143,19 @@ function Footer(props: Props) {
                 <div className={styles.content}>
                     <div className={styles.leftContainer}>
                         {t('copyright', { year: currentYear })}
+                    </div>
+                    <div className={styles.midContainer}>
+                        {t('uptime-pretext')}
+                        <Link
+                            href="https://uptimerobot.com/"
+                            target="_blank"
+                        >
+                            <ImageWrapper
+                                className={styles.partnerLogo}
+                                src="/img/uptime.png"
+                                alt="Uptime Robot"
+                            />
+                        </Link>
                     </div>
                     <div className={styles.rightContainer}>
                         <Link

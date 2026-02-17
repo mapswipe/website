@@ -60,6 +60,19 @@
                 padding: var(--spacing-medium) 0;
             }
 
+            .midContainer {
+                display: flex;
+                align-items: flex-end;
+
+                .partnerLogo {
+                    /* NOTE: Margin bottom because logo is text and line height is not
+                    * consistent */
+                    margin-bottom: 2px;
+                    width: 7rem;
+                    height: 1rem;
+                }
+            }
+
             .rightContainer {
                 display: flex;
                 padding: var(--spacing-medium) 0;
