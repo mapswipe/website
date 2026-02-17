@@ -15,6 +15,7 @@
   "osm-wiki": "OSM Wiki",
   "email": "E-mail",
   "copyright": "Copyright © {{year}} MapSwipe",
+  "uptime-pretext": "",
   "privacy": "Adatvédelem",
   "mapswipe-logo": "Mapswipe logo",
   "didnot-find-language": "Hiányzó nyelv hozzáadása",
