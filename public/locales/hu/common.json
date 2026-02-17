@@ -1,13 +1,13 @@
 {
   "footer-about-us-title": "Névjegy",
-  "footer-about-us-description": "A MapSwipe az önkéntesek egyesített erejét használja fel, hogy térinformatikai projektekben aktívan közreműködjék.",
+  "footer-about-us-description": "A MapSwipe-pal az önkéntesek közös erővel működhetnek közre térinformatikai projektekben.",
   "footer-quick-links": "Gyorslinkek",
   "home-link": "Főoldal",
   "get-involved-link": "Részvétel",
   "data-link": "Adatok",
   "blogs-link": "Blogbejegyzések",
   "community-dashboard-link": "Közösség",
-  "footer-follow-us-title": "Kövess minket itt is:",
+  "footer-follow-us-title": "Kövess minket:",
   "facebook": "Facebook",
   "mastodon": "Mastodon",
   "instagram": "Instagram",
@@ -15,9 +15,10 @@
   "osm-wiki": "OSM Wiki",
   "email": "E-mail",
   "copyright": "Copyright © {{year}} MapSwipe",
+  "uptime-pretext": "",
   "privacy": "Adatvédelem",
   "mapswipe-logo": "Mapswipe logo",
   "didnot-find-language": "Hiányzó nyelv hozzáadása",
   "meta-page-title": "MapSwipe",
-  "meta-page-description": "Önkénteskedj a telefonodról. Tedd jobbá a világot."
+  "meta-page-description": "Önkénteskedjék a telefonján. Változtassa meg a világot."
 }
