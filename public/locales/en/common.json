@@ -15,6 +15,7 @@
   "osm-wiki": "OSM Wiki",
   "email": "Email",
   "copyright": "Copyright © {{year}} MapSwipe",
+  "uptime-pretext": "System status monitored by",
   "privacy": "Privacy",
   "mapswipe-logo": "Mapswipe Logo",
   "didnot-find-language": "Add missing language",

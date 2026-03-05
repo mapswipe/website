@@ -1,4 +1,9 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useState,
+    useMemo,
+} from 'react';
 import dynamic from 'next/dynamic';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -22,6 +27,7 @@ import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import ImageWrapper from 'components/ImageWrapper';
+import Button from 'components/Button';
 import Hero from 'components/Hero';
 import Tag from 'components/Tag';
 import Card from 'components/Card';
@@ -55,6 +61,25 @@ import styles from './styles.module.css';
 type PublicProjects = NonNullable<NonNullable<AllDataQuery['publicProjects']>['results']>;
 async function getAllProjects() {
     return (data as AllDataQuery)?.publicProjects?.results as unknown as PublicProjects;
+}
+
+function transformAoiToGeoJson(
+    aoi: PublicProjects[number]['aoiGeometry'],
+): GeoJSON.FeatureCollection<GeoJSON.Polygon> | undefined {
+    if (!aoi) {
+        return undefined;
+    }
+    return ({
+        type: 'FeatureCollection',
+        features: [{
+            geometry: {
+                type: 'Polygon',
+                coordinates: aoi.bbox,
+            },
+            type: 'Feature',
+            properties: {},
+        }],
+    });
 }
 
 async function getProjectData(id: string) {
@@ -125,12 +150,12 @@ function Project(props: Props) {
         exportModerateToHighAgreementYesMaybeGeometries,
         numberOfContributorUsers,
         aoiGeometry,
+        firebaseId,
         id: projectId,
     } = props;
 
     const svgContainerRef = React.useRef<HTMLDivElement>(null);
     const svgBounds = useSizeTracking(svgContainerRef);
-    const [projectGeoJSON, setProjectGeoJSON] = useState(null);
     const [projectHistory, setProjectHistory] = useState<{
         timestamp: number; progress: number
     }[] | undefined>();
@@ -138,11 +163,6 @@ function Project(props: Props) {
     useEffect(() => {
         async function fetchData() {
             try {
-                if (exportAreaOfInterest?.file?.url) {
-                    const res = await fetch(exportAreaOfInterest.file.url);
-                    setProjectGeoJSON(await res.json());
-                }
-
                 if (exportHistory?.file?.url) {
                     const history = await getProjectHistory(projectId, exportHistory.file.url);
                     setProjectHistory(history);
@@ -153,7 +173,7 @@ function Project(props: Props) {
             }
         }
         fetchData();
-    }, [exportAreaOfInterest, exportHistory, projectId]);
+    }, [exportHistory, projectId]);
 
     const [
         chartPoints,
@@ -302,6 +322,35 @@ function Project(props: Props) {
 
     const roundedTotalArea = Math.round(aoiGeometry?.totalArea ?? 0);
 
+    const aoiGeometryFeature = useMemo(() => (
+        transformAoiToGeoJson(aoiGeometry)
+    ), [aoiGeometry]);
+
+    const aoiGeometryBlob = useMemo(() => {
+        if (!aoiGeometryFeature) {
+            return undefined;
+        }
+        const blob = new Blob(
+            [JSON.stringify(aoiGeometryFeature, null, 2)],
+            { type: 'application/geo+json' },
+        );
+        return blob;
+    }, [aoiGeometryFeature]);
+
+    const onAoiDownloadClick = useCallback(() => {
+        if (!aoiGeometryBlob) {
+            return;
+        }
+        const url = URL.createObjectURL(aoiGeometryBlob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `area_of_interest_${firebaseId}.geojson`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }, [aoiGeometryBlob, firebaseId]);
+
     return (
         <Page contentClassName={_cs(styles.project, className)}>
             <OgMeta
@@ -432,11 +481,11 @@ function Project(props: Props) {
                     })
                 )}
             >
-                {projectGeoJSON && (
+                {aoiGeometryFeature && (
                     <div className={styles.mapContainer}>
                         <DynamicProjectMap
                             className={styles.projectsMap}
-                            geoJSON={projectGeoJSON}
+                            geoJSON={aoiGeometryFeature}
                         />
                     </div>
                 )}
@@ -747,7 +796,44 @@ function Project(props: Props) {
                         </Link>
                     </Card>
                 )}
-                {exportAreaOfInterest && (
+                {aoiGeometry && (
+                    <Card
+                        childrenContainerClassName={styles.downloadCard}
+                        heading={t('area-of-interest-title')}
+                        description={t('area-of-interest-description')}
+                    >
+                        <div className={styles.fileDetails}>
+                            <Tag>GEOJSON</Tag>
+                            <div>
+                                {t('download-size', {
+                                    size: getFileSizeProperties(
+                                        aoiGeometryBlob?.size ?? 0,
+                                    ).size,
+                                    formatParams: {
+                                        size: {
+                                            style: 'unit',
+                                            unit: getFileSizeProperties(
+                                                aoiGeometryBlob?.size ?? 0,
+                                            ).unit,
+                                            maximumFractionDigits: 1,
+                                        },
+                                    },
+                                })}
+                            </div>
+                        </div>
+                        <Button
+                            variant="border"
+                            className={styles.link}
+                            onClick={onAoiDownloadClick}
+                        >
+                            <IoDownloadOutline />
+                            {t('download')}
+                        </Button>
+                    </Card>
+                )}
+                {/* NOTE: If in case there is no aoiGeometry,
+                we show exportAreaOfInterest if present */}
+                {!aoiGeometry && exportAreaOfInterest && (
                     <Card
                         childrenContainerClassName={styles.downloadCard}
                         key={exportAreaOfInterest?.id}
