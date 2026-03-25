@@ -223,9 +223,14 @@ async function fetchAndWriteData() {
             console.error('Could not fetch crsf token');
             return;
         }
+        const referer = process.env.MAPSWIPE_REFERER_ENDPOINT ?? baseUrl;
+
+        console.log('CSRF Token exists:', !!csrfTokenValue);
+        console.log('Referer exists:', !!referer);
+
         graphQLClient.setHeader('X-CSRFToken', csrfTokenValue);
         graphQLClient.setHeader('Cookie', `${COOKIE_NAME}=${csrfTokenValue}`);
-        graphQLClient.setHeader('Referer', process.env.MAPSWIPE_REFERER_ENDPOINT ?? '');
+        graphQLClient.setHeader('Referer', referer);
         data = (await graphQLClient.request(query)) as AllDataQuery;
     }
 
