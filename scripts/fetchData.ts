@@ -195,14 +195,19 @@ async function getCsrfTokenValue() {
     try {
         const healthcheckData = await fetch(healthcheckUrl, { credentials: 'include' });
 
-        const setCookies = 'getSetCookie' in healthcheckData.headers && typeof healthcheckData.headers.getSetCookie === 'function'
-            ? healthcheckData.headers.getSetCookie()
-            : undefined;
+        const cookiesToSet = (
+            healthcheckData.headers as (Headers & { getSetCookie: () => string[] })
+        ).getSetCookie();
 
-        // FIXME: do a proper parsing
-        const token = setCookies?.[0].split('; ')[0].split('=')[1];
+        const parsedCookiesToSet = cookiesToSet
+            .flatMap((item: string) => item.split('; '))
+            .map((item: string) => {
+                const [key, value] = item.split('=');
+                return { key, value } as { key: string, value: string };
+            });
 
-        return token;
+        const csrfToken = parsedCookiesToSet.find((item) => item.key === COOKIE_NAME);
+        return csrfToken?.value;
     } catch (err) {
         // eslint-disable-next-line no-console
         console.error('failed to do the healthcheck', healthcheckUrl);
