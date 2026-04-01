@@ -4,6 +4,12 @@ NextJs application for [Mapswipe community website](https://mapswipe.org).
 
 ## Development
 
+Get all the submodules
+
+```bash
+git submodule update --init --recursive
+```
+
 Before you start, create `.env.local` file:
 
 ```bash
@@ -13,9 +19,8 @@ touch .env.local
 Set these environment variables:
 
 ```env
-APP_ENVIRONMENT=DEV
+APP_ENVIRONMENT=PROD  # Use DEV if you are running your own server instance
 MAPSWIPE_API_ENDPOINT=https://backend.mapswipe.org/
-MAPSWIPE_REFERRER_ENDPOINT=https://website.mapswipe.org/
 NEXT_PUBLIC_POSTHOG_KEY=<posthog-key>
 NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
 ```
@@ -23,13 +28,21 @@ NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
 ### Running
 
 ```bash
+# Install dependencies
 yarn install
-# This fetches latest data from MapSwipe database for projects
+
+# Generate typescript types from graphql schema
+yarn generate:type
+
+# Fetch latest data from MapSwipe database for projects
 yarn fetch-data:local
 
-> NOTE: Currently the platform runs smoothly in node 16, so developers might have to switch to node 16 for development.
+# Run
 yarn dev
 ```
+
+> [!NOTE]
+> Currently the platform runs smoothly in node 16, so developers might have to switch to node 16 for development.
 
 Whenever new texts for translation are added, translation files need to be generated.
 
