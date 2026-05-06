@@ -311,6 +311,13 @@ function Data(props: Props) {
                 <ProjectTypeIcon type="STREET" size="small" />
             ),
         },
+        {
+            key: 'LOCATE',
+            label: t('type-locate-view-title'),
+            icon: (
+                <ProjectTypeIcon type="LOCATE" size="small" />
+            ),
+        },
     ]), [t]);
 
     const projectTypeOptionsMap = useMemo(() => (
@@ -664,6 +671,27 @@ function Data(props: Props) {
                     />
                     <ListItem
                         label={t('type-street-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/locate_image.svg"
+                    heading={t('type-locate-view-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="LOCATE"
+                        />
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-locate-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-locate-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-locate-key-point-3')}
                     />
                 </Card>
             </Section>

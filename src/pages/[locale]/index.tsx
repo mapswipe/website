@@ -283,6 +283,19 @@ function Home(props: Props) {
                 >
                     {t('street-type-description')}
                 </Card>
+                <Card
+                    className={styles.missionType}
+                    coverImageUrl="/img/locate_image.svg"
+                    heading={t('type-locate-features-type')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="LOCATE"
+                        />
+                    )}
+                >
+                    {t('locate-features-type-description')}
+                </Card>
             </Section>
             <Section
                 sectionId="startMapswiping"
