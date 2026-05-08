@@ -77,7 +77,7 @@ You can view the live staging site here:
 1. **Rebase your branch onto the staging branch:**
 
 ```bash
-git checkout stage
+git checkout deploy-stage
 git rebase <branch-you-want-to-deploy>
 git push
 ```
@@ -98,7 +98,7 @@ You can manually trigger the deployment workflow here:
 
 Deployments will be triggered in 2 ways:
 
-1. Anything pushed to `main` branch will trigger immediate deployment
+1. Anything pushed to `deploy-prod` branch will trigger immediate deployment
 to configured github io page.
 2. Every day at UTC 00:01, deployment will be triggered with
 latest data from MapSwipe database.
