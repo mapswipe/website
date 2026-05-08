@@ -4,7 +4,7 @@ name: CD
 on:
   push:
     branches:
-      - main
+      - deploy-prod
 
   schedule:
     # Runs "At 00:01. every day" (see https://crontab.guru)
