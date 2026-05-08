@@ -42,6 +42,7 @@ import SelectInput from 'components/SelectInput';
 import {
     rankedSearchOnList,
     ProjectTypeOption,
+    ProjectType,
     ProjectStatusOption,
     getFileSizeProperties,
 } from 'utils/common';
@@ -268,50 +269,61 @@ function Data(props: Props) {
         )
     ), [projectStatusOptions]);
 
-    const projectTypeOptions: ProjectTypeOption[] = useMemo(() => ([
-        {
-            key: 'FIND',
-            label: t('type-find-title'),
-            icon: (
-                <ProjectTypeIcon type="FIND" size="small" />
-            ),
-        },
-        {
-            key: 'VALIDATE',
-            label: t('type-validate-title'),
-            icon: (
-                <ProjectTypeIcon type="VALIDATE" size="small" />
-            ),
-        },
-        {
-            key: 'COMPARE',
-            label: t('type-compare-title'),
-            icon: (
-                <ProjectTypeIcon type="COMPARE" size="small" />
-            ),
-        },
-        {
-            key: 'COMPLETENESS',
-            label: t('type-completeness-title'),
-            icon: (
-                <ProjectTypeIcon type="COMPLETENESS" size="small" />
-            ),
-        },
-        {
-            key: 'VALIDATE_IMAGE',
-            label: t('type-validate-image-title'),
-            icon: (
-                <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
-            ),
-        },
-        {
-            key: 'STREET',
-            label: t('type-streets-view-title'),
-            icon: (
-                <ProjectTypeIcon type="STREET" size="small" />
-            ),
-        },
-    ]), [t]);
+    const projectTypeOptions: ProjectTypeOption[] = useMemo(() => {
+        const projectTypeOptionsMapping: Record<`${ProjectType}`, ProjectTypeOption> = {
+            FIND: {
+                key: 'FIND',
+                label: t('type-find-title'),
+                icon: (
+                    <ProjectTypeIcon type="FIND" size="small" />
+                ),
+            },
+            VALIDATE: {
+                key: 'VALIDATE',
+                label: t('type-validate-title'),
+                icon: (
+                    <ProjectTypeIcon type="VALIDATE" size="small" />
+                ),
+            },
+            COMPARE: {
+                key: 'COMPARE',
+                label: t('type-compare-title'),
+                icon: (
+                    <ProjectTypeIcon type="COMPARE" size="small" />
+                ),
+            },
+            COMPLETENESS: {
+                key: 'COMPLETENESS',
+                label: t('type-completeness-title'),
+                icon: (
+                    <ProjectTypeIcon type="COMPLETENESS" size="small" />
+                ),
+            },
+            VALIDATE_IMAGE: {
+                key: 'VALIDATE_IMAGE',
+                label: t('type-validate-image-title'),
+                icon: (
+                    <ProjectTypeIcon type="VALIDATE_IMAGE" size="small" />
+                ),
+            },
+            STREET: {
+                key: 'STREET',
+                label: t('type-streets-view-title'),
+                icon: (
+                    <ProjectTypeIcon type="STREET" size="small" />
+                ),
+            },
+            LOCATE: {
+                key: 'LOCATE',
+                label: t('type-locate-title'),
+                icon: (
+                    <ProjectTypeIcon type="LOCATE" size="small" />
+                ),
+            },
+        };
+
+        return Object.values(projectTypeOptionsMapping);
+    }, [t]);
 
     const projectTypeOptionsMap = useMemo(() => (
         listToMap(
@@ -664,6 +676,27 @@ function Data(props: Props) {
                     />
                     <ListItem
                         label={t('type-street-key-point-3')}
+                    />
+                </Card>
+                <Card
+                    coverImageUrl="/img/locate_image.svg"
+                    heading={t('type-locate-title')}
+                    imageClassName={styles.missionImage}
+                    icons={(
+                        <ProjectTypeIcon
+                            type="LOCATE"
+                        />
+                    )}
+                    childrenContainerClassName={styles.keyPointList}
+                >
+                    <ListItem
+                        label={t('type-locate-key-point-1')}
+                    />
+                    <ListItem
+                        label={t('type-locate-key-point-2')}
+                    />
+                    <ListItem
+                        label={t('type-locate-key-point-3')}
                     />
                 </Card>
             </Section>

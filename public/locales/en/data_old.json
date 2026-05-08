@@ -7,5 +7,6 @@
   "ready-to-published": "Ready to Publish",
   "publishing-failed": "Publishing Failed",
   "paused": "Paused",
-  "download-projects-with-geometry-heading": "Projects with Geometry"
+  "download-projects-with-geometry-heading": "Projects with Geometry",
+  "type-locate-view-title": ""
 }
