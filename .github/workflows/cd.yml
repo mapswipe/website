@@ -5,10 +5,10 @@ on:
   push:
     branches:
       - deploy-prod
-
   schedule:
     # Runs "At 00:01. every day" (see https://crontab.guru)
     - cron: '1 0 * * *'
+  workflow_dispatch:
 
 jobs:
   test_build:
@@ -19,10 +19,11 @@ jobs:
       PIPELINE_TYPE: cd
 
     steps:
-      # NOTE: This uses default branch which is `main`
+      # NOTE: This uses deploy-prod branch
       - uses: actions/checkout@v4
         with:
           submodules: true
+          ref: deploy-prod
 
       - uses: actions/setup-node@v4
         with:
