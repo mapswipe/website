@@ -52,7 +52,7 @@
   "type-locate-key-point-1": "Találj meg különböző objektumokat (pl. tetőket, napelemekt vagy vízfolyásokat) a műholdképeken",
   "type-locate-key-point-2": "Segíts javítani azon a képzési adathalmazon, amely megtanítja a gépi tanulási modelleknek, hogy a képeken hol találhatók az objektumok",
   "type-locate-key-point-3": "Gyűjts részletesebb adatokat a helyi közösségekről",
-  "explore-section-heading": "Tedd gyorsabbá és pontosabbá az automatizált térképezést, ezzel segítve a humanitárius szervezeteket tevékenységük kiterjesztésében",
+  "explore-section-heading": "Tedd gyorsabbá és pontosabbá az automatizált térképezést, így segíthetsz a humanitárius szervezeteket tevékenységük kiterjesztésében",
   "data-last-fetched": "Legutóbbi frissítés: {{date, datetime}}",
   "explore-section-heading-description": "Az adatfájlok mindig a legfrissebb adatokat tartalmazzák.",
   "see-more-button": "Továbbiak megjelenítése",
