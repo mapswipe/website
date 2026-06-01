@@ -52,7 +52,7 @@
   "type-locate-key-point-1": "Localize the location of features like rooftops, solar panels, or waterways within satellite image tiles",
   "type-locate-key-point-2": "Help improve training data that teaches machine learning models where features are located in imagery",
   "type-locate-key-point-3": "Capture more detailed information on local communities",
-  "explore-section-heading": "Improve the speed and accuracy of automated mapping, helping humanitarian organizations scale their efforts",
+  "explore-section-heading": "Explore the data",
   "data-last-fetched": "Last updated: {{date, datetime}}",
   "explore-section-heading-description": "The data files always contain the most up-to-date data.",
   "see-more-button": "Show more",
