@@ -1,0 +1,12 @@
+{
+  "ready-to-process": "準備處理",
+  "draft": "草稿",
+  "discarded": "放棄",
+  "processing-failed": "處理失敗",
+  "processed": "已經處理了",
+  "ready-to-published": "準備發佈",
+  "publishing-failed": "發佈失敗",
+  "paused": "已暫停",
+  "download-projects-with-geometry-heading": "有地理形狀的專案",
+  "type-locate-view-title": ""
+}
