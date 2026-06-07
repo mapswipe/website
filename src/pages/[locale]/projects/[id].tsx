@@ -1,5 +1,4 @@
 import React, {
-    useCallback,
     useEffect,
     useState,
     useMemo,
@@ -27,7 +26,6 @@ import OgMeta from 'components/OgMeta';
 import Page from 'components/Page';
 import ProjectTypeIcon from 'components/ProjectTypeIcon';
 import ImageWrapper from 'components/ImageWrapper';
-import Button from 'components/Button';
 import Hero from 'components/Hero';
 import Tag from 'components/Tag';
 import Card from 'components/Card';
@@ -120,6 +118,7 @@ type Props = {
     exportGroups: UrlInfo;
     exportHistory: UrlInfo;
     exportAreaOfInterest: UrlInfo;
+    aoiGeometryInputAsset: UrlInfo;
     exportResults: UrlInfo;
     exportTasks: UrlInfo;
     exportUsers: UrlInfo;
@@ -144,6 +143,7 @@ function Project(props: Props) {
         exportGroups,
         exportHistory,
         exportAreaOfInterest,
+        aoiGeometryInputAsset,
         exportResults,
         exportTasks,
         exportUsers,
@@ -338,30 +338,40 @@ function Project(props: Props) {
         transformAoiToGeoJson(aoiGeometry)
     ), [aoiGeometry]);
 
-    const aoiGeometryBlob = useMemo(() => {
-        if (!aoiGeometryFeature) {
-            return undefined;
+    // NOTE: The AOI download is resolved from a priority chain:
+    // 1. aoiGeometryInputAsset (the original uploaded geometry; not present
+    //    for projects sourced from a tasking manager id)
+    // 2. exportAreaOfInterest (the generated AOI export file; also covers
+    //    older projects)
+    // 3. aoiGeometry.bbox (last resort, built client-side as a data URL)
+    const aoiDownload = useMemo(() => {
+        if (aoiGeometryInputAsset?.file?.url) {
+            return {
+                kind: 'link' as const,
+                url: aoiGeometryInputAsset.file.url,
+                mimetype: aoiGeometryInputAsset.mimetype,
+                fileSize: aoiGeometryInputAsset.fileSize,
+            };
         }
-        const blob = new Blob(
-            [JSON.stringify(aoiGeometryFeature, null, 2)],
-            { type: 'application/geo+json' },
-        );
-        return blob;
-    }, [aoiGeometryFeature]);
-
-    const onAoiDownloadClick = useCallback(() => {
-        if (!aoiGeometryBlob) {
-            return;
+        if (exportAreaOfInterest?.file?.url) {
+            return {
+                kind: 'link' as const,
+                url: exportAreaOfInterest.file.url,
+                mimetype: exportAreaOfInterest.mimetype,
+                fileSize: exportAreaOfInterest.fileSize,
+            };
         }
-        const url = URL.createObjectURL(aoiGeometryBlob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `area_of_interest_${firebaseId}.geojson`;
-        a.click();
-
-        URL.revokeObjectURL(url);
-    }, [aoiGeometryBlob, firebaseId]);
+        if (aoiGeometryFeature) {
+            const geojson = JSON.stringify(aoiGeometryFeature);
+            return {
+                kind: 'data' as const,
+                url: `data:application/geo+json;charset=utf-8,${encodeURIComponent(geojson)}`,
+                mimetype: 'GEOJSON',
+                fileSize: new TextEncoder().encode(geojson).length,
+            };
+        }
+        return undefined;
+    }, [aoiGeometryInputAsset, exportAreaOfInterest, aoiGeometryFeature]);
 
     return (
         <Page contentClassName={_cs(styles.project, className)}>
@@ -632,6 +642,7 @@ function Project(props: Props) {
                             href={exportAggregatedResults?.file?.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -662,6 +673,7 @@ function Project(props: Props) {
                             href={exportAggregatedResultsWithGeometry?.file?.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -690,6 +702,7 @@ function Project(props: Props) {
                             href={exportGroups?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -718,6 +731,7 @@ function Project(props: Props) {
                             href={exportHistory?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -746,6 +760,7 @@ function Project(props: Props) {
                             href={exportResults?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -774,6 +789,7 @@ function Project(props: Props) {
                             href={exportTasks?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -802,73 +818,42 @@ function Project(props: Props) {
                             href={exportUsers?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
                     </Card>
                 )}
-                {aoiGeometry && (
+                {aoiDownload && (
                     <Card
                         childrenContainerClassName={styles.downloadCard}
-                        heading={t('area-of-interest-title')}
-                        description={t('area-of-interest-description')}
-                    >
-                        <div className={styles.fileDetails}>
-                            <Tag>GEOJSON</Tag>
-                            <div>
-                                {t('download-size', {
-                                    size: getFileSizeProperties(
-                                        aoiGeometryBlob?.size ?? 0,
-                                    ).size,
-                                    formatParams: {
-                                        size: {
-                                            style: 'unit',
-                                            unit: getFileSizeProperties(
-                                                aoiGeometryBlob?.size ?? 0,
-                                            ).unit,
-                                            maximumFractionDigits: 1,
-                                        },
-                                    },
-                                })}
-                            </div>
-                        </div>
-                        <Button
-                            variant="border"
-                            className={styles.link}
-                            onClick={onAoiDownloadClick}
-                        >
-                            <IoDownloadOutline />
-                            {t('download')}
-                        </Button>
-                    </Card>
-                )}
-                {/* NOTE: If in case there is no aoiGeometry,
-                we show exportAreaOfInterest if present */}
-                {!aoiGeometry && exportAreaOfInterest && (
-                    <Card
-                        childrenContainerClassName={styles.downloadCard}
-                        key={exportAreaOfInterest?.id}
                         heading={t('area-of-interest-title')}
                         description={t('area-of-interest-description')}
                     >
                         <div className={styles.fileDetails}>
                             <Tag>
-                                {exportAreaOfInterest?.mimetype}
+                                {aoiDownload.mimetype}
                             </Tag>
                             <div>
                                 {t('download-size', {
                                     size: getFileSizeProperties(
-                                        exportAreaOfInterest?.fileSize,
+                                        aoiDownload.fileSize,
                                     ).size,
-                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAreaOfInterest?.fileSize).unit, maximumFractionDigits: 1 } },
+                                    formatParams: { size: { style: 'unit', unit: getFileSizeProperties(aoiDownload.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
                         </div>
                         <Link
-                            href={exportAreaOfInterest?.file.url}
+                            href={aoiDownload.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download={aoiDownload.kind === 'link'}
+                            downloadFileName={
+                                aoiDownload.kind === 'data'
+                                    ? `area_of_interest_${firebaseId}.geojson`
+                                    : undefined
+                            }
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -899,6 +884,7 @@ function Project(props: Props) {
                             href={exportHotTaskingManagerGeometries?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
@@ -929,6 +915,7 @@ function Project(props: Props) {
                             href={exportModerateToHighAgreementYesMaybeGeometries?.file.url}
                             variant="buttonTransparent"
                             className={styles.link}
+                            download
                         >
                             <IoDownloadOutline />
                             {t('download')}
