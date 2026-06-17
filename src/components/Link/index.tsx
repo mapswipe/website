@@ -24,6 +24,11 @@ interface Props extends Omit<NextLinkProps, 'locale'> {
     target?: string;
     variant?: Variant;
     title?: React.ReactNode;
+    download?: boolean;
+    // NOTE: For client-side downloads (e.g. a data: URL) where there is no
+    // media server to set Content-Disposition. Sets the HTML download
+    // attribute so the browser saves the file with this name.
+    downloadFileName?: string;
 }
 
 // NOTE: this does not support relative links
@@ -34,6 +39,8 @@ function Link(props: Props) {
         variant = 'transparent',
         className,
         title,
+        download = false,
+        downloadFileName,
         ...rest
     } = props;
 
@@ -56,6 +63,23 @@ function Link(props: Props) {
         }
     }
 
+    let { target, rel } = rest;
+    if (download) {
+        // NOTE: the server is configured to set the Content-Disposition
+        // header for media files when treat_as_download is set, which
+        // makes the browser download the file instead of opening it.
+        // NOTE: media URLs do not have query params so we can safely
+        // append the query param with `?`
+        if (typeof href === 'string') {
+            href = `${href}?treat_as_download=true`;
+        }
+        // NOTE: fallback for when the server does not handle
+        // treat_as_download: open the file in a new tab instead of
+        // navigating away from the page
+        target = target ?? '_blank';
+        rel = rel ?? 'noopener noreferrer';
+    }
+
     return (
         <NextLink
             className={_cs(
@@ -65,8 +89,11 @@ function Link(props: Props) {
             )}
             // eslint-disable-next-line
             {...rest}
+            target={target}
+            rel={rel}
             title={title ? String(title) : undefined}
             href={href}
+            download={downloadFileName}
         >
             {children}
         </NextLink>

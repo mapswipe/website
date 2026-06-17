@@ -163,6 +163,15 @@ const query = gql`
                     totalArea
                     bbox
                 }
+                aoiGeometryInputAsset {
+                    id
+                    fileSize
+                    file {
+                        name
+                        url
+                    }
+                    mimetype
+                }
             }
             totalCount
         }

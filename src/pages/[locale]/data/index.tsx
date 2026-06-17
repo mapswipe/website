@@ -979,6 +979,7 @@ function Data(props: Props) {
                                 href={asset.file.url}
                                 variant="buttonTransparent"
                                 className={styles.link}
+                                download
                             >
                                 <IoDownloadOutline />
                                 {t('download')}
