@@ -81,6 +81,80 @@ function transformAoiToGeoJson(
     });
 }
 
+const GEOJSON_GEOMETRY_TYPES = [
+    'Point',
+    'MultiPoint',
+    'LineString',
+    'MultiLineString',
+    'Polygon',
+    'MultiPolygon',
+    'GeometryCollection',
+];
+
+// NOTE: The map needs parsed GeoJSON content (not just a URL like the AOI
+// download), so we normalize whatever a file resolves to into a
+// FeatureCollection: a FeatureCollection is used as-is, a Feature is wrapped,
+// and a bare geometry / GeometryCollection (also valid GeoJSON) is wrapped in a
+// feature. Anything that is not GeoJSON returns undefined so the caller can
+// fall through to the next tier of the priority chain.
+function normalizeGeoJson(
+    json: unknown,
+): GeoJSON.FeatureCollection<GeoJSON.Geometry> | undefined {
+    if (!json || typeof json !== 'object') {
+        return undefined;
+    }
+    const { type } = json as { type?: unknown };
+    if (type === 'FeatureCollection') {
+        return json as GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+    }
+    if (type === 'Feature') {
+        return {
+            type: 'FeatureCollection',
+            features: [json as GeoJSON.Feature<GeoJSON.Geometry>],
+        };
+    }
+    if (typeof type === 'string' && GEOJSON_GEOMETRY_TYPES.includes(type)) {
+        return {
+            type: 'FeatureCollection',
+            features: [{
+                type: 'Feature',
+                geometry: json as GeoJSON.Geometry,
+                properties: {},
+            }],
+        };
+    }
+    return undefined;
+}
+
+// NOTE: Fetches a file and parses it as GeoJSON for the AOI priority chain,
+// returning undefined (instead of throwing) so the caller can fall through to
+// the next tier. Network/HTTP failures are logged because the URL came from the
+// API and is expected to resolve; a non-GeoJSON body is a normal outcome for
+// aoiGeometryInputAsset (e.g. a shapefile/KML upload), so it falls through
+// quietly.
+async function tryFetchAoiGeoJson(
+    url: string,
+): Promise<GeoJSON.FeatureCollection<GeoJSON.Geometry> | undefined> {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) {
+            // eslint-disable-next-line no-console
+            console.error('Failed fetching AOI geometry', url, res.status);
+            return undefined;
+        }
+        const body = await res.text();
+        try {
+            return normalizeGeoJson(JSON.parse(body));
+        } catch {
+            return undefined;
+        }
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Failed fetching AOI geometry', url, err);
+        return undefined;
+    }
+}
+
 async function getProjectData(id: string) {
     const projects = (
         data as AllDataQuery
@@ -338,6 +412,38 @@ function Project(props: Props) {
         transformAoiToGeoJson(aoiGeometry)
     ), [aoiGeometry]);
 
+    // NOTE: The map AOI is resolved from the same priority chain as the AOI
+    // download (aoiGeometryInputAsset -> exportAreaOfInterest -> bbox). Unlike
+    // the download, the map needs parsed GeoJSON, so the file-based tiers are
+    // fetched and parsed here, falling through to the next tier when a file is
+    // missing or is not valid GeoJSON, and finally to the bbox-derived feature.
+    const [aoiMapGeoJSON, setAoiMapGeoJSON] = useState<
+    GeoJSON.FeatureCollection<GeoJSON.Geometry> | undefined
+    >();
+
+    useEffect(() => {
+        let active = true;
+
+        async function resolveAoiMapGeoJson() {
+            let resolved: GeoJSON.FeatureCollection<GeoJSON.Geometry> | undefined;
+            if (aoiGeometryInputAsset?.file?.url) {
+                resolved = await tryFetchAoiGeoJson(aoiGeometryInputAsset.file.url);
+            }
+            if (!resolved && exportAreaOfInterest?.file?.url) {
+                resolved = await tryFetchAoiGeoJson(exportAreaOfInterest.file.url);
+            }
+            if (active) {
+                setAoiMapGeoJSON(resolved ?? aoiGeometryFeature);
+            }
+        }
+
+        resolveAoiMapGeoJson();
+
+        return () => {
+            active = false;
+        };
+    }, [aoiGeometryInputAsset, exportAreaOfInterest, aoiGeometryFeature]);
+
     // NOTE: The AOI download is resolved from a priority chain:
     // 1. aoiGeometryInputAsset (the original uploaded geometry; not present
     //    for projects sourced from a tasking manager id)
@@ -503,11 +609,11 @@ function Project(props: Props) {
                     })
                 )}
             >
-                {aoiGeometryFeature && (
+                {aoiMapGeoJSON && (
                     <div className={styles.mapContainer}>
                         <DynamicProjectMap
                             className={styles.projectsMap}
-                            geoJSON={aoiGeometryFeature}
+                            geoJSON={aoiMapGeoJSON}
                         />
                     </div>
                 )}

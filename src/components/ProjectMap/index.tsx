@@ -11,7 +11,7 @@ import GestureHandler from 'components/LeafletGestureHandler';
 interface Props {
     className?: string;
     children?: React.ReactNode;
-    geoJSON: GeoJSON.FeatureCollection<GeoJSON.Polygon>;
+    geoJSON: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
 }
 
 function ProjectMap(props: Props) {
