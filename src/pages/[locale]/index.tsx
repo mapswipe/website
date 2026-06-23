@@ -27,9 +27,11 @@ import data from 'fullData/staticData.json';
 
 import i18nextConfig from '@/next-i18next.config';
 
-import { AllDataQuery } from 'generated/types';
+import { ProjectsPageQuery, StaticDataQuery } from 'generated/types';
 
 import styles from './styles.module.css';
+
+type AllDataQuery = StaticDataQuery & { publicProjects: ProjectsPageQuery['publicProjects'] };
 
 async function getAllData() {
     // FIXME: This should be inferred

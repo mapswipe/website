@@ -49,10 +49,12 @@ import useDebouncedValue from 'hooks/useDebouncedValue';
 import { GlobalExportAssets } from 'utils/queries';
 import data from 'fullData/staticData.json';
 
-import { AllDataQuery } from 'generated/types';
+import { ProjectsPageQuery, StaticDataQuery } from 'generated/types';
 import i18nextConfig from '@/next-i18next.config';
 
 import styles from './styles.module.css';
+
+type AllDataQuery = StaticDataQuery & { publicProjects: ProjectsPageQuery['publicProjects'] };
 
 type PublicProjects = NonNullable<NonNullable<AllDataQuery['publicProjects']>['results']>;
 type PublicProject = PublicProjects[number];
