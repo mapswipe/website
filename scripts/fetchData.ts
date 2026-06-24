@@ -1,7 +1,9 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import fs from 'fs';
 import path from 'path';
-import { AllDataQuery } from '../generated/types';
+import { ProjectsPageQuery, StaticDataQuery } from '../generated/types';
+
+type FetchedData = StaticDataQuery & { publicProjects: ProjectsPageQuery['publicProjects'] };
 
 const datadir = path.join(__dirname, '../fullData');
 const baseUrl = process.env.MAPSWIPE_API_ENDPOINT || 'http://localhost:8000/';
@@ -12,7 +14,7 @@ const pipelineType = process.env.PIPELINE_TYPE;
 
 const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT);
 
-const dummyData: AllDataQuery = {
+const dummyData: FetchedData = {
     publicProjects: {
         results: [],
         totalCount: 0,
@@ -29,15 +31,17 @@ const dummyData: AllDataQuery = {
     globalExportAssets: [],
 };
 
-const query = gql`
-    query AllData {
+const PROJECT_PAGE_SIZE = 500;
+
+const projectsQuery = gql`
+    query ProjectsPage($limit: Int!, $offset: Int!) {
         publicProjects(
             filters: {
                 status: {
                     inList: [PUBLISHED, FINISHED],
                 },
             },
-            pagination: { limit: 9999 },
+            pagination: { limit: $limit, offset: $offset },
         ) {
             results {
                 id
@@ -166,6 +170,11 @@ const query = gql`
             }
             totalCount
         }
+    }
+`;
+
+const staticQuery = gql`
+    query StaticData {
         communityStats {
             id
             totalContributors
@@ -216,8 +225,32 @@ async function getCsrfTokenValue() {
     return undefined;
 }
 
+const MAX_RETRIES = 3;
+
+async function requestWithRetry<T>(
+    requestFn: () => Promise<T>,
+): Promise<T> {
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            // eslint-disable-next-line no-await-in-loop
+            return await requestFn();
+        } catch (err: unknown) {
+            const status = (err as { response?: { status?: number } })?.response?.status;
+            const isServerError = status !== undefined && status >= 500;
+            if (isServerError && attempt < MAX_RETRIES) {
+                // eslint-disable-next-line no-console
+                console.warn(`Request failed with ${status} (attempt ${attempt}/${MAX_RETRIES}). Retrying...`);
+            } else {
+                throw err;
+            }
+        }
+    }
+    // unreachable, but satisfies the return type
+    throw new Error('Unexpected end of requestWithRetry');
+}
+
 async function fetchAndWriteData() {
-    let data = {} as AllDataQuery;
+    let data = {} as FetchedData;
     if (pipelineType === 'ci') {
         data = dummyData;
     } else {
@@ -236,7 +269,33 @@ async function fetchAndWriteData() {
         graphQLClient.setHeader('X-CSRFToken', csrfTokenValue);
         graphQLClient.setHeader('Cookie', `${COOKIE_NAME}=${csrfTokenValue}`);
         graphQLClient.setHeader('Referer', referer);
-        data = (await graphQLClient.request(query)) as AllDataQuery;
+
+        const staticData = (await requestWithRetry(() => graphQLClient.request(staticQuery))) as Pick<
+            FetchedData,
+            'communityStats' | 'publicOrganizations' | 'globalExportAssets'
+        >;
+
+        const allProjects: FetchedData['publicProjects']['results'] = [];
+        let totalCount = Infinity;
+        // eslint-disable-next-line no-await-in-loop
+        for (let offset = 0; offset < totalCount; offset += PROJECT_PAGE_SIZE) {
+            // eslint-disable-next-line no-await-in-loop
+            const page = (await requestWithRetry(() => graphQLClient.request(projectsQuery, {
+                limit: PROJECT_PAGE_SIZE,
+                offset,
+            }))) as Pick<FetchedData, 'publicProjects'>;
+            allProjects.push(...page.publicProjects.results);
+            totalCount = page.publicProjects.totalCount;
+            console.log(`Fetched ${allProjects.length}/${totalCount} projects`);
+        }
+
+        data = {
+            ...staticData,
+            publicProjects: {
+                results: allProjects,
+                totalCount,
+            },
+        };
     }
 
     // ensure the `data` directory exists
