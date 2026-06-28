@@ -288,7 +288,7 @@ function Home(props: Props) {
                 <Card
                     className={styles.missionType}
                     coverImageUrl="/img/locate_image.svg"
-                    heading={t('type-locate-features-type')}
+                    heading={t('type-locate-type')}
                     imageClassName={styles.missionImage}
                     icons={(
                         <ProjectTypeIcon
@@ -296,7 +296,7 @@ function Home(props: Props) {
                         />
                     )}
                 >
-                    {t('locate-features-type-description')}
+                    {t('locate-type-description')}
                 </Card>
             </Section>
             <Section
