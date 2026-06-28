@@ -505,11 +505,11 @@ function Project(props: Props) {
                     })
                 )}
             >
-                {aoiGeometryFeature && (
+                {aoiDownload && (
                     <div className={styles.mapContainer}>
                         <DynamicProjectMap
                             className={styles.projectsMap}
-                            geoJSON={aoiGeometryFeature}
+                            geoJsonUrl={aoiDownload.url}
                         />
                     </div>
                 )}
