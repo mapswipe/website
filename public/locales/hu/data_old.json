@@ -1,15 +1,11 @@
 {
-  "active-projects": "Aktív",
-  "finished-projects": "Befejezett",
-  "type-street-title": "",
-  "type-check-completeness-title": "",
-  "build-area": "Keresés",
-  "footprint": "Érvényesítés",
-  "change-detection": "Összehasonlítás",
-  "completeness": "",
-  "validate-image": "",
-  "street": "",
-  "published": "",
-  "withdrawn": "",
+  "ready-to-process": "Feldolgozásra kész",
+  "draft": "Vázlat",
+  "discarded": "Elvetve",
+  "processing-failed": "Feldolgozás sikertelen",
+  "processed": "Feldolgozva",
+  "ready-to-published": "Közzétételre kész",
+  "publishing-failed": "Közzététel sikertelen",
+  "paused": "Felfüggesztve",
   "download-projects-with-geometry-heading": "Projektek alakzatfájllal"
 }
