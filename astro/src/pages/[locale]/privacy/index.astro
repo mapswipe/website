@@ -7,14 +7,27 @@ import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getT, LOCALES } from '../../../i18n';
+import { selectPaths } from '../../../lib/incremental';
 
 // Privacy page. The policy body is a fixed English markdown string (identical
 // in every locale — same as the Next app, which hardcoded it); only the tab
 // title + hero title are translated. Rendered to HTML at build time via the
 // same remark + GFM pipeline the Next page used (remark().use(html).use(gfm)),
 // so the GFM contact tables render as <table>.
+//
+// The page renders NO project/blog data — its content inputs are the hardcoded
+// policy string (part of this file → codeHash) and the `privacy` i18n namespace
+// (repo-root public/locales → codeHash). So its propsData is a stable
+// per-locale constant: the propsHash never changes on a project/blog *data*
+// edit → the page SKIPS on incremental data builds. A policy/translation edit
+// bumps codeHash → full rebuild, so tracking that content here would be
+// redundant.
 export const getStaticPaths = (async () =>
-  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+  selectPaths('privacy', LOCALES.map((locale) => ({
+    key: `${locale}/privacy`,
+    params: { locale },
+    propsData: { page: 'privacy', locale },
+  })))) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 const t = await getT(locale!, 'privacy');

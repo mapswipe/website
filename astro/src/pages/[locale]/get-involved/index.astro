@@ -2,12 +2,26 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getT, LOCALES } from '../../../i18n';
+import { selectPaths } from '../../../lib/incremental';
 
 // Get-involved page. One static, translated variant per locale —
 // /<locale>/get-involved/ — faithful to the Next Pages-Router page. Uses shared
 // chrome (BaseLayout) + ported Hero/Section/CenteredCard styles.
+//
+// The page renders NO project/blog data — its only content input is the
+// `get-involved` i18n namespace, which lives in the repo-root public/locales
+// and is folded into the orchestration's codeHash. So its propsData is a stable
+// per-locale constant: the propsHash never changes on a project/blog *data*
+// edit → the page SKIPS on incremental data builds (matching Next, which never
+// re-renders static pages on a data change). A translation edit bumps codeHash
+// → the whole site (this page included) rebuilds anyway, so tracking
+// translations here would be redundant.
 export const getStaticPaths = (async () =>
-  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+  selectPaths('get-involved', LOCALES.map((locale) => ({
+    key: `${locale}/get-involved`,
+    params: { locale },
+    propsData: { page: 'get-involved', locale },
+  })))) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 const t = await getT(locale!, 'get-involved');

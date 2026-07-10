@@ -4,20 +4,41 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BlogLayout from '../../../../layouts/BlogLayout.astro';
 import { getT, LOCALES } from '../../../../i18n';
+import { selectPaths } from '../../../../lib/incremental';
 
 // Blog DETAIL page. getStaticPaths = 6 locales x N blogs, producing
 // /<locale>/blogs/<slug>/ with exact URL parity to Next (slug == entry.id ==
 // path.parse(filename).name). Markdown body is rendered by Astro's pipeline
 // (remark-gfm enabled in astro.config.mjs); in-body relative images
 // (./images/*) are optimized natively by astro:assets.
+//
+// propsHash = the entry's stable frontmatter fields + raw markdown body, so
+// only posts whose content/frontmatter changed are rebuilt. The cover hashes
+// as its emitted `src` string (content-hashed by astro:assets) — the full
+// resolved image() metadata object is NOT hashed (it can carry non-portable
+// absolute paths). All 6 locale variants of a post share the SAME signature
+// object so it hashes once.
 export const getStaticPaths = (async () => {
   const entries = await getCollection('blogs');
-  return entries.flatMap((entry) =>
-    LOCALES.map((locale) => ({
+  const candidates = entries.flatMap((entry) => {
+    const signature = {
+      id: entry.id,
+      title: entry.data.title ?? null,
+      publishedDate: entry.data.publishedDate?.getTime() ?? null,
+      author: entry.data.author ?? null,
+      description: entry.data.description ?? null,
+      featured: entry.data.featured ?? false,
+      coverImage: entry.data.coverImage?.src ?? null,
+      body: entry.body ?? '',
+    };
+    return LOCALES.map((locale) => ({
+      key: `${locale}/blogs/${entry.id}`,
       params: { locale, slug: entry.id },
       props: { entry },
-    })),
-  );
+      propsData: signature,
+    }));
+  });
+  return selectPaths('blogs-detail', candidates);
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;

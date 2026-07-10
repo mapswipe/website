@@ -8,18 +8,26 @@ import ProjectHistoryChart from '../../../components/ProjectHistoryChart.tsx';
 import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from '../../../lib/data';
 import { getFileSizeProperties, resolveAoiDownload } from '../../../lib/common';
 import { getT, LOCALES } from '../../../i18n';
+import { selectPaths } from '../../../lib/incremental';
 
 export const getStaticPaths = (async () => {
   let projects = getAllProjects();
   const limit = Number(import.meta.env.SLICE_LIMIT ?? 0);
   if (limit > 0) projects = projects.slice(0, limit);
-  // One path per (project, locale).
-  return projects.flatMap((project) => {
+  // One candidate per (project, locale). The 6 locale variants of a project
+  // share the SAME `project` object reference as propsData, so selectPaths
+  // hashes each project's data exactly once and rebuilds all 6 (or none)
+  // together. Under the incremental orchestration, only projects whose data
+  // changed (or new/all-on-code-change) are returned; otherwise ALL are.
+  const candidates = projects.flatMap((project) => {
     const id = String(project.firebaseId);
     return LOCALES.map((locale) => ({
+      key: `${locale}/projects/${id}`,
       params: { locale, id },
+      propsData: project,
     }));
   });
+  return selectPaths('projects', candidates);
 }) satisfies GetStaticPaths;
 
 const { locale, id } = Astro.params;

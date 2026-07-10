@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/prefetch-images.mjs && astro build",
+    "build:incremental": "node scripts/incremental-build.mjs",
     "prefetch": "node scripts/prefetch-images.mjs",
     "preview": "astro preview",
     "astro": "astro"

@@ -5,13 +5,31 @@ import DataExplorer, { PAGE_SIZE } from '../../../components/DataExplorer.tsx';
 import { getDataExplorerPayload } from '../../../lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from '../../../lib/optimizeImage';
 import { getDict, getT, LOCALES } from '../../../i18n';
+import { selectPaths } from '../../../lib/incremental';
 import '../../../styles/global.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router
 // route src/pages/[locale]/data/index.tsx). trailingSlash:always + directory
 // format => dist/<locale>/data/index.html.
-export const getStaticPaths = (async () =>
-  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+//
+// This aggregate page's propsData is the FULL data-explorer payload even though
+// the page itself now SSRs only a slim slice (the first PAGE_SIZE cards +
+// stats) and the island fetches the bulk from /data-explorer.json: the SSR'd
+// slice (top-N by createdAt) and the stats can shift when ANY project changes,
+// so the propsHash must cover the whole payload → the page rebuilds on any
+// project change (correct). The SAME payload object is shared across all 6
+// locale candidates so it hashes once. When nothing changed under the
+// orchestration, selectPaths returns [] and the page is skipped. (The
+// /data-explorer.json static endpoint has no getStaticPaths at all, so it
+// re-renders on every build and stays fresh regardless.)
+export const getStaticPaths = (async () => {
+  const payload = getDataExplorerPayload();
+  return selectPaths('data', LOCALES.map((locale) => ({
+    key: `${locale}/data`,
+    params: { locale },
+    propsData: payload,
+  })));
+}) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 

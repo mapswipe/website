@@ -4,12 +4,40 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BlogLayout from '../../../layouts/BlogLayout.astro';
 import { getT, LOCALES } from '../../../i18n';
+import { selectPaths } from '../../../lib/incremental';
 
 // Blog LIST page. One variant per locale (blog content is single-language
 // English markdown; only the chrome is translated), producing /<locale>/blogs/
 // with exact URL parity to the Next Pages-Router page.
-export const getStaticPaths = (async () =>
-  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+//
+// This page renders the blog INDEX (each blog's title/date/description/cover/
+// featured flag), so its propsData is a signature over exactly those fields for
+// the whole blog set — it rebuilds when a blog is added/removed or one of those
+// listed fields changes, but NOT on a project *data* edit (projects are absent
+// from its data). Covers hash as the emitted `src` string (content-hashed by
+// astro:assets), not the whole resolved image() metadata object. The key is
+// `${locale}/blogs` (a file, blogs/index.html); the blog DETAIL pages use
+// `${locale}/blogs/<slug>` (dirs) and pruneDeletions only scans the dir
+// children, so there is no key collision or accidental prune. The same
+// signature object is shared across all 6 locales so it hashes once.
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('blogs');
+  const listSignature = entries
+    .map((entry) => ({
+      slug: entry.id,
+      title: entry.data.title ?? entry.id,
+      publishedDate: entry.data.publishedDate?.getTime() ?? null,
+      description: entry.data.description ?? null,
+      coverImage: entry.data.coverImage?.src ?? null,
+      featured: entry.data.featured ?? false,
+    }))
+    .sort((a, b) => (b.publishedDate ?? 0) - (a.publishedDate ?? 0));
+  return selectPaths('blogs-list', LOCALES.map((locale) => ({
+    key: `${locale}/blogs`,
+    params: { locale },
+    propsData: listSignature,
+  })));
+}) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 const t = await getT(locale!, 'blogs');

@@ -7,13 +7,43 @@ import ProjectTypeIcon from '../../components/ProjectTypeIcon.astro';
 import Icon from '../../components/Icon.astro';
 import { getT, LOCALES } from '../../i18n';
 import { getCommunityStats } from '../../lib/data';
+import { selectPaths } from '../../lib/incremental';
 
 // Home page. One static, translated variant per locale — /<locale>/ — matching
 // the Next Pages-Router src/pages/[locale]/index.tsx. Faithful port of Hero,
 // key figures, mission-type cards, featured blogs, download/get-involved CTAs
 // and partners, using the shared chrome (BaseLayout) + ported design tokens.
-export const getStaticPaths = (async () =>
-  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+//
+// The home page renders ONLY the community stats (total swipes/contributors)
+// and the top-3 featured blogs — it does NOT render the project set. So its
+// propsHash tracks exactly those two inputs (matching Next's home). A project
+// *name* (or any per-project data) change leaves community stats + featured
+// blogs unchanged → home's propsHash is unchanged → home SKIPS (correct). It
+// rebuilds only when a stat or a featured-blog field actually changes. The
+// featured signature hashes the cover's emitted `src` string (content-hashed
+// by astro:assets), NOT the whole resolved image() metadata object. The same
+// propsData object is shared across all 6 locale candidates so it hashes once.
+export const getStaticPaths = (async () => {
+  const stats = getCommunityStats();
+  const entries = await getCollection('blogs');
+  const featured = entries
+    .filter((e) => e.data.featured)
+    .map((e) => ({
+      slug: e.id,
+      title: e.data.title ?? e.id,
+      publishedDate: e.data.publishedDate?.getTime() ?? null,
+      description: e.data.description ?? null,
+      coverImage: e.data.coverImage?.src ?? null,
+    }))
+    .sort((a, b) => (b.publishedDate ?? 0) - (a.publishedDate ?? 0))
+    .slice(0, 3);
+  const propsData = { stats, featured };
+  return selectPaths('home', LOCALES.map((locale) => ({
+    key: `${locale}`,
+    params: { locale },
+    propsData,
+  })));
+}) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 const t = await getT(locale!, 'home');

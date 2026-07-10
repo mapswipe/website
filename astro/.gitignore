@@ -1,6 +1,11 @@
 # build output
 dist/
+dist-cache/
 .astro/
+
+# incremental build state (code-hash, manifest, per-page shards).
+# In CI, restore/save this dir alongside dist/ so warm builds skip unchanged pages.
+.astro-incremental/
 
 # deps
 node_modules/
