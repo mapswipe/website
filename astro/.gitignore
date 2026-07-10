@@ -1,0 +1,18 @@
+# build output
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# generated optimized images (emitted into dist/ at build time)
+public/_img/
+
+# persistent build-time image optimization cache.
+# In CI, restore/save this dir as a build cache so warm builds reuse the
+# webp encodes instead of refetching + re-encoding every remote image.
+.image-cache/
+
+# scratch build logs / measurements
+build*.log
+measure_*.txt
