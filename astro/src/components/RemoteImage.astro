@@ -1,0 +1,35 @@
+---
+import { resolveRemoteImage } from '../lib/optimizeImage';
+
+// Remote project cover image, optimized at BUILD time via our own fail-soft
+// resolver (see src/lib/optimizeImage.ts). We bypass Astro's <Image>/astro:assets
+// because its optimize phase is all-or-nothing: one malformed remote image makes
+// sharp throw fatally and aborts the whole build. resolveRemoteImage() wraps each
+// fetch+sharp in try/catch and, on ANY failure, returns the raw remote URL
+// (passthrough) — so a single bad image can never break the build. Good images
+// are resized to `width`, encoded to webp, cached on disk, and shipped locally.
+//
+// Optimization is ALWAYS on now (no IMAGE_OPT gate) but always safe.
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  width?: number;
+  height?: number;
+}
+const { src, alt, class: className, width = 640, height = 420 } = Astro.props;
+
+// Explicit width (inferSize:false semantics) so there is no render-time network
+// fetch just to read dimensions.
+const { src: resolvedSrc, optimized } = await resolveRemoteImage(src, { width });
+---
+<img
+  class={className}
+  src={resolvedSrc}
+  alt={alt}
+  width={width}
+  height={height}
+  loading="lazy"
+  decoding="async"
+  data-optimized={optimized ? 'true' : 'false'}
+/>
