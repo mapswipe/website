@@ -1,5 +1,12 @@
 // Astro integration: deduplicate the inline island-hydration runtimes into ONE
 // external, cacheable file — a build:done post-process.
+//
+// UPSTREAM: force-inlining is documented, unconfigurable behavior. References:
+//   https://github.com/withastro/docs/issues/2150 (inlined even with assetsInlineLimit: 0 — we verified)
+//   https://github.com/withastro/roadmap/discussions/36 (the decision that inlined them)
+//   https://github.com/withastro/astro/issues/6247 (related cross-page inlining heuristic)
+// Draft feature request ready to file: docs/upstream/astro-hydration-script-dedup.md.
+// Delete this file when an external-hydration-scripts option lands.
 // build:done post-process pattern.
 //
 // Why: Astro hard-inlines its directive runtimes (the ~130 B `Astro.only`

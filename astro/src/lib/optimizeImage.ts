@@ -1,5 +1,12 @@
 // Build-time, per-image, fail-soft remote image optimizer with an on-disk cache.
 //
+// UPSTREAM: no existing Astro issue covers a per-image error policy (verified
+// 2026-07-10). Draft feature request ready to file: docs/upstream/
+// astro-remote-image-fail-soft.md. Closest existing refs:
+//   https://github.com/withastro/roadmap/discussions/523 (global error handling)
+//   https://github.com/withastro/astro/issues/15920 (remote revalidation, adjacent)
+// Delete this file when an upstream error policy lands.
+//
 // Why this exists (and why we bypass Astro's <Image>/astro:assets):
 // Astro's optimize phase is all-or-nothing — a single malformed remote image
 // (e.g. a broken SVG mislabeled as raster) makes sharp throw fatally and aborts
