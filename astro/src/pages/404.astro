@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE } from '../i18n';
+
+// 404 page (Next: src/pages/404/index.tsx). Locale-less single page. The Next
+// version's copy was hardcoded English, so it stays English here. Rendered with
+// the default-locale (en) chrome; hreflang disabled (no per-locale 404 set).
+// Astro emits this to dist/404.html.
+---
+<BaseLayout
+  locale={DEFAULT_LOCALE}
+  title="404 | MapSwipe"
+  path="404/"
+  hreflang={false}
+  mainClass="ms-404-main"
+>
+  <div class="ms-404">
+    <div class="ms-404-left">
+      <div class="ms-404-heading">
+        <h2 class="ms-h ms-extra-large">404</h2>
+        <h4 class="ms-h ms-medium ms-normal">This area has not been swiped yet!</h4>
+      </div>
+      <a class="ms-btn-transparent" href="/">Go back to home</a>
+    </div>
+    <div class="ms-404-right">
+      <img src="/img/404.svg" alt="404 Page" />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .ms-404 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-super-large);
+    max-width: var(--width-page-max);
+    margin: 0 auto;
+    padding: var(--spacing-enourmous) var(--spacing-super-large);
+  }
+  .ms-404-left { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-large); }
+  .ms-404-heading { display: flex; flex-direction: column; gap: var(--spacing-small); }
+  .ms-404-right img { max-width: 24rem; width: 100%; height: auto; }
+</style>

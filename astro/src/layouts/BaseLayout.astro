@@ -1,0 +1,78 @@
+---
+import OgMeta from '../components/OgMeta.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { LOCALES } from '../i18n';
+import '../styles/global.css';
+
+// Fonts: the Next app used next/font (Lato body + DM Sans headings, preloaded
+// woff2, display:swap). Astro has no next/font, so we import the equivalent
+// @fontsource packages here. Importing them from the shared base layout means
+// Astro emits <link rel=preload> for the woff2 into <head> of every page that
+// uses this layout (verified in dist). Weights match _app.tsx exactly:
+// Lato 400/700, DM Sans 400/500/700.
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/700.css';
+
+// Explicitly preload the two primary latin woff2 (Lato 400 body + DM Sans 400
+// headings) so they fetch before first paint — reduces FOUT/CLS vs relying on
+// the @font-face declarations alone. Vite hashes these URLs at build time; we
+// import the asset URLs so the emitted <link rel=preload> points at the exact
+// hashed file. The remaining weights/subsets still load via @font-face above.
+import latoBody from '@fontsource/lato/files/lato-latin-400-normal.woff2';
+import dmSansHeading from '@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2';
+
+// Shared chrome for all static, translated pages (home, get-involved, privacy,
+// 404). Emits <head> (OgMeta + hreflang x6 + x-default) and wraps content in
+// the page shell (Navbar + <main> + Footer), mirroring the Next app's
+// components/Page. `path` is the locale-less route suffix used for hreflang
+// (e.g. '' for home, 'get-involved/'); `activePath` drives navbar highlight.
+interface Props {
+  locale: string;
+  title: string;
+  description?: string;
+  path: string;
+  activePath?: string;
+  mainClass?: string;
+  hreflang?: boolean; // default true; 404 opts out (no canonical per-locale set)
+}
+const {
+  locale,
+  title,
+  description,
+  path,
+  activePath,
+  mainClass,
+  hreflang = true,
+} = Astro.props;
+
+const site = Astro.site?.toString().replace(/\/$/, '') ?? 'https://mapswipe.org';
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="/logo-compact.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preload" href={latoBody} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={dmSansHeading} as="font" type="font/woff2" crossorigin />
+    <OgMeta title={title} description={description} />
+    {hreflang && LOCALES.map((l) => (
+      <link rel="alternate" hreflang={l} href={`${site}/${l}/${path}`} />
+    ))}
+    {hreflang && <link rel="alternate" hreflang="x-default" href={`${site}/en/${path}`} />}
+  </head>
+  <body>
+    <div class="ms-page">
+      <Navbar locale={locale} activePath={activePath} />
+      <main class={`ms-main${mainClass ? ` ${mainClass}` : ''}`}>
+        <slot />
+      </main>
+      <Footer locale={locale} />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+---
+// External-SVG-sprite icon set. Each icon is defined once as a <symbol> in
+// public/icons.svg and referenced here via <use>. This replaces the previous
+// full inline-<svg> markup (paths repeated on every render across ~14.7k
+// pages), cutting ~99 MB of duplicated inline SVG from the build. The sprite is
+// fetched/cached once by the browser; each <use> is a ~50 B reference.
+//
+// The outer <svg> keeps the icon's own viewBox (so scaling stays correct) and
+// fill="currentColor" so CSS themes them exactly like before. Icons that use
+// fill="none"/stroke="currentColor" (calendar, arrow-forward) carry those attrs
+// on their paths inside the symbol, so they still inherit the page color.
+interface Props {
+  name:
+    | 'calendar-clear-outline'
+    | 'arrow-forward-sharp'
+    | 'menu'
+    | 'earth-sharp'
+    | 'newspaper'
+    | 'logo-facebook'
+    | 'logo-mastodon'
+    | 'logo-github'
+    | 'logo-instagram'
+    | 'mail'
+    | 'plus';
+  class?: string;
+  size?: string | number;
+}
+const { name, class: className, size = '1em' } = Astro.props;
+
+// Per-name viewBox lookup — kept on the outer <svg> so aspect ratio/scaling
+// matches the original inline icons (most are 512x512, but a few differ).
+const viewBoxForName: Record<Props['name'], string> = {
+  'calendar-clear-outline': '0 0 512 512',
+  'arrow-forward-sharp': '0 0 512 512',
+  menu: '0 0 24 24',
+  'earth-sharp': '0 0 512 512',
+  newspaper: '0 0 576 512',
+  'logo-facebook': '0 0 512 512',
+  'logo-mastodon': '0 0 512 512',
+  'logo-github': '0 0 512 512',
+  'logo-instagram': '0 0 512 512',
+  mail: '0 0 512 512',
+  plus: '0 0 448 512',
+};
+
+// Sprite lives at the site root (/icons.svg), matching the logos' convention
+// (<img src="/logo.svg"> in Navbar.astro). base/BASE_URL is '/', so a leading
+// slash resolves correctly; build from BASE_URL to stay correct if it changes.
+const spriteHref = `${import.meta.env.BASE_URL}icons.svg`.replace(/\/{2,}/g, '/');
+---
+<svg class={className} width={size} height={size} viewBox={viewBoxForName[name]} fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <use href={`${spriteHref}#${name}`} />
+</svg>

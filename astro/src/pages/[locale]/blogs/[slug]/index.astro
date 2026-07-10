@@ -1,0 +1,64 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BlogLayout from '../../../../layouts/BlogLayout.astro';
+import { getT, LOCALES } from '../../../../i18n';
+
+// Blog DETAIL page. getStaticPaths = 6 locales x N blogs, producing
+// /<locale>/blogs/<slug>/ with exact URL parity to Next (slug == entry.id ==
+// path.parse(filename).name). Markdown body is rendered by Astro's pipeline
+// (remark-gfm enabled in astro.config.mjs); in-body relative images
+// (./images/*) are optimized natively by astro:assets.
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('blogs');
+  return entries.flatMap((entry) =>
+    LOCALES.map((locale) => ({
+      params: { locale, slug: entry.id },
+      props: { entry },
+    })),
+  );
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.params;
+const { entry } = Astro.props;
+const t = await getT(locale!, 'blog');
+
+const { title, publishedDate, author, coverImage, description } = entry.data;
+const blogTitle = title ?? entry.id;
+
+// Render the collection entry's markdown body to HTML (replaces Next's
+// remark().use(remark-html).use(remark-gfm)). remark-gfm is applied via the
+// project markdown config.
+const { Content } = await render(entry);
+
+// {{date, datetime}} parity: Intl.DateTimeFormat(lng), default options.
+const dateFmt = new Intl.DateTimeFormat(locale!);
+
+const tabTitle = String(t('blog-tab-head', { blogTitle }));
+---
+<BlogLayout
+  locale={locale!}
+  title={tabTitle}
+  description={description}
+  path={`blogs/${entry.id}/`}
+>
+  <section class="hero">
+    <div class="heroMain">
+      <h1>{blogTitle}</h1>
+      <div class="heroDescription">
+        {publishedDate && <span class="tag">{dateFmt.format(publishedDate)}</span>}
+        {author && <span class="tag">{author}</span>}
+      </div>
+    </div>
+    {coverImage && (
+      <Image class="illustration" src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
+    )}
+  </section>
+
+  <section class="section">
+    <div class="htmlContent">
+      <Content />
+    </div>
+  </section>
+</BlogLayout>

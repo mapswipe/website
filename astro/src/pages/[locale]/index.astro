@@ -1,0 +1,304 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectTypeIcon from '../../components/ProjectTypeIcon.astro';
+import Icon from '../../components/Icon.astro';
+import { getT, LOCALES } from '../../i18n';
+import { getCommunityStats } from '../../lib/data';
+
+// Home page. One static, translated variant per locale — /<locale>/ — matching
+// the Next Pages-Router src/pages/[locale]/index.tsx. Faithful port of Hero,
+// key figures, mission-type cards, featured blogs, download/get-involved CTAs
+// and partners, using the shared chrome (BaseLayout) + ported design tokens.
+export const getStaticPaths = (async () =>
+  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+
+const { locale } = Astro.params;
+const t = await getT(locale!, 'home');
+
+// Key figures. Next formatted these with Intl.NumberFormat('en-US'): swipes
+// compact ("214M"), contributors grouped ("132,105"). Reproduce exactly.
+const { totalContributors, totalSwipes } = getCommunityStats();
+const swipesFmt = totalSwipes == null
+  ? '-'
+  : new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(totalSwipes);
+const contributorsFmt = totalContributors == null
+  ? '-'
+  : new Intl.NumberFormat('en-US').format(totalContributors);
+
+// Featured blogs: top 3 `featured` from the blogs collection, sorted DESC by
+// publishedDate (parity with Next's compareDate(..,-1) + filter + slice(0,3)).
+const entries = await getCollection('blogs');
+const featuredBlogs = entries
+  .filter((e) => e.data.featured)
+  .map((e) => ({
+    slug: e.id,
+    title: e.data.title ?? e.id,
+    publishedDate: e.data.publishedDate,
+    description: e.data.description,
+    coverImage: e.data.coverImage,
+  }))
+  .sort((a, b) => (b.publishedDate?.getTime() ?? 0) - (a.publishedDate?.getTime() ?? 0))
+  .slice(0, 3);
+
+// i18next {{date, datetime}} => Intl.DateTimeFormat(lng) default options.
+const dateFmt = new Intl.DateTimeFormat(locale!);
+const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
+
+const partners = [
+  { altText: 'American Red Cross Logo', imageSrc: '/img/arc.svg', link: 'https://www.redcross.org/' },
+  { altText: 'British Red Cross Logo', imageSrc: '/img/brc.svg', link: 'https://www.redcross.org.uk/' },
+  { altText: 'Canadian Red Cross Logo', imageSrc: '/img/crc.svg', link: 'https://www.redcross.ca/' },
+  { altText: 'HeiGIT logo', imageSrc: '/img/heigit.png', link: 'https://heigit.org/' },
+  { altText: 'HOT logo', imageSrc: '/img/hot.png', link: 'https://www.hotosm.org/' },
+  { altText: 'MSF logo', imageSrc: '/img/msf.png', link: 'https://msf.org.uk/' },
+  { altText: 'Togglecorp logo', imageSrc: '/img/tc.png', link: 'https://togglecorp.com' },
+];
+
+const missionTypes = [
+  { type: 'FIND', coverImageUrl: '/img/find.svg', heading: t('type-find-title'), body: t('find-mission-type-description') },
+  { type: 'COMPARE', beforeAfter: true, heading: t('type-compare-title'), body: t('compare-mission-type-description') },
+  { type: 'VALIDATE', coverImageUrl: '/img/validate.svg', heading: t('type-validate-title'), body: t('validate-mission-type-description') },
+  { type: 'COMPLETENESS', coverImageUrl: '/img/completeness.png', heading: t('type-completeness-title'), body: t('completeness-type-description') },
+  { type: 'VALIDATE_IMAGE', coverImageUrl: '/img/validate_image.png', heading: t('type-validate-image-type'), body: t('validate-image-type-description') },
+  { type: 'STREET', coverImageUrl: '/img/street_image.png', heading: t('type-street-type'), body: t('street-type-description') },
+  { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', heading: t('type-locate-features-type'), body: t('locate-features-type-description') },
+] as const;
+
+const title = String(t('home-tab-head'));
+---
+<BaseLayout locale={locale!} title={title} path="" mainClass="ms-home">
+  {/* Hero */}
+  <div class="ms-hero">
+    <div class="ms-hero-section">
+      <div class="ms-hero-main">
+        <div class="ms-hero-left">
+          <h2 class="ms-h ms-extra-large">{t('hero-title')}</h2>
+          <div class="ms-hero-description">{t('hero-description')}</div>
+          <div class="ms-hero-actions">
+            <a class="ms-btn" href="#startMapswiping">{t('download-app-label')}</a>
+            <a class="ms-btn-transparent" href={`/${locale}/data/`}>{t('data-link')}</a>
+          </div>
+        </div>
+        <div class="ms-hero-right">
+          <video class="ms-hero-video" autoplay loop muted playsinline>
+            <source src="/img/animation.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </div>
+    <div class="ms-angled-background"></div>
+  </div>
+
+  {/* Mobilizing volunteers + key figures */}
+  <section class="ms-section">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('mobilizing-volunteer')}</h4>
+      </div>
+      <div class="ms-mobilize">
+        <div class="ms-pictures">
+          <div class="ms-pic ms-pic-single">
+            <img src="/img/msf_mapping.jpg" alt={t('mobilize-volunteer')} loading="lazy" decoding="async" />
+          </div>
+          <div class="ms-pic-double-wrap">
+            <div class="ms-pic ms-pic-double">
+              <img src="/img/mapswipe_mapathon.jpg" alt={t('mapathon')} loading="lazy" decoding="async" />
+            </div>
+            <div class="ms-pic ms-pic-double">
+              <img src="/img/field_mapping.jpg" alt={t('field-mapping')} loading="lazy" decoding="async" />
+            </div>
+          </div>
+        </div>
+        <div class="ms-mobilize-desc">
+          <p>{t('mobilizing-volunteer-description-paragraph-1')}</p>
+          <p>{t('mobilizing-volunteer-description-paragraph-2')}</p>
+          <div class="ms-figures">
+            <div class="ms-keyfigure">
+              <div class="ms-keyfigure-value">{swipesFmt}<Icon name="plus" class="ms-keyfigure-plus" /></div>
+              <div class="ms-keyfigure-label">{t('total-swipes')}</div>
+            </div>
+            <div class="ms-keyfigure">
+              <div class="ms-keyfigure-value">{contributorsFmt}<Icon name="plus" class="ms-keyfigure-plus" /></div>
+              <div class="ms-keyfigure-label">{t('total-contributors')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Mission types */}
+  <section class="ms-section">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('explore-mission-types')}</h4>
+        <div class="ms-section-description">{t('explore-mission-types-description')}</div>
+      </div>
+      <div class="ms-mission-grid">
+        {missionTypes.map((m) => (
+          <article class="ms-card ms-mission">
+            <div class={`ms-card-cover${m.beforeAfter ? ' ms-before-after' : ''}`}>
+              {m.beforeAfter ? (
+                <>
+                  <img src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+                  <img src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                </>
+              ) : (
+                <img src={m.coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
+              )}
+            </div>
+            <div class="ms-card-content">
+              <div class="ms-card-header">
+                <ProjectTypeIcon type={m.type} class="ms-card-icon" />
+                <h6 class="ms-h ms-extra-small">{m.heading}</h6>
+              </div>
+              <div>{m.body}</div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Start mapswiping (download + get involved) */}
+  <section class="ms-section" id="startMapswiping">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('start-mapswiping-title')}</h4>
+      </div>
+      <div class="ms-start-grid">
+        <div class="ms-download">
+          <div>{t('download-description')}</div>
+          <div class="ms-store-buttons">
+            <a href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
+              <img class="ms-store-img" src="/img/playstore.png" alt={t('download-playstore')} loading="lazy" />
+            </a>
+            <a href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
+              <img class="ms-store-img" src="/img/apple.png" alt={t('download-apple-store')} loading="lazy" />
+            </a>
+          </div>
+          <div class="ms-download-links">
+            <a class="ms-underline" href="https://web.mapswipe.org/" target="_blank">{t('mapswipe-web-link')}</a>
+            |
+            <a class="ms-underline" href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
+          </div>
+        </div>
+        <div class="ms-get-involved">
+          <div>{t('get-involved-description')}</div>
+          <a class="ms-btn" href={`/${locale}/get-involved/`}>{t('get-involved-link')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Recent news & updates (featured blogs) */}
+  <section class="ms-section">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('news-and-updates-title')}</h4>
+      </div>
+      <div class="ms-blog-grid">
+        {featuredBlogs.map((blog, index) => (
+          <article class={`ms-card ms-borderless ms-blog-item${index === 0 ? ' ms-blog-first' : ''}`}>
+            {blog.coverImage && (
+              <div class="ms-card-cover">
+                <Image src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+              </div>
+            )}
+            <div class="ms-card-content">
+              {blog.publishedDate && (
+                <div class="ms-blog-date">
+                  <Icon name="calendar-clear-outline" /> {fmtDate(blog.publishedDate)}
+                </div>
+              )}
+              <h6 class="ms-h ms-extra-small">{blog.title}</h6>
+              <div class="ms-blog-desc">{blog.description}</div>
+              <a class="ms-underline" href={`/${locale}/blogs/${blog.slug}/`}>{t('read-more')}</a>
+            </div>
+          </article>
+        ))}
+        <div class="ms-see-more">
+          <a class="ms-text-link ms-see-more-link" href={`/${locale}/blogs/`}>
+            {t('see-more-pages')}<Icon name="arrow-forward-sharp" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Partners */}
+  <section class="ms-section">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('partners')}</h4>
+      </div>
+      <div class="ms-partners">
+        <a href="https://www.missingmaps.org/" target="_blank">
+          <img class="ms-missingmaps" src="/img/missingmaps.png" alt={t('missing-maps')} loading="lazy" />
+        </a>
+        <div class="ms-partners-desc">{t('missing-map-description')}</div>
+        <div class="ms-partner-logos">
+          {partners.map((p) => (
+            <a href={p.link} target="_blank">
+              <img class="ms-partner-logo" src={p.imageSrc} alt={p.altText} loading="lazy" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Home-specific layout (ported from src/pages/[locale]/styles.module.css). */
+  .ms-hero-video { width: 100%; max-width: 34rem; border-radius: var(--border-radius-medium); }
+
+  .ms-mobilize { display: flex; flex-wrap: wrap; gap: var(--spacing-super-large); }
+  .ms-pictures { flex: 1 1 22rem; display: flex; flex-direction: column; gap: var(--spacing-medium); }
+  .ms-pic img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius-medium); }
+  .ms-pic-single { height: 18rem; }
+  .ms-pic-double-wrap { display: flex; gap: var(--spacing-medium); }
+  .ms-pic-double { flex: 1; height: 12rem; }
+  .ms-mobilize-desc { flex: 1 1 22rem; display: flex; flex-direction: column; gap: var(--spacing-large); }
+  .ms-figures { display: flex; flex-wrap: wrap; gap: var(--spacing-medium); margin-top: var(--spacing-medium); }
+
+  .ms-mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--spacing-large);
+  }
+  .ms-mission .ms-card-cover { height: 12rem; }
+
+  .ms-start-grid { display: flex; flex-wrap: wrap; gap: var(--spacing-super-large); }
+  .ms-download, .ms-get-involved { flex: 1 1 20rem; display: flex; flex-direction: column; gap: var(--spacing-large); }
+  .ms-store-buttons { display: flex; gap: var(--spacing-medium); flex-wrap: wrap; }
+  .ms-store-img { height: 3rem; width: auto; }
+  .ms-download-links { display: flex; align-items: center; gap: var(--spacing-small); }
+
+  .ms-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--spacing-large);
+    align-items: start;
+  }
+  .ms-blog-item .ms-card-cover { height: 12rem; }
+  .ms-blog-first { grid-column: 1 / -1; }
+  .ms-blog-date { display: inline-flex; align-items: center; gap: var(--spacing-super-small); color: var(--color-text); font-size: var(--font-size-small); }
+  .ms-blog-desc { flex-grow: 1; }
+  .ms-see-more { display: flex; align-items: center; }
+  .ms-see-more-link { display: inline-flex; align-items: center; gap: var(--spacing-super-small); color: var(--color-link); font-weight: var(--font-weight-semi-bold); }
+
+  .ms-partners { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-large); text-align: center; }
+  .ms-missingmaps { height: 5rem; width: auto; }
+  .ms-partners-desc { max-width: var(--width-heading-max); }
+  .ms-partner-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--spacing-large); }
+  .ms-partner-logo { height: 3rem; width: auto; object-fit: contain; }
+
+  @media screen and (min-width: 720px) {
+    .ms-blog-first { display: flex; flex-direction: row; }
+    .ms-blog-first .ms-card-cover { width: 20rem; flex-shrink: 0; }
+  }
+</style>

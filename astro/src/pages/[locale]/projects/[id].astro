@@ -1,0 +1,205 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+import RemoteImage from '../../../components/RemoteImage.astro';
+import { COVER_WIDTH } from '../../../lib/optimizeImage';
+import MapIsland from '../../../components/MapIsland.tsx';
+import ProjectHistoryChart from '../../../components/ProjectHistoryChart.tsx';
+import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from '../../../lib/data';
+import { getFileSizeProperties, resolveAoiDownload } from '../../../lib/common';
+import { getT, LOCALES } from '../../../i18n';
+
+export const getStaticPaths = (async () => {
+  let projects = getAllProjects();
+  const limit = Number(import.meta.env.SLICE_LIMIT ?? 0);
+  if (limit > 0) projects = projects.slice(0, limit);
+  // One path per (project, locale).
+  return projects.flatMap((project) => {
+    const id = String(project.firebaseId);
+    return LOCALES.map((locale) => ({
+      params: { locale, id },
+    }));
+  });
+}) satisfies GetStaticPaths;
+
+const { locale, id } = Astro.params;
+const project = getProjectByFirebaseId(id!)!;
+
+const t = await getT(locale!, 'project');
+
+const {
+  name,
+  description,
+  projectType,
+  status,
+  region,
+  progress,
+  createdAt,
+  numberOfContributorUsers,
+  requestingOrganization,
+  image,
+  aoiGeometry,
+  firebaseId,
+} = project;
+
+// Project type / status labels (ported mapping from the Next page).
+const projectTypeLabels: Record<string, string> = {
+  FIND: t('type-find-title'),
+  VALIDATE: t('type-validate-title'),
+  COMPARE: t('type-compare-title'),
+  COMPLETENESS: t('type-completeness-title'),
+  VALIDATE_IMAGE: t('type-validate-image-title'),
+  STREET: t('type-streets-view-title'),
+  LOCATE: t('type-locate-title'),
+};
+const statusLabels: Record<string, string> = {
+  PUBLISHED: t('active'),
+  FINISHED: t('finished'),
+};
+
+const roundedTotalArea = Math.round(aoiGeometry?.totalArea ?? 0);
+const aoiDownload = resolveAoiDownload(project);
+
+const createdAtLabel = createdAt
+  ? new Date(createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+  : undefined;
+
+const title = String(t('project-tab-head', { projectTitle: name }));
+
+// Download-cards config: mirrors the Next page's set exactly (same keys/order).
+type CardDef = { asset?: UrlInfo; heading: string; description: string };
+const cards: CardDef[] = [
+  { asset: project.exportAggregatedResults, heading: t('aggregated-results-title'), description: t('aggregated-results-description') },
+  { asset: project.exportAggregatedResultsWithGeometry, heading: t('aggregated-results-with-geometry-title'), description: t('aggregated-results-with-geometry-description') },
+  { asset: project.exportGroups, heading: t('groups-title'), description: t('groups-description') },
+  { asset: project.exportHistory, heading: t('history-title'), description: t('history-description') },
+  { asset: project.exportResults, heading: t('results-title'), description: t('results-description') },
+  { asset: project.exportTasks, heading: t('tasks-title'), description: t('tasks-description') },
+  { asset: project.exportUsers, heading: 'Users', description: 'This dataset contains information on the individual contributions per user.' },
+  { asset: project.exportHotTaskingManagerGeometries, heading: t('hot-tasking-manager-geometries-title'), description: t('hot-tasking-manager-geometries-description') },
+  { asset: project.exportModerateToHighAgreementYesMaybeGeometries, heading: t('moderate-to-high-agreement-yes-maybe-geometries-title'), description: t('moderate-to-high-agreement-yes-maybe-geometries-description') },
+];
+
+const downloadSizeText = (fileSize?: number) => {
+  const { size, unit } = getFileSizeProperties(fileSize ?? 0);
+  return t('download-size', {
+    size,
+    formatParams: { size: { style: 'unit', unit, maximumFractionDigits: 1 } },
+  });
+};
+
+const historyUrl = project.exportHistory?.file?.url ?? undefined;
+const imageUrl = image?.file?.url ?? undefined;
+const lastFetched = project.exportHistory?.modifiedAt
+  ? t('data-last-fetched', {
+      date: new Date(project.exportHistory.modifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
+    })
+  : undefined;
+---
+<ProjectLayout locale={locale!} firebaseId={String(firebaseId)} title={title}>
+  <section class="hero">
+    <div class="heroMain">
+      <h1>{name}</h1>
+      <div class="tags">
+        {projectType && <span class="tag">{projectTypeLabels[projectType] ?? projectType}</span>}
+        {status && <span class="tag">{statusLabels[status] ?? status}</span>}
+      </div>
+      <div class="tags">
+        {region && <span class="tag" title={t('Location')}>{region}</span>}
+        {requestingOrganization?.name && (
+          <span class="tag" title={t('requesting-organization')}>{requestingOrganization.name}</span>
+        )}
+        {createdAtLabel && <span class="tag" title={t('created-at')}>{createdAtLabel}</span>}
+      </div>
+    </div>
+    {imageUrl && (
+      <RemoteImage class="illustration" src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
+    )}
+  </section>
+
+  <section class="section">
+    <h2>{t('overview-section-title')}</h2>
+    {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
+    <div class="description" set:html={description ?? ''}></div>
+    <div class="stats">
+      <div class="figure">
+        <span class="value">{roundedTotalArea}</span>
+        <span>km<sup>2</sup></span>
+      </div>
+      <div class="figure">
+        <span class="value">{numberOfContributorUsers ?? 0}</span>
+        <span>{t('project-contributors-text')}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    {lastFetched && <p class="lastFetched">{lastFetched}</p>}
+    {aoiDownload && (
+      <div class="mapContainer">
+        <MapIsland client:only="react" geoJsonUrl={aoiDownload.url} />
+      </div>
+    )}
+    <div class="progressBar">
+      <div class="progressLabel">
+        <div>{t('project-progress-label')}</div>
+        <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
+      </div>
+      <div class="track">
+        <div class="progress" style={`width:${progress * 100}%`}></div>
+      </div>
+    </div>
+    <ProjectHistoryChart
+      client:visible
+      projectId={project.id}
+      historyUrl={historyUrl}
+    />
+  </section>
+
+  <section class="section">
+    <h2>{t('data-section-heading')}</h2>
+    <p>{t('data-section-description')}</p>
+    <div class="urlList">
+      {cards.map((card) =>
+        card.asset ? (
+          <div class="card">
+            <h3>{card.heading}</h3>
+            <p>{card.description}</p>
+            <div class="fileDetails">
+              <span class="tag">{card.asset.mimetype}</span>
+              <span>{downloadSizeText(card.asset.fileSize)}</span>
+            </div>
+            {card.asset.file?.url && (
+              <a class="link" href={card.asset.file.url} download>
+                {t('download')}
+              </a>
+            )}
+          </div>
+        ) : null,
+      )}
+      {aoiDownload && (
+        <div class="card">
+          <h3>{t('area-of-interest-title')}</h3>
+          <p>{t('area-of-interest-description')}</p>
+          <div class="fileDetails">
+            <span class="tag">{aoiDownload.mimetype}</span>
+            <span>{downloadSizeText(aoiDownload.fileSize)}</span>
+          </div>
+          <a
+            class="link"
+            href={aoiDownload.url}
+            download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
+          >
+            {t('download')}
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>{t('license-section-heading')}</h2>
+    <p>{t('license-section-description-1')}</p>
+    <p>{t('license-section-description-2')}</p>
+  </section>
+</ProjectLayout>

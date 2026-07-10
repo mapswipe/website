@@ -1,0 +1,22 @@
+---
+// Ported from the Next app's src/components/OgMeta. Emits title + og/twitter
+// meta. buildDate/url come from env like the Next version.
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+const buildDate = import.meta.env.MAPSWIPE_BUILD_DATE;
+const url = import.meta.env.MAPSWIPE_DEPLOYMENT_URL ?? 'https://mapswipe.org/';
+const desc = description ?? '';
+---
+<title>{title}</title>
+{desc && <meta name="description" content={desc} />}
+<meta property="og:type" content="website" />
+<meta property="og:updated_time" content={buildDate ?? '1691561444886'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:image" content={`${url}ms-logo.png`} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={desc} />
+<meta property="twitter:image" content={`${url}ms-logo.png`} />

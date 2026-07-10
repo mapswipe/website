@@ -1,0 +1,69 @@
+---
+import Icon from './Icon.astro';
+import { getT } from '../i18n';
+
+// Ported from the Next app's components/Footer. Static; copyright year computed
+// at build time (Next did `new Date().getFullYear()` at render — same result
+// for a static build). i18next {{year}} interpolation reproduced via getT.
+interface Props {
+  locale: string;
+}
+const { locale } = Astro.props;
+const t = await getT(locale, 'common');
+const currentYear = new Date().getFullYear();
+---
+<div class="ms-footer">
+  <div class="ms-footer-top">
+    <div class="ms-footer-section">
+      <h5 class="ms-h ms-small ms-footer-heading">{t('footer-about-us-title')}</h5>
+      <div>{t('footer-about-us-description')}</div>
+    </div>
+    <div class="ms-footer-section ms-mid">
+      <h5 class="ms-h ms-small ms-footer-heading">{t('footer-quick-links')}</h5>
+      <div class="ms-footer-links">
+        <a href={`/${locale}/`}>{t('home-link')}</a>
+        <a href={`/${locale}/get-involved/`}>{t('get-involved-link')}</a>
+        <a href={`/${locale}/data/`}>{t('data-link')}</a>
+        <a href={`/${locale}/blogs/`}>{t('blogs-link')}</a>
+        <a href="https://community.mapswipe.org/">{t('community-dashboard-link')}</a>
+      </div>
+    </div>
+    <div class="ms-footer-section">
+      <h5 class="ms-h ms-small ms-footer-heading">{t('footer-follow-us-title')}</h5>
+      <div class="ms-social-links">
+        <a class="ms-icon-link" href="https://www.facebook.com/TheMissingMaps" target="_blank" title={t('facebook')}>
+          <Icon name="logo-facebook" />
+        </a>
+        <a class="ms-icon-link" href="https://floss.social/@mapswipe" rel="me" target="_blank" title={t('mastodon')}>
+          <Icon name="logo-mastodon" />
+        </a>
+        <a class="ms-icon-link" href="https://www.instagram.com/themissingmaps/" target="_blank" title={t('instagram')}>
+          <Icon name="logo-instagram" />
+        </a>
+        <a class="ms-icon-link" href="https://github.com/mapswipe" target="_blank" title={t('github')}>
+          <Icon name="logo-github" />
+        </a>
+        <a class="ms-icon-link" href="https://wiki.openstreetmap.org/wiki/MapSwipe" target="_blank" title={t('osm-wiki')}>
+          <Icon name="newspaper" />
+        </a>
+        <a class="ms-icon-link" href="mailto:info@mapswipe.org" target="_blank" title={t('email')}>
+          <Icon name="mail" />
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="ms-footer-bottom">
+    <div class="ms-footer-bottom-content">
+      <div class="ms-footer-left">{t('copyright', { year: currentYear })}</div>
+      <div class="ms-footer-mid">
+        {t('uptime-pretext')}
+        <a href="https://uptimerobot.com/" target="_blank">
+          <img class="ms-uptime-logo" src="/img/uptime.png" alt="Uptime Robot" />
+        </a>
+      </div>
+      <div class="ms-footer-right">
+        <a href={`/${locale}/privacy/`}>{t('privacy')}</a>
+      </div>
+    </div>
+  </div>
+</div>

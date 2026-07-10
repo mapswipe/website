@@ -1,0 +1,17 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+// Chrome for the project detail page. Now delegates to BaseLayout so project
+// pages get the shared nav/footer/fonts + OgMeta + hreflang. hreflang points at
+// the SAME project in every locale (path = projects/<firebaseId>/), matching
+// the Next app's URL scheme.
+interface Props {
+  locale: string;
+  firebaseId: string;
+  title: string;
+}
+const { locale, firebaseId, title } = Astro.props;
+---
+<BaseLayout locale={locale} title={title} path={`projects/${firebaseId}/`} mainClass="project">
+  <slot />
+</BaseLayout>

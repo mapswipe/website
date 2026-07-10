@@ -1,0 +1,87 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import { getT, LOCALES } from '../../../i18n';
+
+// Blog LIST page. One variant per locale (blog content is single-language
+// English markdown; only the chrome is translated), producing /<locale>/blogs/
+// with exact URL parity to the Next Pages-Router page.
+export const getStaticPaths = (async () =>
+  LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+
+const { locale } = Astro.params;
+const t = await getT(locale!, 'blogs');
+
+// Load the collection and sort DESC by publishedDate, matching Next's
+// compareDate(foo, bar, -1). Undated entries sort last (getTime NaN -> 0 floor).
+const entries = await getCollection('blogs');
+const blogs = entries
+  .map((entry) => ({
+    slug: entry.id, // == Next's path.parse(filename).name
+    title: entry.data.title ?? entry.id,
+    publishedDate: entry.data.publishedDate,
+    description: entry.data.description,
+    coverImage: entry.data.coverImage,
+    featured: entry.data.featured,
+  }))
+  .sort((a, b) => (b.publishedDate?.getTime() ?? 0) - (a.publishedDate?.getTime() ?? 0));
+
+const featuredBlogs = blogs.filter((b) => b.featured);
+const otherBlogs = blogs.filter((b) => !b.featured);
+
+// i18next's {{date, datetime}} formatter renders via Intl.DateTimeFormat(lng)
+// with default options. Reproduce that exactly, per-locale.
+const dateFmt = new Intl.DateTimeFormat(locale!);
+const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
+
+const title = String(t('blogs-tab-head'));
+---
+<BlogLayout locale={locale!} title={title} path="blogs/">
+  <section class="hero">
+    <h1>{t('blogs-hero-title')}</h1>
+  </section>
+
+  {featuredBlogs.length > 0 && (
+    <section class="section">
+      <h2>{t('featured-posts')}</h2>
+      <div class="list">
+        {featuredBlogs.map((blog) => (
+          <article class="card">
+            {blog.coverImage && (
+              <Image class="cover" src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+            )}
+            <div class="cardContent">
+              <h3>{blog.title}</h3>
+              {blog.publishedDate && <span class="tag">{fmtDate(blog.publishedDate)}</span>}
+              <div class="description">{blog.description}</div>
+              <a class="link" href={`/${locale}/blogs/${blog.slug}/`}>{t('read-more')}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {otherBlogs.length > 0 && (
+    <section class="section">
+      <h2>{t('other-posts')}</h2>
+      <div class="list">
+        {otherBlogs.map((blog) => (
+          <article class="card">
+            {blog.coverImage && (
+              <Image class="cover" src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+            )}
+            <div class="cardContent">
+              <h3>{blog.title}</h3>
+              {blog.publishedDate && <span class="tag">{fmtDate(blog.publishedDate)}</span>}
+              <div class="description">{blog.description}</div>
+              <a class="link" href={`/${locale}/blogs/${blog.slug}/`}>{t('read-more')}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+</BlogLayout>

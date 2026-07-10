@@ -1,0 +1,72 @@
+---
+import Icon from './Icon.astro';
+import { getT, LOCALES } from '../i18n';
+
+// Ported from the Next app's components/Navbar. Static, zero-JS: the language
+// menu is a pure CSS hover/focus-within dropdown (Next used a JS DropdownMenu +
+// a mobile hamburger toggle; here the routes stay visible and wrap, and the
+// menu opens on hover — no client bundle). `activePath` highlights the current
+// route link, matching Next's router.pathname === '/[locale]/...' check.
+interface Props {
+  locale: string;
+  activePath?: string; // e.g. 'get-involved' | 'data'
+}
+const { locale, activePath } = Astro.props;
+const t = await getT(locale, 'common');
+
+// Per-locale abbreviations/labels (ported from utils/languages.ts).
+const languageTitleMap: Record<string, { abbreviation: string; label: string }> = {
+  ne: { abbreviation: 'ने', label: 'नेपाली' },
+  en: { abbreviation: 'EN', label: 'English' },
+  hu: { abbreviation: 'HU', label: 'Magyar nyelv' },
+  de: { abbreviation: 'DE', label: 'Deutsch' },
+  cs: { abbreviation: 'CS', label: 'Čeština' },
+  pt: { abbreviation: 'PT', label: 'Português' },
+};
+
+// The current page path WITHOUT the locale prefix (e.g. '' for home,
+// 'get-involved/', 'data/'). Used to build language-switch links that keep the
+// user on the same page in the target locale.
+const localelessPath = activePath ? `${activePath}/` : '';
+---
+<div class="ms-navbar ms-navbar-c">
+  <div class="ms-navbar-content">
+    <a class="ms-logo" href={`/${locale}/`}>
+      <img src="/logo.svg" alt={t('mapswipe-logo')} />
+    </a>
+    <div class="ms-routes">
+      <a class={`ms-link${activePath === 'get-involved' ? ' ms-active' : ''}`} href={`/${locale}/get-involved/`}>
+        {t('get-involved-link')}
+      </a>
+      <a class={`ms-link${activePath === 'data' ? ' ms-active' : ''}`} href={`/${locale}/data/`}>
+        {t('data-link')}
+      </a>
+      <a class="ms-link" href="https://community.mapswipe.org/">
+        {t('community-dashboard-link')}
+      </a>
+    </div>
+    <div class="ms-right-container">
+      <div class="ms-language-wrap">
+        <button class="ms-dropdown" type="button" aria-haspopup="true">
+          <Icon name="earth-sharp" />
+          <span class="ms-current-locale">
+            {languageTitleMap[locale]?.abbreviation ?? locale}
+          </span>
+        </button>
+        <div class="ms-language-list">
+          {LOCALES.map((l) => (
+            <a
+              class={`ms-language${l === locale ? ' ms-active-language' : ''}`}
+              href={`/${l}/${localelessPath}`}
+            >
+              {languageTitleMap[l]?.label ?? l}
+            </a>
+          ))}
+          <a class="ms-language" href={`/${locale}/get-involved/#individual`}>
+            {t('didnot-find-language')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
