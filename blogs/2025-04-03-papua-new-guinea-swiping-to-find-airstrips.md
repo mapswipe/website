@@ -3,7 +3,7 @@ title: Swiping to find airstrips in Papua New Guinea
 publishedDate: 2025-04-03
 author: Jana Bauerová, based on Nashath Naufal’s work
 description: What would you do in the middle of the jungle in Papua New Guinea if you needed medical care? Volunteers have identified airstrips Médecins Sans Frontières can use to get to hard-to-reach communities.
-coverImage: /img/blogImages/2025-04-03-cover.jpg
+coverImage: "./images/2025-04-03-cover.jpg"
 featured: true
 ---
 
@@ -11,7 +11,7 @@ What would you do in the middle of the jungle in Papua New Guinea if you had an 
 
 Many settlements on the islands of Papua New Guinea are in areas so remote that there is no road and limited to no connections between communities. As a matter of fact, the only access to health may be via aid organizations using rural airstrips. Around eight million Papua New Guineans rely on rural airstrips (2024), according to the Mission Aviation Fellowship (MAF). However, owing to the challenges of economic sustainability in rural regions, many of those airstrips have become defunct. 
 
-![An aerial view of a grass airstrip in a forested area.](/img/blogImages/2025-04-03-papua-airstrips-1.jpg)
+![An aerial view of a grass airstrip in a forested area.](./images/2025-04-03-papua-airstrips-1.jpg)
 
 [Médecins Sans Frontières (MSF)](https://www.msf.org/), a humanitarian medical organization and a founding member of the [Missing Maps ](https://www.missingmaps.org/)project, uses small airstrips to deliver supplies and personnel to remote regions. For MSF, it is thus essential to know whether there are existing airstrips and where they are located. In a MapSwipe project, MSF asked volunteers to identify rural airstrips in the Jiwaka province, where aid can be delivered to and from.
 
@@ -31,7 +31,7 @@ The contributors seemed to be confused with other features, misidentifying fores
 
 The study compared the findings from the Mapswipe dataset against four different data sources: OpenStreetMap (OSM), [MAF in Papua New Guinea database, OurAirports](https://data.humdata.org/dataset/papua-new-guinea-airports?), and an internal MSF database. From analysing these datasets, it could be concluded that there are a total of 11 unique airstrips in Jiwaka Province. OSM was the most comprehensive dataset and contained 10 out of 11 airstrips. 
 
-![A map showing the locations of airstrips from different databases.](/img/blogImages/2025-04-03-papua-airstrips-2.png)
+![A map showing the locations of airstrips from different databases.](./images/2025-04-03-papua-airstrips-2.png)
 
 Adapting the validation size to increase the number of contributors seeing each tile to five helped to improve accuracy. In the second project iteration, the contributors managed to detect all 11 airstrips within Jiwaka province, including four airstrips that were missed in the first project. The results of Project 2 are accessible on the MapSwipe website here: [Find - Airstrips in Jiwaka Province (2) | MapSwipe ](https://mapswipe.org/en/projects/-O-k29apT1Q8V8IAMrkS/)
 
@@ -45,17 +45,17 @@ In both projects, MSF faced limitations due to satellite imagery:
 1. The satellite imagery available for the projects consisted of a mosaic of different images, each taken on its own date. Retrieving the exact dates of every piece of imagery is not easy, and they do not match like perfect puzzle pieces.
 2. Because of the humid climate in Papua New Guinea, a lot of areas are covered by clouds. Some regions, such as Tabibuga, are rarely cloud-free. Hence, cloud-free satellite imagery was not available for use in the MapSwipe projects, which made remote analysis of the airstrips difficult. The ‘latest’ imagery in some regions dated back to more than 12 years ago.
 
-![Three satellite imagery tiles.](/img/blogImages/2025-04-03-papua-airstrips-3.png)
+![Three satellite imagery tiles.](./images/2025-04-03-papua-airstrips-3.png)
 
 Most Mapswipe projects focus on identifying or validating buildings. This type of map feature was likely new to most MapSwipe contributors. Even though the tutorial for the projects integrated different examples to distinguish various classes of land use from airstrips, the MapSwipe contributors still identified forested land or river features as airstrips. The confusion could have arisen from roads, tracks, or clearings standing out from the forest background. More examples of forested land with roads that are distinctly different colours would possibly help in the tutorial. Even though an example of a river was included in the tutorial, it still was detected by MapSwipe contributors as an airstrip, so a solitary previous example does not necessarily ensure a correct visual interpretation.
 
-![Several rural buildings.](/img/blogImages/2025-04-03-papua-airstrips-4.jpg)
+![Several rural buildings.](./images/2025-04-03-papua-airstrips-4.jpg)
 
 ## Why mapping matters for health
 
 People in the Jiwaka province suffer from many types of violence, including election-related, inter-community, domestic, sexual and gender-based violence, and repercussions due to accusations of sorcery. In Spring 2024, MSF wanted to start a new project in the province to aid survivors of tribal and sexual and gender-based violence. As part of an initial exploration, the field team noted that there were no maps for some of the areas. This led to a GIS Adviser asking for a Missing Maps campaign. Soon, it was launched to help map basic features, enlisting volunteers. For example, in February 2024, volunteers from the Czech and Slovak Missing Maps community mapped shelters at a hybrid mapathon in Prague with support from international validators. 
 
-![Six people in a small room are engrossed in their work on laptops. Visible on the screens are the OSM iD editor.](/img/blogImages/2025-04-03-papua-airstrips-5.jpg)
+![Six people in a small room are engrossed in their work on laptops. Visible on the screens are the OSM iD editor.](./images/2025-04-03-papua-airstrips-5.jpg)
 
 In June 2024, the MSF teams began working on a community-based approach to healthcare by strengthening the capacity of existing medical services, and this Mapswipe analysis was launched. The location of all airstrips is vital to ensuring that survivors of violence in the Jiwaka Province can have access to health.
 

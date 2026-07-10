@@ -3,7 +3,7 @@ title: Solid waste management in Mali - Sustaining livelihoods amidst COVID-19 s
 publishedDate: 2022-02-15
 author: Jessica Bergmann
 description: To support economic livelihoods and resilience, the World Bank partnered with MapSwipe to identify solid waste in Bamako, Mali.
-coverImage: /img/blogImages/2022-02-15-Mali-solid-waste.jpg
+coverImage: "./images/2022-02-15-Mali-solid-waste.jpg"
 featured: false
 ---
 

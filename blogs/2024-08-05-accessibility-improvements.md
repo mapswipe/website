@@ -3,7 +3,7 @@ title: "Enhancing Accessibility in MapSwipe"
 publishedDate: 2024-08-05
 author: Jenny Chan
 description: "The American Red Cross is excited to announce the launch of new functionality in the MapSwipe app. We supported an enhancement to make MapSwipe more accessible and easy to use for a wider community of users."
-coverImage: /img/blogImages/2024-08-05-cover.png
+coverImage: "./images/2024-08-05-cover.png"
 featured: false
 ---
 
@@ -15,7 +15,7 @@ The MapSwipe 'Find' project type has users swipe through satellite images to sea
 
 In the current version of the MapSwipe app, the only indication of the number of taps is through transparent color overlays. However, feedback provided by users noted that this format posed challenges for users with color blindness or when color filters, such as night mode, are turned on, making it difficult to swipe and contribute to projects effectively.
 
-![A screen grab from the MapSwipe app showing the 'Find' type project with only a color overlay on tiles. It is hard to distinguish between the different overlays on different tiles.](/img/blogImages/2024-08-05-color-overlays.jpg)
+![A screen grab from the MapSwipe app showing the 'Find' type project with only a color overlay on tiles. It is hard to distinguish between the different overlays on different tiles.](./images/2024-08-05-color-overlays.jpg)
 
 _The 'Find' type project with only a color overlay on tiles. Top right: green, middle right: yellow, middle left: red._
 
@@ -31,7 +31,7 @@ Our recent MapSwipe [update v2.2.10](https://github.com/mapswipe/mapswipe/releas
 - A question mark icon for areas that need further review.
 - A bad imagery icon for areas that cannot be assessed due to poor image quality. 
 
-![A screen grab from the MapSwipe app showing the updated 'Find' type project with both a color overlay and descriptive icons.](/img/blogImages/2024-08-05-with-icons.png)
+![A screen grab from the MapSwipe app showing the updated 'Find' type project with both a color overlay and descriptive icons.](./images/2024-08-05-with-icons.png)
 
 _The updated 'Find' type project with both color overlay and descriptive icons. Top right: check mark, top left: question mark, and the rest of the tiles: bad imagery._
 

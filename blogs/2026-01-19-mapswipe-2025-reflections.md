@@ -3,7 +3,7 @@ title: "Reflecting on MapSwipe in 2025: A Year of Growth and What Comes Next"
 publishedDate: 2026-01-19
 author: Nicole Siggins
 description: MapSwipe had many successes in 2025 from new project types, to structural revamps. Nicole and Amar, from the MapSwipe Governance Team, get together to celebrate and discuss what's next. 
-coverImage: /img/blogImages/2026-01-19-mapswipe-2025-reflections-video-thumbnail.png
+coverImage: "./images/2026-01-19-mapswipe-2025-reflections-video-thumbnail.png"
 featured: true
 ---
 
@@ -37,11 +37,10 @@ Overall, the focus of the backend revamp was to make sure that the project manag
 ## *“The focus of the backend revamp was to make sure that the project manager experience is enhanced.”*
 
 <figure style="max-width: 800px; margin: 20px auto;">
-  <img
-    src="/img/blogImages/2026-01-19-mapswipe-2025-reflections-backend-revamp.png"
-    alt="An image showing what the MapSwipe project management page looks like in both the old and new backend."
-    style="display: block; width: 100%; height: auto; max-width: 700px;"  />
-  <figcaption style="font-size: 0.9em; color: #555">MapSwipe now has a new and improved backend!</figcaption>
+
+![An image showing what the MapSwipe project management page looks like in both the old and new backend.](./images/2026-01-19-mapswipe-2025-reflections-backend-revamp.png)
+
+<figcaption style="font-size: 0.9em; color: #555">MapSwipe now has a new and improved backend!</figcaption>
 </figure>
 
 **Nicole**  
@@ -64,11 +63,10 @@ It's nice that people who are into the technical side of MapSwipe have a place, 
 ## *“We needed a dedicated space where technical contributors could come together and share knowledge.”*
 
 <figure style="max-width: 800px; margin: 20px auto;">
-  <img
-    src="/img/blogImages/2026-01-19-mapswipe-2025-reflections-monthly-tech-call.png"
-    alt="A group of MapSwipe technical contributors together on a monthly video call."
-  />
-  <figcaption>MapSwipe technical contributors now have a consistent place to meet to share knowledge and ask questions. 
+
+![A group of MapSwipe technical contributors together on a monthly video call.](./images/2026-01-19-mapswipe-2025-reflections-monthly-tech-call.png)
+
+<figcaption>MapSwipe technical contributors now have a consistent place to meet to share knowledge and ask questions. 
 </figcaption>
 </figure>
 
@@ -87,12 +85,10 @@ Yeah, absolutely. So this was a year for MapSwipe where quite a few different pr
 This is a project type where volunteers using MapSwipe are able to look at images from street level to then indicate some type of aspect of the features in that image. So for example, volunteers could look at images and indicate something like, is the road paved or not paved? Or is there something visible in this image? So for example, solid waste. Can you see piles of garbage? Things like that. You can also use it to indicate what type of features are in the image. So for example, is this building a hospital or a school? And it can also be used for things like, what is the surface quality of the road? So it's a really interesting project to be able to remotely view places of the world as if you were there on the street.
 
 <figure style="max-width: 800px; margin: 20px auto;">
-  <img
-    src="/img/blogImages/2026-01-19-mapswipe-2025-reflections-view-streets-project.gif"
-    alt="A gif of the View Streets project. Zooming around at street level imagery to see if there are piles of trash on the street in the image."
-    style={{ width: "100%", height: "auto" }}
-  />
-  <figcaption>Validating the world as if you were there. 
+
+![A gif of the View Streets project. Zooming around at street level imagery to see if there are piles of trash on the street in the image.](./images/2026-01-19-mapswipe-2025-reflections-view-streets-project.gif)
+
+<figcaption>Validating the world as if you were there. 
 </figcaption>
 </figure>
 
@@ -113,11 +109,10 @@ Historically with MapSwipe, a lot of the project types have been looking FOR som
 ## *“It’s very easy to query for something that IS, but finding what isn’t has always been more difficult.”*
 
 <figure style="max-width: 800px; margin: 20px auto;">
-  <img
-    src="/img/blogImages/2026-01-19-mapswipe-2025-reflections-completeness-project.png"
-    alt="An image of the Completeness MapSwipe project type, showing a blue overlay to indicate where OpenStreetMap data currently exists on top of aerial imagery."
-  />
-  <figcaption>The Completeness project type helps get OpenStreetMap data gaps filled. 
+
+![An image of the Completeness MapSwipe project type, showing a blue overlay to indicate where OpenStreetMap data currently exists on top of aerial imagery.](./images/2026-01-19-mapswipe-2025-reflections-completeness-project.png)
+
+<figcaption>The Completeness project type helps get OpenStreetMap data gaps filled. 
 </figcaption>
 </figure>
 
@@ -143,11 +138,10 @@ One of the main things is it's important for us to manage the knowledge of the s
 ## *“A one year maintenance contract was too short. Two years gives us enough time to manage and pass on knowledge.”*
 
 <figure style="max-width: 800px; margin: 20px auto;">
-  <img
-    src="/img/blogImages/2026-01-19-mapswipe-2025-reflections-roadmap.png"
-    alt="An image of the MapSwipe 2025 roadmap, in a tool called mural, which uses differently colored virtual post it notes to track brainstorming ideas."
-  />
-  <figcaption>Progress was made on MapSwipe’s goals by upping the maintenance contract from 1 to 2 years.
+
+![An image of the MapSwipe 2025 roadmap, in a tool called mural, which uses differently colored virtual post it notes to track brainstorming ideas.](./images/2026-01-19-mapswipe-2025-reflections-roadmap.png)
+
+<figcaption>Progress was made on MapSwipe’s goals by upping the maintenance contract from 1 to 2 years.
 </figcaption>
 </figure>
 

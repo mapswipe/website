@@ -3,7 +3,7 @@ title: Using MapSwipe to validate OSM building quality data in Nigeria
 publishedDate: 2023-10-19
 author: Paul Knight
 description: Using the MapSwipe data, the Nigerian Red Cross are now able to see the accuracy of the previous mapping and any edits that need to be made to the community map as it is today.
-coverImage: /img/blogImages/2023-10-19-cover.jpg
+coverImage: "./images/2023-10-19-cover.jpg"
 featured: false
 ---
 
@@ -17,7 +17,7 @@ We have previously written ([1](https://medium.com/digital-and-innovation-at-bri
 
 With new states and communities selected this year, the Nigerian Red Cross is leading on similar activities conducted previously. One of which is through Digital Community Mapping for the Enhanced Vulnerability Capacity Assessment (EVCA). More information about what this is can be found in a [past blog](https://medium.com/digital-and-innovation-at-british-red-cross/first-time-this-community-has-been-on-a-map-nigeria-f592906b7be1).
 
-![A woman standing outside and wearing a red British Red Cross ball cap and branded t-shirt looks at her phone.](/img/blogImages/2023-10-19-volunteer.jpg)
+![A woman standing outside and wearing a red British Red Cross ball cap and branded t-shirt looks at her phone.](./images/2023-10-19-volunteer.jpg)
 _Digital Community Mapping — Carter Olayemi/Nigerian Red Cross_
 
 Previously, the Nigerian Red Cross followed the Missing Maps methodology as presented on the [Missing Maps website](https://www.missingmaps.org/). First, digital volunteers, trace aerial imagery to create a basic digital map on OpenStreetMap. Next, using various data collection tools, community members with local knowledge add detail to the map, such as medical facilities or schools, and rank their capacity or vulnerability, with any public data added to OpenStreetMap. Lastly, the map data is used in products for local disaster risk management planning, for advocacy with stakeholders, and as reference maps during emergency responses.
@@ -30,7 +30,7 @@ In one of the new states that the programme is expanding to, we saw that there w
 
 But how? We used MapSwipe — a mobile app, which allows users to **Find** and flag features such as building or roads in imagery, which then speeds up the mapping process as remote mappers map areas which are known to have a features in them. In the past year the project types have diversified and now include **Compare** imagery and **Validate** quality of mapping. For the Nigeria Programme where there was existing map data, we opted to use the Validate project type.
 
-![Graphic showing different MapSwipe project types: find, compare, and validate.](/img/blogImages/2023-10-19-project-types.jpg)
+![Graphic showing different MapSwipe project types: find, compare, and validate.](./images/2023-10-19-project-types.jpg)
 _Different MapSwipe projects — MapSwipe_
 
 For communities without any previous mapping Nigerian Red Cross conducted a mapathon, as in the previous phase of the programme.
@@ -40,7 +40,7 @@ In September 2023, the Nigerian Red Cross held a mapathon and mapswipe-athon, in
 - **5,733** buildings were validated using the Validate project type on Mapswipe.
 - **1,766** Buildings were mapped at the mapathon using the [HOT Tasking Manager](https://tasks.hotosm.org/).
 
-![The screens of a tutorial for the MapSwipe validate project type.](/img/blogImages/2023-10-19-tutorial.jpg)
+![The screens of a tutorial for the MapSwipe validate project type.](./images/2023-10-19-tutorial.jpg)
 _Tutorial for a MapSwipe Validate project type — MapSwipe_
 
 Using the MapSwipe data, the Nigerian Red Cross are now able to see the accuracy of the previous mapping and any edits that need to be made to the community map as it is today.
