@@ -1,0 +1,29 @@
+{
+  "name": "astro-remote-images",
+  "version": "0.1.0",
+  "description": "Build-time, per-image, fail-soft remote image optimizer for Astro static builds: on-disk cache, bounded concurrent prefetch, two-tier negative cache, configurable error policy (error image / passthrough / fail).",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./RemoteImage.astro": "./src/RemoteImage.astro"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "astro",
+    "images",
+    "remote-images",
+    "sharp",
+    "fail-soft",
+    "static"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}

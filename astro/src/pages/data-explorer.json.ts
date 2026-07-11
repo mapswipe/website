@@ -16,7 +16,7 @@
 // the build, so these are pure cache hits).
 import type { APIRoute } from 'astro';
 import { getDataExplorerPayload } from '../lib/dataExplorer';
-import { resolveRemoteImage, COVER_WIDTH } from '../lib/optimizeImage';
+import { resolveRemoteImage, COVER_WIDTH } from '../lib/remoteImages';
 
 export const GET: APIRoute = async () => {
   const payload = getDataExplorerPayload();

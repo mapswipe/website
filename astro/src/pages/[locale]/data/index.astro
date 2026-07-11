@@ -3,9 +3,9 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DataExplorer, { PAGE_SIZE } from '../../../components/DataExplorer.tsx';
 import { getDataExplorerPayload } from '../../../lib/dataExplorer';
-import { resolveRemoteImage, COVER_WIDTH } from '../../../lib/optimizeImage';
+import { resolveRemoteImage, COVER_WIDTH } from '../../../lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
-import { selectPaths } from '../../../lib/incremental';
+import { selectPaths } from 'astro-incremental-static';
 import '../../../styles/global.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router

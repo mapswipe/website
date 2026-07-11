@@ -1,0 +1,45 @@
+---
+import { getDefaultRemoteImages } from './index.ts';
+
+// Remote image, optimized at BUILD time via the fail-soft resolver (see
+// ./index.ts). Bypasses Astro's <Image>/astro:assets because its optimize
+// phase is all-or-nothing: one malformed remote image makes sharp throw
+// fatally and aborts the whole build. resolve() wraps each fetch+sharp in
+// try/catch and applies the configured error policy (error image /
+// passthrough / fail) — so a single bad image can never break the build
+// unless you opted into 'fail'. Good images are resized to `width`, encoded,
+// cached on disk, and shipped locally.
+//
+// Uses the DEFAULT instance (the last createRemoteImages() call). Make sure
+// the module that configures your instance is imported before this component
+// renders — e.g. import it from the same file that imports this component.
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  width?: number;
+  height?: number;
+}
+const remoteImages = getDefaultRemoteImages();
+const {
+  src,
+  alt,
+  class: className,
+  width = remoteImages.options.width,
+  height = 420,
+} = Astro.props;
+
+// Explicit width (inferSize:false semantics) so there is no render-time
+// network fetch just to read dimensions.
+const { src: resolvedSrc, optimized } = await remoteImages.resolve(src, { width });
+---
+<img
+  class={className}
+  src={resolvedSrc}
+  alt={alt}
+  width={width}
+  height={height}
+  loading="lazy"
+  decoding="async"
+  data-optimized={optimized ? 'true' : 'false'}
+/>
