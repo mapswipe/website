@@ -115,3 +115,7 @@ _astro/dedup-1a2b3c4d.js (3542 B × 14574 pages), …
   semantics to the inline original at the same position, at the cost of one
   extra (immutable, shared, cached) request per distinct runtime.
 - Run it after any other integration that writes HTML.
+
+
+---
+*In this repo: the evidence for the numbers above, the decision record, and the exit path for this package live in [`docs/ownership-map.md`](../../../docs/ownership-map.md) and [`docs/upstream/`](../../../docs/upstream/).*
