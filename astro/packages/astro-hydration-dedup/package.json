@@ -1,0 +1,27 @@
+{
+  "name": "astro-hydration-dedup",
+  "version": "0.1.0",
+  "description": "Astro integration that deduplicates byte-identical inline scripts (island-hydration runtimes) across statically built pages into external, content-hashed, cacheable files.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "astro",
+    "astro-integration",
+    "hydration",
+    "dedup",
+    "static"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "peerDependencies": {
+    "astro": ">=4.0.0"
+  }
+}

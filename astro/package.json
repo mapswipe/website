@@ -3,6 +3,9 @@
   "type": "module",
   "private": true,
   "version": "0.0.1",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/prefetch-images.mjs && astro build",
@@ -14,6 +17,9 @@
   "dependencies": {
     "@astrojs/react": "^4.2.0",
     "@astrojs/sitemap": "^3.2.1",
+    "astro-hydration-dedup": "*",
+    "astro-incremental-static": "*",
+    "astro-remote-images": "*",
     "@fontsource/dm-sans": "^5.2.8",
     "@fontsource/lato": "^5.2.7",
     "astro": "^5.7.0",
