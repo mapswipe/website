@@ -12,7 +12,7 @@ import type { MiniProject, Organization, ExportAsset } from '../lib/dataExplorer
 
 // Leaflet touches window at import time and cannot SSR. We lazy-load the map
 // module via a dynamic import() so its (leaflet) top-level code only runs in the
-// browser — the parent gates rendering behind a post-mount flag. This mirrors
+// browser — the parent defers rendering behind a post-mount flag. This mirrors
 // the Next page's dynamic(() => import('ProjectsMap'), { ssr: false }).
 const ProjectsMapIsland = lazy(() => import('./ProjectsMapIsland'));
 
@@ -468,7 +468,7 @@ export default function DataExplorer(props: Props) {
           <div className="de-map-container">
             {/* Map is client-only: rendered after mount so SSR never touches
                 leaflet. Placeholder keeps layout stable pre-hydration. Also
-                gated on the fetched dataset so it never draws just the 9-item
+                waits for the fetched dataset so it never draws just the 9-item
                 initial slice and then re-jumps to the full set. */}
             <div className="de-map">
               {mounted && !loading ? (

@@ -90,7 +90,7 @@ both afterward.
 
 ```ts
 // 'astro-incremental-static'
-selectPaths(pageId, candidates, opts?)  // the render-skip gate (memoised hashing)
+selectPaths(pageId, candidates, opts?)  // the render-skip selector (memoised hashing)
 isIncrementalBuild()                    // ASTRO_INCREMENTAL === '1'
 hashProps(propsData)                    // sha1 of data minus volatile buildDate
 readCodeHash(stateDir?) / readManifest(stateDir?)
@@ -135,7 +135,7 @@ always fresh.
 
 ## Both historical bugs are fixed inside the package
 
-- **Env-var gating**: selection is armed ONLY by `ASTRO_INCREMENTAL=1`, never
+- **Env-var activation**: selection is armed ONLY by `ASTRO_INCREMENTAL=1`, never
   by state-dir presence — a plain `astro build` after an incremental run is a
   full build, not a silent partial one.
 - **Merged-tree sitemap regen**: the runner rebuilds the full sitemap from the

@@ -18,7 +18,7 @@
  * the environment — which only the runner does when it spawns `astro build`.
  * A plain `astro build` is ALWAYS a full build, even when a stale state dir
  * (code-hash + manifest from an earlier incremental run) is sitting on disk.
- * Gating on the env var rather than on the presence of the code-hash file is
+ * Keying activation on the env var rather than on the presence of the code-hash file is
  * deliberate: file presence is stale state, not intent.
  *
  * CORRECTNESS CONTRACT (yours to uphold): `candidate.propsData` must cover

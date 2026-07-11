@@ -125,7 +125,7 @@ export interface RemoteImages {
     /**
      * Warm the on-disk cache for many URLs with a bounded pool, WITHOUT
      * publishing into the build output (that happens per-page at render
-     * time). Never throws — prefetch is a cache warm, not a build gate; a
+     * time). Never throws — prefetch is a cache warm and must never fail the build; a
      * `'fail'` policy only fires at resolve time.
      */
     prefetch(urls: string[] | (() => string[] | Promise<string[]>), opts?: ResolveOptions): Promise<PrefetchSummary>;

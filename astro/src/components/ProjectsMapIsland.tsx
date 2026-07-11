@@ -8,7 +8,7 @@ import type { MiniProject } from '../lib/dataExplorer';
 // Client-ONLY leaflet map for the data explorer. This module statically imports
 // leaflet/react-leaflet (which touch window at import time), so it must NEVER be
 // imported during SSR. DataExplorer loads it via React.lazy(() => import(...))
-// gated behind a post-mount flag, so the static leaflet import only runs in the
+// deferred behind a post-mount flag, so the static leaflet import only runs in the
 // browser. Ported from the Next app's ProjectsMap (circle markers, per-status
 // colors, popups).
 
