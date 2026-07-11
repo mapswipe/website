@@ -3,8 +3,8 @@
 // concurrent prefetch pool, a two-tier negative cache, and a configurable
 // per-image error policy (error image / passthrough / fail).
 //
-// UPSTREAM: no existing Astro issue covers a per-image error policy (verified
-// 2026-07-10). Closest existing refs:
+// UPSTREAM: no existing Astro issue covers a per-image error policy (as of
+// 2026-07). Closest existing refs:
 //   https://github.com/withastro/roadmap/discussions/523 (global error handling)
 //   https://github.com/withastro/astro/issues/15920 (remote revalidation, adjacent)
 // Delete this package when an upstream error policy lands.

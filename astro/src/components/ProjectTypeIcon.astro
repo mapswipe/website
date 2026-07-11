@@ -2,7 +2,7 @@
 // External-SVG-sprite mission-type icons. Each type's symbol is defined once in
 // public/icons.svg (id "project-type-<kebab>") and referenced via <use>,
 // instead of inlining the full path markup on every render. See Icon.astro for
-// the rationale (removes duplicated inline SVG across the static export).
+// the rationale (avoids duplicated inline SVG across the static export).
 //
 // The outer <svg> keeps the per-type viewBox (aspect ratios differ across
 // types) and fill="currentColor" so CSS theming is preserved.
@@ -17,7 +17,7 @@ interface Props {
 const { type, class: className, size = 'medium' } = Astro.props;
 const px = { small: 16, medium: 24, large: 40 }[size];
 
-// Per-type viewBox (unchanged from the original inline component).
+// Per-type viewBox, matching ProjectTypeIcon.tsx's inline icons exactly.
 const viewBox: Record<ProjectTypeKey, string> = {
   FIND: '0 0 138 162',
   VALIDATE: '0 0 138 162',

@@ -32,8 +32,8 @@ const ProjectsMapIsland = lazy(() => import('./ProjectsMapIsland'));
 // DATA: only the first PAGE_SIZE projects (the SSR'd cards) arrive as props;
 // the full ~2.4k-project dataset + organizations + cover-image map is a
 // SHARED, locale-independent /data-explorer.json fetched on mount (see
-// src/pages/data-explorer.json.ts — previously it was inlined into every locale's
-// HTML, ~3 MB apiece). While loading, the initial cards render and the filter
+// src/pages/data-explorer.json.ts — inlining it into every locale's HTML would
+// cost ~3 MB apiece). While loading, the initial cards render and the filter
 // inputs are disabled (loading flag); filters/search/map operate on the full
 // dataset once it arrives. Fail-soft: if the fetch fails we keep the initial
 // slice and warn.

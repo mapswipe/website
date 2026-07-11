@@ -10,7 +10,6 @@ import hydrationDedup from 'astro-hydration-dedup';
 
 const SITE = 'https://mapswipe.org';
 
-// Faithful vertical slice of the Next Pages-Router app's projects/[id] page.
 export default defineConfig({
   site: SITE,
   output: 'static',
@@ -44,8 +43,8 @@ export default defineConfig({
     hydrationDedup({ minOccurrences: 10 }),
   ],
   // Blog markdown is rendered by Astro's built-in pipeline. Next used remark-gfm
-  // (see the removed remark().use(remarkGfm) in the Pages-Router detail page), so
-  // we enable it here for GFM parity (tables, strikethrough, autolinks, etc.).
+  // (remark().use(remarkGfm) in its Pages-Router detail page), so we enable it
+  // here for GFM parity (tables, strikethrough, autolinks, etc.).
   // In-body relative images (./images/*) are optimized natively by astro:assets.
   markdown: {
     remarkPlugins: [remarkGfm],

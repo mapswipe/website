@@ -22,9 +22,10 @@ export const remoteImages = createRemoteImages({
     // Chronically-slow origins are skipped (not refetched) within this window
     // so warm builds stay fast; a genuinely-transient blip still retries.
     transientRetryAfterMs: Number(process.env.IMAGE_RETRY_AFTER_MS ?? 6 * 60 * 60 * 1000),
-    // Project decision: broken covers (corrupt data / 4xx) AND transiently
-    // unreachable ones (timeout / 5xx) both render the bundled error image
-    // (/_img/image-error.svg) instead of passing the remote URL through.
+    // Broken covers (corrupt data / 4xx) AND transiently unreachable ones
+    // (timeout / 5xx) both render the bundled error image
+    // (/_img/image-error.svg) instead of passing the remote URL through —
+    // deterministic output over covers that may or may not load.
     onError: 'error-image',
     onTransientError: 'error-image',
 });

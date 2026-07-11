@@ -4,7 +4,7 @@
 // A `astro:build:done` post-process.
 //
 // UPSTREAM: force-inlining is documented, unconfigurable behavior. References:
-//   https://github.com/withastro/docs/issues/2150 (inlined even with assetsInlineLimit: 0 — we verified)
+//   https://github.com/withastro/docs/issues/2150 (inlined even with assetsInlineLimit: 0)
 //   https://github.com/withastro/roadmap/discussions/36 (the decision that inlined them)
 //   https://github.com/withastro/astro/issues/6247 (related cross-page inlining heuristic)
 // Delete this package when an external-hydration-scripts option lands.

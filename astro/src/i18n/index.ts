@@ -13,7 +13,7 @@ const NAMESPACES = ['project', 'common', 'data', 'blog', 'blogs', 'home', 'get-i
 // Eagerly import every locale/namespace JSON at build time, straight from the
 // repo-root public/locales (relative to THIS file: src/i18n -> src -> astro ->
 // repo root). The JSONs are compiled into the build output — they never enter
-// dist/ as files (no symlink under astro/public anymore).
+// dist/ as files.
 // Narrow the glob to the namespaces this app uses; a broader glob would
 // eagerly parse unrelated (and occasionally malformed) locale files at build.
 const files = import.meta.glob(['../../../public/locales/*/project.json', '../../../public/locales/*/common.json', '../../../public/locales/*/data.json', '../../../public/locales/*/blog.json', '../../../public/locales/*/blogs.json', '../../../public/locales/*/home.json', '../../../public/locales/*/get-involved.json', '../../../public/locales/*/privacy.json'], {

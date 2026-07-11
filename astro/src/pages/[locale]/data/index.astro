@@ -13,7 +13,7 @@ import '../../../styles/global.css';
 // format => dist/<locale>/data/index.html.
 //
 // This aggregate page's propsData is the FULL data-explorer payload even though
-// the page itself now SSRs only a slim slice (the first PAGE_SIZE cards +
+// the page itself SSRs only a slim slice (the first PAGE_SIZE cards +
 // stats) and the island fetches the bulk from /data-explorer.json: the SSR'd
 // slice (top-N by createdAt) and the stats can shift when ANY project changes,
 // so the propsHash must cover the whole payload → the page rebuilds on any

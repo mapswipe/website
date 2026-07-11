@@ -48,7 +48,7 @@ const t = await getT(locale!, 'blog');
 const { title, publishedDate, author, coverImage, description } = entry.data;
 const blogTitle = title ?? entry.id;
 
-// Render the collection entry's markdown body to HTML (replaces Next's
+// Render the collection entry's markdown body to HTML (Next's equivalent:
 // remark().use(remark-html).use(remark-gfm)). remark-gfm is applied via the
 // project markdown config.
 const { Content } = await render(entry);

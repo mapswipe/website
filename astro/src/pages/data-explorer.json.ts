@@ -1,13 +1,12 @@
 // Static file endpoint: emits the ONE locale-independent data-explorer dataset
-// as /data-explorer.json at build time (replaces the hand-rolled
-// render-time write + build:done ensure integration).
+// as /data-explorer.json at build time.
 //
 // The 6 /<locale>/data/ pages would otherwise each inline the full serialized
 // ~2.4k-project payload (~3 MB of HTML apiece); the dataset is
 // locale-independent, so it ships once and the DataExplorer island fetches it
-// on mount (dataUrl prop, same /data-explorer.json URL as before — NO
-// content-hash cache-busting; GH Pages serves with a ~10-minute cache and the
-// site deploys ~daily, so a worst-case 10-minute skew is tolerable).
+// on mount (dataUrl prop). The URL is deliberately NOT content-hash
+// cache-busted: GH Pages serves with a ~10-minute cache and the site deploys
+// ~daily, so a worst-case 10-minute skew is tolerable.
 //
 // Shape: { miniProjects, organizations, imageMap } — everything bulky the
 // island needs. imageMap is {originalCoverUrl -> optimized /_img src},

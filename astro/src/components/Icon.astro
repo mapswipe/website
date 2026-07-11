@@ -1,9 +1,9 @@
 ---
 // External-SVG-sprite icon set. Each icon is defined once as a <symbol> in
-// public/icons.svg and referenced here via <use>. This replaces the previous
-// full inline-<svg> markup (paths repeated on every render across ~14.7k
-// pages), cutting ~99 MB of duplicated inline SVG from the build. The sprite is
-// fetched/cached once by the browser; each <use> is a ~50 B reference.
+// public/icons.svg and referenced here via <use>. Inlining the full <svg> path
+// markup instead would repeat the paths on every render — ~99 MB of duplicated
+// SVG across ~14.7k statically built pages. The sprite is fetched/cached once
+// by the browser; each <use> is a ~50 B reference.
 //
 // The outer <svg> keeps the icon's own viewBox (so scaling stays correct) and
 // fill="currentColor" so CSS themes them exactly like before. Icons that use
