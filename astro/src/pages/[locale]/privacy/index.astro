@@ -7,7 +7,7 @@ import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getT, LOCALES } from '../../../i18n';
-import { selectPaths } from '../../../lib/incremental';
+import { selectPaths } from 'astro-incremental-static';
 
 // Privacy page. The policy body is a fixed English markdown string (identical
 // in every locale — same as the Next app, which hardcoded it); only the tab

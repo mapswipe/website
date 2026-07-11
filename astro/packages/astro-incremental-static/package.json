@@ -1,0 +1,25 @@
+{
+  "name": "astro-incremental-static",
+  "version": "0.1.0",
+  "description": "Incremental static builds for Astro (output: 'static'): per-page propsHash render-skip in getStaticPaths + an orchestration that merges the previous dist, prunes deleted pages, and regenerates the sitemap over the merged tree.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./runner": "./src/runner.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "astro",
+    "incremental",
+    "static",
+    "build",
+    "render-skip"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  }
+}

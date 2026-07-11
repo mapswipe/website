@@ -7,7 +7,7 @@ import ProjectTypeIcon from '../../components/ProjectTypeIcon.astro';
 import Icon from '../../components/Icon.astro';
 import { getT, LOCALES } from '../../i18n';
 import { getCommunityStats } from '../../lib/data';
-import { selectPaths } from '../../lib/incremental';
+import { selectPaths } from 'astro-incremental-static';
 
 // Home page. One static, translated variant per locale — /<locale>/ — matching
 // the Next Pages-Router src/pages/[locale]/index.tsx. Faithful port of Hero,
