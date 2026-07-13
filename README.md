@@ -36,6 +36,8 @@ forces a full refetch (~50 s; run weekly as a safety net).
 | `pnpm build:incremental` | render-skip build: only pages whose data changed, merged over the previous `dist/` (~5–6 s vs ~33 s warm). See the [package README](packages/astro-incremental-static/README.md) — correctness contract applies |
 | `pnpm preview` | serve `dist/` locally |
 | `pnpm lint` / `pnpm css-lint` | eslint (ts/tsx/astro) / stylelint |
+| `pnpm typecheck` | `astro check` (0 errors expected) |
+| `pnpm verify-dist` | post-build invariant checks (run after a full build) |
 
 A full warm build ≈ 33 s / 1.6 GB RAM; cold (empty image cache) ≈ 90–105 s
 because 2,375 remote project covers are fetched + optimized. `dist/` ≈ 430 MB
