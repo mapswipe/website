@@ -142,6 +142,3 @@ always fresh.
   merged dist, so an incremental run can't silently shrink the published
   sitemap to just the pages it rendered.
 
-
----
-*In this repo: the evidence for the numbers above, the decision record, and the exit path for this package live in [`docs/ownership-map.md`](../../docs/ownership-map.md) and [`docs/upstream/`](../../docs/upstream/).*

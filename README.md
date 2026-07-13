@@ -4,11 +4,6 @@ Static, SEO-driven, 6-locale site (~14,700 pages: 2,400+ projects × en/ne/hu/
 de/cs/pt + blogs + static pages), deployed to GitHub Pages. Astro 5 with React
 islands — most pages ship zero JS.
 
-**Why Astro / how it's built:** [docs/adr/0002-migrate-to-astro.md](docs/adr/0002-migrate-to-astro.md)
-(decisions), [docs/ownership-map.md](docs/ownership-map.md) (what's platform
-vs. ours), [docs/benchmarks.md](docs/benchmarks.md) (measurements),
-[docs/PLAN.md](docs/PLAN.md) (path to cutover), [TODO.md](TODO.md) (live tasks).
-
 ## Setup
 
 ```sh

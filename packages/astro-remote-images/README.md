@@ -158,6 +158,3 @@ Every substitution (error image or passthrough) logs
 - The error-image SVG is inlined in the module (not read from a file) so it
   survives Vite bundling into the SSR build.
 
-
----
-*In this repo: the evidence for the numbers above, the decision record, and the exit path for this package live in [`docs/ownership-map.md`](../../docs/ownership-map.md) and [`docs/upstream/`](../../docs/upstream/).*

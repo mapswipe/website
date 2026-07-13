@@ -1,6 +1,6 @@
 // Post-build verification: every invariant we shipped a bug against, as one
 // script. Run after a FULL build (CI fails the deploy on any regression).
-import { readFileSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
 
