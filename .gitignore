@@ -38,3 +38,7 @@ npm-debug.log*
 
 # editor config
 .vscode/
+
+# playwright
+test-results/
+playwright-report/

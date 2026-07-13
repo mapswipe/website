@@ -38,6 +38,7 @@ forces a full refetch (~50 s; run weekly as a safety net).
 | `pnpm lint` / `pnpm css-lint` | eslint (ts/tsx/astro) / stylelint |
 | `pnpm typecheck` | `astro check` (0 errors expected) |
 | `pnpm verify-dist` | post-build invariant checks (run after a full build) |
+| `pnpm test:e2e` | Playwright island smoke tests against `astro preview` (needs a built `dist/`) |
 
 A full warm build ≈ 33 s / 1.6 GB RAM; cold (empty image cache) ≈ 90–105 s
 because 2,375 remote project covers are fetched + optimized. `dist/` ≈ 430 MB
