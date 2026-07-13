@@ -66,7 +66,7 @@ export default function ProjectHistoryChart(props: Props) {
           setProjectHistory(history);
         }
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error('Failed fetching project data', err);
       }
     })();

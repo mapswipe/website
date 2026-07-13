@@ -35,6 +35,7 @@ forces a full refetch (~50 s; run weekly as a safety net).
 | `npm run build` | **full** static build → `dist/` (always renders every page) |
 | `npm run build:incremental` | render-skip build: only pages whose data changed, merged over the previous `dist/` (~5–6 s vs ~33 s warm). See the [package README](packages/astro-incremental-static/README.md) — correctness contract applies |
 | `npm run preview` | serve `dist/` locally |
+| `npm run lint` / `npm run css-lint` | eslint (ts/tsx/astro) / stylelint |
 
 A full warm build ≈ 33 s / 1.6 GB RAM; cold (empty image cache) ≈ 90–105 s
 because 2,375 remote project covers are fetched + optimized. `dist/` ≈ 430 MB

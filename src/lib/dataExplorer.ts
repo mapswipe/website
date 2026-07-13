@@ -10,7 +10,7 @@ import { join } from 'node:path';
 const require = createRequire(import.meta.url);
 // Same anchor as src/lib/data.ts (cwd = repo root), stable after Vite bundling.
 // MAPSWIPE_DATA_FILE overrides the path (incremental data-change benchmark).
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'fullData', 'staticData.json'));
 
 export interface MiniProject {
@@ -89,7 +89,7 @@ export function getDataExplorerPayload(): DataExplorerPayload {
   const { communityStats, publicOrganizations, globalExportAssets } = data ?? {};
   const { totalContributors = null, totalSwipes = null } = communityStats ?? {};
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   let publicProjects: any[] = data?.publicProjects?.results ?? [];
   const limit = Number(process.env.SLICE_LIMIT ?? 0);
   if (limit > 0) publicProjects = publicProjects.slice(0, limit);

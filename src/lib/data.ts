@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 // breaks. cwd is stable across dev + bundled build -> fullData/staticData.json.
 // MAPSWIPE_DATA_FILE overrides the path (used by the incremental data-change
 // benchmark to point at a perturbed copy without touching the shared symlink).
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'fullData', 'staticData.json'));
 
 export interface UrlInfo {

@@ -61,7 +61,7 @@ export interface HydrationDedupOptions {
     filenamePrefix?: string;
     /**
      * Page globs (relative to the build output, `/`-separated, `**`/`*`/`?`)
-     * to consider. Default: every `**​/*.html`.
+     * to consider. Default: every `** /*.html`.
      */
     include?: string[];
     /** Page globs to skip. Applied after `include`. Default none. */

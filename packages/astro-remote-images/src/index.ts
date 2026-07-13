@@ -323,7 +323,7 @@ export function createRemoteImages(userOptions: RemoteImagesOptions = {}): Remot
         const policy = permanent ? options.onError : options.onTransientError;
         if (!warned.has(key)) {
             warned.add(key);
-            // eslint-disable-next-line no-console
+             
             console.warn(`[remote-images] ${policy} (${reason}): ${url}`);
         }
         if (policy === 'fail') {
@@ -451,7 +451,7 @@ export function createRemoteImages(userOptions: RemoteImagesOptions = {}): Remot
         const result = await encodeToCache(url, w, key);
         if (!result.ok && !warned.has(key)) {
             warned.add(key);
-            // eslint-disable-next-line no-console
+             
             console.warn(`[remote-images] prefetch failed (${result.reason}): ${url}`);
         }
         return result.ok;
@@ -467,7 +467,7 @@ export function createRemoteImages(userOptions: RemoteImagesOptions = {}): Remot
         const widths = opts.width !== undefined ? [opts.width] : options.widths;
         const jobs = urls.flatMap((url) => widths.map((w) => ({ url, w })));
         const total = jobs.length;
-        // eslint-disable-next-line no-console
+         
         console.log(
             `[remote-images] prefetch: ${urls.length} unique URLs × ${widths.length} width(s), `
             + `concurrency=${options.concurrency}`,
@@ -491,7 +491,7 @@ export function createRemoteImages(userOptions: RemoteImagesOptions = {}): Remot
                 }
                 const done = optimized + failed;
                 if (done % 250 === 0 || done === total) {
-                    // eslint-disable-next-line no-console
+                     
                     console.log(`[remote-images] prefetch ${done}/${total} (optimized=${optimized} failed=${failed})`);
                 }
             }
@@ -499,7 +499,7 @@ export function createRemoteImages(userOptions: RemoteImagesOptions = {}): Remot
         await Promise.all(Array.from({ length: Math.min(options.concurrency, total) }, worker));
 
         const seconds = (Date.now() - start) / 1000;
-        // eslint-disable-next-line no-console
+         
         console.log(
             `[remote-images] prefetch done: ${optimized} optimized / ${failed} failed / ${total} total `
             + `in ${seconds.toFixed(1)}s`,

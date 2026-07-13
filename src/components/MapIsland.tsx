@@ -25,7 +25,7 @@ export default function MapIsland(props: Props) {
         const d = await res.json();
         if (active) setGeoJson(d);
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error('Failed fetching map GeoJSON', geoJsonUrl, err);
       }
     })();
@@ -35,7 +35,7 @@ export default function MapIsland(props: Props) {
   }, [geoJsonUrl]);
 
   const handleGeoJSONAdd = useCallback((layer: LayerEvent) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const bounds = (layer.target as any)?.getBounds?.();
     if (bounds) {
       mapRef.current?.fitBounds(bounds, { padding: [12, 12] });

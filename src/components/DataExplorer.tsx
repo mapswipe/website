@@ -52,15 +52,6 @@ function bound(value: number, min: number, max: number): number {
 function sum(list: number[]): number {
   return list.reduce((acc, v) => acc + v, 0);
 }
-function listToMap<T, V>(
-  list: T[],
-  keySelector: (item: T) => string,
-  valueSelector: (item: T) => V,
-): Record<string, V> {
-  const out: Record<string, V> = {};
-  for (const item of list) out[keySelector(item)] = valueSelector(item);
-  return out;
-}
 function compareDate(a: string | null | undefined, b: string | null | undefined): number {
   if (!a && !b) return 0;
   if (!a) return -1;
@@ -216,7 +207,7 @@ export default function DataExplorer(props: Props) {
       .catch((err: unknown) => {
         if (cancelled) return;
         // Fail-soft: keep showing the SSR'd initial slice.
-        // eslint-disable-next-line no-console
+         
         console.warn(`data-explorer: failed to load ${dataUrl}; showing the initial ${initialProjects.length} projects only`, err);
         setLoading(false);
       });

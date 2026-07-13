@@ -14,7 +14,7 @@ function isFalsyString(v: unknown): boolean {
 
 const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) => {
   if (!exportHistoryUrl) {
-    // eslint-disable-next-line no-console
+     
     console.warn(`No exportHistoryUrl for project ${projectId}`);
     return [];
   }
@@ -27,7 +27,7 @@ const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) =
     }
     csvContent = await res.text();
   } catch {
-    // eslint-disable-next-line no-console
+     
     console.warn(`Could not fetch history for project ${projectId}.`);
     return [];
   }
@@ -37,9 +37,9 @@ const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) =
       delimiter: ',',
       newline: '\n',
       header: true,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       complete: (results: any) => resolve(results),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       error: (error: any) => reject(error),
     });
   });

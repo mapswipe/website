@@ -115,7 +115,7 @@ async function fetchAllProjects(): Promise<PublicProjects> {
     let offset = 0;
     let totalCount = 0;
     for (;;) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const page = (await graphQLClient.request(projectsQuery, {
             limit: PROJECTS_PAGE_SIZE, offset,
         })) as AllDataQuery;
@@ -150,7 +150,7 @@ async function scanProjects(): Promise<Map<string, string>> {
     let offset = 0;
     let totalCount = 0;
     for (;;) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const page = (await graphQLClient.request(scanQuery, {
             limit: SCAN_PAGE_SIZE, offset,
         })) as ScanResponse;
@@ -170,7 +170,7 @@ async function fetchProjectsByIds(ids: string[]): Promise<ProjectResult[]> {
     const out: ProjectResult[] = [];
     for (let i = 0; i < ids.length; i += PROJECTS_PAGE_SIZE) {
         const batch = ids.slice(i, i + PROJECTS_PAGE_SIZE);
-        // eslint-disable-next-line no-await-in-loop
+         
         const page = (await graphQLClient.request(projectsByIdsQuery, {
             ids: batch, limit: PROJECTS_PAGE_SIZE, offset: 0,
         })) as AllDataQuery;
@@ -251,14 +251,13 @@ async function getCsrfTokenValue() {
         const csrfToken = parsedCookiesToSet.find((item) => item.key === COOKIE_NAME);
         return csrfToken?.value;
     } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('failed to do the healthcheck', healthcheckUrl);
+        console.error('failed to do the healthcheck', healthcheckUrl, err);
     }
     return undefined;
 }
 
 async function fetchAndWriteData() {
-    let data = {} as AllDataQuery;
+    let data: AllDataQuery;
     if (pipelineType === 'ci') {
         data = dummyData;
     } else {

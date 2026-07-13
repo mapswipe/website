@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: lint
+        name: eslint
+        entry: npm run --silent lint
+        language: system
+        types_or: [ts, tsx, javascript]
+        pass_filenames: false
+      - id: css-lint
+        name: stylelint
+        entry: npm run --silent css-lint
+        language: system
+        types: [css]
+        pass_filenames: false
