@@ -33,7 +33,7 @@ export function getBounds(numList: number[]) {
   return { min: Math.min(...numList), max: Math.max(...numList) };
 }
 
-export function getPathData(pointList: Point[] | undefined) {
+export function getPathData(pointList: readonly Point[] | undefined) {
   if (!pointList || pointList.length < 2) {
     return undefined;
   }

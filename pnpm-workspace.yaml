@@ -1,0 +1,4 @@
+# Settings only — no `packages:` key, so this does NOT define a workspace
+# (pnpm 10 reads config from this file; packages/ are imported by path).
+onlyBuiltDependencies:
+  - sharp

@@ -13,3 +13,9 @@ repos:
         language: system
         types: [css]
         pass_filenames: false
+      - id: typecheck
+        name: astro check
+        entry: pnpm --silent typecheck
+        language: system
+        types_or: [ts, tsx, astro]
+        pass_filenames: false

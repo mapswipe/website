@@ -170,8 +170,8 @@ const title = String(t('home-tab-head'));
       <div class="ms-mission-grid">
         {missionTypes.map((m) => (
           <article class="ms-card ms-mission">
-            <div class={`ms-card-cover${m.beforeAfter ? ' ms-before-after' : ''}`}>
-              {m.beforeAfter ? (
+            <div class={`ms-card-cover${'beforeAfter' in m ? ' ms-before-after' : ''}`}>
+              {'beforeAfter' in m ? (
                 <>
                   <img src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
                   <img src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
