@@ -13,7 +13,8 @@
     "fetch-data": "node scripts/fetchData.ts",
     "lint": "eslint .",
     "css-lint": "stylelint 'src/**/*.css'",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "verify-dist": "node scripts/verify-dist.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
@@ -52,5 +53,8 @@
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.63.0"
   },
-  "packageManager": "pnpm@10.34.5"
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22.18"
+  }
 }
