@@ -5,7 +5,7 @@ import DataExplorer, { PAGE_SIZE } from '../../../components/DataExplorer.tsx';
 import { getDataExplorerPayload } from '../../../lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from '../../../lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
-import { selectPaths } from 'astro-incremental-static';
+import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
 import '../../../styles/global.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router

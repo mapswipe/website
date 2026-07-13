@@ -7,7 +7,7 @@
 //
 // Keep sitemap site/locales in sync with astro.config.mjs (not imported from
 // there: the config pulls in integrations plain Node shouldn't load here).
-import { runIncrementalBuild } from 'astro-incremental-static/runner';
+import { runIncrementalBuild } from '../packages/astro-incremental-static/src/runner.ts';
 
 runIncrementalBuild({
     codeHash: {

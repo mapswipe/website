@@ -29,7 +29,7 @@ package turns a one-record data change into a ~6 s build instead of ~33 s.
 
 ## Install
 
-In-repo workspace package (`private: true`, not published). From an app in the
+Part of this repo as a plain directory (imported by relative path); copy the directory or publish to npm to use elsewhere.
 same npm workspace:
 
 ```jsonc

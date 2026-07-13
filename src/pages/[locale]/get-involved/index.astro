@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getT, LOCALES } from '../../../i18n';
-import { selectPaths } from 'astro-incremental-static';
+import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
 
 // Get-involved page. One static, translated variant per locale —
 // /<locale>/get-involved/ — faithful to the Next Pages-Router page. Uses shared

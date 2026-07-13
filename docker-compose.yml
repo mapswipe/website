@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    command: sh -c 'npm install && npm run dev -- --host 0.0.0.0'
+    command: sh -c 'corepack enable && pnpm install && pnpm dev --host 0.0.0.0'
     ports:
       - '4321:4321'
     volumes:

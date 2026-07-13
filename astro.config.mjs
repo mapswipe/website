@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm';
 // each of ~14.6k pages, ~56 MB total) into external cached, content-hashed
 // /_astro/dedup-<hash8>.js files at build:done. Registered LAST so it
 // post-processes the final HTML after the other build:done hooks.
-import hydrationDedup from 'astro-hydration-dedup';
+import hydrationDedup from './packages/astro-hydration-dedup/src/index.ts';
 
 const SITE = 'https://mapswipe.org';
 

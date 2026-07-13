@@ -8,7 +8,7 @@ import ProjectHistoryChart from '../../../components/ProjectHistoryChart.tsx';
 import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from '../../../lib/data';
 import { getFileSizeProperties, resolveAoiDownload } from '../../../lib/common';
 import { getT, LOCALES } from '../../../i18n';
-import { selectPaths } from 'astro-incremental-static';
+import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
 
 export const getStaticPaths = (async () => {
   let projects = getAllProjects();

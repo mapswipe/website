@@ -1,6 +1,8 @@
 # packages/ — deliberately-owned build infrastructure
 
-Three reusable Astro packages (npm workspaces, `private: true`, publish-ready).
+Three reusable Astro packages — plain directories imported by relative path
+(no workspace linking); each keeps its own `package.json`/README so it can be
+published later.
 Each exists because Astro measurably cannot do the job via config or an
 existing integration — the full evidence trail is in
 [`docs/ownership-map.md`](../docs/ownership-map.md) (what's platform vs.

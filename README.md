@@ -13,13 +13,13 @@ vs. ours), [docs/benchmarks.md](docs/benchmarks.md) (measurements),
 
 ```sh
 # Node 22+ (packages/* and scripts/fetchData.ts are .ts consumed via Node's type stripping)
-npm ci                      # installs the app + the packages/ workspaces
+pnpm install                # single node_modules; packages/ are plain dirs imported by path
 
 # Fetch site data (writes fullData/staticData.json — gitignored):
 MAPSWIPE_API_ENDPOINT=https://backend.mapswipe.org/ \
 MAPSWIPE_REFERER_ENDPOINT=https://mapswipe.org/ \
 APP_ENVIRONMENT=PROD \
-npm run fetch-data
+pnpm fetch-data
 ```
 
 `fetch-data` is **incremental**: it scans `{id, modifiedAt, lastContributionDate}`
@@ -31,11 +31,11 @@ forces a full refetch (~50 s; run weekly as a safety net).
 
 | Command | What |
 | --- | --- |
-| `npm run dev` | dev server |
-| `npm run build` | **full** static build → `dist/` (always renders every page) |
-| `npm run build:incremental` | render-skip build: only pages whose data changed, merged over the previous `dist/` (~5–6 s vs ~33 s warm). See the [package README](packages/astro-incremental-static/README.md) — correctness contract applies |
-| `npm run preview` | serve `dist/` locally |
-| `npm run lint` / `npm run css-lint` | eslint (ts/tsx/astro) / stylelint |
+| `pnpm dev` | dev server |
+| `pnpm build` | **full** static build → `dist/` (always renders every page) |
+| `pnpm build:incremental` | render-skip build: only pages whose data changed, merged over the previous `dist/` (~5–6 s vs ~33 s warm). See the [package README](packages/astro-incremental-static/README.md) — correctness contract applies |
+| `pnpm preview` | serve `dist/` locally |
+| `pnpm lint` / `pnpm css-lint` | eslint (ts/tsx/astro) / stylelint |
 
 A full warm build ≈ 33 s / 1.6 GB RAM; cold (empty image cache) ≈ 90–105 s
 because 2,375 remote project covers are fetched + optimized. `dist/` ≈ 430 MB

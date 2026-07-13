@@ -2,7 +2,7 @@
 // This module MUST be imported before the package's <RemoteImage /> component
 // renders (the component uses the default = last-created instance); every
 // consumer here imports it directly, which guarantees the ordering.
-import { createRemoteImages } from 'astro-remote-images';
+import { createRemoteImages } from '../../packages/astro-remote-images/src/index.ts';
 
 // The render width used for project cover images (projects/[id].astro, the
 // data page cards, the data-explorer imageMap). The prefetch pool warms the

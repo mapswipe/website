@@ -21,7 +21,7 @@ Delete this package when an upstream error policy lands.
 
 ## Install
 
-In-repo workspace package (`private: true`, not published). From an app in the
+Part of this repo as a plain directory (imported by relative path); copy the directory or publish to npm to use elsewhere.
 same npm workspace:
 
 ```jsonc
