@@ -14,6 +14,41 @@ const require = createRequire(import.meta.url);
  
 const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'fullData', 'staticData.json'));
 
+// Fail fast on backend schema drift: without this, a renamed/dropped field
+// surfaces as silently-empty content on 14k rendered pages. Only load-bearing
+// fields are validated — the full shape belongs to the backend contract.
+import { z } from 'astro/zod';
+
+const StaticDataShape = z.object({
+  publicProjects: z.object({
+    totalCount: z.number(),
+    results: z.array(
+      z.object({
+        id: z.union([z.string(), z.number()]),
+        firebaseId: z.union([z.string(), z.number()]),
+        name: z.string(),
+        projectType: z.string().nullish(),
+        modifiedAt: z.string().nullish(),
+      }).passthrough(),
+    ).min(1),
+  }),
+  communityStats: z.object({
+    totalContributors: z.number().nullish(),
+    totalSwipes: z.number().nullish(),
+  }).passthrough(),
+  publicOrganizations: z.object({ results: z.array(z.unknown()) }),
+  globalExportAssets: z.array(z.unknown()),
+});
+
+const parsed = StaticDataShape.safeParse(data);
+if (!parsed.success) {
+  const issues = parsed.error.issues
+    .slice(0, 10)
+    .map((i) => `  ${i.path.join('.')}: ${i.message}`)
+    .join('\n');
+  throw new Error(`staticData.json failed validation (backend schema drift?):\n${issues}`);
+}
+
 export interface UrlInfo {
   id?: string;
   fileSize?: number;

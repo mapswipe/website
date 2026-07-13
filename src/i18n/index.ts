@@ -33,9 +33,32 @@ for (const [path, mod] of Object.entries(files)) {
   resources[locale][ns] = mod;
 }
 
+// Translation gaps fall back to English silently (returnEmptyString: false),
+// so surface them once per build instead of letting them hide.
+let gapsReported = false;
+function reportTranslationGaps() {
+  if (gapsReported) return;
+  gapsReported = true;
+  const lines: string[] = [];
+  for (const locale of LOCALES) {
+    if (locale === DEFAULT_LOCALE) continue;
+    let empty = 0;
+    let total = 0;
+    for (const ns of NAMESPACES) {
+      for (const v of Object.values(resources[locale]?.[ns] ?? {})) {
+        total += 1;
+        if (v === '') empty += 1;
+      }
+    }
+    if (empty > 0) lines.push(`${locale}: ${empty}/${total} empty (falls back to en)`);
+  }
+  if (lines.length) console.warn(`[i18n] translation gaps — ${lines.join(' · ')}`);
+}
+
 let ready = false;
 async function ensureInit() {
   if (ready) return;
+  reportTranslationGaps();
   await i18next.init({
     lng: DEFAULT_LOCALE,
     fallbackLng: DEFAULT_LOCALE,
