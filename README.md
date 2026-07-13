@@ -1,206 +1,84 @@
-# Mapswipe Website
+# MapSwipe website
 
-NextJs application for [Mapswipe community website](https://mapswipe.org).
+Static, SEO-driven, 6-locale site (~14,700 pages: 2,400+ projects × en/ne/hu/
+de/cs/pt + blogs + static pages), deployed to GitHub Pages. Astro 5 with React
+islands — most pages ship zero JS.
 
-## Development
+**Why Astro / how it's built:** [docs/adr/0002-migrate-to-astro.md](docs/adr/0002-migrate-to-astro.md)
+(decisions), [docs/ownership-map.md](docs/ownership-map.md) (what's platform
+vs. ours), [docs/benchmarks.md](docs/benchmarks.md) (measurements),
+[docs/PLAN.md](docs/PLAN.md) (path to cutover), [TODO.md](TODO.md) (live tasks).
 
-Get all the submodules
+## Setup
 
-```bash
-git submodule update --init --recursive
+```sh
+# Node 22+ (packages/* and scripts/fetchData.ts are .ts consumed via Node's type stripping)
+npm ci                      # installs the app + the packages/ workspaces
+
+# Fetch site data (writes fullData/staticData.json — gitignored):
+MAPSWIPE_API_ENDPOINT=https://backend.mapswipe.org/ \
+MAPSWIPE_REFERER_ENDPOINT=https://mapswipe.org/ \
+APP_ENVIRONMENT=PROD \
+npm run fetch-data
 ```
 
-Before you start, create `.env.local` file:
+`fetch-data` is **incremental**: it scans `{id, modifiedAt, lastContributionDate}`
+and refetches only changed projects, merging with the previous
+`staticData.json` (which IS the cache — persist it in CI). `FORCE_FULL_FETCH=1`
+forces a full refetch (~50 s; run weekly as a safety net).
 
-```bash
-touch .env.local
-```
+## Commands
 
-Set these environment variables:
+| Command | What |
+| --- | --- |
+| `npm run dev` | dev server |
+| `npm run build` | **full** static build → `dist/` (always renders every page) |
+| `npm run build:incremental` | render-skip build: only pages whose data changed, merged over the previous `dist/` (~5–6 s vs ~33 s warm). See the [package README](packages/astro-incremental-static/README.md) — correctness contract applies |
+| `npm run preview` | serve `dist/` locally |
 
-```env
-APP_ENVIRONMENT=PROD  # Use DEV if you are running your own server instance
-MAPSWIPE_API_ENDPOINT=https://backend.mapswipe.org/
-NEXT_PUBLIC_POSTHOG_KEY=<posthog-key>
-NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
-```
+A full warm build ≈ 33 s / 1.6 GB RAM; cold (empty image cache) ≈ 90–105 s
+because 2,375 remote project covers are fetched + optimized. `dist/` ≈ 430 MB
+(GitHub Pages limit is 1 GB).
 
-### Running
+## Caches & state (all gitignored; persist the first two in CI)
 
-```bash
-# Install dependencies
-yarn install
+| Path | What | Cold cost if lost |
+| --- | --- | --- |
+| `.image-cache/` | optimized remote covers + negative cache (`.miss`/`.slow` markers) | ~70 s refetch/re-encode |
+| `fullData/staticData.json` | the site data AND the incremental-fetch cache | ~50 s full refetch |
+| `.astro-incremental/` | manifest for `build:incremental` (`ASTRO_INCREMENTAL=1` runs only) | one full render |
+| `node_modules/.astro/`, `.astro/` | Astro/Vite caches | a few seconds |
 
-# Generate typescript types from graphql schema
-yarn generate:type
+## Env knobs
 
-# Fetch latest data from MapSwipe database for projects
-yarn fetch-data:local
+| Var | Effect |
+| --- | --- |
+| `SLICE_LIMIT=N` | build only N projects — fast smoke builds / PR CI |
+| `BAD_IMAGE_TEST=1` | inject a broken cover URL (tests the error-image path) |
+| `MAPSWIPE_DATA_FILE=/path` | point the build at an alternate data file (perturbation tests) |
+| `PREFETCH_CONCURRENCY=N` | image prefetch pool size (default 24) |
+| `FORCE_FULL_FETCH=1` | fetch-data: ignore the incremental cache |
+| `ASTRO_INCREMENTAL=1` | internal — set by the incremental runner; never set manually |
 
-# Run
-yarn dev
-```
+## Structure
 
-> [!NOTE]
-> Currently the platform runs smoothly in node 16, so developers might have to switch to node 16 for development.
+- `src/pages/[locale]/…` — routes (exact URL parity with the old Next site)
+- `src/components/` — `.astro` (static) + `.tsx` (React islands: data explorer,
+  project map, history chart)
+- `src/lib/` — app/domain logic (data slimming, chart math) + thin package config
+- `src/i18n/` — i18next over the repo-root `locales/*.json` (verbatim; kept out
+  of `public/` so translations never ship in `dist/`)
+- `packages/` — reusable build infrastructure ([index](packages/README.md)):
+  hydration-script dedup, fail-soft remote images (error-image policy),
+  incremental static builds
+- Blogs: markdown in repo-root `blogs/` (Content Collections; images co-located
+  in `blogs/images/`, optimized natively by `astro:assets`)
 
-Whenever new texts for translation are added, translation files need to be generated.
+## Gotchas
 
-```bash
-yarn generate:i18n
-```
-
-Before creating a pull request, all lint and type issues must be fixed.
-To check for issues:
-
-```bash
-yarn lint
-yarn css-lint
-yarn typecheck
-yarn unimported
-```
-
-### Building
-
-```bash
-yarn build
-```
-
-### Staging Deployment
-
-The **staging environment** is used to test new changes before they are deployed to production.
-You can view the live staging site here:
-🔗 [https://website-stage.mapswipe.org/](https://website-stage.mapswipe.org/)
-
-### Steps to Deploy to Staging
-
-1. **Rebase your branch onto the staging branch:**
-
-```bash
-git checkout deploy-stage
-git rebase <branch-you-want-to-deploy>
-git push
-```
-
-This rebases your feature branch onto the `stage` branch and pushes the updated staging branch.
-
-2. **Trigger the staging deployment:**
-
-The staging deployment is managed through this repository:
-🔗 [https://github.com/mapswipe/stage-website/](https://github.com/mapswipe/stage-website/)
-
-You can manually trigger the deployment workflow here:
-🔗 [Staging Workflow – stage.yml](https://github.com/mapswipe/stage-website/actions/workflows/stage.yml)
-
-> **Note:** The staging environment also auto-deploys every day at **01:00 UTC**.
-
-### Production Deployment
-
-Deployments will be triggered in 2 ways:
-
-1. Anything pushed to `deploy-prod` branch will trigger immediate deployment
-to configured github io page.
-2. Every day at UTC 00:01, deployment will be triggered with
-latest data from MapSwipe database.
-
-## Edit Website Texts
-
-### Edit Source Strings
-- Pull the latest changes from the `main` branch
-- Checkout to a new branch
-- Navigate to the source string files [here](https://github.com/mapswipe/website/tree/main/public/locales/en)
-- Open appropriate file(s) and edit string(s) as per requirement
-- Push the changes to the local branch
-- Create a pull request to the main branch
-
-### Translate Strings
-#### As Translator
-- Go to Transifex project
-- Click on the language you are looking to translate the source into
-- Open the file to translate the string
-- Translate individual string and save changes
-
-#### As Reviewer
-- Open individual strings, make sure they are correct, and click the 'Review' button
-- Continue translating and reviewing the strings until all the strings are translated and approved
-- **_NOTE: Reviewers must have appropriate permission_**
-
-### Update The Website
-- After all the strings are 100% translated in Transifex, a pull request will be sent to the main branch
-- Each resource (file) will be committed in the same PR (if not merged) as soon as it is 100% translated
-- Merging the pull request will trigger a latest build and the same will be deployed in production
-- **IF LANGUAGE IS NOT PRESENT IN THE WEBSITE**
-- Add the supported language as per the [supported languages](https://github.com/mapswipe/website#supported-languages) guide below
-
-## Supported Languages
-
-Languages listed in [i18next-parser.config.js](https://github.com/mapswipe/community-website/blob/main/i18next-parser.config.js)
-are listed as options to view the website in that particular language.
-
-To add a new language option, user should add [ISO_639-1](https://en.wikipedia.org/wiki/ISO_639-1)
-code of that language to the list.
-
-```js
-module.exports = {
-    locales: ['en', 'ne'] // NOTE: add ISO code in this list,
-};
-```
-
-Language's title and abbreviation in the selected language, needs to be added
-in [languages.ts](https://github.com/mapswipe/community-website/blob/main/src/utils/languages.ts).
-
-After the language settings are added, user should generate the language files.
-
-```bash
-yarn generate:i18n
-```
-
-## Adding 'News & Updates' or Blogs
-
-MapSwipe website supports 'News & Updates' or blogs in the form of markdown.
-To add a new post, you can add a markdown file inside
-[blogs](https://github.com/mapswipe/community-website/tree/main/blogs) folder.
-
-The name of the file will determine the url for that post.
-For example: `this-is-a-blog.md` file will be routed to
-`https://mapswipe.org/en/blogs/this-is-a-blog`.
-
-The markdown should follow the following template:
-
-### Post Template
-
-```md
----
-title: This is a blog
-publishedDate: 2022-08-17
-author: John Doe
-description: Lorem Ipsum
-coverImage: /img/blogImages/example-image.png
-featured: true
----
-
-# Markdown Content
-
-Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-when an unknown printer took a galley of type and scrambled it to make a
-type specimen book. It has survived not only five centuries, but also the leap into
-electronic typesetting, remaining essentially unchanged.
-It was popularised in the 1960s with the release of Letraset sheets containing
-Lorem Ipsum passages, and more recently with desktop publishing software like
-Aldus PageMaker including versions of Lorem Ipsum.
-```
-
-### Metadata
-
-- We are using YAML frontmatter to set markdown metadata in posts
-- The metadata inside '---' must be filled and is required
-- The metadata renders in the card view of the Home or the posts listing page
-
-#### Rules
-
-- `publishedDate` should be in `YYYY-MM-DD` format. Any other format is not supported.
-- Project images `coverImage` should be uploaded in the [/img/blogImages](https://github.com/mapswipe/community-website/tree/main/public/img/blogImages)
-folder.
-- The value for `featured` determines whether to highlight the posts on
-News & Updates section of home page
+- One malformed remote cover **cannot** break the build: it renders
+  `/_img/image-error.svg` and warns (`[remote-images] …`). Policy per failure
+  class is configured in `src/lib/remoteImages.ts`.
+- Translations are build-time only — nothing under `/locales/` ships in `dist/`.
+- The sitemap is authoritative from `@astrojs/sitemap` on full builds; the
+  incremental runner regenerates it over the merged tree.

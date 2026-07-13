@@ -1,9 +1,11 @@
+// Run with plain `node scripts/fetchData.ts` (Node >= 22 type stripping — the
+// type-only import below is erased, so no ts-node/tsc is needed at runtime).
 import { GraphQLClient, gql } from 'graphql-request';
 import fs from 'fs';
 import path from 'path';
-import { AllDataQuery } from '../generated/types';
+import type { AllDataQuery } from '../generated/types';
 
-const datadir = path.join(__dirname, '../fullData');
+const datadir = path.join(import.meta.dirname, '../fullData');
 const outputPath = path.join(datadir, 'staticData.json');
 const baseUrl = process.env.MAPSWIPE_API_ENDPOINT || 'http://localhost:8000/';
 const GRAPHQL_ENDPOINT = `${baseUrl}graphql/`;

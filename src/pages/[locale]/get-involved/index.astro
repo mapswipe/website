@@ -1,0 +1,172 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getT, LOCALES } from '../../../i18n';
+import { selectPaths } from 'astro-incremental-static';
+
+// Get-involved page. One static, translated variant per locale —
+// /<locale>/get-involved/ — faithful to the Next Pages-Router page. Uses shared
+// chrome (BaseLayout) + ported Hero/Section/CenteredCard styles.
+//
+// The page renders NO project/blog data — its only content input is the
+// `get-involved` i18n namespace, which lives in the repo-root locales/
+// and is folded into the orchestration's codeHash. So its propsData is a stable
+// per-locale constant: the propsHash never changes on a project/blog *data*
+// edit → the page SKIPS on incremental data builds (matching Next, which never
+// re-renders static pages on a data change). A translation edit bumps codeHash
+// → the whole site (this page included) rebuilds anyway, so tracking
+// translations here would be redundant.
+export const getStaticPaths = (async () =>
+  selectPaths('get-involved', LOCALES.map((locale) => ({
+    key: `${locale}/get-involved`,
+    params: { locale },
+    propsData: { page: 'get-involved', locale },
+  })))) satisfies GetStaticPaths;
+
+const { locale } = Astro.params;
+const t = await getT(locale!, 'get-involved');
+const title = String(t('get-involved-tab-head'));
+---
+<BaseLayout locale={locale!} title={title} path="get-involved/" activePath="get-involved" mainClass="ms-gi">
+  {/* Hero */}
+  <div class="ms-hero">
+    <div class="ms-hero-section">
+      <div class="ms-hero-main">
+        <div class="ms-hero-left">
+          <h2 class="ms-h ms-extra-large">{t('hero-title')}</h2>
+          <div class="ms-hero-description">{t('hero-description')}</div>
+        </div>
+        <div class="ms-hero-right">
+          <img class="ms-gi-illustration" src="/img/get-involved-banner.svg" alt={t('get-involved-banner')} loading="lazy" />
+        </div>
+      </div>
+    </div>
+    <div class="ms-angled-background"></div>
+  </div>
+
+  {/* Contribute now */}
+  <section class="ms-section">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('contribute-now')}</h4>
+        <div class="ms-section-description">{t('contribute-now-description')}</div>
+      </div>
+      <div class="ms-gi-contribute">
+        <div class="ms-store-buttons">
+          <a href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
+            <img class="ms-store-img" src="/img/playstore.png" alt={t('download-on-playstore')} loading="lazy" />
+          </a>
+          <a href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
+            <img class="ms-store-img" src="/img/apple.png" alt={t('download-on-apple-store')} loading="lazy" />
+          </a>
+        </div>
+        <div class="ms-gi-links">
+          <a class="ms-underline" href="https://web.mapswipe.org/" target="_blank">{t('use-web-app-label')}</a>
+          |
+          <a class="ms-underline" href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Individual */}
+  <section class="ms-section" id="individual">
+    <div class="ms-section-container ms-gi-split">
+      <div class="ms-gi-image">
+        <h4 class="ms-h ms-medium">{t('individual-heading')}</h4>
+        <img class="ms-gi-illustration" src="/img/individual.svg" alt={t('individual-heading-image')} loading="lazy" />
+      </div>
+      <div class="ms-gi-cards">
+        <div class="ms-centered-card">
+          <div class="ms-cc-title">{t('possess-language-skills')}</div>
+          <div class="ms-cc-description">{t('possess-language-skills-description')}</div>
+          <div class="ms-cc-actions"><a class="ms-btn" href="https://explore.transifex.com/mapswipe/" target="_blank">{t('contribute-on-transifex')}</a></div>
+        </div>
+        <div class="ms-centered-card">
+          <div class="ms-cc-title">{t('possess-technical-skills')}</div>
+          <div class="ms-cc-description">{t('possess-techincal-skills-description')}</div>
+          <div class="ms-cc-actions"><a class="ms-btn" href="https://github.com/mapswipe/" target="_blank">{t('contribute-on-github')}</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Group */}
+  <section class="ms-section ms-alt-bg">
+    <div class="ms-section-container ms-gi-split">
+      <div class="ms-gi-cards">
+        <div class="ms-centered-card">
+          <div class="ms-cc-title">{t('want-to-host-mapswipe-events')}</div>
+          <div class="ms-cc-description">{t('want-to-host-mapswipe-events-description')}</div>
+          <div class="ms-cc-actions"><a class="ms-btn" href="https://drive.google.com/drive/folders/1j5XnyqI_LKYBCg9oJaaWIKbsBxwB8Cld?usp=drive_link" target="_blank">{t('download-toolkit')}</a></div>
+        </div>
+        <div class="ms-centered-card">
+          <div class="ms-cc-title">{t('engage-your-csr')}</div>
+          <div class="ms-cc-description">{t('engage-your-csr-description')}</div>
+          <div class="ms-cc-actions"><a class="ms-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSf_05ZvC4i7HfDgYqedvsPxG66o8SHMaKs1GpnLC9KVFa4FuQ/viewform?usp=sf_link" target="_blank">{t('register-your-interest')}</a></div>
+        </div>
+      </div>
+      <div class="ms-gi-image">
+        <h4 class="ms-h ms-medium">{t('group-heading')}</h4>
+        <img class="ms-gi-illustration" src="/img/group.svg" alt={t('group-heading-image')} loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  {/* Organizational */}
+  <section class="ms-section">
+    <div class="ms-section-container ms-gi-split">
+      <div class="ms-gi-image">
+        <h4 class="ms-h ms-medium">{t('organization-heading')}</h4>
+        <img class="ms-gi-illustration" src="/img/organization.svg" alt={t('organization-logo')} loading="lazy" />
+      </div>
+      <div class="ms-centered-card">
+        <div class="ms-cc-title">{t('humanitarian-or-nonprofit')}</div>
+        <div class="ms-cc-description">{t('humanitarian-or-nonprofit-description')}</div>
+        <div class="ms-cc-actions"><a class="ms-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSetcSda6EyuvOXMUPe7Gw7wNNIdR9R9RlvOi1j9Zu-C3ZXtbg/viewform?usp=sf_link" target="_blank">{t('tell-us-more')}</a></div>
+      </div>
+    </div>
+  </section>
+
+  {/* Donate */}
+  <section class="ms-section ms-alt-bg">
+    <div class="ms-section-container ms-gi-split">
+      <div class="ms-centered-card">
+        <div class="ms-cc-title">{t('interested-in-supporting')}</div>
+        <div class="ms-cc-description">
+          <p>{t('interested-in-supporting-description-1')}</p>
+          <a class="ms-underline" href="https://drive.google.com/file/d/1X9Sjys6Qa4Cz16J2cUT87qDejtJNAOOO/view?usp=sharing" target="_blank">{t('download-financial-report')}</a>
+        </div>
+        <div class="ms-cc-actions"><a class="ms-btn" href="https://opencollective.com/mapswipe" target="_blank">{t('donate-now')}</a></div>
+      </div>
+      <div class="ms-gi-image">
+        <h4 class="ms-h ms-medium">{t('donate-heading')}</h4>
+        <img class="ms-gi-illustration" src="/img/donate.svg" alt={t('donation-logo')} loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  {/* Contact */}
+  <section class="ms-section">
+    <div class="ms-section-container">
+      <div class="ms-section-heading-wrap">
+        <h4 class="ms-h ms-medium ms-section-heading">{t('contact-section-heading')}</h4>
+        <div class="ms-section-description">{t('contact-section-description')}</div>
+      </div>
+      <div class="ms-section-actions">
+        <a class="ms-btn" href="mailto:info@mapswipe.org" target="_blank">{t('contact-link-label')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ms-gi-illustration { max-width: 28rem; width: 100%; height: auto; }
+  .ms-gi-contribute { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-large); }
+  .ms-store-buttons { display: flex; gap: var(--spacing-medium); flex-wrap: wrap; }
+  .ms-store-img { height: 3rem; width: auto; }
+  .ms-gi-links { display: flex; align-items: center; gap: var(--spacing-small); }
+  .ms-gi-split { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .ms-gi-image { flex: 1 1 20rem; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-large); text-align: center; }
+  .ms-gi-cards { flex: 1 1 22rem; display: flex; flex-direction: column; gap: var(--spacing-large); }
+</style>

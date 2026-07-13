@@ -1,19 +1,29 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# deps
+node_modules/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# site data (fetched via `npm run fetch-data`; also the incremental-fetch cache)
+fullData/
 
-# testing
-/coverage
+# build output
+dist/
+dist-cache/
+.astro/
 
-# next.js
-/.next/
-/out/
+# incremental build state (code-hash, manifest, per-page shards).
+# In CI, restore/save this dir alongside dist/ so warm builds skip unchanged pages.
+.astro-incremental/
 
-# production
-/build
+# generated optimized images (emitted into dist/ at build time)
+public/_img/
+
+# persistent build-time image optimization cache.
+# In CI, restore/save this dir as a build cache so warm builds reuse the
+# webp encodes instead of refetching + re-encoding every remote image.
+.image-cache/
+
+# scratch build logs / measurements
+build*.log
+measure_*.txt
 
 # misc
 .DS_Store
@@ -22,19 +32,9 @@
 
 # debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
 # typescript
 *.tsbuildinfo
 
 # editor config
 .vscode/
-
-# generated types
-generated
-fullData/
-
-cache/
-server/
