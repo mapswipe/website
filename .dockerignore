@@ -1,0 +1,7 @@
+node_modules
+dist
+dist-cache
+.astro
+.astro-incremental
+.image-cache
+.git

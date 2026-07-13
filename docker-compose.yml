@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    command: sh -c 'npm install && npm run dev -- --host 0.0.0.0'
+    ports:
+      - '4321:4321'
+    volumes:
+      - .:/code
+      # keep container installs off the host checkout
+      - /code/node_modules
