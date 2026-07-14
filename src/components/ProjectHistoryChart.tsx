@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import getProjectHistory from '../lib/projectHistory';
 import { getBounds, getScaleFunction, getPathData, bound } from '../lib/chart';
+// The timeline-chart SVG classes live in the recovered projects page module
+// (Next kept them in src/pages/[locale]/projects/styles.module.css); importing
+// the same module here yields the same hashed classes as the .astro page.
+import styles from '../pages/[locale]/projects/styles.module.css';
 
 // Self-contained port of the project-history chart from the Next `Project`
 // component. Takes projectId + historyUrl, does its own fetch + SVG render,
@@ -66,7 +70,7 @@ export default function ProjectHistoryChart(props: Props) {
           setProjectHistory(history);
         }
       } catch (err) {
-         
+
         console.error('Failed fetching project data', err);
       }
     })();
@@ -130,49 +134,49 @@ export default function ProjectHistoryChart(props: Props) {
   const hasData = projectHistory !== undefined && chartPoints.length > 1;
 
   return (
-    <div ref={svgContainerRef} className={className} style={{ width: '100%', height: 240 }}>
+    <div ref={svgContainerRef} className={className ?? styles.timelineChartContainer}>
       {hasData ? (
-        <svg width="100%" height="100%" style={{ overflow: 'visible' }}>
+        <svg className={styles.timelineChart}>
           <defs>
             <linearGradient id="path-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#AABE5D" stopOpacity={0.5} />
-              <stop offset="100%" stopColor="#AABE5D" stopOpacity={0} />
+              <stop className={styles.stopStart} offset="0%" />
+              <stop className={styles.stopEnd} offset="100%" />
             </linearGradient>
           </defs>
           {yAxisTicks.map((point, i) => (
             <React.Fragment key={point.value}>
-              <text x={Y_AXIS_WIDTH} y={point.y + i * 2} fontSize={10} fill="#666">
+              <text className={styles.yAxisTickText} x={Y_AXIS_WIDTH} y={point.y + i * 2}>
                 {point.value}
               </text>
               <line
+                className={styles.yAxisGridLine}
                 x1={chartMargin.left - CHART_OFFSET}
                 y1={point.y}
                 x2={svgBounds.width - CHART_OFFSET}
                 y2={point.y}
-                stroke="#eee"
               />
             </React.Fragment>
           ))}
           {xAxisTicks.map((tick) => (
             <React.Fragment key={tick.timestamp}>
-              <text x={tick.x} y={svgBounds.height - CHART_OFFSET} fontSize={10} fill="#666">
+              <text className={styles.xAxisTickText} x={tick.x} y={svgBounds.height - CHART_OFFSET}>
                 {xAxisFormatter(tick.date)}
               </text>
               <line
+                className={styles.xAxisGridLine}
                 x1={tick.x}
                 y1={0}
                 x2={tick.x}
                 y2={svgBounds.height - CHART_OFFSET}
-                stroke="#eee"
               />
             </React.Fragment>
           ))}
           <path fill="url(#path-gradient)" d={getPathData(chartPointsForArea)} />
-          <path fill="none" stroke="#AABE5D" strokeWidth={2} d={getPathData(chartPoints)} />
+          <path className={styles.path} d={getPathData(chartPoints)} />
         </svg>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: 24, color: '#888' }}>
-          <div>{emptyMessage}</div>
+        <div className={styles.emptyChart}>
+          <div className={styles.message}>{emptyMessage}</div>
         </div>
       )}
     </div>

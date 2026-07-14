@@ -3,17 +3,18 @@ import BaseLayout from './BaseLayout.astro';
 
 // Shared chrome for the blog list + detail pages. Delegates to BaseLayout
 // (nav/header + footer + fonts + OgMeta + hreflang x6 + x-default), so blog
-// pages get the same shared chrome as every other page type. Keeps the `blog`
-// main class the blog pages' pragmatic styles hang off. `path` is the
-// locale-less route suffix (e.g. "blogs/" or "blogs/<slug>/").
+// pages get the same shared chrome as every other page type. Each page passes
+// its own CSS-Module root class via `mainClass`. `path` is the locale-less
+// route suffix (e.g. "blogs/" or "blogs/<slug>/").
 interface Props {
   locale: string;
   title: string;
   description?: string;
   path: string;
+  mainClass?: string; // the page's CSS-Module root class (e.g. styles.blogs)
 }
-const { locale, title, description, path } = Astro.props;
+const { locale, title, description, path, mainClass } = Astro.props;
 ---
-<BaseLayout locale={locale} title={title} description={description} path={path} mainClass="blog">
+<BaseLayout locale={locale} title={title} description={description} path={path} mainClass={mainClass}>
   <slot />
 </BaseLayout>

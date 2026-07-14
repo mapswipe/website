@@ -8,6 +8,14 @@ import rehypeStringify from 'rehype-stringify';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
+// CSS Modules recovered from the Next app: the page module + the component
+// modules whose markup this page reproduces (Hero, Section, Heading,
+// HtmlOutput).
+import styles from './styles.module.css';
+import heroStyles from '../../../components/Hero.module.css';
+import sectionStyles from '../../../components/Section.module.css';
+import headingStyles from '../../../components/Heading.module.css';
+import htmlOutputStyles from '../../../components/HtmlOutput.module.css';
 
 // Privacy page. The policy body is a fixed English markdown string (identical
 // in every locale — same as the Next app, which hardcoded it); only the tab
@@ -121,38 +129,26 @@ const policyHtml = String(
     .process(policy.replace(/\\n/g, '\n')),
 );
 ---
-<BaseLayout locale={locale!} title={title} path="privacy/" mainClass="ms-privacy">
+<BaseLayout locale={locale!} title={title} path="privacy/" mainClass={styles.privacy}>
   {/* Hero (no right content -> centered) */}
-  <div class="ms-hero ms-hero-centered">
-    <div class="ms-hero-section">
-      <div class="ms-hero-main">
-        <div class="ms-hero-left">
-          <h2 class="ms-h ms-extra-large">{t('privacy-hero-title')}</h2>
+  <div class:list={[heroStyles.hero, heroStyles.withoutRightContent, styles.hero]}>
+    <div class={heroStyles.section}>
+      <div class={heroStyles.mainContent}>
+        <div class={heroStyles.left}>
+          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+            {t('privacy-hero-title')}
+          </h2>
         </div>
       </div>
     </div>
-    <div class="ms-angled-background"></div>
+    <div class={heroStyles.angledBackground}></div>
   </div>
 
-  <section class="ms-section">
-    <div class="ms-section-container">
-      <div class="ms-privacy-content" set:html={policyHtml} />
+  <section class={sectionStyles.section}>
+    <div class={sectionStyles.container}>
+      <div class={styles.content}>
+        <div class={htmlOutputStyles.htmlOutput} set:html={policyHtml} />
+      </div>
     </div>
   </section>
 </BaseLayout>
-
-<style is:global>
-  .ms-privacy-content { max-width: 55rem; margin: 0 auto; }
-  .ms-privacy-content h2 { font-size: var(--font-size-extra-large); margin-top: var(--spacing-large); }
-  .ms-privacy-content h3 { font-size: var(--font-size-large); margin-top: var(--spacing-large); }
-  .ms-privacy-content p { margin: var(--spacing-small) 0; }
-  .ms-privacy-content ul { margin: var(--spacing-small) 0; padding-left: var(--spacing-large); }
-  .ms-privacy-content a { color: var(--color-link); }
-  .ms-privacy-content a:hover { text-decoration: underline; }
-  .ms-privacy-content table { border-collapse: collapse; margin: var(--spacing-medium) 0; }
-  .ms-privacy-content th, .ms-privacy-content td {
-    border: var(--width-separator-thin) solid var(--color-separator);
-    padding: var(--spacing-super-small) var(--spacing-small);
-    text-align: left;
-  }
-</style>

@@ -2,11 +2,25 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DataExplorer, { PAGE_SIZE } from '../../../components/DataExplorer.tsx';
+import ProjectTypeIcon from '../../../components/ProjectTypeIcon.astro';
+import Icon from '../../../components/Icon.astro';
 import { getDataExplorerPayload } from '../../../lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from '../../../lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
 import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
-import '../../../styles/global.css';
+// CSS Modules recovered from the Next app: the page module (shared with the
+// DataExplorer island) + the component modules whose markup this page
+// reproduces (Hero, Section, Card, KeyFigure, Heading, Link, ListItem,
+// ImageWrapper).
+import styles from './styles.module.css';
+import heroStyles from '../../../components/Hero.module.css';
+import sectionStyles from '../../../components/Section.module.css';
+import cardStyles from '../../../components/Card.module.css';
+import keyFigureStyles from '../../../components/KeyFigure.module.css';
+import headingStyles from '../../../components/Heading.module.css';
+import linkStyles from '../../../components/Link.module.css';
+import listItemStyles from '../../../components/ListItem.module.css';
+import imageStyles from '../../../components/ImageWrapper.module.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router
 // route src/pages/[locale]/data/index.tsx). trailingSlash:always + directory
@@ -68,139 +82,178 @@ const t = await getT(locale!, 'data');
 
 const title = String(t('data-tab-head'));
 
-// Static type-explainer cards (mirrors the Next page's type-section).
+// Community stats (static, matching the Next page's statsHeader section).
+const { totalSwipes, totalContributors } = payload;
+const fmt = (n: number | null | undefined) =>
+  (n == null ? '-' : new Intl.NumberFormat('en-US').format(n));
+
+// Static type-explainer cards (mirrors the Next page's type-section: cover
+// image + ProjectTypeIcon + heading + key-point list).
 const typeCards = [
-  { key: 'find', title: t('type-find-title'), points: [t('type-find-key-point-1'), t('type-find-key-point-2'), t('type-find-key-point-3')] },
-  { key: 'compare', title: t('type-compare-title'), points: [t('type-compare-key-point-1'), t('type-compare-key-point-2'), t('type-compare-key-point-3')] },
-  { key: 'validate', title: t('type-validate-title'), points: [t('type-validate-key-point-1'), t('type-validate-key-point-2'), t('type-validate-key-point-3')] },
-  { key: 'completeness', title: t('type-completeness-title'), points: [t('type-completeness-key-point-1'), t('type-completeness-key-point-2'), t('type-completeness-key-point-3')] },
-  { key: 'validate_image', title: t('type-validate-image-title'), points: [t('type-validate-image-key-point-1'), t('type-validate-image-key-point-2'), t('type-validate-image-key-point-3')] },
-  { key: 'street', title: t('type-streets-view-title'), points: [t('type-street-key-point-1'), t('type-street-key-point-2'), t('type-street-key-point-3')] },
-  { key: 'locate', title: t('type-locate-title'), points: [t('type-locate-key-point-1'), t('type-locate-key-point-2'), t('type-locate-key-point-3')] },
-];
+  { type: 'FIND', coverImageUrl: '/img/find.svg', title: t('type-find-title'), points: [t('type-find-key-point-1'), t('type-find-key-point-2'), t('type-find-key-point-3')] },
+  { type: 'COMPARE', beforeAfter: true, title: t('type-compare-title'), points: [t('type-compare-key-point-1'), t('type-compare-key-point-2'), t('type-compare-key-point-3')] },
+  { type: 'VALIDATE', coverImageUrl: '/img/validate.svg', title: t('type-validate-title'), points: [t('type-validate-key-point-1'), t('type-validate-key-point-2'), t('type-validate-key-point-3')] },
+  { type: 'COMPLETENESS', coverImageUrl: '/img/completeness.png', title: t('type-completeness-title'), points: [t('type-completeness-key-point-1'), t('type-completeness-key-point-2'), t('type-completeness-key-point-3')] },
+  { type: 'VALIDATE_IMAGE', coverImageUrl: '/img/validate_image.png', title: t('type-validate-image-title'), points: [t('type-validate-image-key-point-1'), t('type-validate-image-key-point-2'), t('type-validate-image-key-point-3')] },
+  { type: 'STREET', coverImageUrl: '/img/street_image.png', title: t('type-streets-view-title'), points: [t('type-street-key-point-1'), t('type-street-key-point-2'), t('type-street-key-point-3')] },
+  { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', title: t('type-locate-title'), points: [t('type-locate-key-point-1'), t('type-locate-key-point-2'), t('type-locate-key-point-3')] },
+] as const;
 ---
-<BaseLayout locale={locale!} title={title} path="data/" activePath="data" mainClass="data-page">
-      <!-- Hero -->
-      <section class="hero">
-        <div class="heroMain">
-          <h1>{t('data-page-heading')}</h1>
-          <p>{t('data-page-description')}</p>
+<BaseLayout locale={locale!} title={title} path="data/" activePath="data" mainClass={styles.data}>
+  {/* Hero */}
+  <div class={heroStyles.hero}>
+    <div class={heroStyles.section}>
+      <div class={heroStyles.mainContent}>
+        <div class={heroStyles.left}>
+          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+            {t('data-page-heading')}
+          </h2>
+          <div class={heroStyles.description}>{t('data-page-description')}</div>
         </div>
-      </section>
-
-      <!-- Project-type explainer cards (static, SSR-only) -->
-      <section class="section">
-        <h2>{t('type-section-heading')}</h2>
-        <p>{t('type-section-description')}</p>
-        <div class="type-list">
-          {typeCards.map((card) => (
-            <article class="type-card">
-              <h3>{card.title}</h3>
-              <ul>
-                {card.points.map((p) => <li>{p}</li>)}
-              </ul>
-            </article>
-          ))}
+        <div class={heroStyles.right}>
+          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+            <img class={imageStyles.image} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
+          </div>
         </div>
-      </section>
+      </div>
+    </div>
+    <div class={heroStyles.angledBackground}></div>
+  </div>
 
-      <!-- The ONE interactive island: filters + search + sort + pagination +
-           card list + map share state. client:load so filters + initial list
-           are in the SSR'd HTML; the leaflet map is client-guarded inside. -->
-      <DataExplorer
-        client:load
-        dict={dict}
-        imageMap={initialImageMap}
-        initialProjects={initialProjects}
-        totalCount={payload.projects.length}
-        dataUrl={DATA_EXPLORER_JSON_URL}
-        globalExportAssets={payload.globalExportAssets}
-        minArea={payload.minArea}
-        maxArea={payload.maxArea}
-        minContributors={payload.minContributors}
-        maxContributors={payload.maxContributors}
-        totalContributors={payload.totalContributors}
-        totalSwipes={payload.totalSwipes}
-        buildDate={payload.buildDate}
-      />
+  {/* Community stats (Next: statsHeader Section with circle KeyFigures) */}
+  <section class={sectionStyles.section}>
+    <div class={sectionStyles.container}>
+      <div class={styles.statsHeader}>
+        <div class={styles.leftContent}>
+          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.figure, styles.largeFigure]}>
+            <div class={keyFigureStyles.value}>
+              {fmt(totalSwipes)}
+              <Icon name="plus" class={keyFigureStyles.icon} />
+            </div>
+            <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
+          </div>
+          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
+            <div class={keyFigureStyles.value}>
+              {fmt(totalContributors)}
+              <Icon name="plus" class={keyFigureStyles.icon} />
+            </div>
+            <div class={keyFigureStyles.label}>{t('contributors')}</div>
+          </div>
+        </div>
+        <div class={styles.rightContent}>
+          <h4 class:list={[headingStyles.heading, headingStyles.medium, styles.heading]}>
+            {t('community-stats-section-heading')}
+          </h4>
+          <div class={styles.sectionDescription}>
+            {t('community-stats-section-description')}
+            <a class:list={[linkStyles.link, linkStyles.underline]} href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
+              {t('community-dashboard-link-label')}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <!-- License + contact (static) -->
-      <section class="section">
-        <h2>{t('license-section-heading')}</h2>
-        <p>{t('license-section-description')}</p>
-      </section>
-      <section class="section">
-        <h2>{t('contact-section-heading')}</h2>
-        <p>{t('contact-section-description')}</p>
-        <a class="de-btn" href="mailto:info@mapswipe.org" target="_blank">{t('contact-link-label')}</a>
-      </section>
+  {/* Project-type explainer cards (static, SSR-only) */}
+  <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.typeSection]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('type-section-heading')}
+        </h4>
+        <div class={sectionStyles.description}>{t('type-section-description')}</div>
+      </div>
+      <div class={styles.typeList}>
+        {typeCards.map((card) => (
+          <article class={cardStyles.card}>
+            {'beforeAfter' in card && card.beforeAfter ? (
+              <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
+                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                  <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+                </div>
+                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                  <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                </div>
+              </div>
+            ) : (
+              <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
+                <img class:list={[imageStyles.image, cardStyles.image]} src={'coverImageUrl' in card ? card.coverImageUrl : ''} alt="card-cover-image" loading="lazy" decoding="async" />
+              </div>
+            )}
+            <div class={cardStyles.cardContent}>
+              <div class={cardStyles.headerWrapper}>
+                <div class={cardStyles.header}>
+                  <div>
+                    <ProjectTypeIcon type={card.type} />
+                  </div>
+                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                    {card.title}
+                  </h6>
+                </div>
+              </div>
+              <div class:list={[cardStyles.childrenContainer, styles.keyPointList]}>
+                {card.points.map((p) => (
+                  <div class={listItemStyles.listItem}>
+                    <div class={listItemStyles.icon}>
+                      <Icon name="checkmark-circle-outline" />
+                    </div>
+                    <div class={listItemStyles.label}>{p}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* The ONE interactive island: filters + search + sort + pagination +
+       card list + map share state. client:load so filters + initial list
+       are in the SSR'd HTML; the leaflet map is client-guarded inside.
+       Renders the explore + download sections with the same recovered
+       CSS-Module classes as the old Next page (it imports this page's
+       styles.module.css). */}
+  <DataExplorer
+    client:load
+    dict={dict}
+    imageMap={initialImageMap}
+    initialProjects={initialProjects}
+    totalCount={payload.projects.length}
+    dataUrl={DATA_EXPLORER_JSON_URL}
+    globalExportAssets={payload.globalExportAssets}
+    minArea={payload.minArea}
+    maxArea={payload.maxArea}
+    minContributors={payload.minContributors}
+    maxContributors={payload.maxContributors}
+    buildDate={payload.buildDate}
+  />
+
+  {/* License + contact (static) */}
+  <section class={sectionStyles.section}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('license-section-heading')}
+        </h4>
+        <div class={sectionStyles.description}>{t('license-section-description')}</div>
+      </div>
+    </div>
+  </section>
+  <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('contact-section-heading')}
+        </h4>
+        <div class={sectionStyles.description}>{t('contact-section-description')}</div>
+      </div>
+      <div class={sectionStyles.actions}>
+        <a class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">
+          {t('contact-link-label')}
+        </a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
-<style is:global>
-      .data-page { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
-      .type-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
-      .type-card { border: 1px solid #eee; border-radius: 8px; padding: 1rem; }
-      .type-card h3 { margin-top: 0; }
-
-      /* DataExplorer island */
-      .de-stats-header { display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin: 2rem 0; }
-      .de-figures { display: flex; gap: 1.5rem; }
-      .de-figure { display: flex; flex-direction: column; align-items: center; }
-      .de-figure-value { font-size: 1.8rem; font-weight: 700; color: var(--color-accent); }
-      .de-figure-large .de-figure-value { font-size: 2.4rem; }
-      .de-figure-label { font-size: 0.85rem; color: #666; }
-      .de-stats-copy { flex: 1 1 320px; }
-
-      .de-explore { margin-top: 2.5rem; }
-      .de-explore-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
-      .de-last-fetched { font-size: 0.8rem; color: #888; }
-
-      .de-top { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 1.5rem; margin-top: 1rem; }
-      @media (max-width: 800px) { .de-top { grid-template-columns: 1fr; } }
-      /* .de-filters is a <fieldset> (so `disabled` cascades to every filter
-         control while the dataset JSON loads) — reset the fieldset chrome. */
-      .de-filters { display: flex; flex-direction: column; gap: 0.75rem; border: 0; padding: 0; margin: 0; min-inline-size: auto; }
-      .de-filters:disabled { opacity: 0.6; }
-      .de-fieldset { border: 1px solid #eee; border-radius: 8px; padding: 0.5rem 0.75rem; margin: 0; }
-      .de-fieldset legend { font-size: 0.8rem; color: #666; padding: 0 0.3rem; }
-      .de-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-      .de-chip { display: inline-flex; align-items: center; gap: 0.3rem; border: 1px solid #ccc; background: #fff; border-radius: 999px; padding: 0.25rem 0.6rem; font-size: 0.8rem; cursor: pointer; }
-      .de-chip-on { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
-      .de-input { width: 100%; padding: 0.5rem 0.6rem; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
-      .de-row { display: flex; gap: 0.5rem; }
-      .de-date { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.75rem; color: #666; flex: 1; }
-      .de-btn { border: 1px solid var(--color-primary); background: #fff; color: var(--color-primary); border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; }
-      .de-clear { align-self: flex-start; }
-
-      .de-map-container { display: flex; flex-direction: column; gap: 0.5rem; }
-      .de-map { height: 420px; border-radius: 8px; overflow: hidden; }
-      .de-map-placeholder { height: 100%; background: #eef1f2; }
-      .de-map-settings { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; }
-      .de-radio { display: inline-flex; align-items: center; gap: 0.3rem; }
-
-      .de-summary { display: flex; align-items: center; gap: 0.75rem; margin: 1.25rem 0; font-size: 0.95rem; }
-      .de-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; }
-      .de-dot-active { background: #F69143; }
-      .de-dot-finished { background: #AABE5D; }
-
-      .de-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-      .de-card-link { text-decoration: none; color: inherit; }
-      .de-card { border: 1px solid #eee; border-radius: 10px; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
-      .de-card-img { width: 100%; height: 160px; object-fit: cover; }
-      .de-card-body { padding: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; }
-      .de-card-heading { margin: 0; font-size: 1.05rem; }
-      .de-card-tags, .de-card-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-      .de-tag { display: inline-flex; align-items: center; gap: 0.3rem; background: #f2f2f2; border-radius: 999px; padding: 0.15rem 0.55rem; font-size: 0.78rem; }
-      .de-tag-plain { background: transparent; padding: 0.15rem 0; color: #666; }
-      .de-progress { margin-top: auto; }
-      .de-progress-track { background: #eee; border-radius: 999px; height: 8px; overflow: hidden; }
-      .de-progress-bar { background: var(--color-accent); height: 100%; }
-      .de-progress-label { font-size: 0.75rem; color: #666; margin-top: 0.2rem; }
-
-      .de-download { margin-top: 2.5rem; }
-      .de-download-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-      .de-download-card { padding: 1rem; }
-      .de-file-details { display: flex; gap: 0.5rem; align-items: center; margin: 0.5rem 0; font-size: 0.85rem; color: #666; }
-      .de-link { color: var(--color-primary); font-weight: 600; text-decoration: none; }
-      .de-popup-link { text-decoration: none; color: inherit; }
-      .de-popup-tags { display: flex; gap: 0.3rem; margin-top: 0.3rem; }
-</style>

@@ -3,8 +3,19 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BlogLayout from '../../../../layouts/BlogLayout.astro';
+import Icon from '../../../../components/Icon.astro';
 import { getT, LOCALES } from '../../../../i18n';
 import { selectPaths } from '../../../../../packages/astro-incremental-static/src/index.ts';
+// CSS Modules recovered from the Next app: the page module + the component
+// modules whose markup this page reproduces (Hero, Section, Tag, Heading,
+// HtmlOutput, ImageWrapper).
+import styles from './styles.module.css';
+import heroStyles from '../../../../components/Hero.module.css';
+import sectionStyles from '../../../../components/Section.module.css';
+import tagStyles from '../../../../components/Tag.module.css';
+import headingStyles from '../../../../components/Heading.module.css';
+import imageStyles from '../../../../components/ImageWrapper.module.css';
+import htmlOutputStyles from '../../../../components/HtmlOutput.module.css';
 
 // Blog DETAIL page. getStaticPaths = 6 locales x N blogs, producing
 // /<locale>/blogs/<slug>/ with exact URL parity to Next (slug == entry.id ==
@@ -63,23 +74,51 @@ const tabTitle = String(t('blog-tab-head', { blogTitle }));
   title={tabTitle}
   description={description}
   path={`blogs/${entry.id}/`}
+  mainClass={styles.blog}
 >
-  <section class="hero">
-    <div class="heroMain">
-      <h1>{blogTitle}</h1>
-      <div class="heroDescription">
-        {publishedDate && <span class="tag">{dateFmt.format(publishedDate)}</span>}
-        {author && <span class="tag">{author}</span>}
+  {/* Hero: title + date/author tags left, cover image right */}
+  <div class:list={[heroStyles.hero, styles.hero]}>
+    <div class={heroStyles.section}>
+      <div class:list={[heroStyles.mainContent, styles.heroMainContent]}>
+        <div class:list={[heroStyles.left, styles.heroLeftContent]}>
+          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+            {blogTitle}
+          </h2>
+          <div class={heroStyles.description}>
+            <div class={styles.heroDescription}>
+              {publishedDate && (
+                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
+                  <Icon name="calendar-clear-outline" />
+                  {dateFmt.format(publishedDate)}
+                </span>
+              )}
+              {author && (
+                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
+                  {author}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        <div class={heroStyles.right}>
+          {coverImage ? (
+            <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+              <Image class={imageStyles.image} src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
+            </div>
+          ) : (
+            <div />
+          )}
+        </div>
       </div>
     </div>
-    {coverImage && (
-      <Image class="illustration" src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
-    )}
-  </section>
+    <div class={heroStyles.angledBackground}></div>
+  </div>
 
-  <section class="section">
-    <div class="htmlContent">
-      <Content />
+  <section class={sectionStyles.section}>
+    <div class={sectionStyles.container}>
+      <div class={htmlOutputStyles.htmlOutput}>
+        <Content />
+      </div>
     </div>
   </section>
 </BlogLayout>

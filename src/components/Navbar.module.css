@@ -1,0 +1,145 @@
+.navbar {
+    position: relative;
+    z-index: 2;
+    background-color: var(--color-background);
+    color: var(--color-text-on-dark);
+
+    .navbarContent {
+        display: flex;
+        position: relative;
+        align-items: center;
+        margin: auto;
+        background-color: var(--color-background);
+        padding: var(--spacing-medium);
+        max-width: var(--width-page-max);
+        gap: var(--spacing-medium);
+
+        .logo {
+            position: relative;
+            flex-shrink: 0;
+            width: 10rem;
+            height: 2rem;
+            object-fit: contain;
+            object-position: center left;
+
+            /* Astro adaptation: the logo was a next/image fill; the plain
+             * <img> must fill the sized anchor the same way. */
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center left;
+            }
+        }
+
+        .routes {
+            display: flex;
+            place-content: center flex-end;
+            flex-grow: 1;
+            flex-wrap: wrap;
+            text-align: center;
+            gap: var(--spacing-medium);
+
+            .link {
+                border-bottom: var(--width-separator-thin) solid transparent;
+                font-size: var(--font-size-medium);
+                font-weight: var(--font-weight-semi-bold);
+
+                &.active {
+                    border-bottom-color: var(--color-accent);
+                }
+
+                &:hover {
+                    border-bottom-color: var(--color-accent);
+                    text-decoration: unset;
+                }
+            }
+        }
+
+        .rightContainer {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-medium);
+
+            .dropdown {
+                display: flex;
+                align-items: center;
+                border-radius: var(--border-radius-medium);
+                border-color: var(--color-text-on-dark);
+                padding: var(--spacing-tiny) var(--spacing-extra-small);
+                text-transform: uppercase;
+                color: var(--color-text-on-dark);
+                font-size: var(--font-size-small);
+                gap: var(--spacing-tiny);
+
+                .currentLocale {
+                    font-size: var(--font-size-small);
+                }
+            }
+        }
+
+        .menu {
+            display: none;
+            line-height: 100%;
+            color: var(--color-text-on-dark);
+            font-size: var(--font-size-large);
+        }
+
+        /* Astro adaptation: the Next navbar hid the routes off-canvas on
+         * mobile behind a JS hamburger toggle (.navShown / .menu). The Astro
+         * navbar ships zero JS, so the routes simply stay in flow and wrap. */
+        @media screen and (width <= 720px) {
+            justify-content: space-between;
+        }
+    }
+}
+
+.languageList {
+    display: flex;
+    flex-direction: column;
+
+    .language {
+        padding: var(--spacing-ultra-small) var(--spacing-medium);
+
+        &.activeLanguage {
+            background-color: var(--color-background-brand-light);
+            color: var(--color-text);
+            font-weight: var(--font-weight-bold);
+        }
+
+        &:hover {
+            background-color: var(--color-background-brand-light);
+            color: var(--color-text);
+        }
+    }
+}
+
+/* Astro adaptation: the Next app rendered the language list in a
+ * JS-positioned Popup portal (components/Popup + useFloatPlacement). The
+ * zero-JS Astro navbar shows it as an absolutely-positioned descendant on
+ * hover/focus-within instead. The visual chrome (background, radius, padding,
+ * min-width) is ported from the Popup component's module; the box-shadow uses
+ * the design-token shadow (Popup's referenced undefined --go-ui-* variables). */
+.languageWrap {
+    position: relative;
+
+    .languageList {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 3;
+        border-radius: var(--border-radius-small);
+        box-shadow: var(--box-shadow-medium);
+        background: var(--color-foreground);
+        padding: var(--spacing-medium) 0;
+        min-width: 10rem;
+        overflow: auto;
+        color: var(--color-text);
+    }
+
+    &:hover .languageList,
+    &:focus-within .languageList {
+        display: flex;
+    }
+}

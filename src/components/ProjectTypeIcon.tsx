@@ -1,4 +1,7 @@
 import React from 'react';
+// Sizing from the recovered CSS Module (Next: components/ProjectTypeIcon/
+// styles.module.css) — .icon + small/medium/large modifiers.
+import styles from './ProjectTypeIcon.module.css';
 
 // Faithful port of the Next app's ProjectTypeIcon (SVG paths verbatim). Ships in
 // the DataExplorer island bundle. currentColor fill so CSS can theme it.
@@ -72,20 +75,16 @@ interface Props {
   className?: string;
 }
 
-const sizePx: Record<NonNullable<Props['size']>, number> = { small: 16, medium: 24, large: 40 };
-
 export default function ProjectTypeIcon(props: Props) {
   const { type, size = 'medium', className } = props;
   const icon = icons[type];
   if (!icon) return null;
-  const px = sizePx[size];
+  const cls = [styles.icon, styles[size], className].filter(Boolean).join(' ');
   return (
     <svg
-      className={className}
+      className={cls}
       xmlns="http://www.w3.org/2000/svg"
       viewBox={icon.viewBox}
-      width={px}
-      height={px}
       fill="currentColor"
       aria-hidden="true"
     >

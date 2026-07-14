@@ -10,6 +10,28 @@ import React, {
 import ProjectTypeIcon from './ProjectTypeIcon';
 import type { MiniProject, Organization, ExportAsset } from '../lib/dataExplorer';
 
+// CSS Modules recovered from the Next app. The island shares the data page's
+// module (same hashed classes as the .astro page that mounts it) plus the
+// component modules its markup reproduces (Section, Card, Tag, Heading, Link,
+// Button, MultiSelectInput, RadioInput, RawInput, SelectInput, ImageWrapper).
+import styles from '../pages/[locale]/data/styles.module.css';
+import sectionStyles from './Section.module.css';
+import cardStyles from './Card.module.css';
+import tagStyles from './Tag.module.css';
+import headingStyles from './Heading.module.css';
+import linkStyles from './Link.module.css';
+import buttonStyles from './Button.module.css';
+import multiSelectStyles from './MultiSelectInput.module.css';
+import radioStyles from './RadioInput.module.css';
+import rawInputStyles from './RawInput.module.css';
+import selectInputStyles from './SelectInput.module.css';
+import imageStyles from './ImageWrapper.module.css';
+
+// Tiny className joiner (parity with @togglecorp/fujs _cs).
+function cs(...parts: (string | false | null | undefined)[]): string {
+  return parts.filter(Boolean).join(' ');
+}
+
 // Leaflet touches window at import time and cannot SSR. We lazy-load the map
 // module via a dynamic import() so its (leaflet) top-level code only runs in the
 // browser — the parent defers rendering behind a post-mount flag. This mirrors
@@ -151,8 +173,6 @@ interface Props {
   maxArea: number;
   minContributors: number;
   maxContributors: number;
-  totalContributors: number | null;
-  totalSwipes: number | null;
   buildDate: string | null;
 }
 
@@ -168,8 +188,6 @@ export default function DataExplorer(props: Props) {
     maxArea,
     minContributors,
     maxContributors,
-    totalContributors,
-    totalSwipes,
     buildDate,
   } = props;
 
@@ -207,7 +225,7 @@ export default function DataExplorer(props: Props) {
       .catch((err: unknown) => {
         if (cancelled) return;
         // Fail-soft: keep showing the SSR'd initial slice.
-         
+
         console.warn(`data-explorer: failed to load ${dataUrl}; showing the initial ${initialProjects.length} projects only`, err);
         setLoading(false);
       });
@@ -242,6 +260,10 @@ export default function DataExplorer(props: Props) {
     PUBLISHED: t('active'),
     FINISHED: t('finished'),
   }), [t]);
+  const statusClass: Record<string, string> = {
+    PUBLISHED: styles.active,
+    FINISHED: styles.finished,
+  };
 
   const toggleInList = useCallback((list: string[], value: string): string[] =>
     list.includes(value) ? list.filter((v) => v !== value) : [...list, value], []);
@@ -332,269 +354,336 @@ export default function DataExplorer(props: Props) {
   };
 
   return (
-    <div className="de">
-      {/* Community stats key figures */}
-      <section className="de-stats-header">
-        <div className="de-figures">
-          <div className="de-figure de-figure-large">
-            <span className="de-figure-value">{isDefined(totalSwipes) ? new Intl.NumberFormat().format(totalSwipes) : '-'}</span>
-            <span className="de-figure-label">{t('total-swipes')}</span>
-          </div>
-          <div className="de-figure">
-            <span className="de-figure-value">{isDefined(totalContributors) ? new Intl.NumberFormat().format(totalContributors) : '-'}</span>
-            <span className="de-figure-label">{t('contributors')}</span>
-          </div>
-        </div>
-        <div className="de-stats-copy">
-          <h2>{t('community-stats-section-heading')}</h2>
-          <p>
-            {t('community-stats-section-description')}{' '}
-            <a href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
-              {t('community-dashboard-link-label')}
-            </a>
-          </p>
-        </div>
-      </section>
-
-      {/* Explore: filters + map + list */}
-      <section className="de-explore">
-        <div className="de-explore-head">
-          <div>
-            <h2>{t('explore-section-heading')}</h2>
+    <>
+      {/* Explore: filters + map + list (Next: exploreSection Section) */}
+      <section className={cs(sectionStyles.section, styles.exploreSection)}>
+        <div className={sectionStyles.container}>
+          <div className={cs(sectionStyles.headingContainer, styles.exploreHeadingContainer)}>
+            <h4 className={cs(headingStyles.heading, headingStyles.medium, sectionStyles.heading)}>
+              {t('explore-section-heading')}
+            </h4>
             {buildDate && (
-              <p className="de-last-fetched">
+              <div className={cs(sectionStyles.description, styles.lastFetchedDate)}>
                 {t('data-last-fetched', { date: new Date(Number(buildDate)) })}
                 <br />
                 {t('explore-section-heading-description')}
-              </p>
+              </div>
             )}
           </div>
-          {tableProjects.length !== visibleProjects.length && (
-            <button type="button" className="de-btn" onClick={handleSeeMore}>
-              {t('see-more-button')}
-            </button>
-          )}
-        </div>
 
-        <div className="de-top">
-          {/* One disabled-able fieldset: while the shared dataset JSON is
-              loading, every filter control is disabled (native fieldset
-              cascade) — they apply against the full dataset once it arrives. */}
-          <fieldset className="de-filters" disabled={loading} aria-busy={loading}>
-            {/* Project status (multi-select as toggle chips) */}
-            <fieldset className="de-fieldset">
-              <legend>{t('project-status')}</legend>
-              <div className="de-chips">
-                {(['PUBLISHED', 'FINISHED'] as const).map((key) => (
+          <div className={styles.content}>
+            <div className={styles.topContainer}>
+              {/* One disabled-able fieldset: while the shared dataset JSON is
+                  loading, every filter control is disabled (native fieldset
+                  cascade) — they apply against the full dataset once it
+                  arrives. (Next used a plain div; see the fieldset adaptation
+                  note in styles.module.css.) */}
+              <fieldset className={styles.filters} disabled={loading} aria-busy={loading}>
+                {/* Project status (MultiSelectInput as toggle chips) */}
+                <div className={multiSelectStyles.input}>
+                  <div>{t('project-status')}</div>
+                  <div className={multiSelectStyles.optionsContainer}>
+                    {(['PUBLISHED', 'FINISHED'] as const).map((key) => (
+                      <button
+                        key={key}
+                        type="button"
+                        className={cs(
+                          buttonStyles.button,
+                          multiSelectStyles.option,
+                          projectStatuses.includes(key) && multiSelectStyles.selected,
+                        )}
+                        onClick={() => setProjectStatuses((l) => toggleInList(l, key))}
+                      >
+                        <span className={statusClass[key]}>●</span>
+                        {statusLabels[key]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Project type (MultiSelectInput as toggle chips) */}
+                <div className={multiSelectStyles.input}>
+                  <div>{t('project-type')}</div>
+                  <div className={multiSelectStyles.optionsContainer}>
+                    {PROJECT_TYPES.map((key) => (
+                      <button
+                        key={key}
+                        type="button"
+                        className={cs(
+                          buttonStyles.button,
+                          multiSelectStyles.option,
+                          projectTypes.includes(key) && multiSelectStyles.selected,
+                        )}
+                        onClick={() => setProjectTypes((l) => toggleInList(l, key))}
+                      >
+                        <ProjectTypeIcon type={key} size="small" />
+                        {typeLabels[key]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <input
+                  className={cs(rawInputStyles.rawInput, styles.filter)}
+                  placeholder={t('search-label')}
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <input
+                  className={cs(rawInputStyles.rawInput, styles.filter)}
+                  placeholder={t('location-search-label')}
+                  value={locationSearchText}
+                  onChange={(e) => setLocationSearchText(e.target.value)}
+                />
+                <select
+                  className={cs(selectInputStyles.selectInput, styles.filter)}
+                  value={organization}
+                  onChange={(e) => setOrganization(e.target.value)}
+                >
+                  <option value="">{t('organization-placeholder')}</option>
+                  {organizations.map((org) => (
+                    <option key={org.id} value={org.id}>{org.name}</option>
+                  ))}
+                </select>
+                <div className={styles.row}>
+                  <label className={styles.inputContainer}>
+                    <div>{t('date-from-label')}</div>
+                    <input
+                      type="date"
+                      className={cs(rawInputStyles.rawInput, styles.filter, styles.dateFilter)}
+                      value={dateFrom}
+                      onChange={(e) => setDateFrom(e.target.value)}
+                    />
+                  </label>
+                  <label className={styles.inputContainer}>
+                    <div>{t('date-to-label')}</div>
+                    <input
+                      type="date"
+                      className={cs(rawInputStyles.rawInput, styles.filter, styles.dateFilter)}
+                      value={dateTo}
+                      onChange={(e) => setDateTo(e.target.value)}
+                    />
+                  </label>
+                </div>
+                {filtersApplied && (
                   <button
-                    key={key}
                     type="button"
-                    className={`de-chip${projectStatuses.includes(key) ? ' de-chip-on' : ''}`}
-                    onClick={() => setProjectStatuses((l) => toggleInList(l, key))}
+                    className={cs(buttonStyles.button, buttonStyles.border, styles.clearButton)}
+                    onClick={handleClearFilters}
                   >
-                    <span className={`de-dot de-dot-${key === 'PUBLISHED' ? 'active' : 'finished'}`} />
-                    {statusLabels[key]}
+                    {t('clear-filters')}
                   </button>
-                ))}
-              </div>
-            </fieldset>
-
-            {/* Project type (multi-select as toggle chips) */}
-            <fieldset className="de-fieldset">
-              <legend>{t('project-type')}</legend>
-              <div className="de-chips">
-                {PROJECT_TYPES.map((key) => (
-                  <button
-                    key={key}
-                    type="button"
-                    className={`de-chip${projectTypes.includes(key) ? ' de-chip-on' : ''}`}
-                    onClick={() => setProjectTypes((l) => toggleInList(l, key))}
-                  >
-                    <ProjectTypeIcon type={key} size="small" />
-                    {typeLabels[key]}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-
-            <input
-              className="de-input"
-              placeholder={t('search-label')}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <input
-              className="de-input"
-              placeholder={t('location-search-label')}
-              value={locationSearchText}
-              onChange={(e) => setLocationSearchText(e.target.value)}
-            />
-            <select
-              className="de-input"
-              value={organization}
-              onChange={(e) => setOrganization(e.target.value)}
-            >
-              <option value="">{t('organization-placeholder')}</option>
-              {organizations.map((org) => (
-                <option key={org.id} value={org.id}>{org.name}</option>
-              ))}
-            </select>
-            <div className="de-row">
-              <label className="de-date">
-                <span>{t('date-from-label')}</span>
-                <input type="date" className="de-input" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
-              </label>
-              <label className="de-date">
-                <span>{t('date-to-label')}</span>
-                <input type="date" className="de-input" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
-              </label>
-            </div>
-            {filtersApplied && (
-              <button type="button" className="de-btn de-clear" onClick={handleClearFilters}>
-                {t('clear-filters')}
-              </button>
-            )}
-          </fieldset>
-
-          <div className="de-map-container">
-            {/* Map is client-only: rendered after mount so SSR never touches
-                leaflet. Placeholder keeps layout stable pre-hydration. Also
-                waits for the fetched dataset so it never draws just the 9-item
-                initial slice and then re-jumps to the full set. */}
-            <div className="de-map">
-              {mounted && !loading ? (
-                <Suspense fallback={<div className="de-map-placeholder" aria-hidden="true" />}>
-                  <ProjectsMapIsland
-                    projects={visibleProjects}
-                    radiusSelector={radiusSelector}
-                    typeLabels={typeLabels}
-                    statusLabels={statusLabels}
-                  />
-                </Suspense>
-              ) : (
-                <div className="de-map-placeholder" aria-hidden="true" />
-              )}
-            </div>
-            <div className="de-map-settings">
-              <span className="de-map-settings-label">{t('bubble-type')}</span>
-              {([
-                { key: 'area', label: t('mapped-area') },
-                { key: 'contributors', label: t('contributors') },
-              ]).map((opt) => (
-                <label key={opt.key} className="de-radio">
-                  <input
-                    type="radio"
-                    name="bubble"
-                    checked={bubble === opt.key}
-                    onChange={() => setBubble(opt.key)}
-                  />
-                  {opt.label}
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="de-summary" aria-busy={loading}>
-          {/* While loading, the true total comes from the build-time count —
-              visibleProjects only holds the initial slice. The area sum is
-              slice-only until the dataset arrives, so hide it until then. */}
-          <div>{t('visible-projects-count', { totalProjects: loading ? totalCount : visibleProjects.length })}</div>
-          {!loading && (
-            <>
-              <span className="de-dot de-dot-active" />
-              <div>{t('total-area-card-text', { area: roundedTotalArea })}</div>
-            </>
-          )}
-        </div>
-
-        <div className="de-list">
-          {tableProjects.map((project) => (
-            <a key={project.id} className="de-card-link" href={`/projects/${project.firebaseId}/`}>
-              <article className="de-card">
-                {project.image?.file?.url && (
-                  <img
-                    className="de-card-img"
-                    src={imageMap[project.image.file.url] ?? project.image.file.url}
-                    alt={project.name}
-                    loading="lazy"
-                    decoding="async"
-                  />
                 )}
-                <div className="de-card-body">
-                  <h3 className="de-card-heading">{project.name}</h3>
-                  <div className="de-card-tags">
-                    {project.projectType && (
-                      <span className="de-tag">
-                        <ProjectTypeIcon type={project.projectType as typeof PROJECT_TYPES[number]} size="small" />
-                        {typeLabels[project.projectType] ?? project.projectType}
-                      </span>
-                    )}
-                    {project.status && (
-                      <span className="de-tag">
-                        <span className={`de-dot de-dot-${project.status === 'PUBLISHED' ? 'active' : 'finished'}`} />
-                        {statusLabels[project.status] ?? project.status}
-                      </span>
-                    )}
-                  </div>
-                  <div className="de-card-meta">
-                    {project.region && <span className="de-tag de-tag-plain" title={t('Location')}>{project.region}</span>}
-                    {project.requestingOrganization && (
-                      <span className="de-tag de-tag-plain" title={t('requesting-organization')}>
-                        {project.requestingOrganization.name}
-                      </span>
-                    )}
-                    {project.createdAt && (
-                      <span className="de-tag de-tag-plain" title={t('created-at')}>
-                        {t('project-card-last-update', { date: project.createdAt })}
-                      </span>
-                    )}
-                    <span className="de-tag de-tag-plain" title={t('project-contributors')}>
-                      {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers ?? 0 })}
-                    </span>
-                  </div>
-                  <div className="de-progress">
-                    <div className="de-progress-track">
-                      <div className="de-progress-bar" style={{ width: `${project.progress * 100}%` }} />
-                    </div>
-                    <div className="de-progress-label">
-                      {t('project-card-progress-text', { progress: project.progress * 100 })}
+              </fieldset>
+
+              <div className={styles.mapContainer}>
+                {/* Map is client-only: rendered after mount so SSR never touches
+                    leaflet. Placeholder keeps layout stable pre-hydration. Also
+                    waits for the fetched dataset so it never draws just the
+                    9-item initial slice and then re-jumps to the full set. */}
+                {mounted && !loading ? (
+                  <Suspense fallback={<div className={styles.projectsMap} aria-hidden="true" />}>
+                    <ProjectsMapIsland
+                      className={styles.projectsMap}
+                      projects={visibleProjects}
+                      radiusSelector={radiusSelector}
+                      typeLabels={typeLabels}
+                      statusLabels={statusLabels}
+                    />
+                  </Suspense>
+                ) : (
+                  <div className={styles.projectsMap} aria-hidden="true" />
+                )}
+                <div className={styles.mapSettings}>
+                  {/* Bubble type (RadioInput with small pill options) */}
+                  <div className={cs(radioStyles.input, styles.bubbleFilter)}>
+                    <div>{t('bubble-type')}</div>
+                    <div className={radioStyles.optionsContainer}>
+                      {([
+                        { key: 'area', label: t('mapped-area') },
+                        { key: 'contributors', label: t('contributors') },
+                      ]).map((opt) => (
+                        <button
+                          key={opt.key}
+                          type="button"
+                          className={cs(
+                            buttonStyles.button,
+                            radioStyles.option,
+                            radioStyles.small,
+                            bubble === opt.key && radioStyles.selected,
+                          )}
+                          onClick={() => setBubble(opt.key)}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </article>
-            </a>
-          ))}
+              </div>
+            </div>
+
+            <div className={styles.stats} aria-busy={loading}>
+              {/* While loading, the true total comes from the build-time count —
+                  visibleProjects only holds the initial slice. The area sum is
+                  slice-only until the dataset arrives, so hide it until then. */}
+              <div>{t('visible-projects-count', { totalProjects: loading ? totalCount : visibleProjects.length })}</div>
+              {!loading && (
+                <>
+                  <span className={cs(styles.circle, styles.active)}>●</span>
+                  <div>{t('total-area-card-text', { area: roundedTotalArea })}</div>
+                </>
+              )}
+            </div>
+
+            <div className={styles.projectList}>
+              {tableProjects.map((project) => (
+                <a
+                  key={project.id}
+                  className={cs(linkStyles.link, styles.cardLink)}
+                  href={`/projects/${project.firebaseId}/`}
+                >
+                  {/* `de-card` is a stable, hash-free hook kept for the e2e
+                      tests (tests/e2e/islands.spec.ts selects article.de-card). */}
+                  <article className={cs('de-card', cardStyles.card, styles.project)}>
+                    {project.image?.file?.url && (
+                      <div className={cs(imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.projectImage)}>
+                        <img
+                          className={cs(imageStyles.image, cardStyles.image)}
+                          src={imageMap[project.image.file.url] ?? project.image.file.url}
+                          alt={project.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    )}
+                    <div className={cardStyles.cardContent}>
+                      <div className={cardStyles.headerWrapper}>
+                        <div className={cardStyles.header}>
+                          <h6 className={cs(headingStyles.heading, headingStyles.extraSmall, headingStyles.normal, cardStyles.heading)}>
+                            {project.name}
+                          </h6>
+                        </div>
+                        <div className={styles.projectDetailsRow}>
+                          {project.projectType && (
+                            <div className={cs(tagStyles.tag, tagStyles.small)}>
+                              <ProjectTypeIcon type={project.projectType as typeof PROJECT_TYPES[number]} size="small" />
+                              {typeLabels[project.projectType] ?? project.projectType}
+                            </div>
+                          )}
+                          {project.status && (
+                            <div className={cs(tagStyles.tag, tagStyles.small)}>
+                              <span className={statusClass[project.status]}>●</span>
+                              {statusLabels[project.status] ?? project.status}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className={cs(cardStyles.childrenContainer, styles.projectStats)}>
+                        <div className={styles.bottomTags}>
+                          {project.region && (
+                            <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('Location')}>
+                              {project.region}
+                            </div>
+                          )}
+                          {project.requestingOrganization && (
+                            <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('requesting-organization')}>
+                              {project.requestingOrganization.name}
+                            </div>
+                          )}
+                          <div className={styles.projectDetailsRow}>
+                            {project.createdAt && (
+                              <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('created-at')}>
+                                {t('project-card-last-update', { date: project.createdAt })}
+                              </div>
+                            )}
+                            <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('project-contributors')}>
+                              {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers ?? 0 })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={cardStyles.footer}>
+                        <div className={cardStyles.footerContent}>
+                          <div className={styles.progressBar}>
+                            <div className={styles.track}>
+                              <div className={styles.progress} style={{ width: `${project.progress * 100}%` }} />
+                            </div>
+                            <div className={styles.progressLabel}>
+                              {t('project-card-progress-text', { progress: project.progress * 100 })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Next rendered the see-more button as the Section's `actions`. */}
+          {tableProjects.length !== visibleProjects.length && (
+            <div className={sectionStyles.actions}>
+              <button
+                type="button"
+                className={cs(buttonStyles.button, buttonStyles.border)}
+                onClick={handleSeeMore}
+              >
+                {t('see-more-button')}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Download section (global export assets) */}
-      <section className="de-download">
-        <h2>{t('download-section-heading')}</h2>
-        <div className="de-download-list">
-          {globalExportAssets.map((asset) => {
-            const config = assetConfig[asset.type];
-            if (!config) return null;
-            const { size, unit } = getFileSizeProperties(asset.fileSize);
-            const sizeStr = new Intl.NumberFormat(undefined, {
-              style: 'unit', unit, maximumFractionDigits: 1,
-            }).format(size);
-            return (
-              <div className="de-card de-download-card" key={asset.type}>
-                <h3>{config.heading}</h3>
-                <p>{config.description}</p>
-                <div className="de-file-details">
-                  <span className="de-tag">{config.fileLabel}</span>
-                  <span>{sizeStr}</span>
+      <section className={cs(sectionStyles.section, sectionStyles.withAlternativeBackground, styles.downloadSection)}>
+        <div className={sectionStyles.container}>
+          <div className={sectionStyles.headingContainer}>
+            <h4 className={cs(headingStyles.heading, headingStyles.medium, sectionStyles.heading)}>
+              {t('download-section-heading')}
+            </h4>
+          </div>
+          <div className={styles.urlList}>
+            {globalExportAssets.map((asset) => {
+              const config = assetConfig[asset.type];
+              if (!config) return null;
+              const { size, unit } = getFileSizeProperties(asset.fileSize);
+              const sizeStr = new Intl.NumberFormat(undefined, {
+                style: 'unit', unit, maximumFractionDigits: 1,
+              }).format(size);
+              return (
+                <div className={cardStyles.card} key={asset.type}>
+                  <div className={cardStyles.cardContent}>
+                    <div className={cardStyles.headerWrapper}>
+                      <div className={cardStyles.header}>
+                        <h6 className={cs(headingStyles.heading, headingStyles.extraSmall, cardStyles.heading)}>
+                          {config.heading}
+                        </h6>
+                      </div>
+                      <div>{config.description}</div>
+                    </div>
+                    <div className={cs(cardStyles.childrenContainer, styles.downloadCard)}>
+                      <div className={styles.fileDetails}>
+                        <div className={cs(tagStyles.tag, tagStyles.medium)}>{config.fileLabel}</div>
+                        <div>{sizeStr}</div>
+                      </div>
+                      <a
+                        className={cs(linkStyles.link, linkStyles.buttonTransparent, styles.link)}
+                        href={asset.file.url}
+                        download
+                      >
+                        {t('download')}
+                      </a>
+                    </div>
+                  </div>
                 </div>
-                <a className="de-link" href={asset.file.url} download>
-                  {t('download')}
-                </a>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

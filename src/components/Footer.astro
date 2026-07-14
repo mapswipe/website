@@ -1,68 +1,78 @@
 ---
 import Icon from './Icon.astro';
 import { getT } from '../i18n';
+// CSS Modules recovered from the Next app (components/Footer +
+// components/Heading + components/Link).
+import styles from './Footer.module.css';
+import headingStyles from './Heading.module.css';
+import linkStyles from './Link.module.css';
 
 // Ported from the Next app's components/Footer. Static; copyright year computed
 // at build time (Next did `new Date().getFullYear()` at render — same result
 // for a static build). i18next {{year}} interpolation reproduced via getT.
 interface Props {
   locale: string;
+  class?: string;
 }
-const { locale } = Astro.props;
+const { locale, class: className } = Astro.props;
 const t = await getT(locale, 'common');
 const currentYear = new Date().getFullYear();
+
+const headingClass = [headingStyles.heading, headingStyles.small, styles.heading];
+type IconName = 'logo-facebook' | 'logo-mastodon' | 'logo-instagram' | 'logo-github' | 'newspaper' | 'mail';
+const socialLinks: { href: string; title: string; icon: IconName; rel?: string }[] = [
+  { href: 'https://www.facebook.com/TheMissingMaps', title: t('facebook'), icon: 'logo-facebook' },
+  { href: 'https://floss.social/@mapswipe', title: t('mastodon'), icon: 'logo-mastodon', rel: 'me' },
+  { href: 'https://www.instagram.com/themissingmaps/', title: t('instagram'), icon: 'logo-instagram' },
+  { href: 'https://github.com/mapswipe', title: t('github'), icon: 'logo-github' },
+  { href: 'https://wiki.openstreetmap.org/wiki/MapSwipe', title: t('osm-wiki'), icon: 'newspaper' },
+  { href: 'mailto:info@mapswipe.org', title: t('email'), icon: 'mail' },
+];
 ---
-<div class="ms-footer">
-  <div class="ms-footer-top">
-    <div class="ms-footer-section">
-      <h5 class="ms-h ms-small ms-footer-heading">{t('footer-about-us-title')}</h5>
+<div class:list={[styles.footer, className]}>
+  <div class={styles.topContainer}>
+    <div class={styles.section}>
+      <h5 class:list={headingClass}>{t('footer-about-us-title')}</h5>
       <div>{t('footer-about-us-description')}</div>
     </div>
-    <div class="ms-footer-section ms-mid">
-      <h5 class="ms-h ms-small ms-footer-heading">{t('footer-quick-links')}</h5>
-      <div class="ms-footer-links">
-        <a href={`/${locale}/`}>{t('home-link')}</a>
-        <a href={`/${locale}/get-involved/`}>{t('get-involved-link')}</a>
-        <a href={`/${locale}/data/`}>{t('data-link')}</a>
-        <a href={`/${locale}/blogs/`}>{t('blogs-link')}</a>
-        <a href="https://community.mapswipe.org/">{t('community-dashboard-link')}</a>
+    <div class:list={[styles.section, styles.midSection]}>
+      <h5 class:list={headingClass}>{t('footer-quick-links')}</h5>
+      <div class={styles.links}>
+        <a class={linkStyles.link} href={`/${locale}/`}>{t('home-link')}</a>
+        <a class={linkStyles.link} href={`/${locale}/get-involved/`}>{t('get-involved-link')}</a>
+        <a class={linkStyles.link} href={`/${locale}/data/`}>{t('data-link')}</a>
+        <a class={linkStyles.link} href={`/${locale}/blogs/`}>{t('blogs-link')}</a>
+        <a class={linkStyles.link} href="https://community.mapswipe.org/">{t('community-dashboard-link')}</a>
       </div>
     </div>
-    <div class="ms-footer-section">
-      <h5 class="ms-h ms-small ms-footer-heading">{t('footer-follow-us-title')}</h5>
-      <div class="ms-social-links">
-        <a class="ms-icon-link" href="https://www.facebook.com/TheMissingMaps" target="_blank" title={t('facebook')}>
-          <Icon name="logo-facebook" />
-        </a>
-        <a class="ms-icon-link" href="https://floss.social/@mapswipe" rel="me" target="_blank" title={t('mastodon')}>
-          <Icon name="logo-mastodon" />
-        </a>
-        <a class="ms-icon-link" href="https://www.instagram.com/themissingmaps/" target="_blank" title={t('instagram')}>
-          <Icon name="logo-instagram" />
-        </a>
-        <a class="ms-icon-link" href="https://github.com/mapswipe" target="_blank" title={t('github')}>
-          <Icon name="logo-github" />
-        </a>
-        <a class="ms-icon-link" href="https://wiki.openstreetmap.org/wiki/MapSwipe" target="_blank" title={t('osm-wiki')}>
-          <Icon name="newspaper" />
-        </a>
-        <a class="ms-icon-link" href="mailto:info@mapswipe.org" target="_blank" title={t('email')}>
-          <Icon name="mail" />
-        </a>
+    <div class={styles.section}>
+      <h5 class:list={headingClass}>{t('footer-follow-us-title')}</h5>
+      <div class={styles.socialLinks}>
+        {socialLinks.map((link) => (
+          <a
+            class:list={[linkStyles.link, linkStyles.icon]}
+            href={link.href}
+            rel={link.rel}
+            target="_blank"
+            title={link.title}
+          >
+            <Icon name={link.icon} />
+          </a>
+        ))}
       </div>
     </div>
   </div>
-  <div class="ms-footer-bottom">
-    <div class="ms-footer-bottom-content">
-      <div class="ms-footer-left">{t('copyright', { year: currentYear })}</div>
-      <div class="ms-footer-mid">
+  <div class={styles.bottomContainer}>
+    <div class={styles.content}>
+      <div class={styles.leftContainer}>{t('copyright', { year: currentYear })}</div>
+      <div class={styles.midContainer}>
         {t('uptime-pretext')}
-        <a href="https://uptimerobot.com/" target="_blank">
-          <img class="ms-uptime-logo" src="/img/uptime.png" alt="Uptime Robot" />
+        <a class={linkStyles.link} href="https://uptimerobot.com/" target="_blank">
+          <img class={styles.partnerLogo} src="/img/uptime.png" alt="Uptime Robot" />
         </a>
       </div>
-      <div class="ms-footer-right">
-        <a href={`/${locale}/privacy/`}>{t('privacy')}</a>
+      <div class={styles.rightContainer}>
+        <a class={linkStyles.link} href={`/${locale}/privacy/`}>{t('privacy')}</a>
       </div>
     </div>
   </div>

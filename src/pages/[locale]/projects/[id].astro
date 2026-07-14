@@ -5,10 +5,26 @@ import RemoteImage from '../../../components/RemoteImage.astro';
 import { COVER_WIDTH } from '../../../lib/remoteImages';
 import MapIsland from '../../../components/MapIsland.tsx';
 import ProjectHistoryChart from '../../../components/ProjectHistoryChart.tsx';
+import ProjectTypeIcon from '../../../components/ProjectTypeIcon.astro';
+import type { ProjectTypeKey } from '../../../components/ProjectTypeIcon.tsx';
+import Icon from '../../../components/Icon.astro';
 import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from '../../../lib/data';
 import { getFileSizeProperties, resolveAoiDownload } from '../../../lib/common';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
+// CSS Modules recovered from the Next app: the page module (also imported by
+// the ProjectHistoryChart island for the SVG classes) + the component modules
+// whose markup this page reproduces.
+import styles from './styles.module.css';
+import heroStyles from '../../../components/Hero.module.css';
+import sectionStyles from '../../../components/Section.module.css';
+import cardStyles from '../../../components/Card.module.css';
+import tagStyles from '../../../components/Tag.module.css';
+import headingStyles from '../../../components/Heading.module.css';
+import linkStyles from '../../../components/Link.module.css';
+import keyFigureStyles from '../../../components/KeyFigure.module.css';
+import imageStyles from '../../../components/ImageWrapper.module.css';
+import htmlOutputStyles from '../../../components/HtmlOutput.module.css';
 
 export const getStaticPaths = (async () => {
   let projects = getAllProjects();
@@ -64,6 +80,10 @@ const statusLabels: Record<string, string> = {
   PUBLISHED: t('active'),
   FINISHED: t('finished'),
 };
+const statusClass: Record<string, string | undefined> = {
+  PUBLISHED: styles.active,
+  FINISHED: styles.finished,
+};
 
 const roundedTotalArea = Math.round(aoiGeometry?.totalArea ?? 0);
 const aoiDownload = resolveAoiDownload(project);
@@ -104,110 +124,218 @@ const lastFetched = project.exportHistory?.modifiedAt
     })
   : undefined;
 ---
-<ProjectLayout locale={locale!} firebaseId={String(firebaseId)} title={title}>
-  <section class="hero">
-    <div class="heroMain">
-      <h1>{name}</h1>
-      <div class="tags">
-        {projectType && <span class="tag">{projectTypeLabels[projectType] ?? projectType}</span>}
-        {status && <span class="tag">{statusLabels[status] ?? status}</span>}
-      </div>
-      <div class="tags">
-        {region && <span class="tag" title={t('Location')}>{region}</span>}
-        {requestingOrganization?.name && (
-          <span class="tag" title={t('requesting-organization')}>{requestingOrganization.name}</span>
-        )}
-        {createdAtLabel && <span class="tag" title={t('created-at')}>{createdAtLabel}</span>}
-      </div>
-    </div>
-    {imageUrl && (
-      <RemoteImage class="illustration" src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
-    )}
-  </section>
-
-  <section class="section">
-    <h2>{t('overview-section-title')}</h2>
-    {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
-    <div class="description" set:html={description ?? ''}></div>
-    <div class="stats">
-      <div class="figure">
-        <span class="value">{roundedTotalArea}</span>
-        <span>km<sup>2</sup></span>
-      </div>
-      <div class="figure">
-        <span class="value">{numberOfContributorUsers ?? 0}</span>
-        <span>{t('project-contributors-text')}</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    {lastFetched && <p class="lastFetched">{lastFetched}</p>}
-    {aoiDownload && (
-      <div class="mapContainer">
-        <MapIsland client:only="react" geoJsonUrl={aoiDownload.url} />
-      </div>
-    )}
-    <div class="progressBar">
-      <div class="progressLabel">
-        <div>{t('project-progress-label')}</div>
-        <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
-      </div>
-      <div class="track">
-        <div class="progress" style={`width:${progress * 100}%`}></div>
-      </div>
-    </div>
-    <ProjectHistoryChart
-      client:visible
-      projectId={project.id}
-      historyUrl={historyUrl}
-    />
-  </section>
-
-  <section class="section">
-    <h2>{t('data-section-heading')}</h2>
-    <p>{t('data-section-description')}</p>
-    <div class="urlList">
-      {cards.map((card) =>
-        card.asset ? (
-          <div class="card">
-            <h3>{card.heading}</h3>
-            <p>{card.description}</p>
-            <div class="fileDetails">
-              <span class="tag">{card.asset.mimetype}</span>
-              <span>{downloadSizeText(card.asset.fileSize)}</span>
+<ProjectLayout locale={locale!} firebaseId={String(firebaseId)} title={title} mainClass={styles.project}>
+  {/* Hero: name + type/status/meta tags left, cover image right */}
+  <div class:list={[heroStyles.hero, styles.hero]}>
+    <div class={heroStyles.section}>
+      <div class:list={[heroStyles.mainContent, styles.mainContent]}>
+        <div class={heroStyles.left}>
+          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+            {name}
+          </h2>
+          <div class={heroStyles.description}>
+            <div class={styles.heroDescription}>
+              <div class={styles.topTags}>
+                {projectType && (
+                  <span class:list={[tagStyles.tag, tagStyles.medium]}>
+                    <ProjectTypeIcon type={projectType as ProjectTypeKey} size="small" />
+                    {projectTypeLabels[projectType] ?? projectType}
+                  </span>
+                )}
+                {status && (
+                  <span class:list={[tagStyles.tag, tagStyles.medium]}>
+                    <span class={statusClass[status]}>●</span>
+                    {statusLabels[status] ?? status}
+                  </span>
+                )}
+              </div>
+              <div class={styles.bottomTags}>
+                {region && (
+                  <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('Location')}>
+                    {region}
+                  </span>
+                )}
+                {requestingOrganization?.name && (
+                  <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('requesting-organization')}>
+                    {requestingOrganization.name}
+                  </span>
+                )}
+                {createdAtLabel && (
+                  <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('created-at')}>
+                    <Icon name="calendar-clear-outline" />
+                    {createdAtLabel}
+                  </span>
+                )}
+              </div>
             </div>
-            {card.asset.file?.url && (
-              <a class="link" href={card.asset.file.url} download>
-                {t('download')}
-              </a>
-            )}
           </div>
-        ) : null,
-      )}
-      {aoiDownload && (
-        <div class="card">
-          <h3>{t('area-of-interest-title')}</h3>
-          <p>{t('area-of-interest-description')}</p>
-          <div class="fileDetails">
-            <span class="tag">{aoiDownload.mimetype}</span>
-            <span>{downloadSizeText(aoiDownload.fileSize)}</span>
-          </div>
-          <a
-            class="link"
-            href={aoiDownload.url}
-            download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
-          >
-            {t('download')}
-          </a>
         </div>
+        {imageUrl && (
+          <div class={heroStyles.right}>
+            <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+              <RemoteImage class={imageStyles.image} src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+    <div class={heroStyles.angledBackground}></div>
+  </div>
+
+  {/* Overview: description + circle key figures */}
+  <section class:list={[sectionStyles.section, styles.overviewSection]}>
+    <div class={sectionStyles.container}>
+      <div class={styles.overviewContent}>
+        <div class={styles.content}>
+          <h4 class:list={[headingStyles.heading, headingStyles.medium]}>
+            {t('overview-section-title')}
+          </h4>
+          <div class={styles.description}>
+            {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
+            <div class:list={[htmlOutputStyles.htmlOutput, styles.description]} set:html={description ?? ''}></div>
+          </div>
+        </div>
+        <div class={styles.stats}>
+          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.largeFigure, styles.figure]}>
+            <div class={keyFigureStyles.value}>
+              {roundedTotalArea}
+              <Icon name="plus" class={keyFigureStyles.icon} />
+            </div>
+            <div class={keyFigureStyles.label}><span>km<sup>2</sup></span></div>
+          </div>
+          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
+            <div class={keyFigureStyles.value}>
+              {numberOfContributorUsers ?? 0}
+              <Icon name="plus" class={keyFigureStyles.icon} />
+            </div>
+            <div class={keyFigureStyles.label}>{t('project-contributors-text')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Stats: AOI map + progress bar + history chart */}
+  <section class:list={[sectionStyles.section, styles.statsSection]}>
+    <div class:list={[sectionStyles.container, styles.statsContainer]}>
+      <div class={styles.content}>
+        {aoiDownload && (
+          <div class={styles.mapContainer}>
+            <MapIsland client:only="react" className={styles.projectsMap} geoJsonUrl={aoiDownload.url} />
+          </div>
+        )}
+        <div class={styles.rightContainer}>
+          <div class={styles.progressBar}>
+            <div class={styles.progressLabel}>
+              <div>{t('project-progress-label')}</div>
+              <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
+            </div>
+            <div class={styles.track}>
+              <div class={styles.progress} style={`width:${progress * 100}%`}></div>
+            </div>
+          </div>
+          <div class={styles.chartContainer}>
+            <ProjectHistoryChart
+              client:visible
+              className={styles.timelineChartContainer}
+              projectId={project.id}
+              historyUrl={historyUrl}
+            />
+          </div>
+        </div>
+      </div>
+      {lastFetched && (
+        <div class:list={[sectionStyles.actions, styles.lastFetchedContainer]}>{lastFetched}</div>
       )}
     </div>
   </section>
 
-  <section class="section">
-    <h2>{t('license-section-heading')}</h2>
-    <p>{t('license-section-description-1')}</p>
-    <p>{t('license-section-description-2')}</p>
+  {/* Downloads */}
+  <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.downloadSection]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('data-section-heading')}
+        </h4>
+        <div class:list={[sectionStyles.description, styles.downloadDescription]}>
+          {t('data-section-description')}
+        </div>
+      </div>
+      <div class={styles.urlList}>
+        {cards.map((card) =>
+          card.asset ? (
+            <div class={cardStyles.card}>
+              <div class={cardStyles.cardContent}>
+                <div class={cardStyles.headerWrapper}>
+                  <div class={cardStyles.header}>
+                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                      {card.heading}
+                    </h6>
+                  </div>
+                  <div>{card.description}</div>
+                </div>
+                <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
+                  <div class={styles.fileDetails}>
+                    <span class:list={[tagStyles.tag, tagStyles.medium]}>{card.asset.mimetype}</span>
+                    <div>{downloadSizeText(card.asset.fileSize)}</div>
+                  </div>
+                  {card.asset.file?.url && (
+                    <a class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]} href={card.asset.file.url} download>
+                      {t('download')}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : null,
+        )}
+        {aoiDownload && (
+          <div class={cardStyles.card}>
+            <div class={cardStyles.cardContent}>
+              <div class={cardStyles.headerWrapper}>
+                <div class={cardStyles.header}>
+                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                    {t('area-of-interest-title')}
+                  </h6>
+                </div>
+                <div>{t('area-of-interest-description')}</div>
+              </div>
+              <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
+                <div class={styles.fileDetails}>
+                  <span class:list={[tagStyles.tag, tagStyles.medium]}>{aoiDownload.mimetype}</span>
+                  <div>{downloadSizeText(aoiDownload.fileSize)}</div>
+                </div>
+                <a
+                  class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]}
+                  href={aoiDownload.url}
+                  download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
+                >
+                  {t('download')}
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {/* License */}
+  <section class={sectionStyles.section}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('license-section-heading')}
+        </h4>
+        {/* Next passed the license body as Section's `description` node, so the
+            licenseDescription div nests inside the section description div. */}
+        <div class={sectionStyles.description}>
+          <div class={styles.licenseDescription}>
+            <p>{t('license-section-description-1')}</p>
+            <p>{t('license-section-description-2')}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </ProjectLayout>

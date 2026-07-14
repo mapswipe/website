@@ -8,11 +8,23 @@ import Icon from '../../components/Icon.astro';
 import { getT, LOCALES } from '../../i18n';
 import { getCommunityStats } from '../../lib/data';
 import { selectPaths } from '../../../packages/astro-incremental-static/src/index.ts';
+// CSS Modules recovered from the Next app: the page module + the component
+// modules whose markup this page reproduces (Hero, Section, Card, KeyFigure,
+// Heading, Link, Tag, ImageWrapper).
+import styles from './styles.module.css';
+import heroStyles from '../../components/Hero.module.css';
+import sectionStyles from '../../components/Section.module.css';
+import headingStyles from '../../components/Heading.module.css';
+import linkStyles from '../../components/Link.module.css';
+import cardStyles from '../../components/Card.module.css';
+import keyFigureStyles from '../../components/KeyFigure.module.css';
+import tagStyles from '../../components/Tag.module.css';
+import imageStyles from '../../components/ImageWrapper.module.css';
 
 // Home page. One static, translated variant per locale — /<locale>/ — matching
 // the Next Pages-Router src/pages/[locale]/index.tsx. Faithful port of Hero,
 // key figures, mission-type cards, featured blogs, download/get-involved CTAs
-// and partners, using the shared chrome (BaseLayout) + ported design tokens.
+// and partners, using the shared chrome (BaseLayout) + recovered CSS Modules.
 //
 // The home page renders ONLY the community stats (total swipes/contributors)
 // and the top-3 featured blogs — it does NOT render the project set. So its
@@ -99,60 +111,74 @@ const missionTypes = [
 
 const title = String(t('home-tab-head'));
 ---
-<BaseLayout locale={locale!} title={title} path="" mainClass="ms-home">
-  {/* Hero */}
-  <div class="ms-hero">
-    <div class="ms-hero-section">
-      <div class="ms-hero-main">
-        <div class="ms-hero-left">
-          <h2 class="ms-h ms-extra-large">{t('hero-title')}</h2>
-          <div class="ms-hero-description">{t('hero-description')}</div>
-          <div class="ms-hero-actions">
-            <a class="ms-btn" href="#startMapswiping">{t('download-app-label')}</a>
-            <a class="ms-btn-transparent" href={`/${locale}/data/`}>{t('data-link')}</a>
+<BaseLayout locale={locale!} title={title} path="" mainClass={styles.home}>
+  {/* Hero (Next: components/Hero with video rightContent) */}
+  <div class:list={[heroStyles.hero, styles.hero]}>
+    <div class={heroStyles.section}>
+      <div class={heroStyles.mainContent}>
+        <div class={heroStyles.left}>
+          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+            {t('hero-title')}
+          </h2>
+          <div class={heroStyles.description}>{t('hero-description')}</div>
+          <div class={heroStyles.buttonsContainer}>
+            <a class:list={[linkStyles.link, linkStyles.button]} href="#startMapswiping">
+              {t('download-app-label')}
+            </a>
+            <a class:list={[linkStyles.link, linkStyles.buttonTransparent]} href={`/${locale}/data/`}>
+              {t('data-link')}
+            </a>
           </div>
         </div>
-        <div class="ms-hero-right">
-          <video class="ms-hero-video" autoplay loop muted playsinline>
+        <div class={heroStyles.right}>
+          <video class={styles.screenshot} autoplay loop muted playsinline>
             <source src="/img/animation.mp4" type="video/mp4" />
           </video>
         </div>
       </div>
     </div>
-    <div class="ms-angled-background"></div>
+    <div class={heroStyles.angledBackground}></div>
   </div>
 
   {/* Mobilizing volunteers + key figures */}
-  <section class="ms-section">
-    <div class="ms-section-container">
-      <div class="ms-section-heading-wrap">
-        <h4 class="ms-h ms-medium ms-section-heading">{t('mobilizing-volunteer')}</h4>
+  <section class:list={[sectionStyles.section, styles.mobilize]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('mobilizing-volunteer')}
+        </h4>
       </div>
-      <div class="ms-mobilize">
-        <div class="ms-pictures">
-          <div class="ms-pic ms-pic-single">
-            <img src="/img/msf_mapping.jpg" alt={t('mobilize-volunteer')} loading="lazy" decoding="async" />
+      <div class={styles.content}>
+        <div class={styles.pictures}>
+          <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.single]}>
+            <img class:list={[imageStyles.image, styles.image]} src="/img/msf_mapping.jpg" alt={t('mobilize-volunteer')} loading="lazy" decoding="async" />
           </div>
-          <div class="ms-pic-double-wrap">
-            <div class="ms-pic ms-pic-double">
-              <img src="/img/mapswipe_mapathon.jpg" alt={t('mapathon')} loading="lazy" decoding="async" />
+          <div class={styles.images}>
+            <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.double]}>
+              <img class:list={[imageStyles.image, styles.image]} src="/img/mapswipe_mapathon.jpg" alt={t('mapathon')} loading="lazy" decoding="async" />
             </div>
-            <div class="ms-pic ms-pic-double">
-              <img src="/img/field_mapping.jpg" alt={t('field-mapping')} loading="lazy" decoding="async" />
+            <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.double]}>
+              <img class:list={[imageStyles.image, styles.image]} src="/img/field_mapping.jpg" alt={t('field-mapping')} loading="lazy" decoding="async" />
             </div>
           </div>
         </div>
-        <div class="ms-mobilize-desc">
-          <p>{t('mobilizing-volunteer-description-paragraph-1')}</p>
-          <p>{t('mobilizing-volunteer-description-paragraph-2')}</p>
-          <div class="ms-figures">
-            <div class="ms-keyfigure">
-              <div class="ms-keyfigure-value">{swipesFmt}<Icon name="plus" class="ms-keyfigure-plus" /></div>
-              <div class="ms-keyfigure-label">{t('total-swipes')}</div>
+        <div class={styles.descriptionContainer}>
+          <div class={styles.description}>{t('mobilizing-volunteer-description-paragraph-1')}</div>
+          <div class={styles.description}>{t('mobilizing-volunteer-description-paragraph-2')}</div>
+          <div class={styles.infoBoxContainer}>
+            <div class={keyFigureStyles.keyFigure}>
+              <div class={keyFigureStyles.value}>
+                {swipesFmt}
+                <Icon name="plus" class={keyFigureStyles.icon} />
+              </div>
+              <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
             </div>
-            <div class="ms-keyfigure">
-              <div class="ms-keyfigure-value">{contributorsFmt}<Icon name="plus" class="ms-keyfigure-plus" /></div>
-              <div class="ms-keyfigure-label">{t('total-contributors')}</div>
+            <div class={keyFigureStyles.keyFigure}>
+              <div class={keyFigureStyles.value}>
+                {contributorsFmt}
+                <Icon name="plus" class={keyFigureStyles.icon} />
+              </div>
+              <div class={keyFigureStyles.label}>{t('total-contributors')}</div>
             </div>
           </div>
         </div>
@@ -161,31 +187,43 @@ const title = String(t('home-tab-head'));
   </section>
 
   {/* Mission types */}
-  <section class="ms-section">
-    <div class="ms-section-container">
-      <div class="ms-section-heading-wrap">
-        <h4 class="ms-h ms-medium ms-section-heading">{t('explore-mission-types')}</h4>
-        <div class="ms-section-description">{t('explore-mission-types-description')}</div>
+  <section class:list={[sectionStyles.section, styles.missionTypes]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('explore-mission-types')}
+        </h4>
+        <div class={sectionStyles.description}>{t('explore-mission-types-description')}</div>
       </div>
-      <div class="ms-mission-grid">
+      <div class={styles.content}>
         {missionTypes.map((m) => (
-          <article class="ms-card ms-mission">
-            <div class={`ms-card-cover${'beforeAfter' in m ? ' ms-before-after' : ''}`}>
-              {'beforeAfter' in m ? (
-                <>
-                  <img src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
-                  <img src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
-                </>
-              ) : (
-                <img src={m.coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
-              )}
-            </div>
-            <div class="ms-card-content">
-              <div class="ms-card-header">
-                <ProjectTypeIcon type={m.type} class="ms-card-icon" />
-                <h6 class="ms-h ms-extra-small">{m.heading}</h6>
+          <article class:list={[cardStyles.card, styles.missionType]}>
+            {'beforeAfter' in m ? (
+              <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
+                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                  <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+                </div>
+                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                  <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                </div>
               </div>
-              <div>{m.body}</div>
+            ) : (
+              <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
+                <img class:list={[imageStyles.image, cardStyles.image]} src={m.coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
+              </div>
+            )}
+            <div class={cardStyles.cardContent}>
+              <div class={cardStyles.headerWrapper}>
+                <div class={cardStyles.header}>
+                  <div>
+                    <ProjectTypeIcon type={m.type} />
+                  </div>
+                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                    {m.heading}
+                  </h6>
+                </div>
+              </div>
+              <div class={cardStyles.childrenContainer}>{m.body}</div>
             </div>
           </article>
         ))}
@@ -194,65 +232,95 @@ const title = String(t('home-tab-head'));
   </section>
 
   {/* Start mapswiping (download + get involved) */}
-  <section class="ms-section" id="startMapswiping">
-    <div class="ms-section-container">
-      <div class="ms-section-heading-wrap">
-        <h4 class="ms-h ms-medium ms-section-heading">{t('start-mapswiping-title')}</h4>
+  <section class:list={[sectionStyles.section, styles.startMapswiping]} id="startMapswiping">
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('start-mapswiping-title')}
+        </h4>
       </div>
-      <div class="ms-start-grid">
-        <div class="ms-download">
-          <div>{t('download-description')}</div>
-          <div class="ms-store-buttons">
-            <a href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
-              <img class="ms-store-img" src="/img/playstore.png" alt={t('download-playstore')} loading="lazy" />
-            </a>
-            <a href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
-              <img class="ms-store-img" src="/img/apple.png" alt={t('download-apple-store')} loading="lazy" />
-            </a>
-          </div>
-          <div class="ms-download-links">
-            <a class="ms-underline" href="https://web.mapswipe.org/" target="_blank">{t('mapswipe-web-link')}</a>
-            |
-            <a class="ms-underline" href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
+      <div class={styles.content}>
+        <div class={styles.download}>
+          <div class={styles.startMapswipingDescription}>{t('download-description')}</div>
+          <div class={styles.linksContainer}>
+            <div class={styles.buttonsContainer}>
+              <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
+                <img class:list={[imageStyles.image, styles.image]} src="/img/playstore.png" alt={t('download-playstore')} loading="lazy" />
+              </a>
+              <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
+                <img class:list={[imageStyles.image, styles.image]} src="/img/apple.png" alt={t('download-apple-store')} loading="lazy" />
+              </a>
+            </div>
+            <div class={styles.downloadLinksContainer}>
+              <a class:list={[linkStyles.link, styles.downloadLink]} href="https://web.mapswipe.org/" target="_blank">{t('mapswipe-web-link')}</a>
+              |
+              <a class:list={[linkStyles.link, styles.downloadLink]} href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
+            </div>
           </div>
         </div>
-        <div class="ms-get-involved">
-          <div>{t('get-involved-description')}</div>
-          <a class="ms-btn" href={`/${locale}/get-involved/`}>{t('get-involved-link')}</a>
+        <div class={styles.getInvolved}>
+          <div class={styles.startMapswipingDescription}>{t('get-involved-description')}</div>
+          <a class:list={[linkStyles.link, linkStyles.button]} href={`/${locale}/get-involved/`}>
+            {t('get-involved-link')}
+          </a>
         </div>
       </div>
     </div>
   </section>
 
   {/* Recent news & updates (featured blogs) */}
-  <section class="ms-section">
-    <div class="ms-section-container">
-      <div class="ms-section-heading-wrap">
-        <h4 class="ms-h ms-medium ms-section-heading">{t('news-and-updates-title')}</h4>
+  <section class:list={[sectionStyles.section, styles.recentNewsAndUpdates]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('news-and-updates-title')}
+        </h4>
       </div>
-      <div class="ms-blog-grid">
+      <div class={styles.content}>
         {featuredBlogs.map((blog, index) => (
-          <article class={`ms-card ms-borderless ms-blog-item${index === 0 ? ' ms-blog-first' : ''}`}>
+          <article
+            class:list={[
+              cardStyles.card,
+              cardStyles.borderless,
+              index !== 0 && cardStyles.coverImageOnSide,
+              styles.blogItem,
+              index === 0 && styles.firstGrid,
+            ]}
+          >
             {blog.coverImage && (
-              <div class="ms-card-cover">
-                <Image src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+              <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
+                <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
               </div>
             )}
-            <div class="ms-card-content">
-              {blog.publishedDate && (
-                <div class="ms-blog-date">
-                  <Icon name="calendar-clear-outline" /> {fmtDate(blog.publishedDate)}
+            <div class={cardStyles.cardContent}>
+              <div class={cardStyles.headerWrapper}>
+                <div class={cardStyles.header}>
+                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                    {blog.title}
+                  </h6>
                 </div>
-              )}
-              <h6 class="ms-h ms-extra-small">{blog.title}</h6>
-              <div class="ms-blog-desc">{blog.description}</div>
-              <a class="ms-underline" href={`/${locale}/blogs/${blog.slug}/`}>{t('read-more')}</a>
+                {blog.publishedDate && (
+                  <div>
+                    <span class:list={[tagStyles.tag, tagStyles.transparent, styles.tag]}>
+                      <Icon name="calendar-clear-outline" />
+                      {fmtDate(blog.publishedDate)}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div class:list={[cardStyles.childrenContainer, styles.cardContent]}>
+                <div class={styles.blogDescription}>{blog.description}</div>
+                <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
+                  {t('read-more')}
+                </a>
+              </div>
             </div>
           </article>
         ))}
-        <div class="ms-see-more">
-          <a class="ms-text-link ms-see-more-link" href={`/${locale}/blogs/`}>
-            {t('see-more-pages')}<Icon name="arrow-forward-sharp" />
+        <div class={styles.sectionDescription}>
+          <a class:list={[linkStyles.link, styles.seeMoreLink]} href={`/${locale}/blogs/`}>
+            {t('see-more-pages')}
+            <Icon name="arrow-forward-sharp" />
           </a>
         </div>
       </div>
@@ -260,20 +328,26 @@ const title = String(t('home-tab-head'));
   </section>
 
   {/* Partners */}
-  <section class="ms-section">
-    <div class="ms-section-container">
-      <div class="ms-section-heading-wrap">
-        <h4 class="ms-h ms-medium ms-section-heading">{t('partners')}</h4>
+  <section class:list={[sectionStyles.section, styles.partners]}>
+    <div class={sectionStyles.container}>
+      <div class={sectionStyles.headingContainer}>
+        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+          {t('partners')}
+        </h4>
       </div>
-      <div class="ms-partners">
-        <a href="https://www.missingmaps.org/" target="_blank">
-          <img class="ms-missingmaps" src="/img/missingmaps.png" alt={t('missing-maps')} loading="lazy" />
+      <div class={styles.content}>
+        <a class={linkStyles.link} href="https://www.missingmaps.org/" target="_blank">
+          <div class:list={[imageStyles.imageWrapper, styles.missingMapsLogo]}>
+            <img class={imageStyles.image} src="/img/missingmaps.png" alt={t('missing-maps')} loading="lazy" />
+          </div>
         </a>
-        <div class="ms-partners-desc">{t('missing-map-description')}</div>
-        <div class="ms-partner-logos">
+        <div class={styles.partnersDescription}>{t('missing-map-description')}</div>
+        <div class={styles.partnerLogos}>
           {partners.map((p) => (
-            <a href={p.link} target="_blank">
-              <img class="ms-partner-logo" src={p.imageSrc} alt={p.altText} loading="lazy" />
+            <a class={linkStyles.link} href={p.link} target="_blank">
+              <div class:list={[imageStyles.imageWrapper, styles.partnerLogo]}>
+                <img class={imageStyles.image} src={p.imageSrc} alt={p.altText} loading="lazy" />
+              </div>
             </a>
           ))}
         </div>
@@ -281,54 +355,3 @@ const title = String(t('home-tab-head'));
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  /* Home-specific layout (ported from src/pages/[locale]/styles.module.css). */
-  .ms-hero-video { width: 100%; max-width: 34rem; border-radius: var(--border-radius-medium); }
-
-  .ms-mobilize { display: flex; flex-wrap: wrap; gap: var(--spacing-super-large); }
-  .ms-pictures { flex: 1 1 22rem; display: flex; flex-direction: column; gap: var(--spacing-medium); }
-  .ms-pic img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius-medium); }
-  .ms-pic-single { height: 18rem; }
-  .ms-pic-double-wrap { display: flex; gap: var(--spacing-medium); }
-  .ms-pic-double { flex: 1; height: 12rem; }
-  .ms-mobilize-desc { flex: 1 1 22rem; display: flex; flex-direction: column; gap: var(--spacing-large); }
-  .ms-figures { display: flex; flex-wrap: wrap; gap: var(--spacing-medium); margin-top: var(--spacing-medium); }
-
-  .ms-mission-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--spacing-large);
-  }
-  .ms-mission .ms-card-cover { height: 12rem; }
-
-  .ms-start-grid { display: flex; flex-wrap: wrap; gap: var(--spacing-super-large); }
-  .ms-download, .ms-get-involved { flex: 1 1 20rem; display: flex; flex-direction: column; gap: var(--spacing-large); }
-  .ms-store-buttons { display: flex; gap: var(--spacing-medium); flex-wrap: wrap; }
-  .ms-store-img { height: 3rem; width: auto; }
-  .ms-download-links { display: flex; align-items: center; gap: var(--spacing-small); }
-
-  .ms-blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--spacing-large);
-    align-items: start;
-  }
-  .ms-blog-item .ms-card-cover { height: 12rem; }
-  .ms-blog-first { grid-column: 1 / -1; }
-  .ms-blog-date { display: inline-flex; align-items: center; gap: var(--spacing-super-small); color: var(--color-text); font-size: var(--font-size-small); }
-  .ms-blog-desc { flex-grow: 1; }
-  .ms-see-more { display: flex; align-items: center; }
-  .ms-see-more-link { display: inline-flex; align-items: center; gap: var(--spacing-super-small); color: var(--color-link); font-weight: var(--font-weight-semi-bold); }
-
-  .ms-partners { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-large); text-align: center; }
-  .ms-missingmaps { height: 5rem; width: auto; }
-  .ms-partners-desc { max-width: var(--width-heading-max); }
-  .ms-partner-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--spacing-large); }
-  .ms-partner-logo { height: 3rem; width: auto; object-fit: contain; }
-
-  @media screen and (min-width: 720px) {
-    .ms-blog-first { display: flex; flex-direction: row; }
-    .ms-blog-first .ms-card-cover { width: 20rem; flex-shrink: 0; }
-  }
-</style>

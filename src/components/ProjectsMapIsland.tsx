@@ -4,6 +4,10 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import type { MiniProject } from '../lib/dataExplorer';
+// CSS Modules recovered from the Next app's ProjectsMap (popup card link) +
+// Tag (popup tag pills).
+import styles from './ProjectsMap.module.css';
+import tagStyles from './Tag.module.css';
 
 // Client-ONLY leaflet map for the data explorer. This module statically imports
 // leaflet/react-leaflet (which touch window at import time), so it must NEVER be
@@ -25,6 +29,7 @@ function isDefined<T>(v: T | null | undefined): v is T {
 }
 
 interface Props {
+  className?: string;
   projects: MiniProject[];
   radiusSelector: (p: MiniProject) => number;
   typeLabels: Record<string, string>;
@@ -32,7 +37,7 @@ interface Props {
 }
 
 export default function ProjectsMapIsland(props: Props) {
-  const { projects, radiusSelector, typeLabels, statusLabels } = props;
+  const { className, projects, radiusSelector, typeLabels, statusLabels } = props;
 
   const sanitized = useMemo(
     () =>
@@ -54,6 +59,7 @@ export default function ProjectsMapIsland(props: Props) {
 
   return (
     <MapContainer
+      className={className}
       center={[40.866667, 34.566667]}
       zoom={2}
       style={{ height: '100%', width: '100%', minHeight: 420 }}
@@ -69,11 +75,19 @@ export default function ProjectsMapIsland(props: Props) {
           pathOptions={project.status ? (pathOptions[project.status] ?? defaultPathOptions) : defaultPathOptions}
         >
           <Popup>
-            <a className="de-popup-link" href={`/projects/${project.firebaseId}/`}>
+            <a className={styles.cardLink} href={`/projects/${project.firebaseId}/`}>
               <strong>{project.name}</strong>
-              <div className="de-popup-tags">
-                {project.projectType && <span className="de-tag">{typeLabels[project.projectType] ?? project.projectType}</span>}
-                {project.status && <span className="de-tag">{statusLabels[project.status] ?? project.status}</span>}
+              <div className={styles.types}>
+                {project.projectType && (
+                  <span className={`${tagStyles.tag} ${tagStyles.small}`}>
+                    {typeLabels[project.projectType] ?? project.projectType}
+                  </span>
+                )}
+                {project.status && (
+                  <span className={`${tagStyles.tag} ${tagStyles.small}`}>
+                    {statusLabels[project.status] ?? project.status}
+                  </span>
+                )}
               </div>
             </a>
           </Popup>

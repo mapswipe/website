@@ -3,8 +3,20 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BlogLayout from '../../../layouts/BlogLayout.astro';
+import Icon from '../../../components/Icon.astro';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
+// CSS Modules recovered from the Next app: the page module + the component
+// modules whose markup this page reproduces (Hero, Section, Card, Tag,
+// Heading, Link, ImageWrapper).
+import styles from './styles.module.css';
+import heroStyles from '../../../components/Hero.module.css';
+import sectionStyles from '../../../components/Section.module.css';
+import cardStyles from '../../../components/Card.module.css';
+import tagStyles from '../../../components/Tag.module.css';
+import headingStyles from '../../../components/Heading.module.css';
+import linkStyles from '../../../components/Link.module.css';
+import imageStyles from '../../../components/ImageWrapper.module.css';
 
 // Blog LIST page. One variant per locale (blog content is single-language
 // English markdown; only the chrome is translated), producing /<locale>/blogs/
@@ -64,52 +76,69 @@ const otherBlogs = blogs.filter((b) => !b.featured);
 const dateFmt = new Intl.DateTimeFormat(locale!);
 const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
 
+const sections = [
+  { key: 'featured', title: t('featured-posts'), items: featuredBlogs },
+  { key: 'other', title: t('other-posts'), items: otherBlogs },
+];
+
 const title = String(t('blogs-tab-head'));
 ---
-<BlogLayout locale={locale!} title={title} path="blogs/">
-  <section class="hero">
-    <h1>{t('blogs-hero-title')}</h1>
-  </section>
+<BlogLayout locale={locale!} title={title} path="blogs/" mainClass={styles.blogs}>
+  {/* Hero (no right content -> centered, Next: <Hero title/>) */}
+  <div class:list={[heroStyles.hero, heroStyles.withoutRightContent]}>
+    <div class={heroStyles.section}>
+      <div class={heroStyles.mainContent}>
+        <div class={heroStyles.left}>
+          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+            {t('blogs-hero-title')}
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class={heroStyles.angledBackground}></div>
+  </div>
 
-  {featuredBlogs.length > 0 && (
-    <section class="section">
-      <h2>{t('featured-posts')}</h2>
-      <div class="list">
-        {featuredBlogs.map((blog) => (
-          <article class="card">
-            {blog.coverImage && (
-              <Image class="cover" src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
-            )}
-            <div class="cardContent">
-              <h3>{blog.title}</h3>
-              {blog.publishedDate && <span class="tag">{fmtDate(blog.publishedDate)}</span>}
-              <div class="description">{blog.description}</div>
-              <a class="link" href={`/${locale}/blogs/${blog.slug}/`}>{t('read-more')}</a>
-            </div>
-          </article>
-        ))}
+  {sections.map((section) => section.items.length > 0 && (
+    <section class={sectionStyles.section}>
+      <div class={sectionStyles.container}>
+        <div class={sectionStyles.headingContainer}>
+          <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+            {section.title}
+          </h4>
+        </div>
+        <div class={styles.list}>
+          {section.items.map((blog) => (
+            <article class:list={[cardStyles.card, cardStyles.coverImageOnSide]}>
+              {blog.coverImage && (
+                <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
+                  <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+                </div>
+              )}
+              <div class={cardStyles.cardContent}>
+                <div class={cardStyles.headerWrapper}>
+                  <div class={cardStyles.header}>
+                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                      {blog.title}
+                    </h6>
+                  </div>
+                </div>
+                <div class:list={[cardStyles.childrenContainer, styles.cardContent]}>
+                  {blog.publishedDate && (
+                    <span class:list={[tagStyles.tag, tagStyles.transparent, styles.tag]}>
+                      <Icon name="calendar-clear-outline" />
+                      {fmtDate(blog.publishedDate)}
+                    </span>
+                  )}
+                  <div class={styles.description}>{blog.description}</div>
+                  <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
+                    {t('read-more')}
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
-  )}
-
-  {otherBlogs.length > 0 && (
-    <section class="section">
-      <h2>{t('other-posts')}</h2>
-      <div class="list">
-        {otherBlogs.map((blog) => (
-          <article class="card">
-            {blog.coverImage && (
-              <Image class="cover" src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
-            )}
-            <div class="cardContent">
-              <h3>{blog.title}</h3>
-              {blog.publishedDate && <span class="tag">{fmtDate(blog.publishedDate)}</span>}
-              <div class="description">{blog.description}</div>
-              <a class="link" href={`/${locale}/blogs/${blog.slug}/`}>{t('read-more')}</a>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  )}
+  ))}
 </BlogLayout>
