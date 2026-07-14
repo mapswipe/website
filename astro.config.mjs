@@ -12,6 +12,16 @@ const SITE = 'https://mapswipe.org';
 
 export default defineConfig({
   site: SITE,
+  vite: {
+    css: {
+      modules: {
+        // dev keeps readable names; prod ships short hashes — class
+        // attributes were ~22% of every page with the default pattern
+        generateScopedName:
+          process.env.NODE_ENV === 'production' ? '[hash:base64:6]' : '[local]_[hash:base64:4]',
+      },
+    },
+  },
   output: 'static',
   trailingSlash: 'always',
   build: { format: 'directory' },
