@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -10,15 +12,42 @@ import hydrationDedup from './packages/astro-hydration-dedup/src/index.ts';
 
 const SITE = 'https://mapswipe.org';
 
+const CLASS_ALPHA = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const CLASS_ALNUM = `${CLASS_ALPHA}0123456789-_`;
+const assignedClassNames = new Map();
+function shortClassName(name, filename) {
+    const rel = filename.includes('website-astro') || filename.startsWith(process.cwd())
+        ? filename.slice(process.cwd().length)
+        : filename;
+    const digest = createHash('sha1').update(`${rel}:${name}`).digest();
+    let out = CLASS_ALPHA[digest[0] % CLASS_ALPHA.length];
+    for (let i = 1; i < 4; i += 1) {
+        out += CLASS_ALNUM[digest[i] % CLASS_ALNUM.length];
+    }
+    const source = `${rel}:${name}`;
+    const existing = assignedClassNames.get(out);
+    if (existing && existing !== source) {
+        throw new Error(`css module class-name collision: '${out}' (${existing} vs ${source}) — widen the hash`);
+    }
+    assignedClassNames.set(out, source);
+    return out;
+}
+
 export default defineConfig({
     site: SITE,
     vite: {
         css: {
             modules: {
-                // dev keeps readable names; prod ships short hashes — class
-                // attributes were ~22% of every page with the default pattern
-                generateScopedName:
-          process.env.NODE_ENV === 'production' ? '[hash:base64:6]' : '[local]_[hash:base64:4]',
+                // dev keeps readable names; prod ships 4-char names (class
+                // attributes were ~22% of every page with the default
+                // pattern). Content-hashed so names are stable across builds
+                // (the incremental merge relies on that); first char forced
+                // alphabetic (leading digits get CSS-escaped, which grows
+                // output); collisions fail the build instead of silently
+                // merging two components' styles.
+                generateScopedName: process.env.NODE_ENV === 'production'
+                    ? shortClassName
+                    : '[local]_[hash:base64:4]',
             },
         },
     },
