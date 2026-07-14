@@ -1,10 +1,10 @@
 ---
 import Icon from './Icon.astro';
+import Heading from './Heading.astro';
 import { getT } from '../i18n';
 // CSS Modules recovered from the Next app (components/Footer +
-// components/Heading + components/Link).
+// components/Link).
 import styles from './Footer.module.css';
-import headingStyles from './Heading.module.css';
 import linkStyles from './Link.module.css';
 
 // Ported from the Next app's components/Footer. Static; copyright year computed
@@ -18,7 +18,6 @@ const { locale, class: className } = Astro.props;
 const t = await getT(locale, 'common');
 const currentYear = new Date().getFullYear();
 
-const headingClass = [headingStyles.heading, headingStyles.small, styles.heading];
 type IconName = 'logo-facebook' | 'logo-mastodon' | 'logo-instagram' | 'logo-github' | 'newspaper' | 'mail';
 const socialLinks: { href: string; title: string; icon: IconName; rel?: string }[] = [
     { href: 'https://www.facebook.com/TheMissingMaps', title: t('facebook'), icon: 'logo-facebook' },
@@ -32,11 +31,11 @@ const socialLinks: { href: string; title: string; icon: IconName; rel?: string }
 <div class:list={[styles.footer, className]}>
     <div class={styles.topContainer}>
         <div class={styles.section}>
-            <h5 class:list={headingClass}>{t('footer-about-us-title')}</h5>
+            <Heading size="small" class={styles.heading}>{t('footer-about-us-title')}</Heading>
             <div>{t('footer-about-us-description')}</div>
         </div>
         <div class:list={[styles.section, styles.midSection]}>
-            <h5 class:list={headingClass}>{t('footer-quick-links')}</h5>
+            <Heading size="small" class={styles.heading}>{t('footer-quick-links')}</Heading>
             <div class={styles.links}>
                 <a class={linkStyles.link} href={`/${locale}/`}>{t('home-link')}</a>
                 <a class={linkStyles.link} href={`/${locale}/get-involved/`}>{t('get-involved-link')}</a>
@@ -46,7 +45,7 @@ const socialLinks: { href: string; title: string; icon: IconName; rel?: string }
             </div>
         </div>
         <div class={styles.section}>
-            <h5 class:list={headingClass}>{t('footer-follow-us-title')}</h5>
+            <Heading size="small" class={styles.heading}>{t('footer-follow-us-title')}</Heading>
             <div class={styles.socialLinks}>
                 {socialLinks.map((link) => (
                     <a

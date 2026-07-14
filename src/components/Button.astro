@@ -1,0 +1,29 @@
+---
+// Button (port of the Next components/Button). Extra attributes (aria-*, id,
+// event hooks added later, …) pass straight through to the element.
+import type { HTMLAttributes } from 'astro/types';
+import styles from 'components/Button.module.css';
+
+type Variant = 'transparent' | 'primary' | 'border' | 'icon';
+
+interface Props extends Omit<HTMLAttributes<'button'>, 'type'> {
+    variant?: Variant;
+    class?: string;
+}
+
+const {
+    variant = 'primary',
+    class: className,
+    ...rest
+} = Astro.props;
+
+// NOTE: main's map styles 'primary' and leaves 'transparent' bare, but the
+// primary class is empty in the module; the ported pages only use 'border'.
+const variantMap: Record<Variant, string | undefined> = {
+    transparent: undefined,
+    primary: styles.primary,
+    border: styles.border,
+    icon: styles.icon,
+};
+---
+<button class:list={[styles.button, variantMap[variant], className]} type="button" {...rest}><slot /></button>

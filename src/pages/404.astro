@@ -1,11 +1,11 @@
 ---
 import BaseLayout from 'layouts/BaseLayout.astro';
+import Heading from 'components/Heading.astro';
 import { DEFAULT_LOCALE } from '../i18n';
 // CSS Modules recovered from the Next app: the page module (pages/404/
-// styles.module.css, co-located here as 404.module.css) + Heading/Link/
-// ImageWrapper component modules.
+// styles.module.css, co-located here as 404.module.css) + Link/ImageWrapper
+// component modules.
 import styles from './404.module.css';
-import headingStyles from 'components/Heading.module.css';
 import linkStyles from 'components/Link.module.css';
 import imageStyles from 'components/ImageWrapper.module.css';
 
@@ -23,10 +23,10 @@ import imageStyles from 'components/ImageWrapper.module.css';
     <div class={styles.fourHundredFour}>
         <div class={styles.leftContent}>
             <div class={styles.headingContainer}>
-                <h2 class:list={[headingStyles.heading, headingStyles.extraLarge]}>404</h2>
-                <h4 class:list={[headingStyles.heading, headingStyles.medium, headingStyles.normal]}>
+                <Heading size="extraLarge">404</Heading>
+                <Heading font="normal">
                     This area has not been swiped yet!
-                </h4>
+                </Heading>
             </div>
             <a class:list={[linkStyles.link, linkStyles.buttonTransparent]} href="/">Go back to home</a>
         </div>

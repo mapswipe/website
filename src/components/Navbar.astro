@@ -1,12 +1,12 @@
 ---
 import Icon from './Icon.astro';
+import Button from './Button.astro';
 import { getT, LOCALES } from '../i18n';
 // CSS Modules recovered from the Next app (components/Navbar +
-// components/Button + components/Link). The language menu is a pure CSS
-// hover/focus-within dropdown (Next used a JS DropdownMenu + Popup portal and a
-// mobile hamburger toggle; see the adaptation notes in Navbar.module.css).
+// components/Link). The language menu is a pure CSS hover/focus-within
+// dropdown (Next used a JS DropdownMenu + Popup portal and a mobile hamburger
+// toggle; see the adaptation notes in Navbar.module.css).
 import styles from './Navbar.module.css';
-import buttonStyles from './Button.module.css';
 import linkStyles from './Link.module.css';
 
 // Ported from the Next app's components/Navbar. Static, zero-JS. `activePath`
@@ -59,16 +59,12 @@ const localelessPath = activePath ? `${activePath}/` : '';
         </div>
         <div class={styles.rightContainer}>
             <div class={styles.languageWrap}>
-                <button
-                    class:list={[buttonStyles.button, buttonStyles.border, styles.dropdown]}
-                    type="button"
-                    aria-haspopup="true"
-                >
+                <Button variant="border" class={styles.dropdown} aria-haspopup="true">
                     <Icon name="earth-sharp" />
                     <span class={styles.currentLocale}>
                         {languageTitleMap[locale]?.abbreviation ?? locale}
                     </span>
-                </button>
+                </Button>
                 <div class={styles.languageList}>
                     {LOCALES.map((l) => (
                         <a

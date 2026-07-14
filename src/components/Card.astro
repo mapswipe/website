@@ -1,0 +1,55 @@
+---
+// Card (port of the Next components/Card): optional cover (`coverImageUrl`
+// prop for the plain-image case, `cover` slot for custom media such as
+// astro:assets <Image> or the before/after pair), header with optional
+// icons + heading + actions, children container. `as` picks the root element
+// (article in the semantic card lists, div elsewhere).
+import styles from 'components/Card.module.css';
+import imageStyles from 'components/ImageWrapper.module.css';
+import Heading from 'components/Heading.astro';
+
+interface Props {
+    as?: 'div' | 'article';
+    heading?: string;
+    // string or a class:list-style array (falsy entries dropped)
+    class?: string | (string | false | null | undefined)[];
+    coverImageUrl?: string;
+    coverWrapperClass?: string;
+    childrenContainerClass?: string;
+    borderless?: boolean;
+    coverImageOnSide?: boolean;
+}
+
+const {
+    as: Element = 'div',
+    heading,
+    class: className,
+    coverImageUrl,
+    coverWrapperClass,
+    childrenContainerClass,
+    borderless = false,
+    coverImageOnSide = false,
+} = Astro.props;
+
+const icons = Astro.slots.has('icons') ? await Astro.slots.render('icons') : '';
+const actions = Astro.slots.has('actions') ? await Astro.slots.render('actions') : '';
+const cover = Astro.slots.has('cover') ? await Astro.slots.render('cover') : '';
+---
+<Element class:list={[styles.card, borderless && styles.borderless, coverImageOnSide && styles.coverImageOnSide, className]}>
+    {cover.trim() && <Fragment set:html={cover} />}
+    {coverImageUrl && (
+        <div class:list={[imageStyles.imageWrapper, styles.coverImageWrapper, coverWrapperClass]}>
+            <img class:list={[imageStyles.image, styles.image]} src={coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
+        </div>
+    )}
+    <div class={styles.cardContent}>
+        <div class={styles.headerWrapper}>
+            <div class={styles.header}>
+                {icons.trim() && <div set:html={icons} />}
+                {heading && <Heading size="extraSmall" class={styles.heading}>{heading}</Heading>}
+            </div>
+            {actions.trim() && <div set:html={actions} />}
+        </div>
+        <div class:list={[styles.childrenContainer, childrenContainerClass]}><slot /></div>
+    </div>
+</Element>

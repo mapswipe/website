@@ -6,15 +6,13 @@ import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import BaseLayout from 'layouts/BaseLayout.astro';
+import Hero from 'components/Hero.astro';
+import Section from 'components/Section.astro';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
-// CSS Modules recovered from the Next app: the page module + the component
-// modules whose markup this page reproduces (Hero, Section, Heading,
-// HtmlOutput).
+// Page module + the HtmlOutput CSS Module recovered from the Next app; the
+// chrome comes from the shared Hero/Section components.
 import styles from './styles.module.css';
-import heroStyles from 'components/Hero.module.css';
-import sectionStyles from 'components/Section.module.css';
-import headingStyles from 'components/Heading.module.css';
 import htmlOutputStyles from 'components/HtmlOutput.module.css';
 
 // Privacy page. The policy body is a fixed English markdown string (identical
@@ -131,24 +129,9 @@ const policyHtml = String(
 ---
 <BaseLayout locale={locale!} title={title} path="privacy/" mainClass={styles.privacy}>
     {/* Hero (no right content -> centered) */}
-    <div class:list={[heroStyles.hero, heroStyles.withoutRightContent, styles.hero]}>
-        <div class={heroStyles.section}>
-            <div class={heroStyles.mainContent}>
-                <div class={heroStyles.left}>
-                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-                        {t('privacy-hero-title')}
-                    </h2>
-                </div>
-            </div>
-        </div>
-        <div class={heroStyles.angledBackground}></div>
-    </div>
+    <Hero title={t('privacy-hero-title')} withoutRightContent class={styles.hero} />
 
-    <section class={sectionStyles.section}>
-        <div class={sectionStyles.container}>
-            <div class={styles.content}>
-                <div class={htmlOutputStyles.htmlOutput} set:html={policyHtml} />
-            </div>
-        </div>
-    </section>
+    <Section contentClass={styles.content}>
+        <div class={htmlOutputStyles.htmlOutput} set:html={policyHtml} />
+    </Section>
 </BaseLayout>

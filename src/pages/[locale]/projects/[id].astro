@@ -8,21 +8,21 @@ import ProjectHistoryChart from 'components/ProjectHistoryChart.tsx';
 import ProjectTypeIcon from 'components/ProjectTypeIcon.astro';
 import type { ProjectTypeKey } from 'components/ProjectTypeIcon.tsx';
 import Icon from 'components/Icon.astro';
+import Hero from 'components/Hero.astro';
+import Section from 'components/Section.astro';
+import Card from 'components/Card.astro';
+import KeyFigure from 'components/KeyFigure.astro';
+import Tag from 'components/Tag.astro';
+import Heading from 'components/Heading.astro';
 import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from 'lib/data';
 import { getFileSizeProperties, resolveAoiDownload } from 'lib/common';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
-// CSS Modules recovered from the Next app: the page module (also imported by
-// the ProjectHistoryChart island for the SVG classes) + the component modules
-// whose markup this page reproduces.
+// Page module (also imported by the ProjectHistoryChart island for the SVG
+// classes) + the Link/ImageWrapper/HtmlOutput CSS Modules recovered from the
+// Next app; the chrome comes from the shared components imported above.
 import styles from './styles.module.css';
-import heroStyles from 'components/Hero.module.css';
-import sectionStyles from 'components/Section.module.css';
-import cardStyles from 'components/Card.module.css';
-import tagStyles from 'components/Tag.module.css';
-import headingStyles from 'components/Heading.module.css';
 import linkStyles from 'components/Link.module.css';
-import keyFigureStyles from 'components/KeyFigure.module.css';
 import imageStyles from 'components/ImageWrapper.module.css';
 import htmlOutputStyles from 'components/HtmlOutput.module.css';
 
@@ -126,216 +126,157 @@ const lastFetched = project.exportHistory?.modifiedAt
 ---
 <ProjectLayout locale={locale!} firebaseId={String(firebaseId)} title={title} mainClass={styles.project}>
     {/* Hero: name + type/status/meta tags left, cover image right */}
-    <div class:list={[heroStyles.hero, styles.hero]}>
-        <div class={heroStyles.section}>
-            <div class:list={[heroStyles.mainContent, styles.mainContent]}>
-                <div class={heroStyles.left}>
-                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-                        {name}
-                    </h2>
-                    <div class={heroStyles.description}>
-                        <div class={styles.heroDescription}>
-                            <div class={styles.topTags}>
-                                {projectType && (
-                                    <span class:list={[tagStyles.tag, tagStyles.medium]}>
-                                        <ProjectTypeIcon type={projectType as ProjectTypeKey} size="small" />
-                                        {projectTypeLabels[projectType] ?? projectType}
-                                    </span>
-                                )}
-                                {status && (
-                                    <span class:list={[tagStyles.tag, tagStyles.medium]}>
-                                        <span class={statusClass[status]}>●</span>
-                                        {statusLabels[status] ?? status}
-                                    </span>
-                                )}
-                            </div>
-                            <div class={styles.bottomTags}>
-                                {region && (
-                                    <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('Location')}>
-                                        {region}
-                                    </span>
-                                )}
-                                {requestingOrganization?.name && (
-                                    <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('requesting-organization')}>
-                                        {requestingOrganization.name}
-                                    </span>
-                                )}
-                                {createdAtLabel && (
-                                    <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('created-at')}>
-                                        <Icon name="calendar-clear-outline" />
-                                        {createdAtLabel}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
+    <Hero title={name} class={styles.hero} mainContentClass={styles.mainContent}>
+        <Fragment slot="description">
+            <div class={styles.heroDescription}>
+                <div class={styles.topTags}>
+                    {projectType && (
+                        <Tag spacing="medium">
+                            <ProjectTypeIcon type={projectType as ProjectTypeKey} size="small" />
+                            {projectTypeLabels[projectType] ?? projectType}
+                        </Tag>
+                    )}
+                    {status && (
+                        <Tag spacing="medium">
+                            <span class={statusClass[status]}>●</span>
+                            {statusLabels[status] ?? status}
+                        </Tag>
+                    )}
                 </div>
-                {imageUrl && (
-                    <div class={heroStyles.right}>
-                        <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-                            <RemoteImage class={imageStyles.image} src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
-                        </div>
-                    </div>
-                )}
+                <div class={styles.bottomTags}>
+                    {region && (
+                        <Tag variant="transparent" spacing="medium" class={styles.heroTag} title={t('Location')}>
+                            {region}
+                        </Tag>
+                    )}
+                    {requestingOrganization?.name && (
+                        <Tag variant="transparent" spacing="medium" class={styles.heroTag} title={t('requesting-organization')}>
+                            {requestingOrganization.name}
+                        </Tag>
+                    )}
+                    {createdAtLabel && (
+                        <Tag variant="transparent" spacing="medium" class={styles.heroTag} title={t('created-at')}>
+                            <Icon name="calendar-clear-outline" />
+                            {createdAtLabel}
+                        </Tag>
+                    )}
+                </div>
             </div>
-        </div>
-        <div class={heroStyles.angledBackground}></div>
-    </div>
+        </Fragment>
+        {imageUrl && (
+            <Fragment slot="right">
+                <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                    <RemoteImage class={imageStyles.image} src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
+                </div>
+            </Fragment>
+        )}
+    </Hero>
 
     {/* Overview: description + circle key figures */}
-    <section class:list={[sectionStyles.section, styles.overviewSection]}>
-        <div class={sectionStyles.container}>
-            <div class={styles.overviewContent}>
-                <div class={styles.content}>
-                    <h4 class:list={[headingStyles.heading, headingStyles.medium]}>
-                        {t('overview-section-title')}
-                    </h4>
-                    <div class={styles.description}>
-                        {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
-                        <div class:list={[htmlOutputStyles.htmlOutput, styles.description]} set:html={description ?? ''}></div>
-                    </div>
-                </div>
-                <div class={styles.stats}>
-                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.largeFigure, styles.figure]}>
-                        <div class={keyFigureStyles.value}>
-                            {roundedTotalArea}
-                            <Icon name="plus" class={keyFigureStyles.icon} />
-                        </div>
-                        <div class={keyFigureStyles.label}><span>km<sup>2</sup></span></div>
-                    </div>
-                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
-                        <div class={keyFigureStyles.value}>
-                            {numberOfContributorUsers ?? 0}
-                            <Icon name="plus" class={keyFigureStyles.icon} />
-                        </div>
-                        <div class={keyFigureStyles.label}>{t('project-contributors-text')}</div>
-                    </div>
-                </div>
+    <Section class={styles.overviewSection} contentClass={styles.overviewContent}>
+        <div class={styles.content}>
+            <Heading>{t('overview-section-title')}</Heading>
+            <div class={styles.description}>
+                {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
+                <div class:list={[htmlOutputStyles.htmlOutput, styles.description]} set:html={description ?? ''}></div>
             </div>
         </div>
-    </section>
+        <div class={styles.stats}>
+            <KeyFigure variant="circle" class={[styles.largeFigure, styles.figure]} value={roundedTotalArea}>
+                <span>km<sup>2</sup></span>
+            </KeyFigure>
+            <KeyFigure variant="circle" circleColor="complement" class={styles.figure} value={numberOfContributorUsers ?? 0}>
+                {t('project-contributors-text')}
+            </KeyFigure>
+        </div>
+    </Section>
 
     {/* Stats: AOI map + progress bar + history chart */}
-    <section class:list={[sectionStyles.section, styles.statsSection]}>
-        <div class:list={[sectionStyles.container, styles.statsContainer]}>
-            <div class={styles.content}>
-                {aoiDownload && (
-                    <div class={styles.mapContainer}>
-                        <MapIsland client:only="react" className={styles.projectsMap} geoJsonUrl={aoiDownload.url} />
-                    </div>
-                )}
-                <div class={styles.rightContainer}>
-                    <div class={styles.progressBar}>
-                        <div class={styles.progressLabel}>
-                            <div>{t('project-progress-label')}</div>
-                            <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
-                        </div>
-                        <div class={styles.track}>
-                            <div class={styles.progress} style={`width:${progress * 100}%`}></div>
-                        </div>
-                    </div>
-                    <div class={styles.chartContainer}>
-                        <ProjectHistoryChart
-                            client:visible
-                            className={styles.timelineChartContainer}
-                            projectId={project.id}
-                            historyUrl={historyUrl}
-                        />
-                    </div>
+    <Section
+        class={styles.statsSection}
+        containerClass={styles.statsContainer}
+        contentClass={styles.content}
+        actionsClass={styles.lastFetchedContainer}
+    >
+        {aoiDownload && (
+            <div class={styles.mapContainer}>
+                <MapIsland client:only="react" className={styles.projectsMap} geoJsonUrl={aoiDownload.url} />
+            </div>
+        )}
+        <div class={styles.rightContainer}>
+            <div class={styles.progressBar}>
+                <div class={styles.progressLabel}>
+                    <div>{t('project-progress-label')}</div>
+                    <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
+                </div>
+                <div class={styles.track}>
+                    <div class={styles.progress} style={`width:${progress * 100}%`}></div>
                 </div>
             </div>
-            {lastFetched && (
-                <div class:list={[sectionStyles.actions, styles.lastFetchedContainer]}>{lastFetched}</div>
-            )}
+            <div class={styles.chartContainer}>
+                <ProjectHistoryChart
+                    client:visible
+                    className={styles.timelineChartContainer}
+                    projectId={project.id}
+                    historyUrl={historyUrl}
+                />
+            </div>
         </div>
-    </section>
+        {lastFetched && <Fragment slot="actions">{lastFetched}</Fragment>}
+    </Section>
 
     {/* Downloads */}
-    <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.downloadSection]}>
-        <div class={sectionStyles.container}>
-            <div class={sectionStyles.headingContainer}>
-                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-                    {t('data-section-heading')}
-                </h4>
-                <div class:list={[sectionStyles.description, styles.downloadDescription]}>
-                    {t('data-section-description')}
-                </div>
-            </div>
-            <div class={styles.urlList}>
-                {cards.map((card) =>
-                    card.asset ? (
-                        <div class={cardStyles.card}>
-                            <div class={cardStyles.cardContent}>
-                                <div class={cardStyles.headerWrapper}>
-                                    <div class={cardStyles.header}>
-                                        <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                                            {card.heading}
-                                        </h6>
-                                    </div>
-                                    <div>{card.description}</div>
-                                </div>
-                                <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
-                                    <div class={styles.fileDetails}>
-                                        <span class:list={[tagStyles.tag, tagStyles.medium]}>{card.asset.mimetype}</span>
-                                        <div>{downloadSizeText(card.asset.fileSize)}</div>
-                                    </div>
-                                    {card.asset.file?.url && (
-                                        <a class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]} href={card.asset.file.url} download>
-                                            {t('download')}
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    ) : null,
-                )}
-                {aoiDownload && (
-                    <div class={cardStyles.card}>
-                        <div class={cardStyles.cardContent}>
-                            <div class={cardStyles.headerWrapper}>
-                                <div class={cardStyles.header}>
-                                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                                        {t('area-of-interest-title')}
-                                    </h6>
-                                </div>
-                                <div>{t('area-of-interest-description')}</div>
-                            </div>
-                            <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
-                                <div class={styles.fileDetails}>
-                                    <span class:list={[tagStyles.tag, tagStyles.medium]}>{aoiDownload.mimetype}</span>
-                                    <div>{downloadSizeText(aoiDownload.fileSize)}</div>
-                                </div>
-                                <a
-                                    class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]}
-                                    href={aoiDownload.url}
-                                    download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
-                                >
-                                    {t('download')}
-                                </a>
-                            </div>
-                        </div>
+    <Section
+        withAlternativeBackground
+        class={styles.downloadSection}
+        title={t('data-section-heading')}
+        descriptionClass={styles.downloadDescription}
+        contentClass={styles.urlList}
+    >
+        <Fragment slot="description">{t('data-section-description')}</Fragment>
+        {cards.map((card) =>
+            card.asset ? (
+                <Card heading={card.heading} childrenContainerClass={styles.downloadCard}>
+                    <Fragment slot="actions">{card.description}</Fragment>
+                    <div class={styles.fileDetails}>
+                        <Tag spacing="medium">{card.asset.mimetype}</Tag>
+                        <div>{downloadSizeText(card.asset.fileSize)}</div>
                     </div>
-                )}
-            </div>
-        </div>
-    </section>
+                    {card.asset.file?.url && (
+                        <a class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]} href={card.asset.file.url} download>
+                            {t('download')}
+                        </a>
+                    )}
+                </Card>
+            ) : null,
+        )}
+        {aoiDownload && (
+            <Card heading={t('area-of-interest-title')} childrenContainerClass={styles.downloadCard}>
+                <Fragment slot="actions">{t('area-of-interest-description')}</Fragment>
+                <div class={styles.fileDetails}>
+                    <Tag spacing="medium">{aoiDownload.mimetype}</Tag>
+                    <div>{downloadSizeText(aoiDownload.fileSize)}</div>
+                </div>
+                <a
+                    class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]}
+                    href={aoiDownload.url}
+                    download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
+                >
+                    {t('download')}
+                </a>
+            </Card>
+        )}
+    </Section>
 
     {/* License */}
-    <section class={sectionStyles.section}>
-        <div class={sectionStyles.container}>
-            <div class={sectionStyles.headingContainer}>
-                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-                    {t('license-section-heading')}
-                </h4>
-                {/* Next passed the license body as Section's `description` node, so the
+    <Section title={t('license-section-heading')}>
+        {/* Next passed the license body as Section's `description` node, so the
             licenseDescription div nests inside the section description div. */}
-                <div class={sectionStyles.description}>
-                    <div class={styles.licenseDescription}>
-                        <p>{t('license-section-description-1')}</p>
-                        <p>{t('license-section-description-2')}</p>
-                    </div>
-                </div>
+        <Fragment slot="description">
+            <div class={styles.licenseDescription}>
+                <p>{t('license-section-description-1')}</p>
+                <p>{t('license-section-description-2')}</p>
             </div>
-        </div>
-    </section>
+        </Fragment>
+    </Section>
 </ProjectLayout>

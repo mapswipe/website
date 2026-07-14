@@ -1,0 +1,16 @@
+---
+// Centered call-to-action card (port of the Next components/CenteredCard).
+import styles from 'components/CenteredCard.module.css';
+
+interface Props {
+    heading?: string;
+    class?: string;
+}
+
+const { heading, class: className } = Astro.props;
+---
+<div class:list={[className, styles.card]}>
+    <div class={styles.heading}>{heading}</div>
+    <div class={styles.description}><slot /></div>
+    <div class={styles.actions}><slot name="actions" /></div>
+</div>

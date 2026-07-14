@@ -3,23 +3,23 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from 'layouts/BaseLayout.astro';
 import DataExplorer, { PAGE_SIZE } from 'components/DataExplorer.tsx';
 import ProjectTypeIcon from 'components/ProjectTypeIcon.astro';
-import Icon from 'components/Icon.astro';
+import Hero from 'components/Hero.astro';
+import Section from 'components/Section.astro';
+import Card from 'components/Card.astro';
+import KeyFigure from 'components/KeyFigure.astro';
+import Heading from 'components/Heading.astro';
+import ListItem from 'components/ListItem.astro';
 import { getDataExplorerPayload } from 'lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from 'lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
-// CSS Modules recovered from the Next app: the page module (shared with the
-// DataExplorer island) + the component modules whose markup this page
-// reproduces (Hero, Section, Card, KeyFigure, Heading, Link, ListItem,
-// ImageWrapper).
+// Page module (shared with the DataExplorer island) + the Link/ImageWrapper
+// CSS Modules recovered from the Next app; the chrome comes from the shared
+// Hero/Section/Card/KeyFigure/Heading/ListItem components. cardStyles is
+// still imported for the custom before/after cover slot.
 import styles from './styles.module.css';
-import heroStyles from 'components/Hero.module.css';
-import sectionStyles from 'components/Section.module.css';
 import cardStyles from 'components/Card.module.css';
-import keyFigureStyles from 'components/KeyFigure.module.css';
-import headingStyles from 'components/Heading.module.css';
 import linkStyles from 'components/Link.module.css';
-import listItemStyles from 'components/ListItem.module.css';
 import imageStyles from 'components/ImageWrapper.module.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router
@@ -101,113 +101,71 @@ const typeCards = [
 ---
 <BaseLayout locale={locale!} title={title} path="data/" activePath="data" mainClass={styles.data}>
     {/* Hero */}
-    <div class={heroStyles.hero}>
-        <div class={heroStyles.section}>
-            <div class={heroStyles.mainContent}>
-                <div class={heroStyles.left}>
-                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-                        {t('data-page-heading')}
-                    </h2>
-                    <div class={heroStyles.description}>{t('data-page-description')}</div>
-                </div>
-                <div class={heroStyles.right}>
-                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-                        <img class={imageStyles.image} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
-                    </div>
-                </div>
+    <Hero title={t('data-page-heading')}>
+        <Fragment slot="description">{t('data-page-description')}</Fragment>
+        <Fragment slot="right">
+            <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                <img class={imageStyles.image} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
             </div>
-        </div>
-        <div class={heroStyles.angledBackground}></div>
-    </div>
+        </Fragment>
+    </Hero>
 
     {/* Community stats (Next: statsHeader Section with circle KeyFigures) */}
-    <section class={sectionStyles.section}>
-        <div class={sectionStyles.container}>
-            <div class={styles.statsHeader}>
-                <div class={styles.leftContent}>
-                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.figure, styles.largeFigure]}>
-                        <div class={keyFigureStyles.value}>
-                            {fmt(totalSwipes)}
-                            <Icon name="plus" class={keyFigureStyles.icon} />
-                        </div>
-                        <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
-                    </div>
-                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
-                        <div class={keyFigureStyles.value}>
-                            {fmt(totalContributors)}
-                            <Icon name="plus" class={keyFigureStyles.icon} />
-                        </div>
-                        <div class={keyFigureStyles.label}>{t('contributors')}</div>
-                    </div>
-                </div>
-                <div class={styles.rightContent}>
-                    <h4 class:list={[headingStyles.heading, headingStyles.medium, styles.heading]}>
-                        {t('community-stats-section-heading')}
-                    </h4>
-                    <div class={styles.sectionDescription}>
-                        {t('community-stats-section-description')}
-                        <a class:list={[linkStyles.link, linkStyles.underline]} href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
-                            {t('community-dashboard-link-label')}
-                        </a>
-                    </div>
-                </div>
+    <Section contentClass={styles.statsHeader}>
+        <div class={styles.leftContent}>
+            <KeyFigure variant="circle" class={[styles.figure, styles.largeFigure]} value={fmt(totalSwipes)}>
+                {t('total-swipes')}
+            </KeyFigure>
+            <KeyFigure variant="circle" circleColor="complement" class={styles.figure} value={fmt(totalContributors)}>
+                {t('contributors')}
+            </KeyFigure>
+        </div>
+        <div class={styles.rightContent}>
+            <Heading class={styles.heading}>
+                {t('community-stats-section-heading')}
+            </Heading>
+            <div class={styles.sectionDescription}>
+                {t('community-stats-section-description')}
+                <a class:list={[linkStyles.link, linkStyles.underline]} href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
+                    {t('community-dashboard-link-label')}
+                </a>
             </div>
         </div>
-    </section>
+    </Section>
 
     {/* Project-type explainer cards (static, SSR-only) */}
-    <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.typeSection]}>
-        <div class={sectionStyles.container}>
-            <div class={sectionStyles.headingContainer}>
-                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-                    {t('type-section-heading')}
-                </h4>
-                <div class={sectionStyles.description}>{t('type-section-description')}</div>
-            </div>
-            <div class={styles.typeList}>
-                {typeCards.map((card) => (
-                    <article class={cardStyles.card}>
-                        {'beforeAfter' in card && card.beforeAfter ? (
-                            <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
-                                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                                    <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
-                                </div>
-                                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                                    <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
-                                </div>
-                            </div>
-                        ) : (
-                            <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
-                                <img class:list={[imageStyles.image, cardStyles.image]} src={'coverImageUrl' in card ? card.coverImageUrl : ''} alt="card-cover-image" loading="lazy" decoding="async" />
-                            </div>
-                        )}
-                        <div class={cardStyles.cardContent}>
-                            <div class={cardStyles.headerWrapper}>
-                                <div class={cardStyles.header}>
-                                    <div>
-                                        <ProjectTypeIcon type={card.type} />
-                                    </div>
-                                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                                        {card.title}
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class:list={[cardStyles.childrenContainer, styles.keyPointList]}>
-                                {card.points.map((p) => (
-                                    <div class={listItemStyles.listItem}>
-                                        <div class={listItemStyles.icon}>
-                                            <Icon name="checkmark-circle-outline" />
-                                        </div>
-                                        <div class={listItemStyles.label}>{p}</div>
-                                    </div>
-                                ))}
-                            </div>
+    <Section
+        withAlternativeBackground
+        class={styles.typeSection}
+        title={t('type-section-heading')}
+        contentClass={styles.typeList}
+    >
+        <Fragment slot="description">{t('type-section-description')}</Fragment>
+        {typeCards.map((card) => (
+            <Card
+                as="article"
+                heading={card.title}
+                coverImageUrl={'coverImageUrl' in card ? card.coverImageUrl : undefined}
+                coverWrapperClass={styles.missionImage}
+                childrenContainerClass={styles.keyPointList}
+            >
+                {'beforeAfter' in card && card.beforeAfter && (
+                    <div slot="cover" class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
+                        <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                            <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
                         </div>
-                    </article>
+                        <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                            <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                        </div>
+                    </div>
+                )}
+                <Fragment slot="icons"><ProjectTypeIcon type={card.type} /></Fragment>
+                {card.points.map((p) => (
+                    <ListItem>{p}</ListItem>
                 ))}
-            </div>
-        </div>
-    </section>
+            </Card>
+        ))}
+    </Section>
 
     {/* The ONE interactive island: filters + search + sort + pagination +
        card list + map share state. client:load so filters + initial list
@@ -231,29 +189,13 @@ const typeCards = [
     />
 
     {/* License + contact (static) */}
-    <section class={sectionStyles.section}>
-        <div class={sectionStyles.container}>
-            <div class={sectionStyles.headingContainer}>
-                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-                    {t('license-section-heading')}
-                </h4>
-                <div class={sectionStyles.description}>{t('license-section-description')}</div>
-            </div>
-        </div>
-    </section>
-    <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground]}>
-        <div class={sectionStyles.container}>
-            <div class={sectionStyles.headingContainer}>
-                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-                    {t('contact-section-heading')}
-                </h4>
-                <div class={sectionStyles.description}>{t('contact-section-description')}</div>
-            </div>
-            <div class={sectionStyles.actions}>
-                <a class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">
-                    {t('contact-link-label')}
-                </a>
-            </div>
-        </div>
-    </section>
+    <Section title={t('license-section-heading')}>
+        <Fragment slot="description">{t('license-section-description')}</Fragment>
+    </Section>
+    <Section withAlternativeBackground title={t('contact-section-heading')}>
+        <Fragment slot="description">{t('contact-section-description')}</Fragment>
+        <a slot="actions" class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">
+            {t('contact-link-label')}
+        </a>
+    </Section>
 </BaseLayout>

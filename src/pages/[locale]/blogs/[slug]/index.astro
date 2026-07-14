@@ -4,16 +4,14 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BlogLayout from 'layouts/BlogLayout.astro';
 import Icon from 'components/Icon.astro';
+import Hero from 'components/Hero.astro';
+import Section from 'components/Section.astro';
+import Tag from 'components/Tag.astro';
 import { getT, LOCALES } from '../../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
-// CSS Modules recovered from the Next app: the page module + the component
-// modules whose markup this page reproduces (Hero, Section, Tag, Heading,
-// HtmlOutput, ImageWrapper).
+// Page module + the ImageWrapper/HtmlOutput CSS Modules recovered from the
+// Next app; the chrome comes from the shared Hero/Section/Tag components.
 import styles from './styles.module.css';
-import heroStyles from 'components/Hero.module.css';
-import sectionStyles from 'components/Section.module.css';
-import tagStyles from 'components/Tag.module.css';
-import headingStyles from 'components/Heading.module.css';
 import imageStyles from 'components/ImageWrapper.module.css';
 import htmlOutputStyles from 'components/HtmlOutput.module.css';
 
@@ -77,48 +75,39 @@ const tabTitle = String(t('blog-tab-head', { blogTitle }));
     mainClass={styles.blog}
 >
     {/* Hero: title + date/author tags left, cover image right */}
-    <div class:list={[heroStyles.hero, styles.hero]}>
-        <div class={heroStyles.section}>
-            <div class:list={[heroStyles.mainContent, styles.heroMainContent]}>
-                <div class:list={[heroStyles.left, styles.heroLeftContent]}>
-                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-                        {blogTitle}
-                    </h2>
-                    <div class={heroStyles.description}>
-                        <div class={styles.heroDescription}>
-                            {publishedDate && (
-                                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
-                                    <Icon name="calendar-clear-outline" />
-                                    {dateFmt.format(publishedDate)}
-                                </span>
-                            )}
-                            {author && (
-                                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
-                                    {author}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div class={heroStyles.right}>
-                    {coverImage ? (
-                        <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-                            <Image class={imageStyles.image} src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
-                        </div>
-                    ) : (
-                        <div />
-                    )}
-                </div>
+    <Hero
+        title={blogTitle}
+        class={styles.hero}
+        mainContentClass={styles.heroMainContent}
+        leftClass={styles.heroLeftContent}
+    >
+        <Fragment slot="description">
+            <div class={styles.heroDescription}>
+                {publishedDate && (
+                    <Tag variant="transparent" class={styles.heroTag}>
+                        <Icon name="calendar-clear-outline" />
+                        {dateFmt.format(publishedDate)}
+                    </Tag>
+                )}
+                {author && (
+                    <Tag variant="transparent" class={styles.heroTag}>
+                        {author}
+                    </Tag>
+                )}
             </div>
-        </div>
-        <div class={heroStyles.angledBackground}></div>
-    </div>
+        </Fragment>
+        <Fragment slot="right">
+            {coverImage ? (
+                <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                    <Image class={imageStyles.image} src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
+                </div>
+            ) : (
+                <div />
+            )}
+        </Fragment>
+    </Hero>
 
-    <section class={sectionStyles.section}>
-        <div class={sectionStyles.container}>
-            <div class={htmlOutputStyles.htmlOutput}>
-                <Content />
-            </div>
-        </div>
-    </section>
+    <Section contentClass={htmlOutputStyles.htmlOutput}>
+        <Content />
+    </Section>
 </BlogLayout>
