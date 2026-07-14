@@ -15,7 +15,10 @@
     "css-lint": "stylelint 'src/**/*.css'",
     "typecheck": "astro check",
     "verify-dist": "node scripts/verify-dist.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "generate:type": "graphql-codegen --config codegen.yml",
+    "fetch-data:local": "node --env-file=.env.local scripts/fetchData.ts",
+    "check-unused": "knip"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
@@ -41,7 +44,12 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@eslint/js": "^10.0.1",
+    "@graphql-codegen/cli": "^7.2.0",
+    "@graphql-codegen/typescript": "^6.1.0",
+    "@graphql-codegen/typescript-operations": "^6.1.0",
     "@playwright/test": "^1.61.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@stylistic/stylelint-plugin": "^5.2.1",
     "@types/leaflet": "^1.9.12",
     "@types/papaparse": "^5.3.15",
     "@types/react": "^18.3.12",
@@ -50,13 +58,16 @@
     "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.7.0",
+    "knip": "^6.26.0",
     "postcss": "^8.5.19",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-nested": "^7.0.2",
     "postcss-normalize": "^13.0.1",
     "postcss-preset-env": "^11.3.2",
     "stylelint": "^17.14.0",
+    "stylelint-config-concentric-order": "^5.5.0",
     "stylelint-config-standard": "^40.0.0",
+    "stylelint-order": "^8.1.1",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.63.0"
   },

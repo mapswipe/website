@@ -1,0 +1,9 @@
+query ProjectsByIds($ids: [ID!], $limit: Int!, $offset: Int!) {
+    publicProjects(
+        filters: { status: { inList: [PUBLISHED, FINISHED] }, id: { inList: $ids } },
+        pagination: { limit: $limit, offset: $offset },
+    ) {
+        results { ...ProjectFields }
+        totalCount
+    }
+}

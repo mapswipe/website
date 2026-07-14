@@ -1,9 +1,17 @@
 // Run with plain `node scripts/fetchData.ts` (Node >= 22 type stripping — the
 // type-only import below is erased, so no ts-node/tsc is needed at runtime).
-import { GraphQLClient, gql } from 'graphql-request';
+// The GraphQL documents live in scripts/graphql/*.graphql so graphql-codegen
+// can parse them (interpolated template literals break its tag plucker); the
+// same files are read here at runtime.
+import { GraphQLClient } from 'graphql-request';
 import fs from 'fs';
 import path from 'path';
-import type { AllDataQuery } from '../generated/types';
+import type {
+    ProjectScanQuery,
+    ProjectsByIdsQuery,
+    PublicProjectsQuery,
+    RestDataQuery,
+} from '../generated/types';
 
 const datadir = path.join(import.meta.dirname, '../fullData');
 const outputPath = path.join(datadir, 'staticData.json');
@@ -23,102 +31,36 @@ const forceFull = process.env.FORCE_FULL_FETCH === '1' || process.env.FORCE_FULL
 
 const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT);
 
-const dummyData: AllDataQuery = {
+const gqlDir = path.join(import.meta.dirname, 'graphql');
+const readDoc = (name: string) => fs.readFileSync(path.join(gqlDir, name), 'utf8');
+const projectFieldsFragment = readDoc('projectFields.graphql');
+const scanQuery = readDoc('projectScan.graphql');
+const projectsQuery = `${readDoc('publicProjects.graphql')}\n${projectFieldsFragment}`;
+const projectsByIdsQuery = `${readDoc('projectsByIds.graphql')}\n${projectFieldsFragment}`;
+const restQuery = readDoc('restData.graphql');
+
+// staticData.json's shape: the singular rest-data plus the project list.
+type StaticData = RestDataQuery & Pick<PublicProjectsQuery, 'publicProjects'>;
+type PublicProjects = NonNullable<PublicProjectsQuery['publicProjects']>;
+type ProjectResult = NonNullable<PublicProjects['results']>[number];
+
+const dummyData: StaticData = {
     publicProjects: { results: [], totalCount: 0 },
     communityStats: {
-        id: '0', totalContributors: 1, totalUserGroups: 1, totalSwipes: 1,
+        id: '0', totalContributors: 1, totalSwipes: 1,
     },
     publicOrganizations: { results: [] },
     globalExportAssets: [],
 };
-
-// Only fields the pages render (see the page slim functions). Shared between the
-// full and by-id project queries so the selection can't drift.
-const PROJECT_FIELDS = `
-    id
-    exportAggregatedResultsWithGeometry { id fileSize file { url } mimetype }
-    exportAggregatedResults { id fileSize file { url } mimetype }
-    exportAreaOfInterest { id fileSize file { url } mimetype }
-    exportGroups { id fileSize file { url } mimetype }
-    exportHistory { id fileSize file { url } mimetype modifiedAt }
-    exportResults { id fileSize file { url } mimetype }
-    exportTasks { id fileSize file { url } mimetype }
-    exportUsers { id fileSize file { url } mimetype }
-    exportHotTaskingManagerGeometries { id fileSize file { url } mimetype }
-    exportModerateToHighAgreementYesMaybeGeometries { id fileSize file { url } mimetype }
-    name
-    firebaseId
-    image { file { url } }
-    description
-    requestingOrganization { id name }
-    progress
-    status
-    projectType
-    createdAt
-    modifiedAt
-    lastContributionDate
-    region
-    requestingOrganizationId
-    numberOfContributorUsers
-    aoiGeometry { centroid id totalArea bbox }
-    aoiGeometryInputAsset { id fileSize file { url } mimetype }
-`;
-
-const STATUS_FILTER = 'status: { inList: [PUBLISHED, FINISHED] }';
-
-// Cheap change-detection scan: id + the two timestamps that signal a change.
-// `modifiedAt` covers project edits; `lastContributionDate` covers new swipes/
-// contributions that update progress without bumping `modifiedAt`.
-const scanQuery = gql`
-    query ProjectScan($limit: Int!, $offset: Int!) {
-        publicProjects(filters: { ${STATUS_FILTER} }, pagination: { limit: $limit, offset: $offset }) {
-            results { id modifiedAt lastContributionDate }
-            totalCount
-        }
-    }
-`;
-
-// Full fetch of all projects (cold / forced-full path).
-const projectsQuery = gql`
-    query PublicProjects($limit: Int!, $offset: Int!) {
-        publicProjects(filters: { ${STATUS_FILTER} }, pagination: { limit: $limit, offset: $offset }) {
-            results { ${PROJECT_FIELDS} }
-            totalCount
-        }
-    }
-`;
-
-// Full fetch restricted to a set of ids (incremental path).
-const projectsByIdsQuery = gql`
-    query ProjectsByIds($ids: [ID!], $limit: Int!, $offset: Int!) {
-        publicProjects(filters: { ${STATUS_FILTER}, id: { inList: $ids } }, pagination: { limit: $limit, offset: $offset }) {
-            results { ${PROJECT_FIELDS} }
-            totalCount
-        }
-    }
-`;
-
-// The non-project data — small, singular, fetched every run.
-const restQuery = gql`
-    query RestData {
-        communityStats { id totalContributors totalSwipes }
-        publicOrganizations(pagination: { limit: 9999 }) { results { id name } }
-        globalExportAssets { type lastUpdatedAt fileSize file { url name } }
-    }
-`;
-
-type PublicProjects = NonNullable<AllDataQuery['publicProjects']>;
-type ProjectResult = NonNullable<PublicProjects['results']>[number];
 
 async function fetchAllProjects(): Promise<PublicProjects> {
     const results: ProjectResult[] = [];
     let offset = 0;
     let totalCount = 0;
     for (;;) {
-         
         const page = (await graphQLClient.request(projectsQuery, {
             limit: PROJECTS_PAGE_SIZE, offset,
-        })) as AllDataQuery;
+        })) as PublicProjectsQuery;
         const pageResults = page.publicProjects?.results ?? [];
         totalCount = page.publicProjects?.totalCount ?? totalCount;
         results.push(...pageResults);
@@ -131,18 +73,13 @@ async function fetchAllProjects(): Promise<PublicProjects> {
     return { results, totalCount };
 }
 
-// A project is considered changed when either timestamp differs. Note the
-// generated `AllDataQuery` type predates `lastContributionDate`; it is present
-// at runtime (fetched in both the scan and PROJECT_FIELDS) so reads are safe.
+// A project is considered changed when either timestamp differs: `modifiedAt`
+// covers project edits; `lastContributionDate` covers new swipes that update
+// progress without bumping `modifiedAt`.
 type ChangeKeyFields = { modifiedAt?: string | null; lastContributionDate?: string | null };
 function changeSignature(p: ChangeKeyFields): string {
     return `${p.modifiedAt ?? ''}|${p.lastContributionDate ?? ''}`;
 }
-
-type ScanRow = { id: string; modifiedAt?: string | null; lastContributionDate?: string | null };
-type ScanResponse = {
-    publicProjects?: { results?: ScanRow[] | null; totalCount?: number | null } | null;
-};
 
 // Cheap scan → Map<id, changeSignature> of the current published/finished set.
 async function scanProjects(): Promise<Map<string, string>> {
@@ -150,10 +87,9 @@ async function scanProjects(): Promise<Map<string, string>> {
     let offset = 0;
     let totalCount = 0;
     for (;;) {
-         
         const page = (await graphQLClient.request(scanQuery, {
             limit: SCAN_PAGE_SIZE, offset,
-        })) as ScanResponse;
+        })) as ProjectScanQuery;
         const pageResults = page.publicProjects?.results ?? [];
         totalCount = page.publicProjects?.totalCount ?? totalCount;
         pageResults.forEach((p) => map.set(p.id, changeSignature(p)));
@@ -170,10 +106,9 @@ async function fetchProjectsByIds(ids: string[]): Promise<ProjectResult[]> {
     const out: ProjectResult[] = [];
     for (let i = 0; i < ids.length; i += PROJECTS_PAGE_SIZE) {
         const batch = ids.slice(i, i + PROJECTS_PAGE_SIZE);
-         
         const page = (await graphQLClient.request(projectsByIdsQuery, {
             ids: batch, limit: PROJECTS_PAGE_SIZE, offset: 0,
-        })) as AllDataQuery;
+        })) as ProjectsByIdsQuery;
         out.push(...(page.publicProjects?.results ?? []));
     }
     return out;
@@ -183,7 +118,7 @@ async function fetchProjectsByIds(ids: string[]): Promise<ProjectResult[]> {
 // full data). In CI this file is restored from actions/cache before the run.
 function loadPreviousProjects(): Map<string, ProjectResult> | null {
     try {
-        const prev = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as AllDataQuery;
+        const prev = JSON.parse(fs.readFileSync(outputPath, 'utf8')) as StaticData;
         const results = prev.publicProjects?.results ?? [];
         if (results.length === 0) {
             return null;
@@ -216,7 +151,7 @@ async function fetchProjectsIncrementally(): Promise<PublicProjects> {
     // Assemble in the current scan order; deleted projects (in cache, not in
     // scan) are naturally excluded. Missing new ids (edge race) are dropped.
     const results: ProjectResult[] = [];
-    scan.forEach((_modifiedAt, id) => {
+    scan.forEach((_sig, id) => {
         const project = freshById.get(id) ?? prevById.get(id);
         if (project) {
             results.push(project);
@@ -257,7 +192,7 @@ async function getCsrfTokenValue() {
 }
 
 async function fetchAndWriteData() {
-    let data: AllDataQuery;
+    let data: StaticData;
     if (pipelineType === 'ci') {
         data = dummyData;
     } else {
@@ -275,7 +210,7 @@ async function fetchAndWriteData() {
         graphQLClient.setHeader('Referer', referer);
 
         const publicProjects = await fetchProjectsIncrementally();
-        const rest = (await graphQLClient.request(restQuery)) as AllDataQuery;
+        const rest = (await graphQLClient.request(restQuery)) as RestDataQuery;
         data = { ...rest, publicProjects };
     }
 

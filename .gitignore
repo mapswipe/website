@@ -42,3 +42,6 @@ npm-debug.log*
 # playwright
 test-results/
 playwright-report/
+
+# generated from backend/schema.graphql via `pnpm generate:type`
+generated/

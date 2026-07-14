@@ -1,0 +1,10 @@
+# Cheap change-detection scan: id + the two timestamps that signal a change.
+query ProjectScan($limit: Int!, $offset: Int!) {
+    publicProjects(
+        filters: { status: { inList: [PUBLISHED, FINISHED] } },
+        pagination: { limit: $limit, offset: $offset },
+    ) {
+        results { id modifiedAt lastContributionDate }
+        totalCount
+    }
+}

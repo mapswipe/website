@@ -1,0 +1,31 @@
+# Only fields the pages render (see the page slim functions). Shared by the
+# full and by-id queries so the selection can't drift.
+fragment ProjectFields on ProjectType {
+    id
+    exportAggregatedResultsWithGeometry { id fileSize file { url } mimetype }
+    exportAggregatedResults { id fileSize file { url } mimetype }
+    exportAreaOfInterest { id fileSize file { url } mimetype }
+    exportGroups { id fileSize file { url } mimetype }
+    exportHistory { id fileSize file { url } mimetype modifiedAt }
+    exportResults { id fileSize file { url } mimetype }
+    exportTasks { id fileSize file { url } mimetype }
+    exportUsers { id fileSize file { url } mimetype }
+    exportHotTaskingManagerGeometries { id fileSize file { url } mimetype }
+    exportModerateToHighAgreementYesMaybeGeometries { id fileSize file { url } mimetype }
+    name
+    firebaseId
+    image { file { url } }
+    description
+    requestingOrganization { id name }
+    progress
+    status
+    projectType
+    createdAt
+    modifiedAt
+    lastContributionDate
+    region
+    requestingOrganizationId
+    numberOfContributorUsers
+    aoiGeometry { centroid id totalArea bbox }
+    aoiGeometryInputAsset { id fileSize file { url } mimetype }
+}

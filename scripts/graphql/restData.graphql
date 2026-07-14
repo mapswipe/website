@@ -1,0 +1,6 @@
+# The non-project data — small, singular, fetched every run.
+query RestData {
+    communityStats { id totalContributors totalSwipes }
+    publicOrganizations(pagination: { limit: 9999 }) { results { id name } }
+    globalExportAssets { type lastUpdatedAt fileSize file { url name } }
+}
