@@ -1,7 +1,18 @@
 {
-  "extends": "stylelint-config-standard",
-  "rules": {
-    "declaration-block-single-line-max-declarations": null,
-    "selector-class-pattern": null
-  }
+    "plugins": [
+        "@stylistic/stylelint-plugin"
+    ],
+    "extends": [
+        "stylelint-config-recommended",
+        "stylelint-config-concentric-order"
+    ],
+    "rules": {
+        "@stylistic/indentation": 4,
+        "selector-pseudo-class-no-unknown": [
+            true,
+            {
+                "ignorePseudoClasses": ["global"]
+            }
+        ]
+    }
 }

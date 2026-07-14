@@ -14,11 +14,11 @@
         display: flex;
         flex-grow: 1;
         flex-wrap: wrap;
+        gap: var(--spacing-mega-large);
         justify-content: space-between;
         margin: 0 auto;
         padding: var(--spacing-mega-large) var(--spacing-large);
         max-width: var(--width-page-max);
-        gap: var(--spacing-mega-large);
 
         .section {
             display: flex;
@@ -49,8 +49,8 @@
 
         .content {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
+            align-items: center;
             justify-content: space-between;
             margin: 0 auto;
             padding: 0 var(--spacing-large);
@@ -75,8 +75,8 @@
 
             .rightContainer {
                 display: flex;
-                padding: var(--spacing-medium) 0;
                 gap: var(--spacing-medium);
+                padding: var(--spacing-medium) 0;
             }
         }
     }

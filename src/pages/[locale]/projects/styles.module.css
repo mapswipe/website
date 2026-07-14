@@ -71,21 +71,13 @@
 
         .content {
             display: grid;
-            gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
-
-            @media screen and (width <= 36rem) {
-                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            }
-
-            @media screen and (width <= 30rem) {
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-            }
+            gap: var(--spacing-extra-large);
 
             .stats {
                 display: grid;
-                gap: var(--spacing-large);
                 grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                gap: var(--spacing-large);
 
                 @media screen and (width <= 30rem) {
                     grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
@@ -111,25 +103,25 @@
 
                 .chartContainer {
                     display: flex;
-                    align-items: center;
                     flex-direction: column;
+                    gap: var(--spacing-small);
+                    align-items: center;
                     justify-content: center;
                     border: var(--width-separator-thin) solid var(--color-separator);
                     border-radius: var(--border-radius-medium);
                     padding: var(--spacing-large);
                     height: 100%;
                     min-height: 20rem;
-                    gap: var(--spacing-small);
 
                     .timelineChartContainer {
                         width: 100%;
                         height: 100%;
 
                         .timelineChart {
-                            width: 100%;
-                            height: 100%;
 
                             --path-stroke-width: 1pt;
+                            width: 100%;
+                            height: 100%;
 
                             .stopStart {
                                 stop-color: var(--color-accent);
@@ -170,12 +162,12 @@
 
                     .emptyChart {
                         display: flex;
-                        align-items: center;
                         flex-direction: column;
+                        gap: var(--spacing-medium);
+                        align-items: center;
                         justify-content: center;
                         opacity: 0.5;
                         height: 100%;
-                        gap: var(--spacing-medium);
 
                         .chartIcon {
                             font-size: 10rem;
@@ -189,12 +181,12 @@
 
                 .progressBar {
                     display: flex;
-                    align-self: stretch;
                     flex-direction: column;
+                    gap: var(--spacing-super-small);
+                    align-self: stretch;
                     border: var(--width-separator-thin) solid var(--color-separator);
                     border-radius: var(--border-radius-medium);
                     padding: var(--spacing-large);
-                    gap: var(--spacing-super-small);
 
                     .progressLabel {
                         display: flex;
@@ -215,14 +207,22 @@
                     }
                 }
             }
+
+            @media screen and (width <= 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (width <= 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
         }
     }
 
     .overviewSection {
         .overviewContent {
             display: flex;
-            justify-content: space-between;
             gap: var(--spacing-enourmous);
+            justify-content: space-between;
 
             .content {
                 display: flex;
@@ -238,8 +238,8 @@
 
             .stats {
                 display: flex;
-                align-self: center;
                 flex-direction: column;
+                align-self: center;
                 justify-content: center;
                 padding: var(--spacing-mega-large);
                 width: 20rem;
@@ -284,27 +284,27 @@
 
             .downloadCard {
                 display: flex;
+                gap: var(--spacing-large);
                 align-items: flex-end;
                 justify-content: flex-end;
-                gap: var(--spacing-large);
 
                 .fileDetails {
                     display: flex;
-                    align-items: center;
                     gap: var(--spacing-extra-small);
+                    align-items: center;
                 }
 
                 .link {
                     display: flex;
+                    gap: var(--spacing-extra-small);
                     align-items: center;
                     justify-content: center;
                     font-size: var(--font-size-medium);
-                    gap: var(--spacing-extra-small);
                 }
 
                 @media screen and (width <= 720px) {
-                    align-items: unset;
                     flex-direction: column;
+                    align-items: unset;
                 }
             }
         }
@@ -313,9 +313,9 @@
     .licenseDescription {
         display: flex;
         flex-direction: column;
+        gap: var(--spacing-large);
         max-width: 60rem;
         text-align: center;
-        gap: var(--spacing-large);
         font-size: var(--font-size-medium);
     }
 

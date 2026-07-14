@@ -1,7 +1,7 @@
 .icon {
-    display: block;
 
     --height: 1.5rem;
+    display: block;
 
     width: var(--height);
     height: var(--height);

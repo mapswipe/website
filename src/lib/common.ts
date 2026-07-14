@@ -1,6 +1,20 @@
 // Ported verbatim from the Next app's src/utils/common.ts (relevant helpers only).
 const mb = 1024 * 1024;
 
+function transformAoiToGeoJson(aoi: Project['aoiGeometry']) {
+  if (!aoi || !aoi.bbox) return undefined;
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        geometry: { type: 'Polygon', coordinates: aoi.bbox },
+        type: 'Feature',
+        properties: {},
+      },
+    ],
+  } as const;
+}
+
 export function getFileSizeProperties(fileSize: number) {
   if (fileSize > mb / 10) {
     return { size: fileSize / mb, unit: 'megabyte' as const };

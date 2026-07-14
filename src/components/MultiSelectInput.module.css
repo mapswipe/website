@@ -10,13 +10,13 @@
 
         .option {
             display: flex;
+            gap: var(--spacing-super-small);
             align-items: center;
             border: transparent solid var(--width-separator-thin);
             border-radius: var(--border-radius-medium);
             background-color: var(--color-background-accent-light);
             padding: var(--spacing-super-small) var(--spacing-extra-small);
             color: var(--color-text);
-            gap: var(--spacing-super-small);
             font-size: var(--font-size-small);
 
             &.selected {

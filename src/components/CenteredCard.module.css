@@ -1,13 +1,13 @@
 .card {
     display: flex;
-    align-items: center;
     flex-direction: column;
+    gap: var(--spacing-medium);
+    align-items: center;
     justify-content: center;
     border: var(--width-separator-thin) solid var(--color-separator);
     border-radius: var(--border-radius-medium);
     padding: var(--spacing-extra-large) var(--spacing-large);
     text-align: center;
-    gap: var(--spacing-medium);
 
     .heading {
         max-width: 32rem;

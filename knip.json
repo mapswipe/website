@@ -9,5 +9,12 @@
         "packages/*/src/runner.ts",
         "packages/*/src/*.astro"
     ],
-    "project": ["src/**", "scripts/**", "packages/**"]
+    "project": [
+        "src/**",
+        "scripts/**",
+        "packages/**"
+    ],
+    "ignoreBinaries": [
+        "du"
+    ]
 }

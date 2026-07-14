@@ -18,12 +18,12 @@
             display: flex;
             position: relative;
             flex-grow: 1;
+            gap: var(--spacing-super-large);
             justify-content: center;
             margin: 0 auto;
             padding: 6rem var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
             width: 100%;
             max-width: var(--width-page-max);
-            gap: var(--spacing-super-large);
 
             .left {
                 display: flex;

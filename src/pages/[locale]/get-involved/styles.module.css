@@ -1,8 +1,8 @@
 .getInvolved {
     display: flex;
     flex-direction: column;
-    padding-bottom: var(--spacing-gigantic);
     gap: var(--spacing-gigantic);
+    padding-bottom: var(--spacing-gigantic);
 
     .hero {
         .illustration {
@@ -23,12 +23,12 @@
 
     .imageContainer {
         display: flex;
-        align-items: center;
         flex-basis: 30rem;
         flex-direction: column;
+        gap: var(--spacing-extra-large);
+        align-items: center;
         justify-content: center;
         text-align: center;
-        gap: var(--spacing-extra-large);
 
         .illustration {
             width: 24rem;
@@ -60,16 +60,16 @@
 
         .contributeSection {
             display: flex;
-            align-items: center;
             flex-direction: column;
-            justify-content: center;
             gap: var(--spacing-small);
+            align-items: center;
+            justify-content: center;
 
             .buttonsContainer {
                 display: flex;
                 flex-wrap: wrap;
-                justify-content: center;
                 gap: var(--spacing-large);
+                justify-content: center;
 
                 .buttonImageContainer {
                     position: relative;
@@ -86,8 +86,8 @@
 
             .linkContainer{
                 display: flex;
-                justify-content: center;
                 gap: var(--spacing-medium);
+                justify-content: center;
             }
 
             .downloadLink {
@@ -103,8 +103,8 @@
     .individual {
         .content {
             display: flex;
-            justify-content: space-between;
             gap: var(--spacing-large);
+            justify-content: space-between;
 
             .cards {
                 display: flex;
@@ -135,8 +135,8 @@
     .group {
         .content {
             display: flex;
-            justify-content: space-between;
             gap: var(--spacing-large);
+            justify-content: space-between;
 
             .cards {
                 display: flex;
@@ -168,8 +168,8 @@
     .organizational {
         .content {
             display: flex;
-            align-items: center;
             gap: var(--spacing-large);
+            align-items: center;
 
             @media screen and (width <= 720px) {
                 flex-wrap: wrap;
@@ -184,8 +184,8 @@
     .donate {
         .content {
             display: flex;
-            align-items: center;
             gap: var(--spacing-large);
+            align-items: center;
 
             .donateCardDescription {
                 display: flex;

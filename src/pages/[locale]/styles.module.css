@@ -1,8 +1,8 @@
 .home {
     display: flex;
     flex-direction: column;
-    padding-bottom: var(--spacing-gigantic);
     gap: var(--spacing-gigantic);
+    padding-bottom: var(--spacing-gigantic);
 
     .hero {
         .screenshot {
@@ -24,18 +24,18 @@
     .mobilize {
         .content {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
-            justify-content: center;
             gap: var(--spacing-super-large);
+            align-items: center;
+            justify-content: center;
 
             .pictures {
                 display: flex;
-                align-items: center;
                 flex-basis: 32rem;
                 flex-wrap: wrap;
-                justify-content: flex-start;
                 gap: var(--spacing-medium);
+                align-items: center;
+                justify-content: flex-start;
 
                 .imageContainer {
                     position: relative;
@@ -83,8 +83,8 @@
 
                 .infoBoxContainer {
                     display: grid;
-                    gap: var(--spacing-medium);
                     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+                    gap: var(--spacing-medium);
                 }
             }
 
@@ -109,12 +109,8 @@
     .missionTypes {
         .content {
             display: grid;
-            gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-
-            @media screen and (width <= 20rem) {
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-            }
+            gap: var(--spacing-extra-large);
 
             .missionType {
                 font-size: var(--font-size-medium);
@@ -145,6 +141,10 @@
                     }
                 }
             }
+
+            @media screen and (width <= 20rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
         }
     }
 
@@ -161,24 +161,24 @@
                 display: flex;
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
                 flex-direction: column;
+                gap: var(--spacing-extra-large);
                 justify-content: center;
                 border-radius: var(--border-radius-medium);
                 background-color: var(--color-background-brand-light);
                 padding: var(--spacing-extra-large) var(--spacing-gigantic);
-                gap: var(--spacing-extra-large);
                 text-align: center;
 
                 .linksContainer {
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
                     gap: var(--spacing-small);
+                    justify-content: center;
 
                     .buttonsContainer {
                         display: flex;
                         flex-wrap: wrap;
-                        justify-content: center;
                         gap: var(--spacing-large);
+                        justify-content: center;
 
                         .buttonImageContainer {
                             position: relative;
@@ -195,8 +195,8 @@
 
                     .downloadLinksContainer {
                         display: flex;
-                        justify-content: center;
                         gap: var(--spacing-medium);
+                        justify-content: center;
 
                         .downloadLink {
                             color: var(--color-link);
@@ -207,13 +207,13 @@
 
             .getInvolved {
                 display: flex;
-                align-items: center;
                 flex-basis: calc(50% - var(--spacing-mega-large) / 2);
                 flex-direction: column;
+                gap: var(--spacing-extra-large);
+                align-items: center;
                 border-radius: var(--border-radius-medium);
                 background-color: var(--color-background-accent-light);
                 padding: var(--spacing-extra-large) var(--spacing-gigantic);
-                gap: var(--spacing-extra-large);
                 text-align: center;
             }
 
@@ -226,8 +226,8 @@
     .recentNewsAndUpdates {
         .content {
             display: grid;
-            gap: var(--spacing-extra-large);
             grid-template-columns: minmax(20rem, 2fr) minmax(20rem, 3fr);
+            gap: var(--spacing-extra-large);
 
             .blogItem {
                 .tag {
@@ -264,12 +264,12 @@
 
                 .seeMoreLink {
                     display: flex;
+                    gap: var(--spacing-super-small);
                     align-items: center;
                     justify-content: flex-end;
                     color: var(--color-accent);
                     font-size: var(--font-size-medium);
                     font-weight: var(--font-weight-bold);
-                    gap: var(--spacing-super-small);
                 }
             }
 
@@ -293,9 +293,9 @@
 
         .content {
             display: flex;
-            align-items: center;
             flex-direction: column;
             gap: var(--spacing-super-large);
+            align-items: center;
 
             .missingMapsLogo {
                 width: 12rem;
@@ -310,10 +310,10 @@
 
             .partnerLogos {
                 display: flex;
-                align-items: center;
                 flex-wrap: wrap;
-                justify-content: center;
                 gap: var(--spacing-mega-large);
+                align-items: center;
+                justify-content: center;
 
                 .partnerLogo {
                     width: 8rem;

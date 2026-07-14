@@ -2,9 +2,9 @@
     outline: none;
     border: 0;
     background-color: transparent;
-    cursor: pointer;
     font-family: inherit;
     font-size: inherit;
+    cursor: pointer;
 
     &.primary {
         transition: 0.2s all ease-in-out;

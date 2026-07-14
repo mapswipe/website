@@ -7,12 +7,12 @@
     .navbarContent {
         display: flex;
         position: relative;
+        gap: var(--spacing-medium);
         align-items: center;
         margin: auto;
         background-color: var(--color-background);
         padding: var(--spacing-medium);
         max-width: var(--width-page-max);
-        gap: var(--spacing-medium);
 
         .logo {
             position: relative;
@@ -34,35 +34,36 @@
 
         .routes {
             display: flex;
-            place-content: center flex-end;
             flex-grow: 1;
             flex-wrap: wrap;
-            text-align: center;
             gap: var(--spacing-medium);
+            place-content: center flex-end;
+            text-align: center;
 
             .link {
                 border-bottom: var(--width-separator-thin) solid transparent;
                 font-size: var(--font-size-medium);
                 font-weight: var(--font-weight-semi-bold);
 
-                &.active {
-                    border-bottom-color: var(--color-accent);
-                }
-
                 &:hover {
                     border-bottom-color: var(--color-accent);
                     text-decoration: unset;
+                }
+
+                &.active {
+                    border-bottom-color: var(--color-accent);
                 }
             }
         }
 
         .rightContainer {
             display: flex;
-            align-items: center;
             gap: var(--spacing-medium);
+            align-items: center;
 
             .dropdown {
                 display: flex;
+                gap: var(--spacing-tiny);
                 align-items: center;
                 border-radius: var(--border-radius-medium);
                 border-color: var(--color-text-on-dark);
@@ -70,7 +71,6 @@
                 text-transform: uppercase;
                 color: var(--color-text-on-dark);
                 font-size: var(--font-size-small);
-                gap: var(--spacing-tiny);
 
                 .currentLocale {
                     font-size: var(--font-size-small);
@@ -101,15 +101,15 @@
     .language {
         padding: var(--spacing-ultra-small) var(--spacing-medium);
 
+        &:hover {
+            background-color: var(--color-background-brand-light);
+            color: var(--color-text);
+        }
+
         &.activeLanguage {
             background-color: var(--color-background-brand-light);
             color: var(--color-text);
             font-weight: var(--font-weight-bold);
-        }
-
-        &:hover {
-            background-color: var(--color-background-brand-light);
-            color: var(--color-text);
         }
     }
 }
@@ -142,4 +142,5 @@
     &:focus-within .languageList {
         display: flex;
     }
+
 }

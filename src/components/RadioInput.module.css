@@ -11,8 +11,8 @@
 
         .option {
             display: flex;
-            align-items: center;
             flex-shrink: 0;
+            align-items: center;
             border: transparent solid var(--width-separator-thin);
             border-radius: 1rem;
             background-color: var(--color-background-accent-light);

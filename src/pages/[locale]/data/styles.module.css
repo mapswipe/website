@@ -30,13 +30,13 @@
     .statsHeader {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
         gap: var(--spacing-enourmous);
+        justify-content: center;
 
         .leftContent {
             display: flex;
-            align-self: center;
             flex-direction: column;
+            align-self: center;
             justify-content: center;
             padding: var(--spacing-mega-large);
             width: 20rem;
@@ -57,8 +57,8 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            justify-content: center;
             gap: var(--spacing-medium);
+            justify-content: center;
 
             .heading {
                 align-self: center;
@@ -68,9 +68,9 @@
 
             .sectionDescription {
                 display: flex;
-                align-self: center;
                 flex-direction: column;
                 gap: var(--spacing-small);
+                align-self: center;
                 max-width: 30rem;
                 text-align: center;
                 font-size: var(--font-size-medium);
@@ -81,12 +81,8 @@
     .typeSection {
         .typeList {
             display: grid;
-            gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-
-            @media screen and (width <= 24rem) {
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-            }
+            gap: var(--spacing-extra-large);
 
             .missionImage {
                 height: 20rem;
@@ -119,6 +115,10 @@
                 flex-direction: column;
                 gap: var(--spacing-super-small);
             }
+
+            @media screen and (width <= 24rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
         }
     }
 
@@ -145,9 +145,6 @@
                     display: flex;
                     flex-basis: 25rem;
                     flex-direction: column;
-                    border: var(--width-separator-thin) solid var(--color-border-light);
-                    border-radius: var(--border-radius-medium);
-                    padding: var(--spacing-medium);
                     gap: var(--spacing-large);
 
                     /* Astro adaptation: the filters wrapper is a <fieldset>
@@ -155,6 +152,9 @@
                      * dataset JSON loads) — Next used a plain div. Reset the
                      * fieldset chrome the rules above don't already cover. */
                     margin: 0;
+                    border: var(--width-separator-thin) solid var(--color-border-light);
+                    border-radius: var(--border-radius-medium);
+                    padding: var(--spacing-medium);
                     min-inline-size: auto;
 
                     &:disabled {
@@ -189,11 +189,11 @@
 
                     .clearButton {
                         display: flex;
+                        gap: var(--spacing-ultra-small);
                         align-items: center;
                         align-self: flex-end;
                         padding: var(--spacing-tiny) var(--spacing-extra-small);
                         font-size: var(--font-size-small);
-                        gap: var(--spacing-ultra-small);
                     }
                 }
 
@@ -222,8 +222,8 @@
                         padding: var(--spacing-extra-small) var(--spacing-medium);
 
                         .bubbleFilter {
-                            align-items: center;
                             flex-direction: row;
+                            align-items: center;
                         }
                     }
                 }
@@ -235,9 +235,9 @@
 
             .stats {
                 display: flex;
-                align-items: center;
                 flex-wrap: wrap;
                 gap: var(--spacing-large);
+                align-items: center;
                 font-size: var(--font-size-large);
 
                 .circle {
@@ -245,8 +245,8 @@
                 }
 
                 @media screen and (width <= 720px) {
-                    align-items: flex-start;
                     flex-direction: column;
+                    align-items: flex-start;
 
                     .circle {
                         display: none;
@@ -256,12 +256,8 @@
 
             .projectList {
                 display: grid;
-                gap: var(--spacing-extra-large);
                 grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-
-                @media screen and (width <= 24rem) {
-                    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-                }
+                gap: var(--spacing-extra-large);
 
                 .cardLink {
                     &:hover {
@@ -272,19 +268,19 @@
                 .project {
                     height: 100%;
 
-                    .projectImage {
-                        height: 10rem;
-                    }
-
                     &:hover {
                         box-shadow: var(--box-shadow-medium);
+                    }
+
+                    .projectImage {
+                        height: 10rem;
                     }
                 }
 
                 .projectDetailsRow {
                     display: flex;
-                    align-items: center;
                     gap: var(--spacing-extra-small);
+                    align-items: center;
                 }
 
                 .progressBar {
@@ -324,6 +320,10 @@
                         gap: var(--spacing-super-small);
                     }
                 }
+
+                @media screen and (width <= 24rem) {
+                    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+                }
             }
         }
     }
@@ -331,37 +331,37 @@
     .downloadSection {
         .urlList {
             display: grid;
-            gap: var(--spacing-extra-large);
             grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-
-            @media screen and (width <= 24rem) {
-                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-            }
+            gap: var(--spacing-extra-large);
 
             .downloadCard {
                 display: flex;
+                gap: var(--spacing-large);
                 align-items: flex-end;
                 justify-content: space-between;
-                gap: var(--spacing-large);
 
                 .fileDetails {
                     display: flex;
-                    align-items: center;
                     gap: var(--spacing-extra-small);
+                    align-items: center;
                 }
 
                 .link {
                     display: flex;
+                    gap: var(--spacing-extra-small);
                     align-items: center;
                     justify-content: center;
                     font-size: var(--font-size-medium);
-                    gap: var(--spacing-extra-small);
                 }
 
                 @media screen and (width <= 720px) {
-                    align-items: unset;
                     flex-direction: column;
+                    align-items: unset;
                 }
+            }
+
+            @media screen and (width <= 24rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
             }
         }
     }

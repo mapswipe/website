@@ -1,9 +1,9 @@
 .keyFigure {
     display: flex;
-    align-items: center;
     flex-direction: column;
-    justify-content: center;
     gap: var(--spacing-extra-small);
+    align-items: center;
+    justify-content: center;
     border: var(--width-separator-thin) solid var(--color-accent-light);
     border-radius: 0.5rem;
     padding: var(--spacing-large);
@@ -15,12 +15,12 @@
 
     .value {
         display: flex;
+        gap: var(--spacing-super-small);
         align-items: center;
         justify-content: center;
         color: var(--color-heading);
         font-size: var(--font-size-extra-large);
         font-weight: var(--font-weight-bold);
-        gap: var(--spacing-super-small);
 
         .icon {
             color: var(--color-accent);
@@ -37,6 +37,7 @@
         --border-size: 4rem;
 
         position: relative;
+        gap: var(--spacing-tiny);
         border: none;
         border-radius: var(--border-size);
         box-shadow: 0 0 0 2rem var(--color-background-brand-light);
@@ -44,7 +45,6 @@
         width: var(--size);
         height: var(--size);
         text-align: center;
-        gap: var(--spacing-tiny);
 
         .label {
             color: var(--color-heading);
