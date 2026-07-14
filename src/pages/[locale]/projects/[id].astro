@@ -125,15 +125,27 @@ const lastFetched = project.exportHistory?.modifiedAt
     })
     : undefined;
 ---
-<ProjectLayout locale={locale!} firebaseId={String(firebaseId)} title={title} mainClass={styles.project}>
+<ProjectLayout
+    locale={locale!}
+    firebaseId={String(firebaseId)}
+    title={title}
+    mainClass={styles.project}
+>
     {/* Hero: name + type/status/meta tags left, cover image right */}
-    <Hero title={name} class={styles.hero} mainContentClass={styles.mainContent}>
+    <Hero
+        title={name}
+        class={styles.hero}
+        mainContentClass={styles.mainContent}
+    >
         <Fragment slot="description">
             <div class={styles.heroDescription}>
                 <div class={styles.topTags}>
                     {projectType && (
                         <Tag spacing="medium">
-                            <ProjectTypeIcon type={projectType as ProjectTypeKey} size="small" />
+                            <ProjectTypeIcon
+                                type={projectType as ProjectTypeKey}
+                                size="small"
+                            />
                             {projectTypeLabels[projectType] ?? projectType}
                         </Tag>
                     )}
@@ -146,17 +158,32 @@ const lastFetched = project.exportHistory?.modifiedAt
                 </div>
                 <div class={styles.bottomTags}>
                     {region && (
-                        <Tag variant="transparent" spacing="medium" class={styles.heroTag} title={t('Location')}>
+                        <Tag
+                            variant="transparent"
+                            spacing="medium"
+                            class={styles.heroTag}
+                            title={t('Location')}
+                        >
                             {region}
                         </Tag>
                     )}
                     {requestingOrganization?.name && (
-                        <Tag variant="transparent" spacing="medium" class={styles.heroTag} title={t('requesting-organization')}>
+                        <Tag
+                            variant="transparent"
+                            spacing="medium"
+                            class={styles.heroTag}
+                            title={t('requesting-organization')}
+                        >
                             {requestingOrganization.name}
                         </Tag>
                     )}
                     {createdAtLabel && (
-                        <Tag variant="transparent" spacing="medium" class={styles.heroTag} title={t('created-at')}>
+                        <Tag
+                            variant="transparent"
+                            spacing="medium"
+                            class={styles.heroTag}
+                            title={t('created-at')}
+                        >
                             <Icon name="calendar-clear-outline" />
                             {createdAtLabel}
                         </Tag>
@@ -167,26 +194,47 @@ const lastFetched = project.exportHistory?.modifiedAt
         {imageUrl && (
             <Fragment slot="right">
                 <ImageWrapper class={styles.illustration}>
-                    <RemoteImage class={imageStyles.image} src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
+                    <RemoteImage
+                        class={imageStyles.image}
+                        src={imageUrl}
+                        alt={name}
+                        width={COVER_WIDTH}
+                        height={420}
+                    />
                 </ImageWrapper>
             </Fragment>
         )}
     </Hero>
 
     {/* Overview: description + circle key figures */}
-    <Section class={styles.overviewSection} contentClass={styles.overviewContent}>
+    <Section
+        class={styles.overviewSection}
+        contentClass={styles.overviewContent}
+    >
         <div class={styles.content}>
             <Heading>{t('overview-section-title')}</Heading>
             <div class={styles.description}>
                 {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
-                <div class:list={[htmlOutputStyles.htmlOutput, styles.description]} set:html={description ?? ''}></div>
+                <div
+                    class:list={[htmlOutputStyles.htmlOutput, styles.description]}
+                    set:html={description ?? ''}
+                ></div>
             </div>
         </div>
         <div class={styles.stats}>
-            <KeyFigure variant="circle" class={[styles.largeFigure, styles.figure]} value={roundedTotalArea}>
+            <KeyFigure
+                variant="circle"
+                class={[styles.largeFigure, styles.figure]}
+                value={roundedTotalArea}
+            >
                 <span>km<sup>2</sup></span>
             </KeyFigure>
-            <KeyFigure variant="circle" circleColor="complement" class={styles.figure} value={numberOfContributorUsers ?? 0}>
+            <KeyFigure
+                variant="circle"
+                circleColor="complement"
+                class={styles.figure}
+                value={numberOfContributorUsers ?? 0}
+            >
                 {t('project-contributors-text')}
             </KeyFigure>
         </div>
@@ -201,7 +249,11 @@ const lastFetched = project.exportHistory?.modifiedAt
     >
         {aoiDownload && (
             <div class={styles.mapContainer}>
-                <MapIsland client:only="react" className={styles.projectsMap} geoJsonUrl={aoiDownload.url} />
+                <MapIsland
+                    client:only="react"
+                    className={styles.projectsMap}
+                    geoJsonUrl={aoiDownload.url}
+                />
             </div>
         )}
         <div class={styles.rightContainer}>
@@ -211,7 +263,10 @@ const lastFetched = project.exportHistory?.modifiedAt
                     <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
                 </div>
                 <div class={styles.track}>
-                    <div class={styles.progress} style={`width:${progress * 100}%`}></div>
+                    <div
+                        class={styles.progress}
+                        style={`width:${progress * 100}%`}
+                    ></div>
                 </div>
             </div>
             <div class={styles.chartContainer}>
@@ -237,14 +292,22 @@ const lastFetched = project.exportHistory?.modifiedAt
         <Fragment slot="description">{t('data-section-description')}</Fragment>
         {cards.map((card) =>
             card.asset ? (
-                <Card heading={card.heading} childrenContainerClass={styles.downloadCard}>
+                <Card
+                    heading={card.heading}
+                    childrenContainerClass={styles.downloadCard}
+                >
                     <Fragment slot="actions">{card.description}</Fragment>
                     <div class={styles.fileDetails}>
                         <Tag spacing="medium">{card.asset.mimetype}</Tag>
                         <div>{downloadSizeText(card.asset.fileSize)}</div>
                     </div>
                     {card.asset.file?.url && (
-                        <Link variant="buttonTransparent" class={styles.link} href={card.asset.file.url} download>
+                        <Link
+                            variant="buttonTransparent"
+                            class={styles.link}
+                            href={card.asset.file.url}
+                            download
+                        >
                             {t('download')}
                         </Link>
                     )}
@@ -252,7 +315,10 @@ const lastFetched = project.exportHistory?.modifiedAt
             ) : null,
         )}
         {aoiDownload && (
-            <Card heading={t('area-of-interest-title')} childrenContainerClass={styles.downloadCard}>
+            <Card
+                heading={t('area-of-interest-title')}
+                childrenContainerClass={styles.downloadCard}
+            >
                 <Fragment slot="actions">{t('area-of-interest-description')}</Fragment>
                 <div class={styles.fileDetails}>
                     <Tag spacing="medium">{aoiDownload.mimetype}</Tag>

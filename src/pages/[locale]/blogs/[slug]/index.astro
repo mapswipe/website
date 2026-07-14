@@ -85,13 +85,19 @@ const tabTitle = String(t('blog-tab-head', { blogTitle }));
         <Fragment slot="description">
             <div class={styles.heroDescription}>
                 {publishedDate && (
-                    <Tag variant="transparent" class={styles.heroTag}>
+                    <Tag
+                        variant="transparent"
+                        class={styles.heroTag}
+                    >
                         <Icon name="calendar-clear-outline" />
                         {dateFmt.format(publishedDate)}
                     </Tag>
                 )}
                 {author && (
-                    <Tag variant="transparent" class={styles.heroTag}>
+                    <Tag
+                        variant="transparent"
+                        class={styles.heroTag}
+                    >
                         {author}
                     </Tag>
                 )}
@@ -100,7 +106,14 @@ const tabTitle = String(t('blog-tab-head', { blogTitle }));
         <Fragment slot="right">
             {coverImage ? (
                 <ImageWrapper class={styles.illustration}>
-                    <Image class={imageStyles.image} src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
+                    <Image
+                        class={imageStyles.image}
+                        src={coverImage}
+                        alt={blogTitle}
+                        width={800}
+                        loading="lazy"
+                        decoding="async"
+                    />
                 </ImageWrapper>
             ) : (
                 <div />

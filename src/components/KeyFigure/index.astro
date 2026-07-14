@@ -1,6 +1,4 @@
 ---
-// Key figure (port of the Next components/KeyFigure): big value + plus icon
-// over a label (default slot). box (default) or circle variant.
 import styles from 'components/KeyFigure/styles.module.css';
 import Icon from 'components/Icon.astro';
 
@@ -22,7 +20,10 @@ const {
 <div class:list={[styles.keyFigure, variant === 'circle' && styles.circle, circleColor === 'complement' && styles.complement, className]}>
     <div class={styles.value}>
         {value}
-        <Icon name="plus" class={styles.icon} />
+        <Icon
+            name="plus"
+            class={styles.icon}
+        />
     </div>
     <div class={styles.label}><slot /></div>
 </div>

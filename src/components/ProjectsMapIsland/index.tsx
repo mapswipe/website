@@ -75,16 +75,25 @@ export default function ProjectsMapIsland(props: Props) {
                     pathOptions={project.status ? (pathOptions[project.status] ?? defaultPathOptions) : defaultPathOptions}
                 >
                     <Popup>
-                        <a className={styles.cardLink} href={`/projects/${project.firebaseId}/`}>
+                        <a
+                            className={styles.cardLink}
+                            href={`/projects/${project.firebaseId}/`}
+                        >
                             <strong>{project.name}</strong>
                             <div className={styles.types}>
                                 {project.projectType && (
-                                    <Tag as="span" spacing="small">
+                                    <Tag
+                                        as="span"
+                                        spacing="small"
+                                    >
                                         {typeLabels[project.projectType] ?? project.projectType}
                                     </Tag>
                                 )}
                                 {project.status && (
-                                    <Tag as="span" spacing="small">
+                                    <Tag
+                                        as="span"
+                                        spacing="small"
+                                    >
                                         {statusLabels[project.status] ?? project.status}
                                     </Tag>
                                 )}

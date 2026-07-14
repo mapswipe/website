@@ -23,7 +23,11 @@ function ImageWrapper(props: Props) {
     return (
         <div className={cs(styles.imageWrapper, className)}>
             {src ? (
-                <img className={cs(styles.image, imageClassName)} src={src} {...rest} />
+                <img
+                    className={cs(styles.image, imageClassName)}
+                    src={src}
+                    {...rest}
+                />
             ) : children}
         </div>
     );

@@ -1,9 +1,7 @@
 ---
-// Hero banner (port of the Next components/Hero): title + optional
-// description/actions on the left, optional right-side media, angled
-// background. Slots are rendered eagerly so conditionally-absent slot content
-// drops its wrapper div too (parity with the Next component, which only
-// emitted the wrappers when the prop was set).
+// Slots are rendered eagerly so conditionally-absent slot content drops its
+// wrapper div too (parity with the Next component, which only emitted the
+// wrappers when the prop was set).
 import styles from 'components/Hero/styles.module.css';
 import Heading from 'components/Heading/index.astro';
 
@@ -31,11 +29,29 @@ const right = Astro.slots.has('right') ? await Astro.slots.render('right') : '';
     <div class={styles.section}>
         <div class:list={[styles.mainContent, mainContentClass]}>
             <div class:list={[styles.left, leftClass]}>
-                <Heading size="extraLarge" class={styles.heading}>{title}</Heading>
-                {description.trim() && <div class={styles.description} set:html={description} />}
-                {actions.trim() && <div class={styles.buttonsContainer} set:html={actions} />}
+                <Heading
+                    size="extraLarge"
+                    class={styles.heading}
+                >{title}</Heading>
+                {description.trim() && (
+                    <div
+                        class={styles.description}
+                        set:html={description}
+                    />
+                )}
+                {actions.trim() && (
+                    <div
+                        class={styles.buttonsContainer}
+                        set:html={actions}
+                    />
+                )}
             </div>
-            {right.trim() && <div class={styles.right} set:html={right} />}
+            {right.trim() && (
+                <div
+                    class={styles.right}
+                    set:html={right}
+                />
+            )}
         </div>
     </div>
     <div class={styles.angledBackground}></div>

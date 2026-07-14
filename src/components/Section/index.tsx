@@ -38,7 +38,10 @@ function Section(props: Props) {
         children,
     } = props;
     return (
-        <section id={id} className={cs(styles.section, withAlternativeBackground && styles.withAlternativeBackground, className)}>
+        <section
+            id={id}
+            className={cs(styles.section, withAlternativeBackground && styles.withAlternativeBackground, className)}
+        >
             <div className={cs(styles.container, containerClassName)}>
                 {(title || description) && (
                     <div className={cs(styles.headingContainer, headingContainerClassName)}>

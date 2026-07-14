@@ -85,27 +85,59 @@ const sections = [
 
 const title = String(t('blogs-tab-head'));
 ---
-<BlogLayout locale={locale!} title={title} path="blogs/" mainClass={styles.blogs}>
+<BlogLayout
+    locale={locale!}
+    title={title}
+    path="blogs/"
+    mainClass={styles.blogs}
+>
     {/* Hero (no right content -> centered, Next: <Hero title/>) */}
-    <Hero title={t('blogs-hero-title')} withoutRightContent />
+    <Hero
+        title={t('blogs-hero-title')}
+        withoutRightContent
+    />
 
     {sections.map((section) => section.items.length > 0 && (
-        <Section title={section.title} contentClass={styles.list}>
+        <Section
+            title={section.title}
+            contentClass={styles.list}
+        >
             {section.items.map((blog) => (
-                <Card as="article" coverImageOnSide heading={blog.title} childrenContainerClass={styles.cardContent}>
+                <Card
+                    as="article"
+                    coverImageOnSide
+                    heading={blog.title}
+                    childrenContainerClass={styles.cardContent}
+                >
                     {blog.coverImage && (
-                        <ImageWrapper slot="cover" class={cardStyles.coverImageWrapper}>
-                            <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+                        <ImageWrapper
+                            slot="cover"
+                            class={cardStyles.coverImageWrapper}
+                        >
+                            <Image
+                                class:list={[imageStyles.image, cardStyles.image]}
+                                src={blog.coverImage}
+                                alt={blog.title}
+                                width={640}
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </ImageWrapper>
                     )}
                     {blog.publishedDate && (
-                        <Tag variant="transparent" class={styles.tag}>
+                        <Tag
+                            variant="transparent"
+                            class={styles.tag}
+                        >
                             <Icon name="calendar-clear-outline" />
                             {fmtDate(blog.publishedDate)}
                         </Tag>
                     )}
                     <div class={styles.description}>{blog.description}</div>
-                    <Link class={styles.link} href={`/${locale}/blogs/${blog.slug}/`}>
+                    <Link
+                        class={styles.link}
+                        href={`/${locale}/blogs/${blog.slug}/`}
+                    >
                         {t('read-more')}
                     </Link>
                 </Card>

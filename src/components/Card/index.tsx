@@ -6,8 +6,7 @@ import styles from './styles.module.css';
 
 // React twin of Card.astro, for the islands (.astro components cannot render
 // inside React trees). Keep the two in sync. Extras over the .astro twin,
-// used only by the islands: headingFont, actionsClassName, coverAlt, footer
-// (the Next Card's footer/footerContent block).
+// used only by the islands: headingFont, actionsClassName, coverAlt, footer.
 
 interface Props {
     as?: 'div' | 'article';
@@ -65,7 +64,11 @@ function Card(props: Props) {
                     <div className={styles.header}>
                         {icons && <div>{icons}</div>}
                         {heading && (
-                            <Heading size="extraSmall" font={headingFont} className={styles.heading}>
+                            <Heading
+                                size="extraSmall"
+                                font={headingFont}
+                                className={styles.heading}
+                            >
                                 {heading}
                             </Heading>
                         )}

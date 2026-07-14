@@ -26,7 +26,11 @@ function Button(props: Props) {
         ...rest
     } = props;
     return (
-        <button type="button" className={cs(styles.button, variantMap[variant], className)} {...rest}>
+        <button
+            type="button"
+            className={cs(styles.button, variantMap[variant], className)}
+            {...rest}
+        >
             {children}
         </button>
     );

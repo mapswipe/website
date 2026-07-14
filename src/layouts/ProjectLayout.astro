@@ -13,6 +13,11 @@ interface Props {
 }
 const { locale, firebaseId, title, mainClass } = Astro.props;
 ---
-<BaseLayout locale={locale} title={title} path={`projects/${firebaseId}/`} mainClass={mainClass}>
+<BaseLayout
+    locale={locale}
+    title={title}
+    path={`projects/${firebaseId}/`}
+    mainClass={mainClass}
+>
     <slot />
 </BaseLayout>

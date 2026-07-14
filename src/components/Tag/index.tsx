@@ -3,8 +3,8 @@ import cs from 'lib/cs';
 import styles from './styles.module.css';
 
 // React twin of Tag.astro, for the islands (.astro components cannot render
-// inside React trees). Keep the two in sync. `as` picks the element: the Next
-// Tag rendered a div (islands keep that); the .astro twin renders a span.
+// inside React trees). Keep the two in sync. `as` picks the element — the
+// islands' existing markup uses divs, the .astro twin renders a span.
 
 type Variant = 'primary' | 'transparent' | 'border' | 'icon';
 type Spacing = 'small' | 'medium' | 'large';
@@ -40,7 +40,10 @@ function Tag(props: Props) {
         children,
     } = props;
     return (
-        <Element className={cs(styles.tag, variantMap[variant], spacing && spacingMap[spacing], className)} title={title}>
+        <Element
+            className={cs(styles.tag, variantMap[variant], spacing && spacingMap[spacing], className)}
+            title={title}
+        >
             {children}
         </Element>
     );

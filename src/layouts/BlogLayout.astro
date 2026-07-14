@@ -15,6 +15,12 @@ interface Props {
 }
 const { locale, title, description, path, mainClass } = Astro.props;
 ---
-<BaseLayout locale={locale} title={title} description={description} path={path} mainClass={mainClass}>
+<BaseLayout
+    locale={locale}
+    title={title}
+    description={description}
+    path={path}
+    mainClass={mainClass}
+>
     <slot />
 </BaseLayout>

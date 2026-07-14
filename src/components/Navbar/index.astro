@@ -37,23 +37,42 @@ const localelessPath = activePath ? `${activePath}/` : '';
 ---
 <div class:list={[styles.navbar, className]}>
     <div class={styles.navbarContent}>
-        <Link class={styles.logo} href={`/${locale}/`}>
-            <img src="/logo.svg" alt={t('mapswipe-logo')} />
+        <Link
+            class={styles.logo}
+            href={`/${locale}/`}
+        >
+            <img
+                src="/logo.svg"
+                alt={t('mapswipe-logo')}
+            />
         </Link>
         <div class={styles.routes}>
-            <Link class={[styles.link, activePath === 'get-involved' && styles.active]} href={`/${locale}/get-involved/`}>
+            <Link
+                class={[styles.link, activePath === 'get-involved' && styles.active]}
+                href={`/${locale}/get-involved/`}
+            >
                 {t('get-involved-link')}
             </Link>
-            <Link class={[styles.link, activePath === 'data' && styles.active]} href={`/${locale}/data/`}>
+            <Link
+                class={[styles.link, activePath === 'data' && styles.active]}
+                href={`/${locale}/data/`}
+            >
                 {t('data-link')}
             </Link>
-            <Link class={styles.link} href="https://community.mapswipe.org/">
+            <Link
+                class={styles.link}
+                href="https://community.mapswipe.org/"
+            >
                 {t('community-dashboard-link')}
             </Link>
         </div>
         <div class={styles.rightContainer}>
             <div class={styles.languageWrap}>
-                <Button variant="border" class={styles.dropdown} aria-haspopup="true">
+                <Button
+                    variant="border"
+                    class={styles.dropdown}
+                    aria-haspopup="true"
+                >
                     <Icon name="earth-sharp" />
                     <span class={styles.currentLocale}>
                         {languageTitleMap[locale]?.abbreviation ?? locale}
@@ -61,11 +80,17 @@ const localelessPath = activePath ? `${activePath}/` : '';
                 </Button>
                 <div class={styles.languageList}>
                     {LOCALES.map((l) => (
-                        <Link class={[styles.language, l === locale && styles.activeLanguage]} href={`/${l}/${localelessPath}`}>
+                        <Link
+                            class={[styles.language, l === locale && styles.activeLanguage]}
+                            href={`/${l}/${localelessPath}`}
+                        >
                             {languageTitleMap[l]?.label ?? l}
                         </Link>
                     ))}
-                    <Link class={styles.language} href={`/${locale}/get-involved/#individual`}>
+                    <Link
+                        class={styles.language}
+                        href={`/${locale}/get-involved/#individual`}
+                    >
                         {t('didnot-find-language')}
                     </Link>
                 </div>

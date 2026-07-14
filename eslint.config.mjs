@@ -33,4 +33,15 @@ export default tseslint.config(
             '@stylistic/indent': ['error', 4],
         },
     },
+    {
+        // house attribute style: 2+ attributes -> one per line, closing
+        // bracket tag-aligned; a single attribute stays on the tag line
+        files: ['**/*.tsx'],
+        plugins: { '@stylistic': stylistic },
+        rules: {
+            '@stylistic/jsx-max-props-per-line': ['error', { maximum: 1 }],
+            '@stylistic/jsx-first-prop-new-line': ['error', 'multiline-multiprop'],
+            '@stylistic/jsx-closing-bracket-location': ['error', 'tag-aligned'],
+        },
+    },
 );

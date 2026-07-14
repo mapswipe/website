@@ -1,9 +1,9 @@
 ---
-// Card (port of the Next components/Card): optional cover (`coverImageUrl`
-// prop for the plain-image case, `cover` slot for custom media such as
-// astro:assets <Image> or the before/after pair), header with optional
-// icons + heading + actions, children container. `as` picks the root element
-// (article in the semantic card lists, div elsewhere).
+// The cover has two forms: `coverImageUrl` for the plain-image case, the
+// `cover` slot for custom media (astro:assets <Image>, the before/after
+// pair) — a slot can't take the plain case because astro:assets components
+// must be instantiated by the caller. `as` picks the root element (article
+// in the semantic card lists, div elsewhere).
 import styles from 'components/Card/styles.module.css';
 import Heading from 'components/Heading/index.astro';
 import ImageWrapper from 'components/ImageWrapper/index.astro';
@@ -38,13 +38,25 @@ const cover = Astro.slots.has('cover') ? await Astro.slots.render('cover') : '';
 <Element class:list={[styles.card, borderless && styles.borderless, coverImageOnSide && styles.coverImageOnSide, className]}>
     {cover.trim() && <Fragment set:html={cover} />}
     {coverImageUrl && (
-        <ImageWrapper class={[styles.coverImageWrapper, coverWrapperClass]} imageClass={styles.image} src={coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
+        <ImageWrapper
+            class={[styles.coverImageWrapper, coverWrapperClass]}
+            imageClass={styles.image}
+            src={coverImageUrl}
+            alt="card-cover-image"
+            loading="lazy"
+            decoding="async"
+        />
     )}
     <div class={styles.cardContent}>
         <div class={styles.headerWrapper}>
             <div class={styles.header}>
                 {icons.trim() && <div set:html={icons} />}
-                {heading && <Heading size="extraSmall" class={styles.heading}>{heading}</Heading>}
+                {heading && (
+                    <Heading
+                        size="extraSmall"
+                        class={styles.heading}
+                    >{heading}</Heading>
+                )}
             </div>
             {actions.trim() && <div set:html={actions} />}
         </div>

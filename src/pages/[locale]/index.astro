@@ -113,32 +113,80 @@ const missionTypes = [
 
 const title = String(t('home-tab-head'));
 ---
-<BaseLayout locale={locale!} title={title} path="" mainClass={styles.home}>
+<BaseLayout
+    locale={locale!}
+    title={title}
+    path=""
+    mainClass={styles.home}
+>
     {/* Hero (Next: components/Hero with video rightContent) */}
-    <Hero title={t('hero-title')} class={styles.hero}>
+    <Hero
+        title={t('hero-title')}
+        class={styles.hero}
+    >
         <Fragment slot="description">{t('hero-description')}</Fragment>
         <Fragment slot="actions">
-            <Link variant="button" href="#startMapswiping">
+            <Link
+                variant="button"
+                href="#startMapswiping"
+            >
                 {t('download-app-label')}
             </Link>
-            <Link variant="buttonTransparent" href={`/${locale}/data/`}>
+            <Link
+                variant="buttonTransparent"
+                href={`/${locale}/data/`}
+            >
                 {t('data-link')}
             </Link>
         </Fragment>
         <Fragment slot="right">
-            <video class={styles.screenshot} autoplay loop muted playsinline>
-                <source src="/img/animation.mp4" type="video/mp4" />
+            <video
+                class={styles.screenshot}
+                autoplay
+                loop
+                muted
+                playsinline
+            >
+                <source
+                    src="/img/animation.mp4"
+                    type="video/mp4"
+                />
             </video>
         </Fragment>
     </Hero>
 
     {/* Mobilizing volunteers + key figures */}
-    <Section class={styles.mobilize} title={t('mobilizing-volunteer')} contentClass={styles.content}>
+    <Section
+        class={styles.mobilize}
+        title={t('mobilizing-volunteer')}
+        contentClass={styles.content}
+    >
         <div class={styles.pictures}>
-            <ImageWrapper class={[styles.imageContainer, styles.single]} imageClass={styles.image} src="/img/msf_mapping.jpg" alt={t('mobilize-volunteer')} loading="lazy" decoding="async" />
+            <ImageWrapper
+                class={[styles.imageContainer, styles.single]}
+                imageClass={styles.image}
+                src="/img/msf_mapping.jpg"
+                alt={t('mobilize-volunteer')}
+                loading="lazy"
+                decoding="async"
+            />
             <div class={styles.images}>
-                <ImageWrapper class={[styles.imageContainer, styles.double]} imageClass={styles.image} src="/img/mapswipe_mapathon.jpg" alt={t('mapathon')} loading="lazy" decoding="async" />
-                <ImageWrapper class={[styles.imageContainer, styles.double]} imageClass={styles.image} src="/img/field_mapping.jpg" alt={t('field-mapping')} loading="lazy" decoding="async" />
+                <ImageWrapper
+                    class={[styles.imageContainer, styles.double]}
+                    imageClass={styles.image}
+                    src="/img/mapswipe_mapathon.jpg"
+                    alt={t('mapathon')}
+                    loading="lazy"
+                    decoding="async"
+                />
+                <ImageWrapper
+                    class={[styles.imageContainer, styles.double]}
+                    imageClass={styles.image}
+                    src="/img/field_mapping.jpg"
+                    alt={t('field-mapping')}
+                    loading="lazy"
+                    decoding="async"
+                />
             </div>
         </div>
         <div class={styles.descriptionContainer}>
@@ -152,7 +200,11 @@ const title = String(t('home-tab-head'));
     </Section>
 
     {/* Mission types */}
-    <Section class={styles.missionTypes} title={t('explore-mission-types')} contentClass={styles.content}>
+    <Section
+        class={styles.missionTypes}
+        title={t('explore-mission-types')}
+        contentClass={styles.content}
+    >
         <Fragment slot="description">{t('explore-mission-types-description')}</Fragment>
         {missionTypes.map((m) => (
             <Card
@@ -163,9 +215,26 @@ const title = String(t('home-tab-head'));
                 coverWrapperClass={styles.missionImage}
             >
                 {'beforeAfter' in m && (
-                    <div slot="cover" class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
-                        <ImageWrapper class={styles.beforeAfterImageWrapper} imageClass={styles.beforeImage} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
-                        <ImageWrapper class={styles.beforeAfterImageWrapper} imageClass={styles.afterImage} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                    <div
+                        slot="cover"
+                        class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}
+                    >
+                        <ImageWrapper
+                            class={styles.beforeAfterImageWrapper}
+                            imageClass={styles.beforeImage}
+                            src="/img/before.svg"
+                            alt="before-image"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <ImageWrapper
+                            class={styles.beforeAfterImageWrapper}
+                            imageClass={styles.afterImage}
+                            src="/img/after.svg"
+                            alt="after-image"
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </div>
                 )}
                 <Fragment slot="icons"><ProjectTypeIcon type={m.type} /></Fragment>
@@ -175,35 +244,73 @@ const title = String(t('home-tab-head'));
     </Section>
 
     {/* Start mapswiping (download + get involved) */}
-    <Section id="startMapswiping" class={styles.startMapswiping} title={t('start-mapswiping-title')} contentClass={styles.content}>
+    <Section
+        id="startMapswiping"
+        class={styles.startMapswiping}
+        title={t('start-mapswiping-title')}
+        contentClass={styles.content}
+    >
         <div class={styles.download}>
             <div class={styles.startMapswipingDescription}>{t('download-description')}</div>
             <div class={styles.linksContainer}>
                 <div class={styles.buttonsContainer}>
-                    <Link class={styles.buttonImageContainer} href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
-                        <img class:list={[imageStyles.image, styles.image]} src="/img/playstore.png" alt={t('download-playstore')} loading="lazy" />
+                    <Link
+                        class={styles.buttonImageContainer}
+                        href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
+                        target="_blank"
+                    >
+                        <img
+                            class:list={[imageStyles.image, styles.image]}
+                            src="/img/playstore.png"
+                            alt={t('download-playstore')}
+                            loading="lazy"
+                        />
                     </Link>
-                    <Link class={styles.buttonImageContainer} href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
-                        <img class:list={[imageStyles.image, styles.image]} src="/img/apple.png" alt={t('download-apple-store')} loading="lazy" />
+                    <Link
+                        class={styles.buttonImageContainer}
+                        href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
+                        target="_blank"
+                    >
+                        <img
+                            class:list={[imageStyles.image, styles.image]}
+                            src="/img/apple.png"
+                            alt={t('download-apple-store')}
+                            loading="lazy"
+                        />
                     </Link>
                 </div>
                 <div class={styles.downloadLinksContainer}>
-                    <Link class={styles.downloadLink} href="https://web.mapswipe.org/" target="_blank">{t('mapswipe-web-link')}</Link>
+                    <Link
+                        class={styles.downloadLink}
+                        href="https://web.mapswipe.org/"
+                        target="_blank"
+                    >{t('mapswipe-web-link')}</Link>
                     |
-                    <Link class={styles.downloadLink} href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</Link>
+                    <Link
+                        class={styles.downloadLink}
+                        href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk"
+                        target="_blank"
+                    >{t('download-apk-label')}</Link>
                 </div>
             </div>
         </div>
         <div class={styles.getInvolved}>
             <div class={styles.startMapswipingDescription}>{t('get-involved-description')}</div>
-            <Link variant="button" href={`/${locale}/get-involved/`}>
+            <Link
+                variant="button"
+                href={`/${locale}/get-involved/`}
+            >
                 {t('get-involved-link')}
             </Link>
         </div>
     </Section>
 
     {/* Recent news & updates (featured blogs) */}
-    <Section class={styles.recentNewsAndUpdates} title={t('news-and-updates-title')} contentClass={styles.content}>
+    <Section
+        class={styles.recentNewsAndUpdates}
+        title={t('news-and-updates-title')}
+        contentClass={styles.content}
+    >
         {featuredBlogs.map((blog, index) => (
             <Card
                 as="article"
@@ -214,26 +321,45 @@ const title = String(t('home-tab-head'));
                 childrenContainerClass={styles.cardContent}
             >
                 {blog.coverImage && (
-                    <ImageWrapper slot="cover" class={cardStyles.coverImageWrapper}>
-                        <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+                    <ImageWrapper
+                        slot="cover"
+                        class={cardStyles.coverImageWrapper}
+                    >
+                        <Image
+                            class:list={[imageStyles.image, cardStyles.image]}
+                            src={blog.coverImage}
+                            alt={blog.title}
+                            width={640}
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </ImageWrapper>
                 )}
                 {blog.publishedDate && (
                     <Fragment slot="actions">
-                        <Tag variant="transparent" class={styles.tag}>
+                        <Tag
+                            variant="transparent"
+                            class={styles.tag}
+                        >
                             <Icon name="calendar-clear-outline" />
                             {fmtDate(blog.publishedDate)}
                         </Tag>
                     </Fragment>
                 )}
                 <div class={styles.blogDescription}>{blog.description}</div>
-                <Link class={styles.link} href={`/${locale}/blogs/${blog.slug}/`}>
+                <Link
+                    class={styles.link}
+                    href={`/${locale}/blogs/${blog.slug}/`}
+                >
                     {t('read-more')}
                 </Link>
             </Card>
         ))}
         <div class={styles.sectionDescription}>
-            <Link class={styles.seeMoreLink} href={`/${locale}/blogs/`}>
+            <Link
+                class={styles.seeMoreLink}
+                href={`/${locale}/blogs/`}
+            >
                 {t('see-more-pages')}
                 <Icon name="arrow-forward-sharp" />
             </Link>
@@ -241,15 +367,35 @@ const title = String(t('home-tab-head'));
     </Section>
 
     {/* Partners */}
-    <Section class={styles.partners} title={t('partners')} contentClass={styles.content}>
-        <Link href="https://www.missingmaps.org/" target="_blank">
-            <ImageWrapper class={styles.missingMapsLogo} src="/img/missingmaps.png" alt={t('missing-maps')} loading="lazy" />
+    <Section
+        class={styles.partners}
+        title={t('partners')}
+        contentClass={styles.content}
+    >
+        <Link
+            href="https://www.missingmaps.org/"
+            target="_blank"
+        >
+            <ImageWrapper
+                class={styles.missingMapsLogo}
+                src="/img/missingmaps.png"
+                alt={t('missing-maps')}
+                loading="lazy"
+            />
         </Link>
         <div class={styles.partnersDescription}>{t('missing-map-description')}</div>
         <div class={styles.partnerLogos}>
             {partners.map((p) => (
-                <Link href={p.link} target="_blank">
-                    <ImageWrapper class={styles.partnerLogo} src={p.imageSrc} alt={p.altText} loading="lazy" />
+                <Link
+                    href={p.link}
+                    target="_blank"
+                >
+                    <ImageWrapper
+                        class={styles.partnerLogo}
+                        src={p.imageSrc}
+                        alt={p.altText}
+                        loading="lazy"
+                    />
                 </Link>
             ))}
         </div>

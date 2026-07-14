@@ -1,9 +1,8 @@
 ---
-// ImageWrapper (port of the Next components/ImageWrapper): aspect-holding
-// wrapper div + the image class. With `src` it renders a plain <img> (extra
-// attributes pass through); without it the default slot supplies the media —
-// used for astro:assets <Image>/<RemoteImage>, which must be instantiated by
-// the caller (give them class={imageStyles.image} from this module).
+// With `src` it renders a plain <img> (extra attributes pass through);
+// without it the default slot supplies the media — used for astro:assets
+// <Image>/<RemoteImage>, which must be instantiated by the caller (give them
+// class={imageStyles.image} from this module).
 import type { HTMLAttributes } from 'astro/types';
 import styles from 'components/ImageWrapper/styles.module.css';
 
@@ -25,5 +24,11 @@ const {
 delete rest.slot;
 ---
 <div class:list={[styles.imageWrapper, className]}>
-    {src ? <img class:list={[styles.image, imageClass]} src={src} {...rest} /> : <slot />}
+    {src ? (
+        <img
+            class:list={[styles.image, imageClass]}
+            src={src}
+            {...rest}
+        />
+    ) : <slot />}
 </div>

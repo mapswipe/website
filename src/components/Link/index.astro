@@ -1,7 +1,7 @@
 ---
-// Link (port of the Next components/Link, minus next/link's client routing —
-// static pages only need a styled anchor). Extra attributes (href, target,
-// rel, title, download, …) pass straight through to the element.
+// A styled anchor is all static pages need (next/link's client routing has
+// no equivalent here). Extra attributes (href, target, rel, title, download,
+// …) pass straight through to the element.
 import type { HTMLAttributes } from 'astro/types';
 import styles from 'components/Link/styles.module.css';
 
@@ -26,4 +26,7 @@ const variantMap: Record<Variant, string | undefined> = {
     underline: styles.underline,
 };
 ---
-<a class:list={[styles.link, variantMap[variant], className]} {...rest}><slot /></a>
+<a
+    class:list={[styles.link, variantMap[variant], className]}
+    {...rest}
+><slot /></a>

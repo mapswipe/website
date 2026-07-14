@@ -50,6 +50,14 @@ const viewBoxForName: Record<Props['name'], string> = {
 // slash resolves correctly; build from BASE_URL to stay correct if it changes.
 const spriteHref = `${import.meta.env.BASE_URL}icons.svg`.replace(/\/{2,}/g, '/');
 ---
-<svg class={className} width={size} height={size} viewBox={viewBoxForName[name]} fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<svg
+    class={className}
+    width={size}
+    height={size}
+    viewBox={viewBoxForName[name]}
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+>
     <use href={`${spriteHref}#${name}`} />
 </svg>

@@ -348,6 +348,15 @@ export default function DataExplorer(props: Props) {
         },
     };
 
+    // Shared pre-hydration/pre-data stand-in: same element for the Suspense
+    // fallback and the not-yet-mounted branch, so layout never shifts.
+    const mapPlaceholder = (
+        <div
+            className={styles.projectsMap}
+            aria-hidden="true"
+        />
+    );
+
     return (
         <>
             {/* Explore: filters + map + list. The see-more button renders as the
@@ -366,7 +375,10 @@ export default function DataExplorer(props: Props) {
                 descriptionClassName={styles.lastFetchedDate}
                 contentClassName={styles.content}
                 actions={tableProjects.length !== visibleProjects.length && (
-                    <Button variant="border" onClick={handleSeeMore}>
+                    <Button
+                        variant="border"
+                        onClick={handleSeeMore}
+                    >
                         {t('see-more-button')}
                     </Button>
                 )}
@@ -377,7 +389,11 @@ export default function DataExplorer(props: Props) {
                   cascade) — they apply against the full dataset once it
                   arrives. (Next used a plain div; see the fieldset adaptation
                   note in styles.module.css.) */}
-                    <fieldset className={styles.filters} disabled={loading} aria-busy={loading}>
+                    <fieldset
+                        className={styles.filters}
+                        disabled={loading}
+                        aria-busy={loading}
+                    >
                         {/* Project status (MultiSelectInput as toggle chips) */}
                         <div className={multiSelectStyles.input}>
                             <div>{t('project-status')}</div>
@@ -413,7 +429,10 @@ export default function DataExplorer(props: Props) {
                                         )}
                                         onClick={() => setProjectTypes((l) => toggleInList(l, key))}
                                     >
-                                        <ProjectTypeIcon type={key} size="small" />
+                                        <ProjectTypeIcon
+                                            type={key}
+                                            size="small"
+                                        />
                                         {typeLabels[key]}
                                     </Button>
                                 ))}
@@ -439,7 +458,10 @@ export default function DataExplorer(props: Props) {
                         >
                             <option value="">{t('organization-placeholder')}</option>
                             {organizations.map((org) => (
-                                <option key={org.id} value={org.id}>{org.name}</option>
+                                <option
+                                    key={org.id}
+                                    value={org.id}
+                                >{org.name}</option>
                             ))}
                         </select>
                         <div className={styles.row}>
@@ -479,7 +501,7 @@ export default function DataExplorer(props: Props) {
                     waits for the fetched dataset so it never draws just the
                     9-item initial slice and then re-jumps to the full set. */}
                         {mounted && !loading ? (
-                            <Suspense fallback={<div className={styles.projectsMap} aria-hidden="true" />}>
+                            <Suspense fallback={mapPlaceholder}>
                                 <ProjectsMapIsland
                                     className={styles.projectsMap}
                                     projects={visibleProjects}
@@ -488,9 +510,7 @@ export default function DataExplorer(props: Props) {
                                     statusLabels={statusLabels}
                                 />
                             </Suspense>
-                        ) : (
-                            <div className={styles.projectsMap} aria-hidden="true" />
-                        )}
+                        ) : mapPlaceholder}
                         <div className={styles.mapSettings}>
                             {/* Bubble type (RadioInput with small pill options) */}
                             <div className={cs(radioStyles.input, styles.bubbleFilter)}>
@@ -519,7 +539,10 @@ export default function DataExplorer(props: Props) {
                     </div>
                 </div>
 
-                <div className={styles.stats} aria-busy={loading}>
+                <div
+                    className={styles.stats}
+                    aria-busy={loading}
+                >
                     {/* While loading, the true total comes from the build-time count —
                   visibleProjects only holds the initial slice. The area sum is
                   slice-only until the dataset arrives, so hide it until then. */}
@@ -556,7 +579,10 @@ export default function DataExplorer(props: Props) {
                                     <>
                                         {project.projectType && (
                                             <Tag spacing="small">
-                                                <ProjectTypeIcon type={project.projectType as typeof PROJECT_TYPES[number]} size="small" />
+                                                <ProjectTypeIcon
+                                                    type={project.projectType as typeof PROJECT_TYPES[number]}
+                                                    size="small"
+                                                />
                                                 {typeLabels[project.projectType] ?? project.projectType}
                                             </Tag>
                                         )}
@@ -572,7 +598,10 @@ export default function DataExplorer(props: Props) {
                                 footer={(
                                     <div className={styles.progressBar}>
                                         <div className={styles.track}>
-                                            <div className={styles.progress} style={{ width: `${project.progress * 100}%` }} />
+                                            <div
+                                                className={styles.progress}
+                                                style={{ width: `${project.progress * 100}%` }}
+                                            />
                                         </div>
                                         <div className={styles.progressLabel}>
                                             {t('project-card-progress-text', { progress: project.progress * 100 })}
@@ -582,22 +611,42 @@ export default function DataExplorer(props: Props) {
                             >
                                 <div className={styles.bottomTags}>
                                     {project.region && (
-                                        <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('Location')}>
+                                        <Tag
+                                            variant="transparent"
+                                            spacing="medium"
+                                            className={styles.tag}
+                                            title={t('Location')}
+                                        >
                                             {project.region}
                                         </Tag>
                                     )}
                                     {project.requestingOrganization && (
-                                        <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('requesting-organization')}>
+                                        <Tag
+                                            variant="transparent"
+                                            spacing="medium"
+                                            className={styles.tag}
+                                            title={t('requesting-organization')}
+                                        >
                                             {project.requestingOrganization.name}
                                         </Tag>
                                     )}
                                     <div className={styles.projectDetailsRow}>
                                         {project.createdAt && (
-                                            <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('created-at')}>
+                                            <Tag
+                                                variant="transparent"
+                                                spacing="medium"
+                                                className={styles.tag}
+                                                title={t('created-at')}
+                                            >
                                                 {t('project-card-last-update', { date: project.createdAt })}
                                             </Tag>
                                         )}
-                                        <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('project-contributors')}>
+                                        <Tag
+                                            variant="transparent"
+                                            spacing="medium"
+                                            className={styles.tag}
+                                            title={t('project-contributors')}
+                                        >
                                             {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers ?? 0 })}
                                         </Tag>
                                     </div>

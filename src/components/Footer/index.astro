@@ -31,11 +31,17 @@ const socialLinks: { href: string; title: string; icon: IconName; rel?: string }
 <div class:list={[styles.footer, className]}>
     <div class={styles.topContainer}>
         <div class={styles.section}>
-            <Heading size="small" class={styles.heading}>{t('footer-about-us-title')}</Heading>
+            <Heading
+                size="small"
+                class={styles.heading}
+            >{t('footer-about-us-title')}</Heading>
             <div>{t('footer-about-us-description')}</div>
         </div>
         <div class:list={[styles.section, styles.midSection]}>
-            <Heading size="small" class={styles.heading}>{t('footer-quick-links')}</Heading>
+            <Heading
+                size="small"
+                class={styles.heading}
+            >{t('footer-quick-links')}</Heading>
             <div class={styles.links}>
                 <Link href={`/${locale}/`}>{t('home-link')}</Link>
                 <Link href={`/${locale}/get-involved/`}>{t('get-involved-link')}</Link>
@@ -45,7 +51,10 @@ const socialLinks: { href: string; title: string; icon: IconName; rel?: string }
             </div>
         </div>
         <div class={styles.section}>
-            <Heading size="small" class={styles.heading}>{t('footer-follow-us-title')}</Heading>
+            <Heading
+                size="small"
+                class={styles.heading}
+            >{t('footer-follow-us-title')}</Heading>
             <div class={styles.socialLinks}>
                 {socialLinks.map((link) => (
                     <Link
@@ -66,8 +75,15 @@ const socialLinks: { href: string; title: string; icon: IconName; rel?: string }
             <div class={styles.leftContainer}>{t('copyright', { year: currentYear })}</div>
             <div class={styles.midContainer}>
                 {t('uptime-pretext')}
-                <Link href="https://uptimerobot.com/" target="_blank">
-                    <img class={styles.partnerLogo} src="/img/uptime.png" alt="Uptime Robot" />
+                <Link
+                    href="https://uptimerobot.com/"
+                    target="_blank"
+                >
+                    <img
+                        class={styles.partnerLogo}
+                        src="/img/uptime.png"
+                        alt="Uptime Robot"
+                    />
                 </Link>
             </div>
             <div class={styles.rightContainer}>

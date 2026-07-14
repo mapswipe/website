@@ -127,11 +127,23 @@ const policyHtml = String(
         .process(policy.replace(/\\n/g, '\n')),
 );
 ---
-<BaseLayout locale={locale!} title={title} path="privacy/" mainClass={styles.privacy}>
+<BaseLayout
+    locale={locale!}
+    title={title}
+    path="privacy/"
+    mainClass={styles.privacy}
+>
     {/* Hero (no right content -> centered) */}
-    <Hero title={t('privacy-hero-title')} withoutRightContent class={styles.hero} />
+    <Hero
+        title={t('privacy-hero-title')}
+        withoutRightContent
+        class={styles.hero}
+    />
 
     <Section contentClass={styles.content}>
-        <div class={htmlOutputStyles.htmlOutput} set:html={policyHtml} />
+        <div
+            class={htmlOutputStyles.htmlOutput}
+            set:html={policyHtml}
+        />
     </Section>
 </BaseLayout>

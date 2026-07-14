@@ -27,7 +27,10 @@ function Link(props: Props) {
         ...rest
     } = props;
     return (
-        <a className={cs(styles.link, variantMap[variant], className)} {...rest}>
+        <a
+            className={cs(styles.link, variantMap[variant], className)}
+            {...rest}
+        >
             {children}
         </a>
     );

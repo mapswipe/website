@@ -11,12 +11,41 @@ const url = import.meta.env.MAPSWIPE_DEPLOYMENT_URL ?? 'https://mapswipe.org/';
 const desc = description ?? '';
 ---
 <title>{title}</title>
-{desc && <meta name="description" content={desc} />}
-<meta property="og:type" content="website" />
-<meta property="og:updated_time" content={buildDate ?? '1691561444886'} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={desc} />
-<meta property="og:image" content={`${url}ms-logo.png`} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={desc} />
-<meta property="twitter:image" content={`${url}ms-logo.png`} />
+{desc && (
+    <meta
+        name="description"
+        content={desc}
+    />
+)}
+<meta
+    property="og:type"
+    content="website"
+/>
+<meta
+    property="og:updated_time"
+    content={buildDate ?? '1691561444886'}
+/>
+<meta
+    property="og:title"
+    content={title}
+/>
+<meta
+    property="og:description"
+    content={desc}
+/>
+<meta
+    property="og:image"
+    content={`${url}ms-logo.png`}
+/>
+<meta
+    property="twitter:title"
+    content={title}
+/>
+<meta
+    property="twitter:description"
+    content={desc}
+/>
+<meta
+    property="twitter:image"
+    content={`${url}ms-logo.png`}
+/>

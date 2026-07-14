@@ -99,22 +99,42 @@ const typeCards = [
     { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', title: t('type-locate-title'), points: [t('type-locate-key-point-1'), t('type-locate-key-point-2'), t('type-locate-key-point-3')] },
 ] as const;
 ---
-<BaseLayout locale={locale!} title={title} path="data/" activePath="data" mainClass={styles.data}>
+<BaseLayout
+    locale={locale!}
+    title={title}
+    path="data/"
+    activePath="data"
+    mainClass={styles.data}
+>
     {/* Hero */}
     <Hero title={t('data-page-heading')}>
         <Fragment slot="description">{t('data-page-description')}</Fragment>
         <Fragment slot="right">
-            <ImageWrapper class={styles.illustration} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
+            <ImageWrapper
+                class={styles.illustration}
+                src="/img/data-banner.svg"
+                alt={t('data-banner-image')}
+                loading="lazy"
+            />
         </Fragment>
     </Hero>
 
     {/* Community stats (Next: statsHeader Section with circle KeyFigures) */}
     <Section contentClass={styles.statsHeader}>
         <div class={styles.leftContent}>
-            <KeyFigure variant="circle" class={[styles.figure, styles.largeFigure]} value={fmt(totalSwipes)}>
+            <KeyFigure
+                variant="circle"
+                class={[styles.figure, styles.largeFigure]}
+                value={fmt(totalSwipes)}
+            >
                 {t('total-swipes')}
             </KeyFigure>
-            <KeyFigure variant="circle" circleColor="complement" class={styles.figure} value={fmt(totalContributors)}>
+            <KeyFigure
+                variant="circle"
+                circleColor="complement"
+                class={styles.figure}
+                value={fmt(totalContributors)}
+            >
                 {t('contributors')}
             </KeyFigure>
         </div>
@@ -124,7 +144,12 @@ const typeCards = [
             </Heading>
             <div class={styles.sectionDescription}>
                 {t('community-stats-section-description')}
-                <Link variant="underline" href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
+                <Link
+                    variant="underline"
+                    href="https://community.mapswipe.org"
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     {t('community-dashboard-link-label')}
                 </Link>
             </div>
@@ -148,9 +173,26 @@ const typeCards = [
                 childrenContainerClass={styles.keyPointList}
             >
                 {'beforeAfter' in card && card.beforeAfter && (
-                    <div slot="cover" class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
-                        <ImageWrapper class={styles.beforeAfterImageWrapper} imageClass={styles.beforeImage} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
-                        <ImageWrapper class={styles.beforeAfterImageWrapper} imageClass={styles.afterImage} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                    <div
+                        slot="cover"
+                        class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}
+                    >
+                        <ImageWrapper
+                            class={styles.beforeAfterImageWrapper}
+                            imageClass={styles.beforeImage}
+                            src="/img/before.svg"
+                            alt="before-image"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <ImageWrapper
+                            class={styles.beforeAfterImageWrapper}
+                            imageClass={styles.afterImage}
+                            src="/img/after.svg"
+                            alt="after-image"
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </div>
                 )}
                 <Fragment slot="icons"><ProjectTypeIcon type={card.type} /></Fragment>
@@ -186,9 +228,17 @@ const typeCards = [
     <Section title={t('license-section-heading')}>
         <Fragment slot="description">{t('license-section-description')}</Fragment>
     </Section>
-    <Section withAlternativeBackground title={t('contact-section-heading')}>
+    <Section
+        withAlternativeBackground
+        title={t('contact-section-heading')}
+    >
         <Fragment slot="description">{t('contact-section-description')}</Fragment>
-        <Link variant="button" slot="actions"  href="mailto:info@mapswipe.org" target="_blank">
+        <Link
+            variant="button"
+            slot="actions"
+            href="mailto:info@mapswipe.org"
+            target="_blank"
+        >
             {t('contact-link-label')}
         </Link>
     </Section>

@@ -1,6 +1,5 @@
 ---
-// Button (port of the Next components/Button). Extra attributes (aria-*, id,
-// event hooks added later, …) pass straight through to the element.
+// Extra attributes (aria-*, id, …) pass straight through to the element.
 import type { HTMLAttributes } from 'astro/types';
 import styles from 'components/Button/styles.module.css';
 
@@ -27,4 +26,8 @@ const variantMap: Record<Variant, string | undefined> = {
     icon: styles.icon,
 };
 ---
-<button class:list={[styles.button, variantMap[variant], className]} type="button" {...rest}><slot /></button>
+<button
+    class:list={[styles.button, variantMap[variant], className]}
+    type="button"
+    {...rest}
+><slot /></button>
