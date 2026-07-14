@@ -1,0 +1,13 @@
+{
+    "$schema": "https://unpkg.com/knip@latest/schema.json",
+    "entry": [
+        "src/pages/**/*.astro",
+        "src/pages/**/*.ts",
+        "scripts/*.mjs",
+        "tests/e2e/**/*.spec.ts",
+        "packages/*/src/index.ts",
+        "packages/*/src/runner.ts",
+        "packages/*/src/*.astro"
+    ],
+    "project": ["src/**", "scripts/**", "packages/**"]
+}

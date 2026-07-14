@@ -11,19 +11,6 @@ export function getFileSizeProperties(fileSize: number) {
 import type { Project } from './data';
 
 // Ported from the Next page's transformAoiToGeoJson.
-export function transformAoiToGeoJson(aoi: Project['aoiGeometry']) {
-  if (!aoi || !aoi.bbox) return undefined;
-  return {
-    type: 'FeatureCollection',
-    features: [
-      {
-        geometry: { type: 'Polygon', coordinates: aoi.bbox },
-        type: 'Feature',
-        properties: {},
-      },
-    ],
-  } as const;
-}
 
 // Ported from the Next page's aoiDownload priority chain.
 export function resolveAoiDownload(project: Project) {

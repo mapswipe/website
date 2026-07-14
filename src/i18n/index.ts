@@ -96,6 +96,3 @@ export async function getDict(locale: string, ns: string): Promise<Record<string
   return dict;
 }
 
-export function isLocale(value: string | undefined): value is Locale {
-  return !!value && (LOCALES as readonly string[]).includes(value);
-}
