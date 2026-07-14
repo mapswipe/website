@@ -2,21 +2,21 @@
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import BlogLayout from '../../../layouts/BlogLayout.astro';
-import Icon from '../../../components/Icon.astro';
+import BlogLayout from 'layouts/BlogLayout.astro';
+import Icon from 'components/Icon.astro';
 import { getT, LOCALES } from '../../../i18n';
-import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
+import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // CSS Modules recovered from the Next app: the page module + the component
 // modules whose markup this page reproduces (Hero, Section, Card, Tag,
 // Heading, Link, ImageWrapper).
 import styles from './styles.module.css';
-import heroStyles from '../../../components/Hero.module.css';
-import sectionStyles from '../../../components/Section.module.css';
-import cardStyles from '../../../components/Card.module.css';
-import tagStyles from '../../../components/Tag.module.css';
-import headingStyles from '../../../components/Heading.module.css';
-import linkStyles from '../../../components/Link.module.css';
-import imageStyles from '../../../components/ImageWrapper.module.css';
+import heroStyles from 'components/Hero.module.css';
+import sectionStyles from 'components/Section.module.css';
+import cardStyles from 'components/Card.module.css';
+import tagStyles from 'components/Tag.module.css';
+import headingStyles from 'components/Heading.module.css';
+import linkStyles from 'components/Link.module.css';
+import imageStyles from 'components/ImageWrapper.module.css';
 
 // Blog LIST page. One variant per locale (blog content is single-language
 // English markdown; only the chrome is translated), producing /<locale>/blogs/

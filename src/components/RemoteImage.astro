@@ -2,8 +2,8 @@
 // Thin wrapper over astro-remote-images' component: importing the app config
 // module first guarantees the package's default instance is OUR configured
 // one (fail-soft optimize, error-image policy, COVER_WIDTH default width).
-import '../lib/remoteImages';
-import RemoteImage from '../../packages/astro-remote-images/src/RemoteImage.astro';
+import 'lib/remoteImages';
+import RemoteImage from 'packages/astro-remote-images/src/RemoteImage.astro';
 
 interface Props {
   src: string;

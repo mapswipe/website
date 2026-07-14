@@ -1,26 +1,26 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import DataExplorer, { PAGE_SIZE } from '../../../components/DataExplorer.tsx';
-import ProjectTypeIcon from '../../../components/ProjectTypeIcon.astro';
-import Icon from '../../../components/Icon.astro';
-import { getDataExplorerPayload } from '../../../lib/dataExplorer';
-import { resolveRemoteImage, COVER_WIDTH } from '../../../lib/remoteImages';
+import BaseLayout from 'layouts/BaseLayout.astro';
+import DataExplorer, { PAGE_SIZE } from 'components/DataExplorer.tsx';
+import ProjectTypeIcon from 'components/ProjectTypeIcon.astro';
+import Icon from 'components/Icon.astro';
+import { getDataExplorerPayload } from 'lib/dataExplorer';
+import { resolveRemoteImage, COVER_WIDTH } from 'lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
-import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
+import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // CSS Modules recovered from the Next app: the page module (shared with the
 // DataExplorer island) + the component modules whose markup this page
 // reproduces (Hero, Section, Card, KeyFigure, Heading, Link, ListItem,
 // ImageWrapper).
 import styles from './styles.module.css';
-import heroStyles from '../../../components/Hero.module.css';
-import sectionStyles from '../../../components/Section.module.css';
-import cardStyles from '../../../components/Card.module.css';
-import keyFigureStyles from '../../../components/KeyFigure.module.css';
-import headingStyles from '../../../components/Heading.module.css';
-import linkStyles from '../../../components/Link.module.css';
-import listItemStyles from '../../../components/ListItem.module.css';
-import imageStyles from '../../../components/ImageWrapper.module.css';
+import heroStyles from 'components/Hero.module.css';
+import sectionStyles from 'components/Section.module.css';
+import cardStyles from 'components/Card.module.css';
+import keyFigureStyles from 'components/KeyFigure.module.css';
+import headingStyles from 'components/Heading.module.css';
+import linkStyles from 'components/Link.module.css';
+import listItemStyles from 'components/ListItem.module.css';
+import imageStyles from 'components/ImageWrapper.module.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router
 // route src/pages/[locale]/data/index.tsx). trailingSlash:always + directory

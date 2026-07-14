@@ -8,3 +8,12 @@ generates:
     plugins:
       - "typescript"
       - "typescript-operations"
+    config:
+      enumsAsTypes: true
+      onlyOperationTypes: true
+      # JSON-serialized over HTTP: date/time scalars arrive as ISO strings
+      scalars:
+        DateTime: string
+        Date: string
+        Time: string
+        GenericScalar: unknown

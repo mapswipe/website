@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import getProjectHistory from '../lib/projectHistory';
-import { getBounds, getScaleFunction, getPathData, bound } from '../lib/chart';
+import getProjectHistory from 'lib/projectHistory';
+import { getBounds, getScaleFunction, getPathData, bound } from 'lib/chart';
 // The timeline-chart SVG classes live in the recovered projects page module
 // (Next kept them in src/pages/[locale]/projects/styles.module.css); importing
 // the same module here yields the same hashed classes as the .astro page.
-import styles from '../pages/[locale]/projects/styles.module.css';
+import styles from 'pages/[locale]/projects/styles.module.css';
 
 // Self-contained port of the project-history chart from the Next `Project`
 // component. Takes projectId + historyUrl, does its own fetch + SVG render,

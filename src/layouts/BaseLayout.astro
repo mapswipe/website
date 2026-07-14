@@ -1,15 +1,15 @@
 ---
-import OgMeta from '../components/OgMeta.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
+import OgMeta from 'components/OgMeta.astro';
+import Navbar from 'components/Navbar.astro';
+import Footer from 'components/Footer.astro';
 import { LOCALES } from '../i18n';
 // Design tokens + base element styles, restored from the Next app's
 // src/styles/{variables,globals}.css. Component/page styling lives in
 // co-located CSS Modules (same system as the Next app).
-import '../styles/variables.css';
-import '../styles/globals.css';
+import 'styles/variables.css';
+import 'styles/globals.css';
 // Page shell (Next: components/Page/styles.module.css).
-import pageStyles from '../components/Page.module.css';
+import pageStyles from 'components/Page.module.css';
 
 // Fonts: the Next app used next/font (Lato body + DM Sans headings, preloaded
 // woff2, display:swap). Astro has no next/font, so we import the equivalent

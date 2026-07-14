@@ -2,24 +2,24 @@
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectTypeIcon from '../../components/ProjectTypeIcon.astro';
-import Icon from '../../components/Icon.astro';
+import BaseLayout from 'layouts/BaseLayout.astro';
+import ProjectTypeIcon from 'components/ProjectTypeIcon.astro';
+import Icon from 'components/Icon.astro';
 import { getT, LOCALES } from '../../i18n';
-import { getCommunityStats } from '../../lib/data';
-import { selectPaths } from '../../../packages/astro-incremental-static/src/index.ts';
+import { getCommunityStats } from 'lib/data';
+import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // CSS Modules recovered from the Next app: the page module + the component
 // modules whose markup this page reproduces (Hero, Section, Card, KeyFigure,
 // Heading, Link, Tag, ImageWrapper).
 import styles from './styles.module.css';
-import heroStyles from '../../components/Hero.module.css';
-import sectionStyles from '../../components/Section.module.css';
-import headingStyles from '../../components/Heading.module.css';
-import linkStyles from '../../components/Link.module.css';
-import cardStyles from '../../components/Card.module.css';
-import keyFigureStyles from '../../components/KeyFigure.module.css';
-import tagStyles from '../../components/Tag.module.css';
-import imageStyles from '../../components/ImageWrapper.module.css';
+import heroStyles from 'components/Hero.module.css';
+import sectionStyles from 'components/Section.module.css';
+import headingStyles from 'components/Heading.module.css';
+import linkStyles from 'components/Link.module.css';
+import cardStyles from 'components/Card.module.css';
+import keyFigureStyles from 'components/KeyFigure.module.css';
+import tagStyles from 'components/Tag.module.css';
+import imageStyles from 'components/ImageWrapper.module.css';
 
 // Home page. One static, translated variant per locale — /<locale>/ — matching
 // the Next Pages-Router src/pages/[locale]/index.tsx. Faithful port of Hero,

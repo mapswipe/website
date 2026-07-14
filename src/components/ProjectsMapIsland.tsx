@@ -3,7 +3,7 @@ import type { CircleMarkerOptions, LatLngTuple } from 'leaflet';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-import type { MiniProject } from '../lib/dataExplorer';
+import type { MiniProject } from 'lib/dataExplorer';
 // CSS Modules recovered from the Next app's ProjectsMap (popup card link) +
 // Tag (popup tag pills).
 import styles from './ProjectsMap.module.css';

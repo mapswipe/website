@@ -1,30 +1,30 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import ProjectLayout from '../../../layouts/ProjectLayout.astro';
-import RemoteImage from '../../../components/RemoteImage.astro';
-import { COVER_WIDTH } from '../../../lib/remoteImages';
-import MapIsland from '../../../components/MapIsland.tsx';
-import ProjectHistoryChart from '../../../components/ProjectHistoryChart.tsx';
-import ProjectTypeIcon from '../../../components/ProjectTypeIcon.astro';
-import type { ProjectTypeKey } from '../../../components/ProjectTypeIcon.tsx';
-import Icon from '../../../components/Icon.astro';
-import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from '../../../lib/data';
-import { getFileSizeProperties, resolveAoiDownload } from '../../../lib/common';
+import ProjectLayout from 'layouts/ProjectLayout.astro';
+import RemoteImage from 'components/RemoteImage.astro';
+import { COVER_WIDTH } from 'lib/remoteImages';
+import MapIsland from 'components/MapIsland.tsx';
+import ProjectHistoryChart from 'components/ProjectHistoryChart.tsx';
+import ProjectTypeIcon from 'components/ProjectTypeIcon.astro';
+import type { ProjectTypeKey } from 'components/ProjectTypeIcon.tsx';
+import Icon from 'components/Icon.astro';
+import { getAllProjects, getProjectByFirebaseId, type UrlInfo } from 'lib/data';
+import { getFileSizeProperties, resolveAoiDownload } from 'lib/common';
 import { getT, LOCALES } from '../../../i18n';
-import { selectPaths } from '../../../../packages/astro-incremental-static/src/index.ts';
+import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // CSS Modules recovered from the Next app: the page module (also imported by
 // the ProjectHistoryChart island for the SVG classes) + the component modules
 // whose markup this page reproduces.
 import styles from './styles.module.css';
-import heroStyles from '../../../components/Hero.module.css';
-import sectionStyles from '../../../components/Section.module.css';
-import cardStyles from '../../../components/Card.module.css';
-import tagStyles from '../../../components/Tag.module.css';
-import headingStyles from '../../../components/Heading.module.css';
-import linkStyles from '../../../components/Link.module.css';
-import keyFigureStyles from '../../../components/KeyFigure.module.css';
-import imageStyles from '../../../components/ImageWrapper.module.css';
-import htmlOutputStyles from '../../../components/HtmlOutput.module.css';
+import heroStyles from 'components/Hero.module.css';
+import sectionStyles from 'components/Section.module.css';
+import cardStyles from 'components/Card.module.css';
+import tagStyles from 'components/Tag.module.css';
+import headingStyles from 'components/Heading.module.css';
+import linkStyles from 'components/Link.module.css';
+import keyFigureStyles from 'components/KeyFigure.module.css';
+import imageStyles from 'components/ImageWrapper.module.css';
+import htmlOutputStyles from 'components/HtmlOutput.module.css';
 
 export const getStaticPaths = (async () => {
   let projects = getAllProjects();

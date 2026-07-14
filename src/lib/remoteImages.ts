@@ -2,6 +2,8 @@
 // This module MUST be imported before the package's <RemoteImage /> component
 // renders (the component uses the default = last-created instance); every
 // consumer here imports it directly, which guarantees the ordering.
+// Imported by scripts/prefetch-images.mjs under plain node, which does not
+// read tsconfig paths — this file must stick to relative imports.
 import { createRemoteImages } from '../../packages/astro-remote-images/src/index.ts';
 
 // The render width used for project cover images (projects/[id].astro, the

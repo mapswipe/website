@@ -8,13 +8,13 @@ import React, {
 } from 'react';
 
 import ProjectTypeIcon from './ProjectTypeIcon';
-import type { MiniProject, Organization, ExportAsset } from '../lib/dataExplorer';
+import type { MiniProject, Organization, ExportAsset } from 'lib/dataExplorer';
 
 // CSS Modules recovered from the Next app. The island shares the data page's
 // module (same hashed classes as the .astro page that mounts it) plus the
 // component modules its markup reproduces (Section, Card, Tag, Heading, Link,
 // Button, MultiSelectInput, RadioInput, RawInput, SelectInput, ImageWrapper).
-import styles from '../pages/[locale]/data/styles.module.css';
+import styles from 'pages/[locale]/data/styles.module.css';
 import sectionStyles from './Section.module.css';
 import cardStyles from './Card.module.css';
 import tagStyles from './Tag.module.css';
