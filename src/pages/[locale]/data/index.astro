@@ -9,6 +9,8 @@ import Card from 'components/Card.astro';
 import KeyFigure from 'components/KeyFigure.astro';
 import Heading from 'components/Heading.astro';
 import ListItem from 'components/ListItem.astro';
+import Link from 'components/Link.astro';
+import ImageWrapper from 'components/ImageWrapper.astro';
 import { getDataExplorerPayload } from 'lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from 'lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
@@ -19,8 +21,6 @@ import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // still imported for the custom before/after cover slot.
 import styles from './styles.module.css';
 import cardStyles from 'components/Card.module.css';
-import linkStyles from 'components/Link.module.css';
-import imageStyles from 'components/ImageWrapper.module.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router
 // route src/pages/[locale]/data/index.tsx). trailingSlash:always + directory
@@ -104,9 +104,7 @@ const typeCards = [
     <Hero title={t('data-page-heading')}>
         <Fragment slot="description">{t('data-page-description')}</Fragment>
         <Fragment slot="right">
-            <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-                <img class={imageStyles.image} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
-            </div>
+            <ImageWrapper class={styles.illustration} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
         </Fragment>
     </Hero>
 
@@ -126,9 +124,9 @@ const typeCards = [
             </Heading>
             <div class={styles.sectionDescription}>
                 {t('community-stats-section-description')}
-                <a class:list={[linkStyles.link, linkStyles.underline]} href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
+                <Link variant="underline" href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
                     {t('community-dashboard-link-label')}
-                </a>
+                </Link>
             </div>
         </div>
     </Section>
@@ -151,12 +149,8 @@ const typeCards = [
             >
                 {'beforeAfter' in card && card.beforeAfter && (
                     <div slot="cover" class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
-                        <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                            <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
-                        </div>
-                        <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                            <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
-                        </div>
+                        <ImageWrapper class={styles.beforeAfterImageWrapper} imageClass={styles.beforeImage} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+                        <ImageWrapper class={styles.beforeAfterImageWrapper} imageClass={styles.afterImage} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
                     </div>
                 )}
                 <Fragment slot="icons"><ProjectTypeIcon type={card.type} /></Fragment>
@@ -194,8 +188,8 @@ const typeCards = [
     </Section>
     <Section withAlternativeBackground title={t('contact-section-heading')}>
         <Fragment slot="description">{t('contact-section-description')}</Fragment>
-        <a slot="actions" class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">
+        <Link variant="button" slot="actions"  href="mailto:info@mapswipe.org" target="_blank">
             {t('contact-link-label')}
-        </a>
+        </Link>
     </Section>
 </BaseLayout>

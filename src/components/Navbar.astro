@@ -1,13 +1,13 @@
 ---
 import Icon from './Icon.astro';
 import Button from './Button.astro';
+import Link from './Link.astro';
 import { getT, LOCALES } from '../i18n';
 // CSS Modules recovered from the Next app (components/Navbar +
 // components/Link). The language menu is a pure CSS hover/focus-within
 // dropdown (Next used a JS DropdownMenu + Popup portal and a mobile hamburger
 // toggle; see the adaptation notes in Navbar.module.css).
 import styles from './Navbar.module.css';
-import linkStyles from './Link.module.css';
 
 // Ported from the Next app's components/Navbar. Static, zero-JS. `activePath`
 // highlights the current route link, matching Next's router.pathname ===
@@ -37,25 +37,19 @@ const localelessPath = activePath ? `${activePath}/` : '';
 ---
 <div class:list={[styles.navbar, className]}>
     <div class={styles.navbarContent}>
-        <a class:list={[linkStyles.link, styles.logo]} href={`/${locale}/`}>
+        <Link class={styles.logo} href={`/${locale}/`}>
             <img src="/logo.svg" alt={t('mapswipe-logo')} />
-        </a>
+        </Link>
         <div class={styles.routes}>
-            <a
-                class:list={[linkStyles.link, styles.link, activePath === 'get-involved' && styles.active]}
-                href={`/${locale}/get-involved/`}
-            >
+            <Link class={[styles.link, activePath === 'get-involved' && styles.active]} href={`/${locale}/get-involved/`}>
                 {t('get-involved-link')}
-            </a>
-            <a
-                class:list={[linkStyles.link, styles.link, activePath === 'data' && styles.active]}
-                href={`/${locale}/data/`}
-            >
+            </Link>
+            <Link class={[styles.link, activePath === 'data' && styles.active]} href={`/${locale}/data/`}>
                 {t('data-link')}
-            </a>
-            <a class:list={[linkStyles.link, styles.link]} href="https://community.mapswipe.org/">
+            </Link>
+            <Link class={styles.link} href="https://community.mapswipe.org/">
                 {t('community-dashboard-link')}
-            </a>
+            </Link>
         </div>
         <div class={styles.rightContainer}>
             <div class={styles.languageWrap}>
@@ -67,16 +61,13 @@ const localelessPath = activePath ? `${activePath}/` : '';
                 </Button>
                 <div class={styles.languageList}>
                     {LOCALES.map((l) => (
-                        <a
-                            class:list={[linkStyles.link, styles.language, l === locale && styles.activeLanguage]}
-                            href={`/${l}/${localelessPath}`}
-                        >
+                        <Link class={[styles.language, l === locale && styles.activeLanguage]} href={`/${l}/${localelessPath}`}>
                             {languageTitleMap[l]?.label ?? l}
-                        </a>
+                        </Link>
                     ))}
-                    <a class:list={[linkStyles.link, styles.language]} href={`/${locale}/get-involved/#individual`}>
+                    <Link class={styles.language} href={`/${locale}/get-involved/#individual`}>
                         {t('didnot-find-language')}
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

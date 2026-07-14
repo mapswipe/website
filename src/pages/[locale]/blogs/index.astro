@@ -8,6 +8,8 @@ import Hero from 'components/Hero.astro';
 import Section from 'components/Section.astro';
 import Card from 'components/Card.astro';
 import Tag from 'components/Tag.astro';
+import Link from 'components/Link.astro';
+import ImageWrapper from 'components/ImageWrapper.astro';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // Page module + the Link/ImageWrapper CSS Modules recovered from the Next
@@ -16,7 +18,6 @@ import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // <Image> can't go through Card's plain-img coverImageUrl prop).
 import styles from './styles.module.css';
 import cardStyles from 'components/Card.module.css';
-import linkStyles from 'components/Link.module.css';
 import imageStyles from 'components/ImageWrapper.module.css';
 
 // Blog LIST page. One variant per locale (blog content is single-language
@@ -93,9 +94,9 @@ const title = String(t('blogs-tab-head'));
             {section.items.map((blog) => (
                 <Card as="article" coverImageOnSide heading={blog.title} childrenContainerClass={styles.cardContent}>
                     {blog.coverImage && (
-                        <div slot="cover" class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
+                        <ImageWrapper slot="cover" class={cardStyles.coverImageWrapper}>
                             <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
-                        </div>
+                        </ImageWrapper>
                     )}
                     {blog.publishedDate && (
                         <Tag variant="transparent" class={styles.tag}>
@@ -104,9 +105,9 @@ const title = String(t('blogs-tab-head'));
                         </Tag>
                     )}
                     <div class={styles.description}>{blog.description}</div>
-                    <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
+                    <Link class={styles.link} href={`/${locale}/blogs/${blog.slug}/`}>
                         {t('read-more')}
-                    </a>
+                    </Link>
                 </Card>
             ))}
         </Section>
