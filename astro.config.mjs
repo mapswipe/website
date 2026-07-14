@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { writeFileSync } from 'node:fs';
 
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
@@ -15,6 +16,16 @@ const SITE = 'https://mapswipe.org';
 const CLASS_ALPHA = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const CLASS_ALNUM = `${CLASS_ALPHA}0123456789-_`;
 const assignedClassNames = new Map();
+// Debug aid: CLASS_MAP_OUT=<path> dumps {shortName -> source} after the build,
+// so two builds' HTML can be compared structurally when class hashes shift
+// (e.g. after moving a CSS module).
+if (process.env.CLASS_MAP_OUT) {
+    process.on('exit', () => {
+        try {
+            writeFileSync(process.env.CLASS_MAP_OUT, JSON.stringify(Object.fromEntries(assignedClassNames)));
+        } catch { /* best-effort */ }
+    });
+}
 function shortClassName(name, filename) {
     const rel = filename.includes('website-astro') || filename.startsWith(process.cwd())
         ? filename.slice(process.cwd().length)

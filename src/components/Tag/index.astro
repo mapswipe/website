@@ -1,0 +1,35 @@
+---
+// Tag pill (port of the Next components/Tag). No default spacing: the pages
+// this replaces only set a spacing class where the Next pages passed one.
+import styles from 'components/Tag/styles.module.css';
+
+type Variant = 'primary' | 'transparent' | 'border' | 'icon';
+type Spacing = 'small' | 'medium' | 'large';
+
+interface Props {
+    variant?: Variant;
+    spacing?: Spacing;
+    class?: string;
+    title?: string;
+}
+
+const {
+    variant = 'primary',
+    spacing,
+    class: className,
+    title,
+} = Astro.props;
+
+const variantMap: Record<Variant, string | undefined> = {
+    primary: undefined,
+    transparent: styles.transparent,
+    border: styles.border,
+    icon: styles.icon,
+};
+const spacingMap: Record<Spacing, string> = {
+    small: styles.small,
+    medium: styles.medium,
+    large: styles.large,
+};
+---
+<span class:list={[styles.tag, variantMap[variant], spacing && spacingMap[spacing], className]} title={title}><slot /></span>

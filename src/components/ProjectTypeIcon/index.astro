@@ -1,0 +1,51 @@
+---
+// External-SVG-sprite mission-type icons. Each type's symbol is defined once in
+// public/icons.svg (id "project-type-<kebab>") and referenced via <use>,
+// instead of inlining the full path markup on every render. See Icon.astro for
+// the rationale (avoids duplicated inline SVG across the static export).
+//
+// The outer <svg> keeps the per-type viewBox (aspect ratios differ across
+// types) and fill="currentColor" so CSS theming is preserved.
+// Sizing comes from the recovered CSS Module (Next: components/ProjectTypeIcon/
+// styles.module.css) — .icon + small/medium/large modifiers.
+import styles from './styles.module.css';
+
+type ProjectTypeKey =
+  | 'FIND' | 'VALIDATE' | 'VALIDATE_IMAGE' | 'COMPARE' | 'COMPLETENESS' | 'STREET' | 'LOCATE';
+
+interface Props {
+    type: ProjectTypeKey;
+    class?: string;
+    size?: 'small' | 'medium' | 'large';
+}
+const { type, class: className, size = 'medium' } = Astro.props;
+
+// Per-type viewBox, matching ProjectTypeIcon.tsx's inline icons exactly.
+const viewBox: Record<ProjectTypeKey, string> = {
+    FIND: '0 0 138 162',
+    VALIDATE: '0 0 138 162',
+    VALIDATE_IMAGE: '0 0 283 332',
+    COMPARE: '0 0 138 162',
+    COMPLETENESS: '0 0 283 331',
+    STREET: '0 0 283 332',
+    LOCATE: '0 0 35 38',
+};
+
+// Type -> sprite symbol id.
+const symbolId: Record<ProjectTypeKey, string> = {
+    FIND: 'project-type-find',
+    VALIDATE: 'project-type-validate',
+    VALIDATE_IMAGE: 'project-type-validate-image',
+    COMPARE: 'project-type-compare',
+    COMPLETENESS: 'project-type-completeness',
+    STREET: 'project-type-street',
+    LOCATE: 'project-type-locate',
+};
+
+// Sprite at site root (/icons.svg), matching the logos' convention; built from
+// BASE_URL so it stays correct if a non-'/' base is ever configured.
+const spriteHref = `${import.meta.env.BASE_URL}icons.svg`.replace(/\/{2,}/g, '/');
+---
+<svg class:list={[styles.icon, styles[size], className]} xmlns="http://www.w3.org/2000/svg" viewBox={viewBox[type]} fill="currentColor" aria-hidden="true">
+    <use href={`${spriteHref}#${symbolId[type]}`} />
+</svg>

@@ -1,0 +1,29 @@
+---
+// ImageWrapper (port of the Next components/ImageWrapper): aspect-holding
+// wrapper div + the image class. With `src` it renders a plain <img> (extra
+// attributes pass through); without it the default slot supplies the media —
+// used for astro:assets <Image>/<RemoteImage>, which must be instantiated by
+// the caller (give them class={imageStyles.image} from this module).
+import type { HTMLAttributes } from 'astro/types';
+import styles from 'components/ImageWrapper/styles.module.css';
+
+interface Props extends Omit<HTMLAttributes<'img'>, 'class'> {
+    // string or a class:list-style array (falsy entries dropped)
+    class?: string | (string | false | null | undefined)[];
+    imageClass?: string | (string | false | null | undefined)[];
+    src?: string;
+}
+
+const {
+    class: className,
+    imageClass,
+    src,
+    ...rest
+} = Astro.props;
+// `slot` on a component is placement metadata for the parent, but Astro also
+// leaves it in props — it must not be spread onto the element.
+delete rest.slot;
+---
+<div class:list={[styles.imageWrapper, className]}>
+    {src ? <img class:list={[styles.image, imageClass]} src={src} {...rest} /> : <slot />}
+</div>

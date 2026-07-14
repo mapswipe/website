@@ -1,0 +1,30 @@
+---
+// Button (port of the Next components/Button). Extra attributes (aria-*, id,
+// event hooks added later, …) pass straight through to the element.
+import type { HTMLAttributes } from 'astro/types';
+import styles from 'components/Button/styles.module.css';
+
+type Variant = 'transparent' | 'primary' | 'border' | 'icon';
+
+interface Props extends Omit<HTMLAttributes<'button'>, 'type'> {
+    variant?: Variant;
+    class?: string;
+}
+
+const {
+    variant = 'primary',
+    class: className,
+    ...rest
+} = Astro.props;
+// `slot` on a component is placement metadata for the parent, but Astro also
+// leaves it in props — it must not be spread onto the element.
+delete rest.slot;
+
+const variantMap: Record<Variant, string | undefined> = {
+    transparent: undefined,
+    primary: styles.primary,
+    border: styles.border,
+    icon: styles.icon,
+};
+---
+<button class:list={[styles.button, variantMap[variant], className]} type="button" {...rest}><slot /></button>

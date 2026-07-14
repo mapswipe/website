@@ -2,15 +2,15 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from 'layouts/BaseLayout.astro';
 import DataExplorer, { PAGE_SIZE } from 'components/DataExplorer.tsx';
-import ProjectTypeIcon from 'components/ProjectTypeIcon.astro';
-import Hero from 'components/Hero.astro';
-import Section from 'components/Section.astro';
-import Card from 'components/Card.astro';
-import KeyFigure from 'components/KeyFigure.astro';
-import Heading from 'components/Heading.astro';
-import ListItem from 'components/ListItem.astro';
-import Link from 'components/Link.astro';
-import ImageWrapper from 'components/ImageWrapper.astro';
+import ProjectTypeIcon from 'components/ProjectTypeIcon/index.astro';
+import Hero from 'components/Hero/index.astro';
+import Section from 'components/Section/index.astro';
+import Card from 'components/Card/index.astro';
+import KeyFigure from 'components/KeyFigure/index.astro';
+import Heading from 'components/Heading/index.astro';
+import ListItem from 'components/ListItem/index.astro';
+import Link from 'components/Link/index.astro';
+import ImageWrapper from 'components/ImageWrapper/index.astro';
 import { getDataExplorerPayload } from 'lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from 'lib/remoteImages';
 import { getDict, getT, LOCALES } from '../../../i18n';
@@ -20,7 +20,7 @@ import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // Hero/Section/Card/KeyFigure/Heading/ListItem components. cardStyles is
 // still imported for the custom before/after cover slot.
 import styles from './styles.module.css';
-import cardStyles from 'components/Card.module.css';
+import cardStyles from 'components/Card/styles.module.css';
 
 // One static page per locale: /<locale>/data/ (parity with the Next Pages-Router
 // route src/pages/[locale]/data/index.tsx). trailingSlash:always + directory

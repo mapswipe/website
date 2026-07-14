@@ -22,10 +22,10 @@ import type { MiniProject, Organization, ExportAsset } from 'lib/dataExplorer';
 // RadioInput, RawInput, SelectInput); the chrome comes from the React twins
 // of the shared components (Section, Card, Tag, Button, Link).
 import styles from 'pages/[locale]/data/styles.module.css';
-import multiSelectStyles from './MultiSelectInput.module.css';
-import radioStyles from './RadioInput.module.css';
-import rawInputStyles from './RawInput.module.css';
-import selectInputStyles from './SelectInput.module.css';
+import multiSelectStyles from './MultiSelectInput/styles.module.css';
+import radioStyles from './RadioInput/styles.module.css';
+import rawInputStyles from './RawInput/styles.module.css';
+import selectInputStyles from './SelectInput/styles.module.css';
 
 // Leaflet touches window at import time and cannot SSR. We lazy-load the map
 // module via a dynamic import() so its (leaflet) top-level code only runs in the

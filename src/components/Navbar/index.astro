@@ -1,0 +1,75 @@
+---
+import Icon from '../Icon.astro';
+import Button from '../Button/index.astro';
+import Link from '../Link/index.astro';
+import { getT, LOCALES } from '../../i18n';
+// CSS Modules recovered from the Next app (components/Navbar +
+// components/Link). The language menu is a pure CSS hover/focus-within
+// dropdown (Next used a JS DropdownMenu + Popup portal and a mobile hamburger
+// toggle; see the adaptation notes in Navbar.module.css).
+import styles from './styles.module.css';
+
+// Ported from the Next app's components/Navbar. Static, zero-JS. `activePath`
+// highlights the current route link, matching Next's router.pathname ===
+// '/[locale]/...' check.
+interface Props {
+    locale: string;
+    activePath?: string; // e.g. 'get-involved' | 'data'
+    class?: string;
+}
+const { locale, activePath, class: className } = Astro.props;
+const t = await getT(locale, 'common');
+
+// Per-locale abbreviations/labels (ported from utils/languages.ts).
+const languageTitleMap: Record<string, { abbreviation: string; label: string }> = {
+    ne: { abbreviation: 'ने', label: 'नेपाली' },
+    en: { abbreviation: 'EN', label: 'English' },
+    hu: { abbreviation: 'HU', label: 'Magyar nyelv' },
+    de: { abbreviation: 'DE', label: 'Deutsch' },
+    cs: { abbreviation: 'CS', label: 'Čeština' },
+    pt: { abbreviation: 'PT', label: 'Português' },
+};
+
+// The current page path WITHOUT the locale prefix (e.g. '' for home,
+// 'get-involved/', 'data/'). Used to build language-switch links that keep the
+// user on the same page in the target locale.
+const localelessPath = activePath ? `${activePath}/` : '';
+---
+<div class:list={[styles.navbar, className]}>
+    <div class={styles.navbarContent}>
+        <Link class={styles.logo} href={`/${locale}/`}>
+            <img src="/logo.svg" alt={t('mapswipe-logo')} />
+        </Link>
+        <div class={styles.routes}>
+            <Link class={[styles.link, activePath === 'get-involved' && styles.active]} href={`/${locale}/get-involved/`}>
+                {t('get-involved-link')}
+            </Link>
+            <Link class={[styles.link, activePath === 'data' && styles.active]} href={`/${locale}/data/`}>
+                {t('data-link')}
+            </Link>
+            <Link class={styles.link} href="https://community.mapswipe.org/">
+                {t('community-dashboard-link')}
+            </Link>
+        </div>
+        <div class={styles.rightContainer}>
+            <div class={styles.languageWrap}>
+                <Button variant="border" class={styles.dropdown} aria-haspopup="true">
+                    <Icon name="earth-sharp" />
+                    <span class={styles.currentLocale}>
+                        {languageTitleMap[locale]?.abbreviation ?? locale}
+                    </span>
+                </Button>
+                <div class={styles.languageList}>
+                    {LOCALES.map((l) => (
+                        <Link class={[styles.language, l === locale && styles.activeLanguage]} href={`/${l}/${localelessPath}`}>
+                            {languageTitleMap[l]?.label ?? l}
+                        </Link>
+                    ))}
+                    <Link class={styles.language} href={`/${locale}/get-involved/#individual`}>
+                        {t('didnot-find-language')}
+                    </Link>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

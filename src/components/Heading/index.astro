@@ -1,0 +1,26 @@
+---
+// Heading (port of the Next components/Heading): `size` picks both the
+// element and the size class; font 'normal' opts out of the heading font.
+import styles from 'components/Heading/styles.module.css';
+
+type Size = 'extraSmall' | 'small' | 'medium' | 'large' | 'extraLarge' | 'superLarge';
+
+interface Props {
+    size?: Size;
+    font?: 'heading' | 'normal';
+    class?: string;
+}
+
+const { size = 'medium', font = 'heading', class: className } = Astro.props;
+
+const elementMap: Record<Size, string> = {
+    extraSmall: 'h6',
+    small: 'h5',
+    medium: 'h4',
+    large: 'h3',
+    extraLarge: 'h2',
+    superLarge: 'h1',
+};
+const Element = elementMap[size];
+---
+<Element class:list={[styles.heading, styles[size], font === 'normal' && styles.normal, className]}><slot /></Element>

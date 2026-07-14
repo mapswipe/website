@@ -4,17 +4,17 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BlogLayout from 'layouts/BlogLayout.astro';
 import Icon from 'components/Icon.astro';
-import Hero from 'components/Hero.astro';
-import Section from 'components/Section.astro';
-import Tag from 'components/Tag.astro';
-import ImageWrapper from 'components/ImageWrapper.astro';
+import Hero from 'components/Hero/index.astro';
+import Section from 'components/Section/index.astro';
+import Tag from 'components/Tag/index.astro';
+import ImageWrapper from 'components/ImageWrapper/index.astro';
 import { getT, LOCALES } from '../../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
 // Page module + the ImageWrapper/HtmlOutput CSS Modules recovered from the
 // Next app; the chrome comes from the shared Hero/Section/Tag components.
 import styles from './styles.module.css';
-import imageStyles from 'components/ImageWrapper.module.css';
-import htmlOutputStyles from 'components/HtmlOutput.module.css';
+import imageStyles from 'components/ImageWrapper/styles.module.css';
+import htmlOutputStyles from 'components/HtmlOutput/styles.module.css';
 
 // Blog DETAIL page. getStaticPaths = 6 locales x N blogs, producing
 // /<locale>/blogs/<slug>/ with exact URL parity to Next (slug == entry.id ==

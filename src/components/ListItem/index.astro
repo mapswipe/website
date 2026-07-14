@@ -1,0 +1,18 @@
+---
+// List item with a leading icon (port of the Next components/ListItem);
+// the icon slot defaults to the checkmark, like the Next component.
+import styles from 'components/ListItem/styles.module.css';
+import Icon from 'components/Icon.astro';
+
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+<div class:list={[styles.listItem, className]}>
+    <div class={styles.icon}>
+        <slot name="icon"><Icon name="checkmark-circle-outline" /></slot>
+    </div>
+    <div class={styles.label}><slot /></div>
+</div>
