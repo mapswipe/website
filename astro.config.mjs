@@ -24,7 +24,13 @@ export default defineConfig({
     },
     output: 'static',
     trailingSlash: 'always',
-    build: { format: 'directory' },
+    build: {
+        format: 'directory',
+        // 'auto' inlines small stylesheets into EVERY page — ~10 KB of
+        // identical CSS duplicated across 14.6k pages (~150 MB of dist).
+        // External files are fetched once and cached.
+        inlineStylesheets: 'never',
+    },
     // Root/locale-less redirect stubs (parity with the Next app's src/pages/*.tsx
     // Redirect stubs). Next did client-side language detection; for a static
     // export we redirect the locale-less path to the default-locale (en) variant.
