@@ -8,29 +8,24 @@ import React, {
 } from 'react';
 
 import ProjectTypeIcon from './ProjectTypeIcon';
+import Section from './Section';
+import Card from './Card';
+import Tag from './Tag';
+import Button from './Button';
+import Link from './Link';
+import cs from 'lib/cs';
 import type { MiniProject, Organization, ExportAsset } from 'lib/dataExplorer';
 
 // CSS Modules recovered from the Next app. The island shares the data page's
 // module (same hashed classes as the .astro page that mounts it) plus the
-// component modules its markup reproduces (Section, Card, Tag, Heading, Link,
-// Button, MultiSelectInput, RadioInput, RawInput, SelectInput, ImageWrapper).
+// form-control modules whose markup stays island-local (MultiSelectInput,
+// RadioInput, RawInput, SelectInput); the chrome comes from the React twins
+// of the shared components (Section, Card, Tag, Button, Link).
 import styles from 'pages/[locale]/data/styles.module.css';
-import sectionStyles from './Section.module.css';
-import cardStyles from './Card.module.css';
-import tagStyles from './Tag.module.css';
-import headingStyles from './Heading.module.css';
-import linkStyles from './Link.module.css';
-import buttonStyles from './Button.module.css';
 import multiSelectStyles from './MultiSelectInput.module.css';
 import radioStyles from './RadioInput.module.css';
 import rawInputStyles from './RawInput.module.css';
 import selectInputStyles from './SelectInput.module.css';
-import imageStyles from './ImageWrapper.module.css';
-
-// Tiny className joiner (parity with @togglecorp/fujs _cs).
-function cs(...parts: (string | false | null | undefined)[]): string {
-    return parts.filter(Boolean).join(' ');
-}
 
 // Leaflet touches window at import time and cannot SSR. We lazy-load the map
 // module via a dynamic import() so its (leaflet) top-level code only runs in the
@@ -355,335 +350,301 @@ export default function DataExplorer(props: Props) {
 
     return (
         <>
-            {/* Explore: filters + map + list (Next: exploreSection Section) */}
-            <section className={cs(sectionStyles.section, styles.exploreSection)}>
-                <div className={sectionStyles.container}>
-                    <div className={cs(sectionStyles.headingContainer, styles.exploreHeadingContainer)}>
-                        <h4 className={cs(headingStyles.heading, headingStyles.medium, sectionStyles.heading)}>
-                            {t('explore-section-heading')}
-                        </h4>
-                        {buildDate && (
-                            <div className={cs(sectionStyles.description, styles.lastFetchedDate)}>
-                                {t('data-last-fetched', { date: new Date(Number(buildDate)) })}
-                                <br />
-                                {t('explore-section-heading-description')}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className={styles.content}>
-                        <div className={styles.topContainer}>
-                            {/* One disabled-able fieldset: while the shared dataset JSON is
+            {/* Explore: filters + map + list. The see-more button renders as the
+                Section's actions, as in Next. */}
+            <Section
+                className={styles.exploreSection}
+                headingContainerClassName={styles.exploreHeadingContainer}
+                title={t('explore-section-heading')}
+                description={buildDate && (
+                    <>
+                        {t('data-last-fetched', { date: new Date(Number(buildDate)) })}
+                        <br />
+                        {t('explore-section-heading-description')}
+                    </>
+                )}
+                descriptionClassName={styles.lastFetchedDate}
+                contentClassName={styles.content}
+                actions={tableProjects.length !== visibleProjects.length && (
+                    <Button variant="border" onClick={handleSeeMore}>
+                        {t('see-more-button')}
+                    </Button>
+                )}
+            >
+                <div className={styles.topContainer}>
+                    {/* One disabled-able fieldset: while the shared dataset JSON is
                   loading, every filter control is disabled (native fieldset
                   cascade) — they apply against the full dataset once it
                   arrives. (Next used a plain div; see the fieldset adaptation
                   note in styles.module.css.) */}
-                            <fieldset className={styles.filters} disabled={loading} aria-busy={loading}>
-                                {/* Project status (MultiSelectInput as toggle chips) */}
-                                <div className={multiSelectStyles.input}>
-                                    <div>{t('project-status')}</div>
-                                    <div className={multiSelectStyles.optionsContainer}>
-                                        {(['PUBLISHED', 'FINISHED'] as const).map((key) => (
-                                            <button
-                                                key={key}
-                                                type="button"
-                                                className={cs(
-                                                    buttonStyles.button,
-                                                    multiSelectStyles.option,
-                                                    projectStatuses.includes(key) && multiSelectStyles.selected,
-                                                )}
-                                                onClick={() => setProjectStatuses((l) => toggleInList(l, key))}
-                                            >
-                                                <span className={statusClass[key]}>●</span>
-                                                {statusLabels[key]}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Project type (MultiSelectInput as toggle chips) */}
-                                <div className={multiSelectStyles.input}>
-                                    <div>{t('project-type')}</div>
-                                    <div className={multiSelectStyles.optionsContainer}>
-                                        {PROJECT_TYPES.map((key) => (
-                                            <button
-                                                key={key}
-                                                type="button"
-                                                className={cs(
-                                                    buttonStyles.button,
-                                                    multiSelectStyles.option,
-                                                    projectTypes.includes(key) && multiSelectStyles.selected,
-                                                )}
-                                                onClick={() => setProjectTypes((l) => toggleInList(l, key))}
-                                            >
-                                                <ProjectTypeIcon type={key} size="small" />
-                                                {typeLabels[key]}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <input
-                                    className={cs(rawInputStyles.rawInput, styles.filter)}
-                                    placeholder={t('search-label')}
-                                    value={searchText}
-                                    onChange={(e) => setSearchText(e.target.value)}
-                                />
-                                <input
-                                    className={cs(rawInputStyles.rawInput, styles.filter)}
-                                    placeholder={t('location-search-label')}
-                                    value={locationSearchText}
-                                    onChange={(e) => setLocationSearchText(e.target.value)}
-                                />
-                                <select
-                                    className={cs(selectInputStyles.selectInput, styles.filter)}
-                                    value={organization}
-                                    onChange={(e) => setOrganization(e.target.value)}
-                                >
-                                    <option value="">{t('organization-placeholder')}</option>
-                                    {organizations.map((org) => (
-                                        <option key={org.id} value={org.id}>{org.name}</option>
-                                    ))}
-                                </select>
-                                <div className={styles.row}>
-                                    <label className={styles.inputContainer}>
-                                        <div>{t('date-from-label')}</div>
-                                        <input
-                                            type="date"
-                                            className={cs(rawInputStyles.rawInput, styles.filter, styles.dateFilter)}
-                                            value={dateFrom}
-                                            onChange={(e) => setDateFrom(e.target.value)}
-                                        />
-                                    </label>
-                                    <label className={styles.inputContainer}>
-                                        <div>{t('date-to-label')}</div>
-                                        <input
-                                            type="date"
-                                            className={cs(rawInputStyles.rawInput, styles.filter, styles.dateFilter)}
-                                            value={dateTo}
-                                            onChange={(e) => setDateTo(e.target.value)}
-                                        />
-                                    </label>
-                                </div>
-                                {filtersApplied && (
-                                    <button
-                                        type="button"
-                                        className={cs(buttonStyles.button, buttonStyles.border, styles.clearButton)}
-                                        onClick={handleClearFilters}
+                    <fieldset className={styles.filters} disabled={loading} aria-busy={loading}>
+                        {/* Project status (MultiSelectInput as toggle chips) */}
+                        <div className={multiSelectStyles.input}>
+                            <div>{t('project-status')}</div>
+                            <div className={multiSelectStyles.optionsContainer}>
+                                {(['PUBLISHED', 'FINISHED'] as const).map((key) => (
+                                    <Button
+                                        key={key}
+                                        variant="transparent"
+                                        className={cs(
+                                            multiSelectStyles.option,
+                                            projectStatuses.includes(key) && multiSelectStyles.selected,
+                                        )}
+                                        onClick={() => setProjectStatuses((l) => toggleInList(l, key))}
                                     >
-                                        {t('clear-filters')}
-                                    </button>
-                                )}
-                            </fieldset>
-
-                            <div className={styles.mapContainer}>
-                                {/* Map is client-only: rendered after mount so SSR never touches
-                    leaflet. Placeholder keeps layout stable pre-hydration. Also
-                    waits for the fetched dataset so it never draws just the
-                    9-item initial slice and then re-jumps to the full set. */}
-                                {mounted && !loading ? (
-                                    <Suspense fallback={<div className={styles.projectsMap} aria-hidden="true" />}>
-                                        <ProjectsMapIsland
-                                            className={styles.projectsMap}
-                                            projects={visibleProjects}
-                                            radiusSelector={radiusSelector}
-                                            typeLabels={typeLabels}
-                                            statusLabels={statusLabels}
-                                        />
-                                    </Suspense>
-                                ) : (
-                                    <div className={styles.projectsMap} aria-hidden="true" />
-                                )}
-                                <div className={styles.mapSettings}>
-                                    {/* Bubble type (RadioInput with small pill options) */}
-                                    <div className={cs(radioStyles.input, styles.bubbleFilter)}>
-                                        <div>{t('bubble-type')}</div>
-                                        <div className={radioStyles.optionsContainer}>
-                                            {([
-                                                { key: 'area', label: t('mapped-area') },
-                                                { key: 'contributors', label: t('contributors') },
-                                            ]).map((opt) => (
-                                                <button
-                                                    key={opt.key}
-                                                    type="button"
-                                                    className={cs(
-                                                        buttonStyles.button,
-                                                        radioStyles.option,
-                                                        radioStyles.small,
-                                                        bubble === opt.key && radioStyles.selected,
-                                                    )}
-                                                    onClick={() => setBubble(opt.key)}
-                                                >
-                                                    {opt.label}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                                        <span className={statusClass[key]}>●</span>
+                                        {statusLabels[key]}
+                                    </Button>
+                                ))}
                             </div>
                         </div>
 
-                        <div className={styles.stats} aria-busy={loading}>
-                            {/* While loading, the true total comes from the build-time count —
+                        {/* Project type (MultiSelectInput as toggle chips) */}
+                        <div className={multiSelectStyles.input}>
+                            <div>{t('project-type')}</div>
+                            <div className={multiSelectStyles.optionsContainer}>
+                                {PROJECT_TYPES.map((key) => (
+                                    <Button
+                                        key={key}
+                                        variant="transparent"
+                                        className={cs(
+                                            multiSelectStyles.option,
+                                            projectTypes.includes(key) && multiSelectStyles.selected,
+                                        )}
+                                        onClick={() => setProjectTypes((l) => toggleInList(l, key))}
+                                    >
+                                        <ProjectTypeIcon type={key} size="small" />
+                                        {typeLabels[key]}
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <input
+                            className={cs(rawInputStyles.rawInput, styles.filter)}
+                            placeholder={t('search-label')}
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                        />
+                        <input
+                            className={cs(rawInputStyles.rawInput, styles.filter)}
+                            placeholder={t('location-search-label')}
+                            value={locationSearchText}
+                            onChange={(e) => setLocationSearchText(e.target.value)}
+                        />
+                        <select
+                            className={cs(selectInputStyles.selectInput, styles.filter)}
+                            value={organization}
+                            onChange={(e) => setOrganization(e.target.value)}
+                        >
+                            <option value="">{t('organization-placeholder')}</option>
+                            {organizations.map((org) => (
+                                <option key={org.id} value={org.id}>{org.name}</option>
+                            ))}
+                        </select>
+                        <div className={styles.row}>
+                            <label className={styles.inputContainer}>
+                                <div>{t('date-from-label')}</div>
+                                <input
+                                    type="date"
+                                    className={cs(rawInputStyles.rawInput, styles.filter, styles.dateFilter)}
+                                    value={dateFrom}
+                                    onChange={(e) => setDateFrom(e.target.value)}
+                                />
+                            </label>
+                            <label className={styles.inputContainer}>
+                                <div>{t('date-to-label')}</div>
+                                <input
+                                    type="date"
+                                    className={cs(rawInputStyles.rawInput, styles.filter, styles.dateFilter)}
+                                    value={dateTo}
+                                    onChange={(e) => setDateTo(e.target.value)}
+                                />
+                            </label>
+                        </div>
+                        {filtersApplied && (
+                            <Button
+                                variant="border"
+                                className={styles.clearButton}
+                                onClick={handleClearFilters}
+                            >
+                                {t('clear-filters')}
+                            </Button>
+                        )}
+                    </fieldset>
+
+                    <div className={styles.mapContainer}>
+                        {/* Map is client-only: rendered after mount so SSR never touches
+                    leaflet. Placeholder keeps layout stable pre-hydration. Also
+                    waits for the fetched dataset so it never draws just the
+                    9-item initial slice and then re-jumps to the full set. */}
+                        {mounted && !loading ? (
+                            <Suspense fallback={<div className={styles.projectsMap} aria-hidden="true" />}>
+                                <ProjectsMapIsland
+                                    className={styles.projectsMap}
+                                    projects={visibleProjects}
+                                    radiusSelector={radiusSelector}
+                                    typeLabels={typeLabels}
+                                    statusLabels={statusLabels}
+                                />
+                            </Suspense>
+                        ) : (
+                            <div className={styles.projectsMap} aria-hidden="true" />
+                        )}
+                        <div className={styles.mapSettings}>
+                            {/* Bubble type (RadioInput with small pill options) */}
+                            <div className={cs(radioStyles.input, styles.bubbleFilter)}>
+                                <div>{t('bubble-type')}</div>
+                                <div className={radioStyles.optionsContainer}>
+                                    {([
+                                        { key: 'area', label: t('mapped-area') },
+                                        { key: 'contributors', label: t('contributors') },
+                                    ]).map((opt) => (
+                                        <Button
+                                            key={opt.key}
+                                            variant="transparent"
+                                            className={cs(
+                                                radioStyles.option,
+                                                radioStyles.small,
+                                                bubble === opt.key && radioStyles.selected,
+                                            )}
+                                            onClick={() => setBubble(opt.key)}
+                                        >
+                                            {opt.label}
+                                        </Button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.stats} aria-busy={loading}>
+                    {/* While loading, the true total comes from the build-time count —
                   visibleProjects only holds the initial slice. The area sum is
                   slice-only until the dataset arrives, so hide it until then. */}
-                            <div>{t('visible-projects-count', { totalProjects: loading ? totalCount : visibleProjects.length })}</div>
-                            {!loading && (
-                                <>
-                                    <span className={cs(styles.circle, styles.active)}>●</span>
-                                    <div>{t('total-area-card-text', { area: roundedTotalArea })}</div>
-                                </>
-                            )}
-                        </div>
-
-                        <div className={styles.projectList}>
-                            {tableProjects.map((project) => (
-                                <a
-                                    key={project.id}
-                                    className={cs(linkStyles.link, styles.cardLink)}
-                                    href={`/projects/${project.firebaseId}/`}
-                                >
-                                    {/* `de-card` is a stable, hash-free hook kept for the e2e
-                      tests (tests/e2e/islands.spec.ts selects article.de-card). */}
-                                    <article className={cs('de-card', cardStyles.card, styles.project)}>
-                                        {project.image?.file?.url && (
-                                            <div className={cs(imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.projectImage)}>
-                                                <img
-                                                    className={cs(imageStyles.image, cardStyles.image)}
-                                                    src={imageMap[project.image.file.url] ?? project.image.file.url}
-                                                    alt={project.name}
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                />
-                                            </div>
-                                        )}
-                                        <div className={cardStyles.cardContent}>
-                                            <div className={cardStyles.headerWrapper}>
-                                                <div className={cardStyles.header}>
-                                                    <h6 className={cs(headingStyles.heading, headingStyles.extraSmall, headingStyles.normal, cardStyles.heading)}>
-                                                        {project.name}
-                                                    </h6>
-                                                </div>
-                                                <div className={styles.projectDetailsRow}>
-                                                    {project.projectType && (
-                                                        <div className={cs(tagStyles.tag, tagStyles.small)}>
-                                                            <ProjectTypeIcon type={project.projectType as typeof PROJECT_TYPES[number]} size="small" />
-                                                            {typeLabels[project.projectType] ?? project.projectType}
-                                                        </div>
-                                                    )}
-                                                    {project.status && (
-                                                        <div className={cs(tagStyles.tag, tagStyles.small)}>
-                                                            <span className={statusClass[project.status]}>●</span>
-                                                            {statusLabels[project.status] ?? project.status}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className={cs(cardStyles.childrenContainer, styles.projectStats)}>
-                                                <div className={styles.bottomTags}>
-                                                    {project.region && (
-                                                        <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('Location')}>
-                                                            {project.region}
-                                                        </div>
-                                                    )}
-                                                    {project.requestingOrganization && (
-                                                        <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('requesting-organization')}>
-                                                            {project.requestingOrganization.name}
-                                                        </div>
-                                                    )}
-                                                    <div className={styles.projectDetailsRow}>
-                                                        {project.createdAt && (
-                                                            <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('created-at')}>
-                                                                {t('project-card-last-update', { date: project.createdAt })}
-                                                            </div>
-                                                        )}
-                                                        <div className={cs(tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.tag)} title={t('project-contributors')}>
-                                                            {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers ?? 0 })}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className={cardStyles.footer}>
-                                                <div className={cardStyles.footerContent}>
-                                                    <div className={styles.progressBar}>
-                                                        <div className={styles.track}>
-                                                            <div className={styles.progress} style={{ width: `${project.progress * 100}%` }} />
-                                                        </div>
-                                                        <div className={styles.progressLabel}>
-                                                            {t('project-card-progress-text', { progress: project.progress * 100 })}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </article>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Next rendered the see-more button as the Section's `actions`. */}
-                    {tableProjects.length !== visibleProjects.length && (
-                        <div className={sectionStyles.actions}>
-                            <button
-                                type="button"
-                                className={cs(buttonStyles.button, buttonStyles.border)}
-                                onClick={handleSeeMore}
-                            >
-                                {t('see-more-button')}
-                            </button>
-                        </div>
+                    <div>{t('visible-projects-count', { totalProjects: loading ? totalCount : visibleProjects.length })}</div>
+                    {!loading && (
+                        <>
+                            <span className={cs(styles.circle, styles.active)}>●</span>
+                            <div>{t('total-area-card-text', { area: roundedTotalArea })}</div>
+                        </>
                     )}
                 </div>
-            </section>
 
-            {/* Download section (global export assets) */}
-            <section className={cs(sectionStyles.section, sectionStyles.withAlternativeBackground, styles.downloadSection)}>
-                <div className={sectionStyles.container}>
-                    <div className={sectionStyles.headingContainer}>
-                        <h4 className={cs(headingStyles.heading, headingStyles.medium, sectionStyles.heading)}>
-                            {t('download-section-heading')}
-                        </h4>
-                    </div>
-                    <div className={styles.urlList}>
-                        {globalExportAssets.map((asset) => {
-                            const config = assetConfig[asset.type];
-                            if (!config) return null;
-                            const { size, unit } = getFileSizeProperties(asset.fileSize);
-                            const sizeStr = new Intl.NumberFormat(undefined, {
-                                style: 'unit', unit, maximumFractionDigits: 1,
-                            }).format(size);
-                            return (
-                                <div className={cardStyles.card} key={asset.type}>
-                                    <div className={cardStyles.cardContent}>
-                                        <div className={cardStyles.headerWrapper}>
-                                            <div className={cardStyles.header}>
-                                                <h6 className={cs(headingStyles.heading, headingStyles.extraSmall, cardStyles.heading)}>
-                                                    {config.heading}
-                                                </h6>
-                                            </div>
-                                            <div>{config.description}</div>
+                <div className={styles.projectList}>
+                    {tableProjects.map((project) => (
+                        <Link
+                            key={project.id}
+                            className={styles.cardLink}
+                            href={`/projects/${project.firebaseId}/`}
+                        >
+                            {/* `de-card` is a stable, hash-free hook kept for the e2e
+                      tests (tests/e2e/islands.spec.ts selects article.de-card). */}
+                            <Card
+                                as="article"
+                                className={cs('de-card', styles.project)}
+                                heading={project.name}
+                                headingFont="normal"
+                                coverImageUrl={project.image?.file?.url
+                                    ? (imageMap[project.image.file.url] ?? project.image.file.url)
+                                    : undefined}
+                                coverAlt={project.name}
+                                coverWrapperClassName={styles.projectImage}
+                                actionsClassName={styles.projectDetailsRow}
+                                actions={(
+                                    <>
+                                        {project.projectType && (
+                                            <Tag spacing="small">
+                                                <ProjectTypeIcon type={project.projectType as typeof PROJECT_TYPES[number]} size="small" />
+                                                {typeLabels[project.projectType] ?? project.projectType}
+                                            </Tag>
+                                        )}
+                                        {project.status && (
+                                            <Tag spacing="small">
+                                                <span className={statusClass[project.status]}>●</span>
+                                                {statusLabels[project.status] ?? project.status}
+                                            </Tag>
+                                        )}
+                                    </>
+                                )}
+                                childrenContainerClassName={styles.projectStats}
+                                footer={(
+                                    <div className={styles.progressBar}>
+                                        <div className={styles.track}>
+                                            <div className={styles.progress} style={{ width: `${project.progress * 100}%` }} />
                                         </div>
-                                        <div className={cs(cardStyles.childrenContainer, styles.downloadCard)}>
-                                            <div className={styles.fileDetails}>
-                                                <div className={cs(tagStyles.tag, tagStyles.medium)}>{config.fileLabel}</div>
-                                                <div>{sizeStr}</div>
-                                            </div>
-                                            <a
-                                                className={cs(linkStyles.link, linkStyles.buttonTransparent, styles.link)}
-                                                href={asset.file.url}
-                                                download
-                                            >
-                                                {t('download')}
-                                            </a>
+                                        <div className={styles.progressLabel}>
+                                            {t('project-card-progress-text', { progress: project.progress * 100 })}
                                         </div>
                                     </div>
+                                )}
+                            >
+                                <div className={styles.bottomTags}>
+                                    {project.region && (
+                                        <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('Location')}>
+                                            {project.region}
+                                        </Tag>
+                                    )}
+                                    {project.requestingOrganization && (
+                                        <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('requesting-organization')}>
+                                            {project.requestingOrganization.name}
+                                        </Tag>
+                                    )}
+                                    <div className={styles.projectDetailsRow}>
+                                        {project.createdAt && (
+                                            <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('created-at')}>
+                                                {t('project-card-last-update', { date: project.createdAt })}
+                                            </Tag>
+                                        )}
+                                        <Tag variant="transparent" spacing="medium" className={styles.tag} title={t('project-contributors')}>
+                                            {t('project-card-contributors-text', { contributors: project.numberOfContributorUsers ?? 0 })}
+                                        </Tag>
+                                    </div>
                                 </div>
-                            );
-                        })}
-                    </div>
+                            </Card>
+                        </Link>
+                    ))}
                 </div>
-            </section>
+            </Section>
+
+            {/* Download section (global export assets) */}
+            <Section
+                withAlternativeBackground
+                className={styles.downloadSection}
+                title={t('download-section-heading')}
+                contentClassName={styles.urlList}
+            >
+                {globalExportAssets.map((asset) => {
+                    const config = assetConfig[asset.type];
+                    if (!config) return null;
+                    const { size, unit } = getFileSizeProperties(asset.fileSize);
+                    const sizeStr = new Intl.NumberFormat(undefined, {
+                        style: 'unit', unit, maximumFractionDigits: 1,
+                    }).format(size);
+                    return (
+                        <Card
+                            key={asset.type}
+                            heading={config.heading}
+                            actions={config.description}
+                            childrenContainerClassName={styles.downloadCard}
+                        >
+                            <div className={styles.fileDetails}>
+                                <Tag spacing="medium">{config.fileLabel}</Tag>
+                                <div>{sizeStr}</div>
+                            </div>
+                            <Link
+                                variant="buttonTransparent"
+                                className={styles.link}
+                                href={asset.file.url}
+                                download
+                            >
+                                {t('download')}
+                            </Link>
+                        </Card>
+                    );
+                })}
+            </Section>
         </>
     );
 }

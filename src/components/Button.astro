@@ -20,8 +20,6 @@ const {
 // leaves it in props — it must not be spread onto the element.
 delete rest.slot;
 
-// NOTE: main's map styles 'primary' and leaves 'transparent' bare, but the
-// primary class is empty in the module; the ported pages only use 'border'.
 const variantMap: Record<Variant, string | undefined> = {
     transparent: undefined,
     primary: styles.primary,

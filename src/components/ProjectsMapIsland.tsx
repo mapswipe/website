@@ -4,10 +4,10 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import type { MiniProject } from 'lib/dataExplorer';
-// CSS Modules recovered from the Next app's ProjectsMap (popup card link) +
-// Tag (popup tag pills).
+import Tag from './Tag';
+// CSS Module recovered from the Next app's ProjectsMap (popup card link);
+// the popup tag pills come from the shared Tag component.
 import styles from './ProjectsMap.module.css';
-import tagStyles from './Tag.module.css';
 
 // Client-ONLY leaflet map for the data explorer. This module statically imports
 // leaflet/react-leaflet (which touch window at import time), so it must NEVER be
@@ -79,14 +79,14 @@ export default function ProjectsMapIsland(props: Props) {
                             <strong>{project.name}</strong>
                             <div className={styles.types}>
                                 {project.projectType && (
-                                    <span className={`${tagStyles.tag} ${tagStyles.small}`}>
+                                    <Tag as="span" spacing="small">
                                         {typeLabels[project.projectType] ?? project.projectType}
-                                    </span>
+                                    </Tag>
                                 )}
                                 {project.status && (
-                                    <span className={`${tagStyles.tag} ${tagStyles.small}`}>
+                                    <Tag as="span" spacing="small">
                                         {statusLabels[project.status] ?? project.status}
-                                    </span>
+                                    </Tag>
                                 )}
                             </div>
                         </a>
