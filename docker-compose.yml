@@ -1,5 +1,5 @@
 services:
-  web:
+  astro:
     build: .
     command: sh -c 'corepack enable && pnpm install && pnpm dev --host 0.0.0.0'
     ports:
