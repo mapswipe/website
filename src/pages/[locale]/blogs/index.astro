@@ -33,22 +33,22 @@ import imageStyles from 'components/ImageWrapper.module.css';
 // children, so there is no key collision or accidental prune. The same
 // signature object is shared across all 6 locales so it hashes once.
 export const getStaticPaths = (async () => {
-  const entries = await getCollection('blogs');
-  const listSignature = entries
-    .map((entry) => ({
-      slug: entry.id,
-      title: entry.data.title ?? entry.id,
-      publishedDate: entry.data.publishedDate?.getTime() ?? null,
-      description: entry.data.description ?? null,
-      coverImage: entry.data.coverImage?.src ?? null,
-      featured: entry.data.featured ?? false,
-    }))
-    .sort((a, b) => (b.publishedDate ?? 0) - (a.publishedDate ?? 0));
-  return selectPaths('blogs-list', LOCALES.map((locale) => ({
-    key: `${locale}/blogs`,
-    params: { locale },
-    propsData: listSignature,
-  })));
+    const entries = await getCollection('blogs');
+    const listSignature = entries
+        .map((entry) => ({
+            slug: entry.id,
+            title: entry.data.title ?? entry.id,
+            publishedDate: entry.data.publishedDate?.getTime() ?? null,
+            description: entry.data.description ?? null,
+            coverImage: entry.data.coverImage?.src ?? null,
+            featured: entry.data.featured ?? false,
+        }))
+        .sort((a, b) => (b.publishedDate ?? 0) - (a.publishedDate ?? 0));
+    return selectPaths('blogs-list', LOCALES.map((locale) => ({
+        key: `${locale}/blogs`,
+        params: { locale },
+        propsData: listSignature,
+    })));
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
@@ -58,15 +58,15 @@ const t = await getT(locale!, 'blogs');
 // compareDate(foo, bar, -1). Undated entries sort last (getTime NaN -> 0 floor).
 const entries = await getCollection('blogs');
 const blogs = entries
-  .map((entry) => ({
-    slug: entry.id, // == Next's path.parse(filename).name
-    title: entry.data.title ?? entry.id,
-    publishedDate: entry.data.publishedDate,
-    description: entry.data.description,
-    coverImage: entry.data.coverImage,
-    featured: entry.data.featured,
-  }))
-  .sort((a, b) => (b.publishedDate?.getTime() ?? 0) - (a.publishedDate?.getTime() ?? 0));
+    .map((entry) => ({
+        slug: entry.id, // == Next's path.parse(filename).name
+        title: entry.data.title ?? entry.id,
+        publishedDate: entry.data.publishedDate,
+        description: entry.data.description,
+        coverImage: entry.data.coverImage,
+        featured: entry.data.featured,
+    }))
+    .sort((a, b) => (b.publishedDate?.getTime() ?? 0) - (a.publishedDate?.getTime() ?? 0));
 
 const featuredBlogs = blogs.filter((b) => b.featured);
 const otherBlogs = blogs.filter((b) => !b.featured);
@@ -77,68 +77,68 @@ const dateFmt = new Intl.DateTimeFormat(locale!);
 const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
 
 const sections = [
-  { key: 'featured', title: t('featured-posts'), items: featuredBlogs },
-  { key: 'other', title: t('other-posts'), items: otherBlogs },
+    { key: 'featured', title: t('featured-posts'), items: featuredBlogs },
+    { key: 'other', title: t('other-posts'), items: otherBlogs },
 ];
 
 const title = String(t('blogs-tab-head'));
 ---
 <BlogLayout locale={locale!} title={title} path="blogs/" mainClass={styles.blogs}>
-  {/* Hero (no right content -> centered, Next: <Hero title/>) */}
-  <div class:list={[heroStyles.hero, heroStyles.withoutRightContent]}>
-    <div class={heroStyles.section}>
-      <div class={heroStyles.mainContent}>
-        <div class={heroStyles.left}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {t('blogs-hero-title')}
-          </h2>
+    {/* Hero (no right content -> centered, Next: <Hero title/>) */}
+    <div class:list={[heroStyles.hero, heroStyles.withoutRightContent]}>
+        <div class={heroStyles.section}>
+            <div class={heroStyles.mainContent}>
+                <div class={heroStyles.left}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {t('blogs-hero-title')}
+                    </h2>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
 
-  {sections.map((section) => section.items.length > 0 && (
-    <section class={sectionStyles.section}>
-      <div class={sectionStyles.container}>
-        <div class={sectionStyles.headingContainer}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-            {section.title}
-          </h4>
-        </div>
-        <div class={styles.list}>
-          {section.items.map((blog) => (
-            <article class:list={[cardStyles.card, cardStyles.coverImageOnSide]}>
-              {blog.coverImage && (
-                <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
-                  <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+    {sections.map((section) => section.items.length > 0 && (
+        <section class={sectionStyles.section}>
+            <div class={sectionStyles.container}>
+                <div class={sectionStyles.headingContainer}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                        {section.title}
+                    </h4>
                 </div>
-              )}
-              <div class={cardStyles.cardContent}>
-                <div class={cardStyles.headerWrapper}>
-                  <div class={cardStyles.header}>
-                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                      {blog.title}
-                    </h6>
-                  </div>
+                <div class={styles.list}>
+                    {section.items.map((blog) => (
+                        <article class:list={[cardStyles.card, cardStyles.coverImageOnSide]}>
+                            {blog.coverImage && (
+                                <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
+                                    <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+                                </div>
+                            )}
+                            <div class={cardStyles.cardContent}>
+                                <div class={cardStyles.headerWrapper}>
+                                    <div class={cardStyles.header}>
+                                        <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                                            {blog.title}
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class:list={[cardStyles.childrenContainer, styles.cardContent]}>
+                                    {blog.publishedDate && (
+                                        <span class:list={[tagStyles.tag, tagStyles.transparent, styles.tag]}>
+                                            <Icon name="calendar-clear-outline" />
+                                            {fmtDate(blog.publishedDate)}
+                                        </span>
+                                    )}
+                                    <div class={styles.description}>{blog.description}</div>
+                                    <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
+                                        {t('read-more')}
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
                 </div>
-                <div class:list={[cardStyles.childrenContainer, styles.cardContent]}>
-                  {blog.publishedDate && (
-                    <span class:list={[tagStyles.tag, tagStyles.transparent, styles.tag]}>
-                      <Icon name="calendar-clear-outline" />
-                      {fmtDate(blog.publishedDate)}
-                    </span>
-                  )}
-                  <div class={styles.description}>{blog.description}</div>
-                  <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
-                    {t('read-more')}
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  ))}
+            </div>
+        </section>
+    ))}
 </BlogLayout>

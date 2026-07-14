@@ -36,25 +36,25 @@ import imageStyles from 'components/ImageWrapper.module.css';
 // by astro:assets), NOT the whole resolved image() metadata object. The same
 // propsData object is shared across all 6 locale candidates so it hashes once.
 export const getStaticPaths = (async () => {
-  const stats = getCommunityStats();
-  const entries = await getCollection('blogs');
-  const featured = entries
-    .filter((e) => e.data.featured)
-    .map((e) => ({
-      slug: e.id,
-      title: e.data.title ?? e.id,
-      publishedDate: e.data.publishedDate?.getTime() ?? null,
-      description: e.data.description ?? null,
-      coverImage: e.data.coverImage?.src ?? null,
-    }))
-    .sort((a, b) => (b.publishedDate ?? 0) - (a.publishedDate ?? 0))
-    .slice(0, 3);
-  const propsData = { stats, featured };
-  return selectPaths('home', LOCALES.map((locale) => ({
-    key: `${locale}`,
-    params: { locale },
-    propsData,
-  })));
+    const stats = getCommunityStats();
+    const entries = await getCollection('blogs');
+    const featured = entries
+        .filter((e) => e.data.featured)
+        .map((e) => ({
+            slug: e.id,
+            title: e.data.title ?? e.id,
+            publishedDate: e.data.publishedDate?.getTime() ?? null,
+            description: e.data.description ?? null,
+            coverImage: e.data.coverImage?.src ?? null,
+        }))
+        .sort((a, b) => (b.publishedDate ?? 0) - (a.publishedDate ?? 0))
+        .slice(0, 3);
+    const propsData = { stats, featured };
+    return selectPaths('home', LOCALES.map((locale) => ({
+        key: `${locale}`,
+        params: { locale },
+        propsData,
+    })));
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
@@ -64,294 +64,294 @@ const t = await getT(locale!, 'home');
 // compact ("214M"), contributors grouped ("132,105"). Reproduce exactly.
 const { totalContributors, totalSwipes } = getCommunityStats();
 const swipesFmt = totalSwipes == null
-  ? '-'
-  : new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(totalSwipes);
+    ? '-'
+    : new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(totalSwipes);
 const contributorsFmt = totalContributors == null
-  ? '-'
-  : new Intl.NumberFormat('en-US').format(totalContributors);
+    ? '-'
+    : new Intl.NumberFormat('en-US').format(totalContributors);
 
 // Featured blogs: top 3 `featured` from the blogs collection, sorted DESC by
 // publishedDate (parity with Next's compareDate(..,-1) + filter + slice(0,3)).
 const entries = await getCollection('blogs');
 const featuredBlogs = entries
-  .filter((e) => e.data.featured)
-  .map((e) => ({
-    slug: e.id,
-    title: e.data.title ?? e.id,
-    publishedDate: e.data.publishedDate,
-    description: e.data.description,
-    coverImage: e.data.coverImage,
-  }))
-  .sort((a, b) => (b.publishedDate?.getTime() ?? 0) - (a.publishedDate?.getTime() ?? 0))
-  .slice(0, 3);
+    .filter((e) => e.data.featured)
+    .map((e) => ({
+        slug: e.id,
+        title: e.data.title ?? e.id,
+        publishedDate: e.data.publishedDate,
+        description: e.data.description,
+        coverImage: e.data.coverImage,
+    }))
+    .sort((a, b) => (b.publishedDate?.getTime() ?? 0) - (a.publishedDate?.getTime() ?? 0))
+    .slice(0, 3);
 
 // i18next {{date, datetime}} => Intl.DateTimeFormat(lng) default options.
 const dateFmt = new Intl.DateTimeFormat(locale!);
 const fmtDate = (d?: Date) => (d ? dateFmt.format(d) : '');
 
 const partners = [
-  { altText: 'American Red Cross Logo', imageSrc: '/img/arc.svg', link: 'https://www.redcross.org/' },
-  { altText: 'British Red Cross Logo', imageSrc: '/img/brc.svg', link: 'https://www.redcross.org.uk/' },
-  { altText: 'Canadian Red Cross Logo', imageSrc: '/img/crc.svg', link: 'https://www.redcross.ca/' },
-  { altText: 'HeiGIT logo', imageSrc: '/img/heigit.png', link: 'https://heigit.org/' },
-  { altText: 'HOT logo', imageSrc: '/img/hot.png', link: 'https://www.hotosm.org/' },
-  { altText: 'MSF logo', imageSrc: '/img/msf.png', link: 'https://msf.org.uk/' },
-  { altText: 'Togglecorp logo', imageSrc: '/img/tc.png', link: 'https://togglecorp.com' },
+    { altText: 'American Red Cross Logo', imageSrc: '/img/arc.svg', link: 'https://www.redcross.org/' },
+    { altText: 'British Red Cross Logo', imageSrc: '/img/brc.svg', link: 'https://www.redcross.org.uk/' },
+    { altText: 'Canadian Red Cross Logo', imageSrc: '/img/crc.svg', link: 'https://www.redcross.ca/' },
+    { altText: 'HeiGIT logo', imageSrc: '/img/heigit.png', link: 'https://heigit.org/' },
+    { altText: 'HOT logo', imageSrc: '/img/hot.png', link: 'https://www.hotosm.org/' },
+    { altText: 'MSF logo', imageSrc: '/img/msf.png', link: 'https://msf.org.uk/' },
+    { altText: 'Togglecorp logo', imageSrc: '/img/tc.png', link: 'https://togglecorp.com' },
 ];
 
 const missionTypes = [
-  { type: 'FIND', coverImageUrl: '/img/find.svg', heading: t('type-find-title'), body: t('find-mission-type-description') },
-  { type: 'COMPARE', beforeAfter: true, heading: t('type-compare-title'), body: t('compare-mission-type-description') },
-  { type: 'VALIDATE', coverImageUrl: '/img/validate.svg', heading: t('type-validate-title'), body: t('validate-mission-type-description') },
-  { type: 'COMPLETENESS', coverImageUrl: '/img/completeness.png', heading: t('type-completeness-title'), body: t('completeness-type-description') },
-  { type: 'VALIDATE_IMAGE', coverImageUrl: '/img/validate_image.png', heading: t('type-validate-image-type'), body: t('validate-image-type-description') },
-  { type: 'STREET', coverImageUrl: '/img/street_image.png', heading: t('type-street-type'), body: t('street-type-description') },
-  { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', heading: t('type-locate-features-type'), body: t('locate-features-type-description') },
+    { type: 'FIND', coverImageUrl: '/img/find.svg', heading: t('type-find-title'), body: t('find-mission-type-description') },
+    { type: 'COMPARE', beforeAfter: true, heading: t('type-compare-title'), body: t('compare-mission-type-description') },
+    { type: 'VALIDATE', coverImageUrl: '/img/validate.svg', heading: t('type-validate-title'), body: t('validate-mission-type-description') },
+    { type: 'COMPLETENESS', coverImageUrl: '/img/completeness.png', heading: t('type-completeness-title'), body: t('completeness-type-description') },
+    { type: 'VALIDATE_IMAGE', coverImageUrl: '/img/validate_image.png', heading: t('type-validate-image-type'), body: t('validate-image-type-description') },
+    { type: 'STREET', coverImageUrl: '/img/street_image.png', heading: t('type-street-type'), body: t('street-type-description') },
+    { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', heading: t('type-locate-features-type'), body: t('locate-features-type-description') },
 ] as const;
 
 const title = String(t('home-tab-head'));
 ---
 <BaseLayout locale={locale!} title={title} path="" mainClass={styles.home}>
-  {/* Hero (Next: components/Hero with video rightContent) */}
-  <div class:list={[heroStyles.hero, styles.hero]}>
-    <div class={heroStyles.section}>
-      <div class={heroStyles.mainContent}>
-        <div class={heroStyles.left}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {t('hero-title')}
-          </h2>
-          <div class={heroStyles.description}>{t('hero-description')}</div>
-          <div class={heroStyles.buttonsContainer}>
-            <a class:list={[linkStyles.link, linkStyles.button]} href="#startMapswiping">
-              {t('download-app-label')}
-            </a>
-            <a class:list={[linkStyles.link, linkStyles.buttonTransparent]} href={`/${locale}/data/`}>
-              {t('data-link')}
-            </a>
-          </div>
-        </div>
-        <div class={heroStyles.right}>
-          <video class={styles.screenshot} autoplay loop muted playsinline>
-            <source src="/img/animation.mp4" type="video/mp4" />
-          </video>
-        </div>
-      </div>
-    </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
-
-  {/* Mobilizing volunteers + key figures */}
-  <section class:list={[sectionStyles.section, styles.mobilize]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('mobilizing-volunteer')}
-        </h4>
-      </div>
-      <div class={styles.content}>
-        <div class={styles.pictures}>
-          <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.single]}>
-            <img class:list={[imageStyles.image, styles.image]} src="/img/msf_mapping.jpg" alt={t('mobilize-volunteer')} loading="lazy" decoding="async" />
-          </div>
-          <div class={styles.images}>
-            <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.double]}>
-              <img class:list={[imageStyles.image, styles.image]} src="/img/mapswipe_mapathon.jpg" alt={t('mapathon')} loading="lazy" decoding="async" />
-            </div>
-            <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.double]}>
-              <img class:list={[imageStyles.image, styles.image]} src="/img/field_mapping.jpg" alt={t('field-mapping')} loading="lazy" decoding="async" />
-            </div>
-          </div>
-        </div>
-        <div class={styles.descriptionContainer}>
-          <div class={styles.description}>{t('mobilizing-volunteer-description-paragraph-1')}</div>
-          <div class={styles.description}>{t('mobilizing-volunteer-description-paragraph-2')}</div>
-          <div class={styles.infoBoxContainer}>
-            <div class={keyFigureStyles.keyFigure}>
-              <div class={keyFigureStyles.value}>
-                {swipesFmt}
-                <Icon name="plus" class={keyFigureStyles.icon} />
-              </div>
-              <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
-            </div>
-            <div class={keyFigureStyles.keyFigure}>
-              <div class={keyFigureStyles.value}>
-                {contributorsFmt}
-                <Icon name="plus" class={keyFigureStyles.icon} />
-              </div>
-              <div class={keyFigureStyles.label}>{t('total-contributors')}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Mission types */}
-  <section class:list={[sectionStyles.section, styles.missionTypes]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('explore-mission-types')}
-        </h4>
-        <div class={sectionStyles.description}>{t('explore-mission-types-description')}</div>
-      </div>
-      <div class={styles.content}>
-        {missionTypes.map((m) => (
-          <article class:list={[cardStyles.card, styles.missionType]}>
-            {'beforeAfter' in m ? (
-              <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
-                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                  <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+    {/* Hero (Next: components/Hero with video rightContent) */}
+    <div class:list={[heroStyles.hero, styles.hero]}>
+        <div class={heroStyles.section}>
+            <div class={heroStyles.mainContent}>
+                <div class={heroStyles.left}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {t('hero-title')}
+                    </h2>
+                    <div class={heroStyles.description}>{t('hero-description')}</div>
+                    <div class={heroStyles.buttonsContainer}>
+                        <a class:list={[linkStyles.link, linkStyles.button]} href="#startMapswiping">
+                            {t('download-app-label')}
+                        </a>
+                        <a class:list={[linkStyles.link, linkStyles.buttonTransparent]} href={`/${locale}/data/`}>
+                            {t('data-link')}
+                        </a>
+                    </div>
                 </div>
-                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                  <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                <div class={heroStyles.right}>
+                    <video class={styles.screenshot} autoplay loop muted playsinline>
+                        <source src="/img/animation.mp4" type="video/mp4" />
+                    </video>
                 </div>
-              </div>
-            ) : (
-              <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
-                <img class:list={[imageStyles.image, cardStyles.image]} src={m.coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
-              </div>
-            )}
-            <div class={cardStyles.cardContent}>
-              <div class={cardStyles.headerWrapper}>
-                <div class={cardStyles.header}>
-                  <div>
-                    <ProjectTypeIcon type={m.type} />
-                  </div>
-                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                    {m.heading}
-                  </h6>
-                </div>
-              </div>
-              <div class={cardStyles.childrenContainer}>{m.body}</div>
             </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  {/* Start mapswiping (download + get involved) */}
-  <section class:list={[sectionStyles.section, styles.startMapswiping]} id="startMapswiping">
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('start-mapswiping-title')}
-        </h4>
-      </div>
-      <div class={styles.content}>
-        <div class={styles.download}>
-          <div class={styles.startMapswipingDescription}>{t('download-description')}</div>
-          <div class={styles.linksContainer}>
-            <div class={styles.buttonsContainer}>
-              <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
-                <img class:list={[imageStyles.image, styles.image]} src="/img/playstore.png" alt={t('download-playstore')} loading="lazy" />
-              </a>
-              <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
-                <img class:list={[imageStyles.image, styles.image]} src="/img/apple.png" alt={t('download-apple-store')} loading="lazy" />
-              </a>
-            </div>
-            <div class={styles.downloadLinksContainer}>
-              <a class:list={[linkStyles.link, styles.downloadLink]} href="https://web.mapswipe.org/" target="_blank">{t('mapswipe-web-link')}</a>
-              |
-              <a class:list={[linkStyles.link, styles.downloadLink]} href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
-            </div>
-          </div>
         </div>
-        <div class={styles.getInvolved}>
-          <div class={styles.startMapswipingDescription}>{t('get-involved-description')}</div>
-          <a class:list={[linkStyles.link, linkStyles.button]} href={`/${locale}/get-involved/`}>
-            {t('get-involved-link')}
-          </a>
-        </div>
-      </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-  </section>
 
-  {/* Recent news & updates (featured blogs) */}
-  <section class:list={[sectionStyles.section, styles.recentNewsAndUpdates]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('news-and-updates-title')}
-        </h4>
-      </div>
-      <div class={styles.content}>
-        {featuredBlogs.map((blog, index) => (
-          <article
-            class:list={[
-              cardStyles.card,
-              cardStyles.borderless,
-              index !== 0 && cardStyles.coverImageOnSide,
-              styles.blogItem,
-              index === 0 && styles.firstGrid,
-            ]}
-          >
-            {blog.coverImage && (
-              <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
-                <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
-              </div>
-            )}
-            <div class={cardStyles.cardContent}>
-              <div class={cardStyles.headerWrapper}>
-                <div class={cardStyles.header}>
-                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                    {blog.title}
-                  </h6>
+    {/* Mobilizing volunteers + key figures */}
+    <section class:list={[sectionStyles.section, styles.mobilize]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('mobilizing-volunteer')}
+                </h4>
+            </div>
+            <div class={styles.content}>
+                <div class={styles.pictures}>
+                    <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.single]}>
+                        <img class:list={[imageStyles.image, styles.image]} src="/img/msf_mapping.jpg" alt={t('mobilize-volunteer')} loading="lazy" decoding="async" />
+                    </div>
+                    <div class={styles.images}>
+                        <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.double]}>
+                            <img class:list={[imageStyles.image, styles.image]} src="/img/mapswipe_mapathon.jpg" alt={t('mapathon')} loading="lazy" decoding="async" />
+                        </div>
+                        <div class:list={[imageStyles.imageWrapper, styles.imageContainer, styles.double]}>
+                            <img class:list={[imageStyles.image, styles.image]} src="/img/field_mapping.jpg" alt={t('field-mapping')} loading="lazy" decoding="async" />
+                        </div>
+                    </div>
                 </div>
-                {blog.publishedDate && (
-                  <div>
-                    <span class:list={[tagStyles.tag, tagStyles.transparent, styles.tag]}>
-                      <Icon name="calendar-clear-outline" />
-                      {fmtDate(blog.publishedDate)}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div class:list={[cardStyles.childrenContainer, styles.cardContent]}>
-                <div class={styles.blogDescription}>{blog.description}</div>
-                <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
-                  {t('read-more')}
+                <div class={styles.descriptionContainer}>
+                    <div class={styles.description}>{t('mobilizing-volunteer-description-paragraph-1')}</div>
+                    <div class={styles.description}>{t('mobilizing-volunteer-description-paragraph-2')}</div>
+                    <div class={styles.infoBoxContainer}>
+                        <div class={keyFigureStyles.keyFigure}>
+                            <div class={keyFigureStyles.value}>
+                                {swipesFmt}
+                                <Icon name="plus" class={keyFigureStyles.icon} />
+                            </div>
+                            <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
+                        </div>
+                        <div class={keyFigureStyles.keyFigure}>
+                            <div class={keyFigureStyles.value}>
+                                {contributorsFmt}
+                                <Icon name="plus" class={keyFigureStyles.icon} />
+                            </div>
+                            <div class={keyFigureStyles.label}>{t('total-contributors')}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Mission types */}
+    <section class:list={[sectionStyles.section, styles.missionTypes]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('explore-mission-types')}
+                </h4>
+                <div class={sectionStyles.description}>{t('explore-mission-types-description')}</div>
+            </div>
+            <div class={styles.content}>
+                {missionTypes.map((m) => (
+                    <article class:list={[cardStyles.card, styles.missionType]}>
+                        {'beforeAfter' in m ? (
+                            <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
+                                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                                    <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+                                </div>
+                                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                                    <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                                </div>
+                            </div>
+                        ) : (
+                            <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
+                                <img class:list={[imageStyles.image, cardStyles.image]} src={m.coverImageUrl} alt="card-cover-image" loading="lazy" decoding="async" />
+                            </div>
+                        )}
+                        <div class={cardStyles.cardContent}>
+                            <div class={cardStyles.headerWrapper}>
+                                <div class={cardStyles.header}>
+                                    <div>
+                                        <ProjectTypeIcon type={m.type} />
+                                    </div>
+                                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                                        {m.heading}
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class={cardStyles.childrenContainer}>{m.body}</div>
+                        </div>
+                    </article>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    {/* Start mapswiping (download + get involved) */}
+    <section class:list={[sectionStyles.section, styles.startMapswiping]} id="startMapswiping">
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('start-mapswiping-title')}
+                </h4>
+            </div>
+            <div class={styles.content}>
+                <div class={styles.download}>
+                    <div class={styles.startMapswipingDescription}>{t('download-description')}</div>
+                    <div class={styles.linksContainer}>
+                        <div class={styles.buttonsContainer}>
+                            <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
+                                <img class:list={[imageStyles.image, styles.image]} src="/img/playstore.png" alt={t('download-playstore')} loading="lazy" />
+                            </a>
+                            <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
+                                <img class:list={[imageStyles.image, styles.image]} src="/img/apple.png" alt={t('download-apple-store')} loading="lazy" />
+                            </a>
+                        </div>
+                        <div class={styles.downloadLinksContainer}>
+                            <a class:list={[linkStyles.link, styles.downloadLink]} href="https://web.mapswipe.org/" target="_blank">{t('mapswipe-web-link')}</a>
+                            |
+                            <a class:list={[linkStyles.link, styles.downloadLink]} href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class={styles.getInvolved}>
+                    <div class={styles.startMapswipingDescription}>{t('get-involved-description')}</div>
+                    <a class:list={[linkStyles.link, linkStyles.button]} href={`/${locale}/get-involved/`}>
+                        {t('get-involved-link')}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Recent news & updates (featured blogs) */}
+    <section class:list={[sectionStyles.section, styles.recentNewsAndUpdates]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('news-and-updates-title')}
+                </h4>
+            </div>
+            <div class={styles.content}>
+                {featuredBlogs.map((blog, index) => (
+                    <article
+                        class:list={[
+                            cardStyles.card,
+                            cardStyles.borderless,
+                            index !== 0 && cardStyles.coverImageOnSide,
+                            styles.blogItem,
+                            index === 0 && styles.firstGrid,
+                        ]}
+                    >
+                        {blog.coverImage && (
+                            <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper]}>
+                                <Image class:list={[imageStyles.image, cardStyles.image]} src={blog.coverImage} alt={blog.title} width={640} loading="lazy" decoding="async" />
+                            </div>
+                        )}
+                        <div class={cardStyles.cardContent}>
+                            <div class={cardStyles.headerWrapper}>
+                                <div class={cardStyles.header}>
+                                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                                        {blog.title}
+                                    </h6>
+                                </div>
+                                {blog.publishedDate && (
+                                    <div>
+                                        <span class:list={[tagStyles.tag, tagStyles.transparent, styles.tag]}>
+                                            <Icon name="calendar-clear-outline" />
+                                            {fmtDate(blog.publishedDate)}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                            <div class:list={[cardStyles.childrenContainer, styles.cardContent]}>
+                                <div class={styles.blogDescription}>{blog.description}</div>
+                                <a class:list={[linkStyles.link, styles.link]} href={`/${locale}/blogs/${blog.slug}/`}>
+                                    {t('read-more')}
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                ))}
+                <div class={styles.sectionDescription}>
+                    <a class:list={[linkStyles.link, styles.seeMoreLink]} href={`/${locale}/blogs/`}>
+                        {t('see-more-pages')}
+                        <Icon name="arrow-forward-sharp" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Partners */}
+    <section class:list={[sectionStyles.section, styles.partners]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('partners')}
+                </h4>
+            </div>
+            <div class={styles.content}>
+                <a class={linkStyles.link} href="https://www.missingmaps.org/" target="_blank">
+                    <div class:list={[imageStyles.imageWrapper, styles.missingMapsLogo]}>
+                        <img class={imageStyles.image} src="/img/missingmaps.png" alt={t('missing-maps')} loading="lazy" />
+                    </div>
                 </a>
-              </div>
+                <div class={styles.partnersDescription}>{t('missing-map-description')}</div>
+                <div class={styles.partnerLogos}>
+                    {partners.map((p) => (
+                        <a class={linkStyles.link} href={p.link} target="_blank">
+                            <div class:list={[imageStyles.imageWrapper, styles.partnerLogo]}>
+                                <img class={imageStyles.image} src={p.imageSrc} alt={p.altText} loading="lazy" />
+                            </div>
+                        </a>
+                    ))}
+                </div>
             </div>
-          </article>
-        ))}
-        <div class={styles.sectionDescription}>
-          <a class:list={[linkStyles.link, styles.seeMoreLink]} href={`/${locale}/blogs/`}>
-            {t('see-more-pages')}
-            <Icon name="arrow-forward-sharp" />
-          </a>
         </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Partners */}
-  <section class:list={[sectionStyles.section, styles.partners]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('partners')}
-        </h4>
-      </div>
-      <div class={styles.content}>
-        <a class={linkStyles.link} href="https://www.missingmaps.org/" target="_blank">
-          <div class:list={[imageStyles.imageWrapper, styles.missingMapsLogo]}>
-            <img class={imageStyles.image} src="/img/missingmaps.png" alt={t('missing-maps')} loading="lazy" />
-          </div>
-        </a>
-        <div class={styles.partnersDescription}>{t('missing-map-description')}</div>
-        <div class={styles.partnerLogos}>
-          {partners.map((p) => (
-            <a class={linkStyles.link} href={p.link} target="_blank">
-              <div class:list={[imageStyles.imageWrapper, styles.partnerLogo]}>
-                <img class={imageStyles.image} src={p.imageSrc} alt={p.altText} loading="lazy" />
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 </BaseLayout>

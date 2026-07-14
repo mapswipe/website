@@ -27,23 +27,23 @@ import imageStyles from 'components/ImageWrapper.module.css';
 import htmlOutputStyles from 'components/HtmlOutput.module.css';
 
 export const getStaticPaths = (async () => {
-  let projects = getAllProjects();
-  const limit = Number(import.meta.env.SLICE_LIMIT ?? 0);
-  if (limit > 0) projects = projects.slice(0, limit);
-  // One candidate per (project, locale). The 6 locale variants of a project
-  // share the SAME `project` object reference as propsData, so selectPaths
-  // hashes each project's data exactly once and rebuilds all 6 (or none)
-  // together. Under the incremental orchestration, only projects whose data
-  // changed (or new/all-on-code-change) are returned; otherwise ALL are.
-  const candidates = projects.flatMap((project) => {
-    const id = String(project.firebaseId);
-    return LOCALES.map((locale) => ({
-      key: `${locale}/projects/${id}`,
-      params: { locale, id },
-      propsData: project,
-    }));
-  });
-  return selectPaths('projects', candidates);
+    let projects = getAllProjects();
+    const limit = Number(import.meta.env.SLICE_LIMIT ?? 0);
+    if (limit > 0) projects = projects.slice(0, limit);
+    // One candidate per (project, locale). The 6 locale variants of a project
+    // share the SAME `project` object reference as propsData, so selectPaths
+    // hashes each project's data exactly once and rebuilds all 6 (or none)
+    // together. Under the incremental orchestration, only projects whose data
+    // changed (or new/all-on-code-change) are returned; otherwise ALL are.
+    const candidates = projects.flatMap((project) => {
+        const id = String(project.firebaseId);
+        return LOCALES.map((locale) => ({
+            key: `${locale}/projects/${id}`,
+            params: { locale, id },
+            propsData: project,
+        }));
+    });
+    return selectPaths('projects', candidates);
 }) satisfies GetStaticPaths;
 
 const { locale, id } = Astro.params;
@@ -52,290 +52,290 @@ const project = getProjectByFirebaseId(id!)!;
 const t = await getT(locale!, 'project');
 
 const {
-  name,
-  description,
-  projectType,
-  status,
-  region,
-  progress,
-  createdAt,
-  numberOfContributorUsers,
-  requestingOrganization,
-  image,
-  aoiGeometry,
-  firebaseId,
+    name,
+    description,
+    projectType,
+    status,
+    region,
+    progress,
+    createdAt,
+    numberOfContributorUsers,
+    requestingOrganization,
+    image,
+    aoiGeometry,
+    firebaseId,
 } = project;
 
 // Project type / status labels (ported mapping from the Next page).
 const projectTypeLabels: Record<string, string> = {
-  FIND: t('type-find-title'),
-  VALIDATE: t('type-validate-title'),
-  COMPARE: t('type-compare-title'),
-  COMPLETENESS: t('type-completeness-title'),
-  VALIDATE_IMAGE: t('type-validate-image-title'),
-  STREET: t('type-streets-view-title'),
-  LOCATE: t('type-locate-title'),
+    FIND: t('type-find-title'),
+    VALIDATE: t('type-validate-title'),
+    COMPARE: t('type-compare-title'),
+    COMPLETENESS: t('type-completeness-title'),
+    VALIDATE_IMAGE: t('type-validate-image-title'),
+    STREET: t('type-streets-view-title'),
+    LOCATE: t('type-locate-title'),
 };
 const statusLabels: Record<string, string> = {
-  PUBLISHED: t('active'),
-  FINISHED: t('finished'),
+    PUBLISHED: t('active'),
+    FINISHED: t('finished'),
 };
 const statusClass: Record<string, string | undefined> = {
-  PUBLISHED: styles.active,
-  FINISHED: styles.finished,
+    PUBLISHED: styles.active,
+    FINISHED: styles.finished,
 };
 
 const roundedTotalArea = Math.round(aoiGeometry?.totalArea ?? 0);
 const aoiDownload = resolveAoiDownload(project);
 
 const createdAtLabel = createdAt
-  ? new Date(createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-  : undefined;
+    ? new Date(createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+    : undefined;
 
 const title = String(t('project-tab-head', { projectTitle: name }));
 
 // Download-cards config: mirrors the Next page's set exactly (same keys/order).
 type CardDef = { asset?: UrlInfo; heading: string; description: string };
 const cards: CardDef[] = [
-  { asset: project.exportAggregatedResults, heading: t('aggregated-results-title'), description: t('aggregated-results-description') },
-  { asset: project.exportAggregatedResultsWithGeometry, heading: t('aggregated-results-with-geometry-title'), description: t('aggregated-results-with-geometry-description') },
-  { asset: project.exportGroups, heading: t('groups-title'), description: t('groups-description') },
-  { asset: project.exportHistory, heading: t('history-title'), description: t('history-description') },
-  { asset: project.exportResults, heading: t('results-title'), description: t('results-description') },
-  { asset: project.exportTasks, heading: t('tasks-title'), description: t('tasks-description') },
-  { asset: project.exportUsers, heading: 'Users', description: 'This dataset contains information on the individual contributions per user.' },
-  { asset: project.exportHotTaskingManagerGeometries, heading: t('hot-tasking-manager-geometries-title'), description: t('hot-tasking-manager-geometries-description') },
-  { asset: project.exportModerateToHighAgreementYesMaybeGeometries, heading: t('moderate-to-high-agreement-yes-maybe-geometries-title'), description: t('moderate-to-high-agreement-yes-maybe-geometries-description') },
+    { asset: project.exportAggregatedResults, heading: t('aggregated-results-title'), description: t('aggregated-results-description') },
+    { asset: project.exportAggregatedResultsWithGeometry, heading: t('aggregated-results-with-geometry-title'), description: t('aggregated-results-with-geometry-description') },
+    { asset: project.exportGroups, heading: t('groups-title'), description: t('groups-description') },
+    { asset: project.exportHistory, heading: t('history-title'), description: t('history-description') },
+    { asset: project.exportResults, heading: t('results-title'), description: t('results-description') },
+    { asset: project.exportTasks, heading: t('tasks-title'), description: t('tasks-description') },
+    { asset: project.exportUsers, heading: 'Users', description: 'This dataset contains information on the individual contributions per user.' },
+    { asset: project.exportHotTaskingManagerGeometries, heading: t('hot-tasking-manager-geometries-title'), description: t('hot-tasking-manager-geometries-description') },
+    { asset: project.exportModerateToHighAgreementYesMaybeGeometries, heading: t('moderate-to-high-agreement-yes-maybe-geometries-title'), description: t('moderate-to-high-agreement-yes-maybe-geometries-description') },
 ];
 
 const downloadSizeText = (fileSize?: number) => {
-  const { size, unit } = getFileSizeProperties(fileSize ?? 0);
-  return t('download-size', {
-    size,
-    formatParams: { size: { style: 'unit', unit, maximumFractionDigits: 1 } },
-  });
+    const { size, unit } = getFileSizeProperties(fileSize ?? 0);
+    return t('download-size', {
+        size,
+        formatParams: { size: { style: 'unit', unit, maximumFractionDigits: 1 } },
+    });
 };
 
 const historyUrl = project.exportHistory?.file?.url ?? undefined;
 const imageUrl = image?.file?.url ?? undefined;
 const lastFetched = project.exportHistory?.modifiedAt
-  ? t('data-last-fetched', {
-      date: new Date(project.exportHistory.modifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
+    ? t('data-last-fetched', {
+        date: new Date(project.exportHistory.modifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
     })
-  : undefined;
+    : undefined;
 ---
 <ProjectLayout locale={locale!} firebaseId={String(firebaseId)} title={title} mainClass={styles.project}>
-  {/* Hero: name + type/status/meta tags left, cover image right */}
-  <div class:list={[heroStyles.hero, styles.hero]}>
-    <div class={heroStyles.section}>
-      <div class:list={[heroStyles.mainContent, styles.mainContent]}>
-        <div class={heroStyles.left}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {name}
-          </h2>
-          <div class={heroStyles.description}>
-            <div class={styles.heroDescription}>
-              <div class={styles.topTags}>
-                {projectType && (
-                  <span class:list={[tagStyles.tag, tagStyles.medium]}>
-                    <ProjectTypeIcon type={projectType as ProjectTypeKey} size="small" />
-                    {projectTypeLabels[projectType] ?? projectType}
-                  </span>
-                )}
-                {status && (
-                  <span class:list={[tagStyles.tag, tagStyles.medium]}>
-                    <span class={statusClass[status]}>●</span>
-                    {statusLabels[status] ?? status}
-                  </span>
-                )}
-              </div>
-              <div class={styles.bottomTags}>
-                {region && (
-                  <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('Location')}>
-                    {region}
-                  </span>
-                )}
-                {requestingOrganization?.name && (
-                  <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('requesting-organization')}>
-                    {requestingOrganization.name}
-                  </span>
-                )}
-                {createdAtLabel && (
-                  <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('created-at')}>
-                    <Icon name="calendar-clear-outline" />
-                    {createdAtLabel}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        {imageUrl && (
-          <div class={heroStyles.right}>
-            <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-              <RemoteImage class={imageStyles.image} src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
-
-  {/* Overview: description + circle key figures */}
-  <section class:list={[sectionStyles.section, styles.overviewSection]}>
-    <div class={sectionStyles.container}>
-      <div class={styles.overviewContent}>
-        <div class={styles.content}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium]}>
-            {t('overview-section-title')}
-          </h4>
-          <div class={styles.description}>
-            {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
-            <div class:list={[htmlOutputStyles.htmlOutput, styles.description]} set:html={description ?? ''}></div>
-          </div>
-        </div>
-        <div class={styles.stats}>
-          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.largeFigure, styles.figure]}>
-            <div class={keyFigureStyles.value}>
-              {roundedTotalArea}
-              <Icon name="plus" class={keyFigureStyles.icon} />
-            </div>
-            <div class={keyFigureStyles.label}><span>km<sup>2</sup></span></div>
-          </div>
-          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
-            <div class={keyFigureStyles.value}>
-              {numberOfContributorUsers ?? 0}
-              <Icon name="plus" class={keyFigureStyles.icon} />
-            </div>
-            <div class={keyFigureStyles.label}>{t('project-contributors-text')}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Stats: AOI map + progress bar + history chart */}
-  <section class:list={[sectionStyles.section, styles.statsSection]}>
-    <div class:list={[sectionStyles.container, styles.statsContainer]}>
-      <div class={styles.content}>
-        {aoiDownload && (
-          <div class={styles.mapContainer}>
-            <MapIsland client:only="react" className={styles.projectsMap} geoJsonUrl={aoiDownload.url} />
-          </div>
-        )}
-        <div class={styles.rightContainer}>
-          <div class={styles.progressBar}>
-            <div class={styles.progressLabel}>
-              <div>{t('project-progress-label')}</div>
-              <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
-            </div>
-            <div class={styles.track}>
-              <div class={styles.progress} style={`width:${progress * 100}%`}></div>
-            </div>
-          </div>
-          <div class={styles.chartContainer}>
-            <ProjectHistoryChart
-              client:visible
-              className={styles.timelineChartContainer}
-              projectId={project.id}
-              historyUrl={historyUrl}
-            />
-          </div>
-        </div>
-      </div>
-      {lastFetched && (
-        <div class:list={[sectionStyles.actions, styles.lastFetchedContainer]}>{lastFetched}</div>
-      )}
-    </div>
-  </section>
-
-  {/* Downloads */}
-  <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.downloadSection]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('data-section-heading')}
-        </h4>
-        <div class:list={[sectionStyles.description, styles.downloadDescription]}>
-          {t('data-section-description')}
-        </div>
-      </div>
-      <div class={styles.urlList}>
-        {cards.map((card) =>
-          card.asset ? (
-            <div class={cardStyles.card}>
-              <div class={cardStyles.cardContent}>
-                <div class={cardStyles.headerWrapper}>
-                  <div class={cardStyles.header}>
-                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                      {card.heading}
-                    </h6>
-                  </div>
-                  <div>{card.description}</div>
+    {/* Hero: name + type/status/meta tags left, cover image right */}
+    <div class:list={[heroStyles.hero, styles.hero]}>
+        <div class={heroStyles.section}>
+            <div class:list={[heroStyles.mainContent, styles.mainContent]}>
+                <div class={heroStyles.left}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {name}
+                    </h2>
+                    <div class={heroStyles.description}>
+                        <div class={styles.heroDescription}>
+                            <div class={styles.topTags}>
+                                {projectType && (
+                                    <span class:list={[tagStyles.tag, tagStyles.medium]}>
+                                        <ProjectTypeIcon type={projectType as ProjectTypeKey} size="small" />
+                                        {projectTypeLabels[projectType] ?? projectType}
+                                    </span>
+                                )}
+                                {status && (
+                                    <span class:list={[tagStyles.tag, tagStyles.medium]}>
+                                        <span class={statusClass[status]}>●</span>
+                                        {statusLabels[status] ?? status}
+                                    </span>
+                                )}
+                            </div>
+                            <div class={styles.bottomTags}>
+                                {region && (
+                                    <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('Location')}>
+                                        {region}
+                                    </span>
+                                )}
+                                {requestingOrganization?.name && (
+                                    <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('requesting-organization')}>
+                                        {requestingOrganization.name}
+                                    </span>
+                                )}
+                                {createdAtLabel && (
+                                    <span class:list={[tagStyles.tag, tagStyles.transparent, tagStyles.medium, styles.heroTag]} title={t('created-at')}>
+                                        <Icon name="calendar-clear-outline" />
+                                        {createdAtLabel}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
-                  <div class={styles.fileDetails}>
-                    <span class:list={[tagStyles.tag, tagStyles.medium]}>{card.asset.mimetype}</span>
-                    <div>{downloadSizeText(card.asset.fileSize)}</div>
-                  </div>
-                  {card.asset.file?.url && (
-                    <a class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]} href={card.asset.file.url} download>
-                      {t('download')}
-                    </a>
-                  )}
-                </div>
-              </div>
+                {imageUrl && (
+                    <div class={heroStyles.right}>
+                        <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                            <RemoteImage class={imageStyles.image} src={imageUrl} alt={name} width={COVER_WIDTH} height={420} />
+                        </div>
+                    </div>
+                )}
             </div>
-          ) : null,
-        )}
-        {aoiDownload && (
-          <div class={cardStyles.card}>
-            <div class={cardStyles.cardContent}>
-              <div class={cardStyles.headerWrapper}>
-                <div class={cardStyles.header}>
-                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                    {t('area-of-interest-title')}
-                  </h6>
-                </div>
-                <div>{t('area-of-interest-description')}</div>
-              </div>
-              <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
-                <div class={styles.fileDetails}>
-                  <span class:list={[tagStyles.tag, tagStyles.medium]}>{aoiDownload.mimetype}</span>
-                  <div>{downloadSizeText(aoiDownload.fileSize)}</div>
-                </div>
-                <a
-                  class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]}
-                  href={aoiDownload.url}
-                  download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
-                >
-                  {t('download')}
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-  </section>
 
-  {/* License */}
-  <section class={sectionStyles.section}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('license-section-heading')}
-        </h4>
-        {/* Next passed the license body as Section's `description` node, so the
+    {/* Overview: description + circle key figures */}
+    <section class:list={[sectionStyles.section, styles.overviewSection]}>
+        <div class={sectionStyles.container}>
+            <div class={styles.overviewContent}>
+                <div class={styles.content}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium]}>
+                        {t('overview-section-title')}
+                    </h4>
+                    <div class={styles.description}>
+                        {/* description is raw HTML/markdown in the source data (HtmlOutput in Next) */}
+                        <div class:list={[htmlOutputStyles.htmlOutput, styles.description]} set:html={description ?? ''}></div>
+                    </div>
+                </div>
+                <div class={styles.stats}>
+                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.largeFigure, styles.figure]}>
+                        <div class={keyFigureStyles.value}>
+                            {roundedTotalArea}
+                            <Icon name="plus" class={keyFigureStyles.icon} />
+                        </div>
+                        <div class={keyFigureStyles.label}><span>km<sup>2</sup></span></div>
+                    </div>
+                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
+                        <div class={keyFigureStyles.value}>
+                            {numberOfContributorUsers ?? 0}
+                            <Icon name="plus" class={keyFigureStyles.icon} />
+                        </div>
+                        <div class={keyFigureStyles.label}>{t('project-contributors-text')}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Stats: AOI map + progress bar + history chart */}
+    <section class:list={[sectionStyles.section, styles.statsSection]}>
+        <div class:list={[sectionStyles.container, styles.statsContainer]}>
+            <div class={styles.content}>
+                {aoiDownload && (
+                    <div class={styles.mapContainer}>
+                        <MapIsland client:only="react" className={styles.projectsMap} geoJsonUrl={aoiDownload.url} />
+                    </div>
+                )}
+                <div class={styles.rightContainer}>
+                    <div class={styles.progressBar}>
+                        <div class={styles.progressLabel}>
+                            <div>{t('project-progress-label')}</div>
+                            <div>{t('project-card-progress-text', { progress: progress * 100 })}</div>
+                        </div>
+                        <div class={styles.track}>
+                            <div class={styles.progress} style={`width:${progress * 100}%`}></div>
+                        </div>
+                    </div>
+                    <div class={styles.chartContainer}>
+                        <ProjectHistoryChart
+                            client:visible
+                            className={styles.timelineChartContainer}
+                            projectId={project.id}
+                            historyUrl={historyUrl}
+                        />
+                    </div>
+                </div>
+            </div>
+            {lastFetched && (
+                <div class:list={[sectionStyles.actions, styles.lastFetchedContainer]}>{lastFetched}</div>
+            )}
+        </div>
+    </section>
+
+    {/* Downloads */}
+    <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.downloadSection]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('data-section-heading')}
+                </h4>
+                <div class:list={[sectionStyles.description, styles.downloadDescription]}>
+                    {t('data-section-description')}
+                </div>
+            </div>
+            <div class={styles.urlList}>
+                {cards.map((card) =>
+                    card.asset ? (
+                        <div class={cardStyles.card}>
+                            <div class={cardStyles.cardContent}>
+                                <div class={cardStyles.headerWrapper}>
+                                    <div class={cardStyles.header}>
+                                        <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                                            {card.heading}
+                                        </h6>
+                                    </div>
+                                    <div>{card.description}</div>
+                                </div>
+                                <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
+                                    <div class={styles.fileDetails}>
+                                        <span class:list={[tagStyles.tag, tagStyles.medium]}>{card.asset.mimetype}</span>
+                                        <div>{downloadSizeText(card.asset.fileSize)}</div>
+                                    </div>
+                                    {card.asset.file?.url && (
+                                        <a class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]} href={card.asset.file.url} download>
+                                            {t('download')}
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ) : null,
+                )}
+                {aoiDownload && (
+                    <div class={cardStyles.card}>
+                        <div class={cardStyles.cardContent}>
+                            <div class={cardStyles.headerWrapper}>
+                                <div class={cardStyles.header}>
+                                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                                        {t('area-of-interest-title')}
+                                    </h6>
+                                </div>
+                                <div>{t('area-of-interest-description')}</div>
+                            </div>
+                            <div class:list={[cardStyles.childrenContainer, styles.downloadCard]}>
+                                <div class={styles.fileDetails}>
+                                    <span class:list={[tagStyles.tag, tagStyles.medium]}>{aoiDownload.mimetype}</span>
+                                    <div>{downloadSizeText(aoiDownload.fileSize)}</div>
+                                </div>
+                                <a
+                                    class:list={[linkStyles.link, linkStyles.buttonTransparent, styles.link]}
+                                    href={aoiDownload.url}
+                                    download={aoiDownload.kind === 'link' ? true : `area_of_interest_${firebaseId}.geojson`}
+                                >
+                                    {t('download')}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    </section>
+
+    {/* License */}
+    <section class={sectionStyles.section}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('license-section-heading')}
+                </h4>
+                {/* Next passed the license body as Section's `description` node, so the
             licenseDescription div nests inside the section description div. */}
-        <div class={sectionStyles.description}>
-          <div class={styles.licenseDescription}>
-            <p>{t('license-section-description-1')}</p>
-            <p>{t('license-section-description-2')}</p>
-          </div>
+                <div class={sectionStyles.description}>
+                    <div class={styles.licenseDescription}>
+                        <p>{t('license-section-description-1')}</p>
+                        <p>{t('license-section-description-2')}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 </ProjectLayout>

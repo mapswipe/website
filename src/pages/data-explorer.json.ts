@@ -18,25 +18,25 @@ import { getDataExplorerPayload } from 'lib/dataExplorer';
 import { resolveRemoteImage, COVER_WIDTH } from 'lib/remoteImages';
 
 export const GET: APIRoute = async () => {
-  const payload = getDataExplorerPayload();
+    const payload = getDataExplorerPayload();
 
-  const uniqueUrls = [...new Set(
-    payload.projects.map((p) => p.image?.file?.url).filter((u): u is string => Boolean(u)),
-  )];
-  const entries = await Promise.all(
-    uniqueUrls.map(async (url) => {
-      const { src } = await resolveRemoteImage(url, { width: COVER_WIDTH });
-      return [url, src] as const;
-    }),
-  );
-  const imageMap = Object.fromEntries(entries);
+    const uniqueUrls = [...new Set(
+        payload.projects.map((p) => p.image?.file?.url).filter((u): u is string => Boolean(u)),
+    )];
+    const entries = await Promise.all(
+        uniqueUrls.map(async (url) => {
+            const { src } = await resolveRemoteImage(url, { width: COVER_WIDTH });
+            return [url, src] as const;
+        }),
+    );
+    const imageMap = Object.fromEntries(entries);
 
-  return new Response(
-    JSON.stringify({
-      miniProjects: payload.projects,
-      organizations: payload.organizations,
-      imageMap,
-    }),
-    { headers: { 'Content-Type': 'application/json' } },
-  );
+    return new Response(
+        JSON.stringify({
+            miniProjects: payload.projects,
+            organizations: payload.organizations,
+            imageMap,
+        }),
+        { headers: { 'Content-Type': 'application/json' } },
+    );
 };

@@ -10,7 +10,7 @@
 // fill="none"/stroke="currentColor" (calendar, arrow-forward) carry those attrs
 // on their paths inside the symbol, so they still inherit the page color.
 interface Props {
-  name:
+    name:
     | 'calendar-clear-outline'
     | 'arrow-forward-sharp'
     | 'menu'
@@ -23,26 +23,26 @@ interface Props {
     | 'mail'
     | 'checkmark-circle-outline'
     | 'plus';
-  class?: string;
-  size?: string | number;
+    class?: string;
+    size?: string | number;
 }
 const { name, class: className, size = '1em' } = Astro.props;
 
 // Per-name viewBox lookup — kept on the outer <svg> so aspect ratio/scaling
 // matches the original inline icons (most are 512x512, but a few differ).
 const viewBoxForName: Record<Props['name'], string> = {
-  'calendar-clear-outline': '0 0 512 512',
-  'arrow-forward-sharp': '0 0 512 512',
-  menu: '0 0 24 24',
-  'earth-sharp': '0 0 512 512',
-  newspaper: '0 0 576 512',
-  'logo-facebook': '0 0 512 512',
-  'logo-mastodon': '0 0 512 512',
-  'logo-github': '0 0 512 512',
-  'logo-instagram': '0 0 512 512',
-  mail: '0 0 512 512',
-  'checkmark-circle-outline': '0 0 512 512',
-  plus: '0 0 448 512',
+    'calendar-clear-outline': '0 0 512 512',
+    'arrow-forward-sharp': '0 0 512 512',
+    menu: '0 0 24 24',
+    'earth-sharp': '0 0 512 512',
+    newspaper: '0 0 576 512',
+    'logo-facebook': '0 0 512 512',
+    'logo-mastodon': '0 0 512 512',
+    'logo-github': '0 0 512 512',
+    'logo-instagram': '0 0 512 512',
+    mail: '0 0 512 512',
+    'checkmark-circle-outline': '0 0 512 512',
+    plus: '0 0 448 512',
 };
 
 // Sprite lives at the site root (/icons.svg), matching the logos' convention
@@ -51,5 +51,5 @@ const viewBoxForName: Record<Props['name'], string> = {
 const spriteHref = `${import.meta.env.BASE_URL}icons.svg`.replace(/\/{2,}/g, '/');
 ---
 <svg class={className} width={size} height={size} viewBox={viewBoxForName[name]} fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <use href={`${spriteHref}#${name}`} />
+    <use href={`${spriteHref}#${name}`} />
 </svg>

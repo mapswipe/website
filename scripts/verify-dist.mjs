@@ -7,8 +7,8 @@ import { join } from 'node:path';
 const DIST = 'dist';
 const failures = [];
 const check = (name, ok, detail = '') => {
-  console.log(`${ok ? '  ok ' : 'FAIL '} ${name}${detail ? ` — ${detail}` : ''}`);
-  if (!ok) failures.push(name);
+    console.log(`${ok ? '  ok ' : 'FAIL '} ${name}${detail ? ` — ${detail}` : ''}`);
+    if (!ok) failures.push(name);
 };
 
 const data = JSON.parse(readFileSync('fullData/staticData.json', 'utf8'));
@@ -29,22 +29,22 @@ check('sitemap not partial', locs > 1000, `${locs} (a partial-merge sitemap woul
 
 const dataJson = JSON.parse(readFileSync(join(DIST, 'data-explorer.json'), 'utf8'));
 check('data-explorer.json matches data', dataJson.miniProjects.length === projects,
-  `${dataJson.miniProjects.length} vs ${projects}`);
+    `${dataJson.miniProjects.length} vs ${projects}`);
 
 const sampleProject = execSync(
-  `find ${DIST}/en/projects -mindepth 2 -name index.html | head -1`).toString().trim();
+    `find ${DIST}/en/projects -mindepth 2 -name index.html | head -1`).toString().trim();
 const page = readFileSync(sampleProject, 'utf8');
 const hydrationSrc = page.match(/src="(\/_astro\/dedup-[^"]+\.js)"/);
 check('hydration script referenced', !!hydrationSrc);
 check('hydration script exists', !!hydrationSrc && existsSync(join(DIST, hydrationSrc[1])));
 
 check('no unoptimized blog-image refs',
-  execSync(`grep -rl "/img/blogImages" ${DIST} --include='*.html' | wc -l`).toString().trim() === '0');
+    execSync(`grep -rl "/img/blogImages" ${DIST} --include='*.html' | wc -l`).toString().trim() === '0');
 check('error-image asset shipped', existsSync(join(DIST, '_img/image-error.svg')));
 
 const animated = execSync(
-  `for f in ${DIST}/_astro/*.webp; do grep -lq ANMF "$f" 2>/dev/null && echo "$f"; done | wc -l`,
-  { shell: '/bin/bash' }).toString().trim();
+    `for f in ${DIST}/_astro/*.webp; do grep -lq ANMF "$f" 2>/dev/null && echo "$f"; done | wc -l`,
+    { shell: '/bin/bash' }).toString().trim();
 check('animated webp survives (GIF regression guard)', Number(animated) >= 1, `${animated} animated`);
 
 check('German content renders', readFileSync(join(DIST, 'de/index.html'), 'utf8').includes('Projekt'));
@@ -55,7 +55,7 @@ const distMB = Number(execSync(`du -sm ${DIST}`).toString().split('\t')[0]);
 check('dist under 900 MB (1 GB Pages limit early warning)', distMB < 900, `${distMB} MB`);
 
 if (failures.length) {
-  console.error(`\n${failures.length} check(s) failed: ${failures.join(', ')}`);
-  process.exit(1);
+    console.error(`\n${failures.length} check(s) failed: ${failures.join(', ')}`);
+    process.exit(1);
 }
 console.log(`\nall checks passed (dist ${distMB} MB, ${htmlCount} pages)`);

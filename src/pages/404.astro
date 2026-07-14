@@ -15,25 +15,25 @@ import imageStyles from 'components/ImageWrapper.module.css';
 // Astro emits this to dist/404.html.
 ---
 <BaseLayout
-  locale={DEFAULT_LOCALE}
-  title="404 | MapSwipe"
-  path="404/"
-  hreflang={false}
+    locale={DEFAULT_LOCALE}
+    title="404 | MapSwipe"
+    path="404/"
+    hreflang={false}
 >
-  <div class={styles.fourHundredFour}>
-    <div class={styles.leftContent}>
-      <div class={styles.headingContainer}>
-        <h2 class:list={[headingStyles.heading, headingStyles.extraLarge]}>404</h2>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, headingStyles.normal]}>
-          This area has not been swiped yet!
-        </h4>
-      </div>
-      <a class:list={[linkStyles.link, linkStyles.buttonTransparent]} href="/">Go back to home</a>
+    <div class={styles.fourHundredFour}>
+        <div class={styles.leftContent}>
+            <div class={styles.headingContainer}>
+                <h2 class:list={[headingStyles.heading, headingStyles.extraLarge]}>404</h2>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, headingStyles.normal]}>
+                    This area has not been swiped yet!
+                </h4>
+            </div>
+            <a class:list={[linkStyles.link, linkStyles.buttonTransparent]} href="/">Go back to home</a>
+        </div>
+        <div class={styles.rightContent}>
+            <div class={imageStyles.imageWrapper}>
+                <img class={imageStyles.image} src="/img/404.svg" alt="404 Page" />
+            </div>
+        </div>
     </div>
-    <div class={styles.rightContent}>
-      <div class={imageStyles.imageWrapper}>
-        <img class={imageStyles.image} src="/img/404.svg" alt="404 Page" />
-      </div>
-    </div>
-  </div>
 </BaseLayout>

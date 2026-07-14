@@ -2,8 +2,8 @@
 // Ported from the Next app's src/components/OgMeta. Emits title + og/twitter
 // meta. buildDate/url come from env like the Next version.
 interface Props {
-  title: string;
-  description?: string;
+    title: string;
+    description?: string;
 }
 const { title, description } = Astro.props;
 const buildDate = import.meta.env.MAPSWIPE_BUILD_DATE;

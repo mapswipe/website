@@ -21,25 +21,25 @@ import { glob } from 'astro/loaders';
 // (name/markdownContent in the Next Blog interface are the loader-derived id +
 // body, not frontmatter — Astro provides those separately.)
 const blogs = defineCollection({
-  loader: glob({
-    pattern: '*.md',
-    base: './blogs',
-    // Preserve Next's slug exactly: filename without extension, case intact.
-    generateId: ({ entry }) => entry.replace(/\.md$/, ''),
-  }),
-  schema: ({ image }) => z.object({
-    title: z.string().optional(),
-    // Frontmatter dates are plain YYYY-MM-DD; zod coerces to a Date. Next stored
-    // this as a ms timestamp (new Date(...).getTime()); we derive that from the
-    // Date at use-site to keep i18next datetime formatting identical.
-    publishedDate: z.coerce.date().optional(),
-    author: z.string().optional(),
-    description: z.string().optional(),
-    // Relative path (./images/*) next to the content, resolved + optimized by
-    // astro:assets — render with <Image> from the pages.
-    coverImage: image().optional(),
-    featured: z.boolean().default(false),
-  }),
+    loader: glob({
+        pattern: '*.md',
+        base: './blogs',
+        // Preserve Next's slug exactly: filename without extension, case intact.
+        generateId: ({ entry }) => entry.replace(/\.md$/, ''),
+    }),
+    schema: ({ image }) => z.object({
+        title: z.string().optional(),
+        // Frontmatter dates are plain YYYY-MM-DD; zod coerces to a Date. Next stored
+        // this as a ms timestamp (new Date(...).getTime()); we derive that from the
+        // Date at use-site to keep i18next datetime formatting identical.
+        publishedDate: z.coerce.date().optional(),
+        author: z.string().optional(),
+        description: z.string().optional(),
+        // Relative path (./images/*) next to the content, resolved + optimized by
+        // astro:assets — render with <Image> from the pages.
+        coverImage: image().optional(),
+        featured: z.boolean().default(false),
+    }),
 });
 
 export const collections = { blogs };

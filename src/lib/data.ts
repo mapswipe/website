@@ -20,101 +20,101 @@ const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 
 import { z } from 'astro/zod';
 
 const StaticDataShape = z.object({
-  publicProjects: z.object({
-    totalCount: z.number(),
-    results: z.array(
-      z.object({
-        id: z.union([z.string(), z.number()]),
-        firebaseId: z.union([z.string(), z.number()]),
-        name: z.string(),
-        projectType: z.string().nullish(),
-        modifiedAt: z.string().nullish(),
-      }).passthrough(),
-    ).min(1),
-  }),
-  communityStats: z.object({
-    totalContributors: z.number().nullish(),
-    totalSwipes: z.number().nullish(),
-  }).passthrough(),
-  publicOrganizations: z.object({ results: z.array(z.unknown()) }),
-  globalExportAssets: z.array(z.unknown()),
+    publicProjects: z.object({
+        totalCount: z.number(),
+        results: z.array(
+            z.object({
+                id: z.union([z.string(), z.number()]),
+                firebaseId: z.union([z.string(), z.number()]),
+                name: z.string(),
+                projectType: z.string().nullish(),
+                modifiedAt: z.string().nullish(),
+            }).passthrough(),
+        ).min(1),
+    }),
+    communityStats: z.object({
+        totalContributors: z.number().nullish(),
+        totalSwipes: z.number().nullish(),
+    }).passthrough(),
+    publicOrganizations: z.object({ results: z.array(z.unknown()) }),
+    globalExportAssets: z.array(z.unknown()),
 });
 
 const parsed = StaticDataShape.safeParse(data);
 if (!parsed.success) {
-  const issues = parsed.error.issues
-    .slice(0, 10)
-    .map((i) => `  ${i.path.join('.')}: ${i.message}`)
-    .join('\n');
-  throw new Error(`staticData.json failed validation (backend schema drift?):\n${issues}`);
+    const issues = parsed.error.issues
+        .slice(0, 10)
+        .map((i) => `  ${i.path.join('.')}: ${i.message}`)
+        .join('\n');
+    throw new Error(`staticData.json failed validation (backend schema drift?):\n${issues}`);
 }
 
 export interface UrlInfo {
-  id?: string;
-  fileSize?: number;
-  mimetype?: string;
-  file?: { url?: string | null; name?: string | null } | null;
-  modifiedAt?: string;
+    id?: string;
+    fileSize?: number;
+    mimetype?: string;
+    file?: { url?: string | null; name?: string | null } | null;
+    modifiedAt?: string;
 }
 
 export interface Project {
-  id: string;
-  firebaseId: string;
-  name: string;
-  description?: string | null;
-  projectType?: string | null;
-  status?: string | null;
-  region?: string | null;
-  progress: number;
-  createdAt?: string | null;
-  numberOfContributorUsers?: number | null;
-  requestingOrganization?: { name?: string | null } | null;
-  image?: { file?: { url?: string | null } | null } | null;
-  aoiGeometry?: {
-    centroid?: [number, number] | number[] | null;
-    bbox?: number[][][] | null;
-    totalArea?: number | null;
-  } | null;
-  aoiGeometryInputAsset?: UrlInfo;
-  exportAggregatedResults?: UrlInfo;
-  exportAggregatedResultsWithGeometry?: UrlInfo;
-  exportGroups?: UrlInfo;
-  exportHistory?: UrlInfo;
-  exportAreaOfInterest?: UrlInfo;
-  exportResults?: UrlInfo;
-  exportTasks?: UrlInfo;
-  exportUsers?: UrlInfo;
-  exportHotTaskingManagerGeometries?: UrlInfo;
-  exportModerateToHighAgreementYesMaybeGeometries?: UrlInfo;
+    id: string;
+    firebaseId: string;
+    name: string;
+    description?: string | null;
+    projectType?: string | null;
+    status?: string | null;
+    region?: string | null;
+    progress: number;
+    createdAt?: string | null;
+    numberOfContributorUsers?: number | null;
+    requestingOrganization?: { name?: string | null } | null;
+    image?: { file?: { url?: string | null } | null } | null;
+    aoiGeometry?: {
+        centroid?: [number, number] | number[] | null;
+        bbox?: number[][][] | null;
+        totalArea?: number | null;
+    } | null;
+    aoiGeometryInputAsset?: UrlInfo;
+    exportAggregatedResults?: UrlInfo;
+    exportAggregatedResultsWithGeometry?: UrlInfo;
+    exportGroups?: UrlInfo;
+    exportHistory?: UrlInfo;
+    exportAreaOfInterest?: UrlInfo;
+    exportResults?: UrlInfo;
+    exportTasks?: UrlInfo;
+    exportUsers?: UrlInfo;
+    exportHotTaskingManagerGeometries?: UrlInfo;
+    exportModerateToHighAgreementYesMaybeGeometries?: UrlInfo;
 }
 
 export function getAllProjects(): Project[] {
-  const projects = (data?.publicProjects?.results ?? []) as Project[];
-  // Test knob: inject a deliberately bad cover URL into the first image-bearing
-  // project so we can prove the resolver fails soft to passthrough without
-  // killing the build. No-op unless BAD_IMAGE_TEST is set.
-  if (process.env.BAD_IMAGE_TEST) {
-    const badUrl = process.env.BAD_IMAGE_TEST;
-    const target = projects.find((p) => p.image?.file?.url);
-    if (target?.image?.file) target.image.file.url = badUrl;
-  }
-  return projects;
+    const projects = (data?.publicProjects?.results ?? []) as Project[];
+    // Test knob: inject a deliberately bad cover URL into the first image-bearing
+    // project so we can prove the resolver fails soft to passthrough without
+    // killing the build. No-op unless BAD_IMAGE_TEST is set.
+    if (process.env.BAD_IMAGE_TEST) {
+        const badUrl = process.env.BAD_IMAGE_TEST;
+        const target = projects.find((p) => p.image?.file?.url);
+        if (target?.image?.file) target.image.file.url = badUrl;
+    }
+    return projects;
 }
 
 export function getProjectByFirebaseId(id: string): Project | undefined {
-  return getAllProjects().find((p) => String(p.firebaseId) === String(id));
+    return getAllProjects().find((p) => String(p.firebaseId) === String(id));
 }
 
 // Home-page key figures. Mirrors the Next home page's
 // value?.communityStats?.{totalContributors,totalSwipes}.
 export interface CommunityStats {
-  totalContributors: number | null;
-  totalSwipes: number | null;
+    totalContributors: number | null;
+    totalSwipes: number | null;
 }
 export function getCommunityStats(): CommunityStats {
-  const stats = data?.communityStats ?? {};
-  return {
-    totalContributors: stats.totalContributors ?? null,
-    totalSwipes: stats.totalSwipes ?? null,
-  };
+    const stats = data?.communityStats ?? {};
+    return {
+        totalContributors: stats.totalContributors ?? null,
+        totalSwipes: stats.totalSwipes ?? null,
+    };
 }

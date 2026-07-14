@@ -14,19 +14,19 @@ import { getDefaultRemoteImages } from './index.ts';
 // the module that configures your instance is imported before this component
 // renders — e.g. import it from the same file that imports this component.
 interface Props {
-  src: string;
-  alt: string;
-  class?: string;
-  width?: number;
-  height?: number;
+    src: string;
+    alt: string;
+    class?: string;
+    width?: number;
+    height?: number;
 }
 const remoteImages = getDefaultRemoteImages();
 const {
-  src,
-  alt,
-  class: className,
-  width = remoteImages.options.width,
-  height = 420,
+    src,
+    alt,
+    class: className,
+    width = remoteImages.options.width,
+    height = 420,
 } = Astro.props;
 
 // Explicit width (inferSize:false semantics) so there is no render-time
@@ -34,12 +34,12 @@ const {
 const { src: resolvedSrc, optimized } = await remoteImages.resolve(src, { width });
 ---
 <img
-  class={className}
-  src={resolvedSrc}
-  alt={alt}
-  width={width}
-  height={height}
-  loading="lazy"
-  decoding="async"
-  data-optimized={optimized ? 'true' : 'false'}
+    class={className}
+    src={resolvedSrc}
+    alt={alt}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+    data-optimized={optimized ? 'true' : 'false'}
 />

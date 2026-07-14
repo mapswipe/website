@@ -27,183 +27,183 @@ import imageStyles from 'components/ImageWrapper.module.css';
 // → the whole site (this page included) rebuilds anyway, so tracking
 // translations here would be redundant.
 export const getStaticPaths = (async () =>
-  selectPaths('get-involved', LOCALES.map((locale) => ({
-    key: `${locale}/get-involved`,
-    params: { locale },
-    propsData: { page: 'get-involved', locale },
-  })))) satisfies GetStaticPaths;
+    selectPaths('get-involved', LOCALES.map((locale) => ({
+        key: `${locale}/get-involved`,
+        params: { locale },
+        propsData: { page: 'get-involved', locale },
+    })))) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 const t = await getT(locale!, 'get-involved');
 const title = String(t('get-involved-tab-head'));
 ---
 <BaseLayout locale={locale!} title={title} path="get-involved/" activePath="get-involved" mainClass={styles.getInvolved}>
-  {/* Hero */}
-  <div class:list={[heroStyles.hero, styles.hero]}>
-    <div class={heroStyles.section}>
-      <div class={heroStyles.mainContent}>
-        <div class={heroStyles.left}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {t('hero-title')}
-          </h2>
-          <div class={heroStyles.description}>{t('hero-description')}</div>
-        </div>
-        <div class={heroStyles.right}>
-          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-            <img class={imageStyles.image} src="/img/get-involved-banner.svg" alt={t('get-involved-banner')} loading="lazy" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
-
-  {/* Contribute now */}
-  <section class={sectionStyles.section}>
-    <div class:list={[sectionStyles.container, styles.contributeContainer]}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('contribute-now')}
-        </h4>
-        <div class={sectionStyles.description}>{t('contribute-now-description')}</div>
-      </div>
-      <div class={styles.contributeSection}>
-        <div class={styles.buttonsContainer}>
-          <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
-            <img class:list={[imageStyles.image, styles.image]} src="/img/playstore.png" alt={t('download-on-playstore')} loading="lazy" />
-          </a>
-          <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
-            <img class:list={[imageStyles.image, styles.image]} src="/img/apple.png" alt={t('download-on-apple-store')} loading="lazy" />
-          </a>
-        </div>
-        <div class={styles.linkContainer}>
-          <a class:list={[linkStyles.link, styles.downloadLink]} href="https://web.mapswipe.org/" target="_blank">{t('use-web-app-label')}</a>
-          |
-          <a class:list={[linkStyles.link, styles.downloadLink]} href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Individual */}
-  <section class:list={[sectionStyles.section, styles.individual]} id="individual">
-    <div class:list={[sectionStyles.container, styles.sectionContainer]}>
-      <div class={styles.content}>
-        <div class={styles.imageContainer}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('individual-heading')}</h4>
-          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-            <img class={imageStyles.image} src="/img/individual.svg" alt={t('individual-heading-image')} loading="lazy" />
-          </div>
-        </div>
-        <div class={styles.cards}>
-          <div class:list={[styles.card, centeredCardStyles.card]}>
-            <div class={centeredCardStyles.heading}>{t('possess-language-skills')}</div>
-            <div class={centeredCardStyles.description}>{t('possess-language-skills-description')}</div>
-            <div class={centeredCardStyles.actions}>
-              <a class:list={[linkStyles.link, linkStyles.button]} href="https://explore.transifex.com/mapswipe/" target="_blank">{t('contribute-on-transifex')}</a>
+    {/* Hero */}
+    <div class:list={[heroStyles.hero, styles.hero]}>
+        <div class={heroStyles.section}>
+            <div class={heroStyles.mainContent}>
+                <div class={heroStyles.left}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {t('hero-title')}
+                    </h2>
+                    <div class={heroStyles.description}>{t('hero-description')}</div>
+                </div>
+                <div class={heroStyles.right}>
+                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                        <img class={imageStyles.image} src="/img/get-involved-banner.svg" alt={t('get-involved-banner')} loading="lazy" />
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class:list={[styles.card, centeredCardStyles.card]}>
-            <div class={centeredCardStyles.heading}>{t('possess-technical-skills')}</div>
-            <div class={centeredCardStyles.description}>{t('possess-techincal-skills-description')}</div>
-            <div class={centeredCardStyles.actions}>
-              <a class:list={[linkStyles.link, linkStyles.button]} href="https://github.com/mapswipe/" target="_blank">{t('contribute-on-github')}</a>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-  </section>
 
-  {/* Group */}
-  <section class:list={[sectionStyles.section, styles.group, sectionStyles.withAlternativeBackground]}>
-    <div class:list={[sectionStyles.container, styles.sectionContainer]}>
-      <div class={styles.content}>
-        <div class={styles.cards}>
-          <div class:list={[styles.card, centeredCardStyles.card]}>
-            <div class={centeredCardStyles.heading}>{t('want-to-host-mapswipe-events')}</div>
-            <div class={centeredCardStyles.description}>{t('want-to-host-mapswipe-events-description')}</div>
-            <div class={centeredCardStyles.actions}>
-              <a class:list={[linkStyles.link, linkStyles.button]} href="https://drive.google.com/drive/folders/1j5XnyqI_LKYBCg9oJaaWIKbsBxwB8Cld?usp=drive_link" target="_blank">{t('download-toolkit')}</a>
+    {/* Contribute now */}
+    <section class={sectionStyles.section}>
+        <div class:list={[sectionStyles.container, styles.contributeContainer]}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('contribute-now')}
+                </h4>
+                <div class={sectionStyles.description}>{t('contribute-now-description')}</div>
             </div>
-          </div>
-          <div class:list={[styles.card, centeredCardStyles.card]}>
-            <div class={centeredCardStyles.heading}>{t('engage-your-csr')}</div>
-            <div class={centeredCardStyles.description}>{t('engage-your-csr-description')}</div>
-            <div class={centeredCardStyles.actions}>
-              <a class:list={[linkStyles.link, linkStyles.button]} href="https://docs.google.com/forms/d/e/1FAIpQLSf_05ZvC4i7HfDgYqedvsPxG66o8SHMaKs1GpnLC9KVFa4FuQ/viewform?usp=sf_link" target="_blank">{t('register-your-interest')}</a>
+            <div class={styles.contributeSection}>
+                <div class={styles.buttonsContainer}>
+                    <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe" target="_blank">
+                        <img class:list={[imageStyles.image, styles.image]} src="/img/playstore.png" alt={t('download-on-playstore')} loading="lazy" />
+                    </a>
+                    <a class:list={[linkStyles.link, styles.buttonImageContainer]} href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1" target="_blank">
+                        <img class:list={[imageStyles.image, styles.image]} src="/img/apple.png" alt={t('download-on-apple-store')} loading="lazy" />
+                    </a>
+                </div>
+                <div class={styles.linkContainer}>
+                    <a class:list={[linkStyles.link, styles.downloadLink]} href="https://web.mapswipe.org/" target="_blank">{t('use-web-app-label')}</a>
+                    |
+                    <a class:list={[linkStyles.link, styles.downloadLink]} href="https://github.com/mapswipe/mapswipe/releases/latest/download/app-production-release.apk" target="_blank">{t('download-apk-label')}</a>
+                </div>
             </div>
-          </div>
         </div>
-        <div class={styles.imageContainer}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('group-heading')}</h4>
-          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-            <img class={imageStyles.image} src="/img/group.svg" alt={t('group-heading-image')} loading="lazy" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  {/* Organizational */}
-  <section class:list={[sectionStyles.section, styles.organizational]}>
-    <div class:list={[sectionStyles.container, styles.sectionContainer]}>
-      <div class={styles.content}>
-        <div class={styles.imageContainer}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('organization-heading')}</h4>
-          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-            <img class={imageStyles.image} src="/img/organization.svg" alt={t('organization-logo')} loading="lazy" />
-          </div>
-        </div>
-        <div class:list={[styles.card, centeredCardStyles.card]}>
-          <div class={centeredCardStyles.heading}>{t('humanitarian-or-nonprofit')}</div>
-          <div class={centeredCardStyles.description}>{t('humanitarian-or-nonprofit-description')}</div>
-          <div class={centeredCardStyles.actions}>
-            <a class:list={[linkStyles.link, linkStyles.button]} href="https://docs.google.com/forms/d/e/1FAIpQLSetcSda6EyuvOXMUPe7Gw7wNNIdR9R9RlvOi1j9Zu-C3ZXtbg/viewform?usp=sf_link" target="_blank">{t('tell-us-more')}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Donate */}
-  <section class:list={[sectionStyles.section, styles.donate, sectionStyles.withAlternativeBackground]}>
-    <div class:list={[sectionStyles.container, styles.sectionContainer]}>
-      <div class={styles.content}>
-        <div class:list={[styles.card, centeredCardStyles.card]}>
-          <div class={centeredCardStyles.heading}>{t('interested-in-supporting')}</div>
-          <div class={centeredCardStyles.description}>
-            <div class={styles.donateCardDescription}>
-              <p>{t('interested-in-supporting-description-1')}</p>
-              <a class:list={[linkStyles.link, styles.downloadLink]} href="https://drive.google.com/file/d/1X9Sjys6Qa4Cz16J2cUT87qDejtJNAOOO/view?usp=sharing" target="_blank">{t('download-financial-report')}</a>
+    {/* Individual */}
+    <section class:list={[sectionStyles.section, styles.individual]} id="individual">
+        <div class:list={[sectionStyles.container, styles.sectionContainer]}>
+            <div class={styles.content}>
+                <div class={styles.imageContainer}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('individual-heading')}</h4>
+                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                        <img class={imageStyles.image} src="/img/individual.svg" alt={t('individual-heading-image')} loading="lazy" />
+                    </div>
+                </div>
+                <div class={styles.cards}>
+                    <div class:list={[styles.card, centeredCardStyles.card]}>
+                        <div class={centeredCardStyles.heading}>{t('possess-language-skills')}</div>
+                        <div class={centeredCardStyles.description}>{t('possess-language-skills-description')}</div>
+                        <div class={centeredCardStyles.actions}>
+                            <a class:list={[linkStyles.link, linkStyles.button]} href="https://explore.transifex.com/mapswipe/" target="_blank">{t('contribute-on-transifex')}</a>
+                        </div>
+                    </div>
+                    <div class:list={[styles.card, centeredCardStyles.card]}>
+                        <div class={centeredCardStyles.heading}>{t('possess-technical-skills')}</div>
+                        <div class={centeredCardStyles.description}>{t('possess-techincal-skills-description')}</div>
+                        <div class={centeredCardStyles.actions}>
+                            <a class:list={[linkStyles.link, linkStyles.button]} href="https://github.com/mapswipe/" target="_blank">{t('contribute-on-github')}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class={centeredCardStyles.actions}>
-            <a class:list={[linkStyles.link, linkStyles.button]} href="https://opencollective.com/mapswipe" target="_blank">{t('donate-now')}</a>
-          </div>
         </div>
-        <div class={styles.imageContainer}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('donate-heading')}</h4>
-          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-            <img class={imageStyles.image} src="/img/donate.svg" alt={t('donation-logo')} loading="lazy" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  {/* Contact */}
-  <section class={sectionStyles.section}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('contact-section-heading')}
-        </h4>
-        <div class={sectionStyles.description}>{t('contact-section-description')}</div>
-      </div>
-      <div class={sectionStyles.actions}>
-        <a class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">{t('contact-link-label')}</a>
-      </div>
-    </div>
-  </section>
+    {/* Group */}
+    <section class:list={[sectionStyles.section, styles.group, sectionStyles.withAlternativeBackground]}>
+        <div class:list={[sectionStyles.container, styles.sectionContainer]}>
+            <div class={styles.content}>
+                <div class={styles.cards}>
+                    <div class:list={[styles.card, centeredCardStyles.card]}>
+                        <div class={centeredCardStyles.heading}>{t('want-to-host-mapswipe-events')}</div>
+                        <div class={centeredCardStyles.description}>{t('want-to-host-mapswipe-events-description')}</div>
+                        <div class={centeredCardStyles.actions}>
+                            <a class:list={[linkStyles.link, linkStyles.button]} href="https://drive.google.com/drive/folders/1j5XnyqI_LKYBCg9oJaaWIKbsBxwB8Cld?usp=drive_link" target="_blank">{t('download-toolkit')}</a>
+                        </div>
+                    </div>
+                    <div class:list={[styles.card, centeredCardStyles.card]}>
+                        <div class={centeredCardStyles.heading}>{t('engage-your-csr')}</div>
+                        <div class={centeredCardStyles.description}>{t('engage-your-csr-description')}</div>
+                        <div class={centeredCardStyles.actions}>
+                            <a class:list={[linkStyles.link, linkStyles.button]} href="https://docs.google.com/forms/d/e/1FAIpQLSf_05ZvC4i7HfDgYqedvsPxG66o8SHMaKs1GpnLC9KVFa4FuQ/viewform?usp=sf_link" target="_blank">{t('register-your-interest')}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class={styles.imageContainer}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('group-heading')}</h4>
+                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                        <img class={imageStyles.image} src="/img/group.svg" alt={t('group-heading-image')} loading="lazy" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Organizational */}
+    <section class:list={[sectionStyles.section, styles.organizational]}>
+        <div class:list={[sectionStyles.container, styles.sectionContainer]}>
+            <div class={styles.content}>
+                <div class={styles.imageContainer}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('organization-heading')}</h4>
+                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                        <img class={imageStyles.image} src="/img/organization.svg" alt={t('organization-logo')} loading="lazy" />
+                    </div>
+                </div>
+                <div class:list={[styles.card, centeredCardStyles.card]}>
+                    <div class={centeredCardStyles.heading}>{t('humanitarian-or-nonprofit')}</div>
+                    <div class={centeredCardStyles.description}>{t('humanitarian-or-nonprofit-description')}</div>
+                    <div class={centeredCardStyles.actions}>
+                        <a class:list={[linkStyles.link, linkStyles.button]} href="https://docs.google.com/forms/d/e/1FAIpQLSetcSda6EyuvOXMUPe7Gw7wNNIdR9R9RlvOi1j9Zu-C3ZXtbg/viewform?usp=sf_link" target="_blank">{t('tell-us-more')}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Donate */}
+    <section class:list={[sectionStyles.section, styles.donate, sectionStyles.withAlternativeBackground]}>
+        <div class:list={[sectionStyles.container, styles.sectionContainer]}>
+            <div class={styles.content}>
+                <div class:list={[styles.card, centeredCardStyles.card]}>
+                    <div class={centeredCardStyles.heading}>{t('interested-in-supporting')}</div>
+                    <div class={centeredCardStyles.description}>
+                        <div class={styles.donateCardDescription}>
+                            <p>{t('interested-in-supporting-description-1')}</p>
+                            <a class:list={[linkStyles.link, styles.downloadLink]} href="https://drive.google.com/file/d/1X9Sjys6Qa4Cz16J2cUT87qDejtJNAOOO/view?usp=sharing" target="_blank">{t('download-financial-report')}</a>
+                        </div>
+                    </div>
+                    <div class={centeredCardStyles.actions}>
+                        <a class:list={[linkStyles.link, linkStyles.button]} href="https://opencollective.com/mapswipe" target="_blank">{t('donate-now')}</a>
+                    </div>
+                </div>
+                <div class={styles.imageContainer}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium]}>{t('donate-heading')}</h4>
+                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                        <img class={imageStyles.image} src="/img/donate.svg" alt={t('donation-logo')} loading="lazy" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Contact */}
+    <section class={sectionStyles.section}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('contact-section-heading')}
+                </h4>
+                <div class={sectionStyles.description}>{t('contact-section-description')}</div>
+            </div>
+            <div class={sectionStyles.actions}>
+                <a class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">{t('contact-link-label')}</a>
+            </div>
+        </div>
+    </section>
 </BaseLayout>

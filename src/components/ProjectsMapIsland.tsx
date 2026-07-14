@@ -17,88 +17,88 @@ import tagStyles from './Tag.module.css';
 // colors, popups).
 
 const pathOptions: Record<string, CircleMarkerOptions> = {
-  PUBLISHED: { fillColor: '#F69143', color: '#0F193F', weight: 1, opacity: 0.2, fillOpacity: 0.9 },
-  FINISHED: { fillColor: '#AABE5D', color: '#0F193F', weight: 1, opacity: 0.2, fillOpacity: 0.9 },
+    PUBLISHED: { fillColor: '#F69143', color: '#0F193F', weight: 1, opacity: 0.2, fillOpacity: 0.9 },
+    FINISHED: { fillColor: '#AABE5D', color: '#0F193F', weight: 1, opacity: 0.2, fillOpacity: 0.9 },
 };
 const defaultPathOptions: CircleMarkerOptions = {
-  fillColor: '#0F193F', color: '#0F193F', weight: 1, opacity: 0.3, fillOpacity: 0.9,
+    fillColor: '#0F193F', color: '#0F193F', weight: 1, opacity: 0.3, fillOpacity: 0.9,
 };
 
 function isDefined<T>(v: T | null | undefined): v is T {
-  return v !== null && v !== undefined;
+    return v !== null && v !== undefined;
 }
 
 interface Props {
-  className?: string;
-  projects: MiniProject[];
-  radiusSelector: (p: MiniProject) => number;
-  typeLabels: Record<string, string>;
-  statusLabels: Record<string, string>;
+    className?: string;
+    projects: MiniProject[];
+    radiusSelector: (p: MiniProject) => number;
+    typeLabels: Record<string, string>;
+    statusLabels: Record<string, string>;
 }
 
 export default function ProjectsMapIsland(props: Props) {
-  const { className, projects, radiusSelector, typeLabels, statusLabels } = props;
+    const { className, projects, radiusSelector, typeLabels, statusLabels } = props;
 
-  const sanitized = useMemo(
-    () =>
-      projects
-        .map((project) =>
-          isDefined(project.aoiGeometry?.centroid)
-            ? {
-                project,
-                centroid: [
-                  project.aoiGeometry!.centroid![1],
-                  project.aoiGeometry!.centroid![0],
-                ] as LatLngTuple,
-              }
-            : undefined,
-        )
-        .filter(isDefined),
-    [projects],
-  );
+    const sanitized = useMemo(
+        () =>
+            projects
+                .map((project) =>
+                    isDefined(project.aoiGeometry?.centroid)
+                        ? {
+                            project,
+                            centroid: [
+                                project.aoiGeometry!.centroid![1],
+                                project.aoiGeometry!.centroid![0],
+                            ] as LatLngTuple,
+                        }
+                        : undefined,
+                )
+                .filter(isDefined),
+        [projects],
+    );
 
-  return (
-    <MapContainer
-      className={className}
-      center={[40.866667, 34.566667]}
-      zoom={2}
-      style={{ height: '100%', width: '100%', minHeight: 420 }}
-      maxZoom={13}
-      minZoom={1}
-      worldCopyJump
-    >
-      {sanitized.map(({ project, centroid }) => (
-        <CircleMarker
-          key={project.id}
-          center={centroid}
-          radius={radiusSelector(project)}
-          pathOptions={project.status ? (pathOptions[project.status] ?? defaultPathOptions) : defaultPathOptions}
+    return (
+        <MapContainer
+            className={className}
+            center={[40.866667, 34.566667]}
+            zoom={2}
+            style={{ height: '100%', width: '100%', minHeight: 420 }}
+            maxZoom={13}
+            minZoom={1}
+            worldCopyJump
         >
-          <Popup>
-            <a className={styles.cardLink} href={`/projects/${project.firebaseId}/`}>
-              <strong>{project.name}</strong>
-              <div className={styles.types}>
-                {project.projectType && (
-                  <span className={`${tagStyles.tag} ${tagStyles.small}`}>
-                    {typeLabels[project.projectType] ?? project.projectType}
-                  </span>
-                )}
-                {project.status && (
-                  <span className={`${tagStyles.tag} ${tagStyles.small}`}>
-                    {statusLabels[project.status] ?? project.status}
-                  </span>
-                )}
-              </div>
-            </a>
-          </Popup>
-        </CircleMarker>
-      ))}
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        subdomains="abcd"
-        maxZoom={20}
-      />
-    </MapContainer>
-  );
+            {sanitized.map(({ project, centroid }) => (
+                <CircleMarker
+                    key={project.id}
+                    center={centroid}
+                    radius={radiusSelector(project)}
+                    pathOptions={project.status ? (pathOptions[project.status] ?? defaultPathOptions) : defaultPathOptions}
+                >
+                    <Popup>
+                        <a className={styles.cardLink} href={`/projects/${project.firebaseId}/`}>
+                            <strong>{project.name}</strong>
+                            <div className={styles.types}>
+                                {project.projectType && (
+                                    <span className={`${tagStyles.tag} ${tagStyles.small}`}>
+                                        {typeLabels[project.projectType] ?? project.projectType}
+                                    </span>
+                                )}
+                                {project.status && (
+                                    <span className={`${tagStyles.tag} ${tagStyles.small}`}>
+                                        {statusLabels[project.status] ?? project.status}
+                                    </span>
+                                )}
+                            </div>
+                        </a>
+                    </Popup>
+                </CircleMarker>
+            ))}
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                subdomains="abcd"
+                maxZoom={20}
+            />
+        </MapContainer>
+    );
 }

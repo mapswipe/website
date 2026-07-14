@@ -37,48 +37,48 @@ import dmSansHeading from '@fontsource/dm-sans/files/dm-sans-latin-400-normal.wo
 // components/Page. `path` is the locale-less route suffix used for hreflang
 // (e.g. '' for home, 'get-involved/'); `activePath` drives navbar highlight.
 interface Props {
-  locale: string;
-  title: string;
-  description?: string;
-  path: string;
-  activePath?: string;
-  mainClass?: string;
-  hreflang?: boolean; // default true; 404 opts out (no canonical per-locale set)
+    locale: string;
+    title: string;
+    description?: string;
+    path: string;
+    activePath?: string;
+    mainClass?: string;
+    hreflang?: boolean; // default true; 404 opts out (no canonical per-locale set)
 }
 const {
-  locale,
-  title,
-  description,
-  path,
-  activePath,
-  mainClass,
-  hreflang = true,
+    locale,
+    title,
+    description,
+    path,
+    activePath,
+    mainClass,
+    hreflang = true,
 } = Astro.props;
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? 'https://mapswipe.org';
 ---
 <!doctype html>
 <html lang={locale}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="/logo-compact.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="preload" href={latoBody} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={dmSansHeading} as="font" type="font/woff2" crossorigin />
-    <OgMeta title={title} description={description} />
-    {hreflang && LOCALES.map((l) => (
-      <link rel="alternate" hreflang={l} href={`${site}/${l}/${path}`} />
-    ))}
-    {hreflang && <link rel="alternate" hreflang="x-default" href={`${site}/en/${path}`} />}
-  </head>
-  <body>
-    <div class={pageStyles.page}>
-      <Navbar locale={locale} activePath={activePath} class={pageStyles.navbar} />
-      <main class:list={[pageStyles.mainContent, mainClass]}>
-        <slot />
-      </main>
-      <Footer locale={locale} class={pageStyles.footer} />
-    </div>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" href="/logo-compact.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="preload" href={latoBody} as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href={dmSansHeading} as="font" type="font/woff2" crossorigin />
+        <OgMeta title={title} description={description} />
+        {hreflang && LOCALES.map((l) => (
+            <link rel="alternate" hreflang={l} href={`${site}/${l}/${path}`} />
+        ))}
+        {hreflang && <link rel="alternate" hreflang="x-default" href={`${site}/en/${path}`} />}
+    </head>
+    <body>
+        <div class={pageStyles.page}>
+            <Navbar locale={locale} activePath={activePath} class={pageStyles.navbar} />
+            <main class:list={[pageStyles.mainContent, mainClass]}>
+                <slot />
+            </main>
+            <Footer locale={locale} class={pageStyles.footer} />
+        </div>
+    </body>
 </html>

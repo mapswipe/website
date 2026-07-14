@@ -13,21 +13,21 @@ import linkStyles from './Link.module.css';
 // highlights the current route link, matching Next's router.pathname ===
 // '/[locale]/...' check.
 interface Props {
-  locale: string;
-  activePath?: string; // e.g. 'get-involved' | 'data'
-  class?: string;
+    locale: string;
+    activePath?: string; // e.g. 'get-involved' | 'data'
+    class?: string;
 }
 const { locale, activePath, class: className } = Astro.props;
 const t = await getT(locale, 'common');
 
 // Per-locale abbreviations/labels (ported from utils/languages.ts).
 const languageTitleMap: Record<string, { abbreviation: string; label: string }> = {
-  ne: { abbreviation: 'ने', label: 'नेपाली' },
-  en: { abbreviation: 'EN', label: 'English' },
-  hu: { abbreviation: 'HU', label: 'Magyar nyelv' },
-  de: { abbreviation: 'DE', label: 'Deutsch' },
-  cs: { abbreviation: 'CS', label: 'Čeština' },
-  pt: { abbreviation: 'PT', label: 'Português' },
+    ne: { abbreviation: 'ने', label: 'नेपाली' },
+    en: { abbreviation: 'EN', label: 'English' },
+    hu: { abbreviation: 'HU', label: 'Magyar nyelv' },
+    de: { abbreviation: 'DE', label: 'Deutsch' },
+    cs: { abbreviation: 'CS', label: 'Čeština' },
+    pt: { abbreviation: 'PT', label: 'Português' },
 };
 
 // The current page path WITHOUT the locale prefix (e.g. '' for home,
@@ -36,53 +36,53 @@ const languageTitleMap: Record<string, { abbreviation: string; label: string }> 
 const localelessPath = activePath ? `${activePath}/` : '';
 ---
 <div class:list={[styles.navbar, className]}>
-  <div class={styles.navbarContent}>
-    <a class:list={[linkStyles.link, styles.logo]} href={`/${locale}/`}>
-      <img src="/logo.svg" alt={t('mapswipe-logo')} />
-    </a>
-    <div class={styles.routes}>
-      <a
-        class:list={[linkStyles.link, styles.link, activePath === 'get-involved' && styles.active]}
-        href={`/${locale}/get-involved/`}
-      >
-        {t('get-involved-link')}
-      </a>
-      <a
-        class:list={[linkStyles.link, styles.link, activePath === 'data' && styles.active]}
-        href={`/${locale}/data/`}
-      >
-        {t('data-link')}
-      </a>
-      <a class:list={[linkStyles.link, styles.link]} href="https://community.mapswipe.org/">
-        {t('community-dashboard-link')}
-      </a>
-    </div>
-    <div class={styles.rightContainer}>
-      <div class={styles.languageWrap}>
-        <button
-          class:list={[buttonStyles.button, buttonStyles.border, styles.dropdown]}
-          type="button"
-          aria-haspopup="true"
-        >
-          <Icon name="earth-sharp" />
-          <span class={styles.currentLocale}>
-            {languageTitleMap[locale]?.abbreviation ?? locale}
-          </span>
-        </button>
-        <div class={styles.languageList}>
-          {LOCALES.map((l) => (
+    <div class={styles.navbarContent}>
+        <a class:list={[linkStyles.link, styles.logo]} href={`/${locale}/`}>
+            <img src="/logo.svg" alt={t('mapswipe-logo')} />
+        </a>
+        <div class={styles.routes}>
             <a
-              class:list={[linkStyles.link, styles.language, l === locale && styles.activeLanguage]}
-              href={`/${l}/${localelessPath}`}
+                class:list={[linkStyles.link, styles.link, activePath === 'get-involved' && styles.active]}
+                href={`/${locale}/get-involved/`}
             >
-              {languageTitleMap[l]?.label ?? l}
+                {t('get-involved-link')}
             </a>
-          ))}
-          <a class:list={[linkStyles.link, styles.language]} href={`/${locale}/get-involved/#individual`}>
-            {t('didnot-find-language')}
-          </a>
+            <a
+                class:list={[linkStyles.link, styles.link, activePath === 'data' && styles.active]}
+                href={`/${locale}/data/`}
+            >
+                {t('data-link')}
+            </a>
+            <a class:list={[linkStyles.link, styles.link]} href="https://community.mapswipe.org/">
+                {t('community-dashboard-link')}
+            </a>
         </div>
-      </div>
+        <div class={styles.rightContainer}>
+            <div class={styles.languageWrap}>
+                <button
+                    class:list={[buttonStyles.button, buttonStyles.border, styles.dropdown]}
+                    type="button"
+                    aria-haspopup="true"
+                >
+                    <Icon name="earth-sharp" />
+                    <span class={styles.currentLocale}>
+                        {languageTitleMap[locale]?.abbreviation ?? locale}
+                    </span>
+                </button>
+                <div class={styles.languageList}>
+                    {LOCALES.map((l) => (
+                        <a
+                            class:list={[linkStyles.link, styles.language, l === locale && styles.activeLanguage]}
+                            href={`/${l}/${localelessPath}`}
+                        >
+                            {languageTitleMap[l]?.label ?? l}
+                        </a>
+                    ))}
+                    <a class:list={[linkStyles.link, styles.language]} href={`/${locale}/get-involved/#individual`}>
+                        {t('didnot-find-language')}
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

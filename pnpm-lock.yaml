@@ -141,9 +141,6 @@ importers:
       stylelint-config-recommended:
         specifier: ^18.0.0
         version: 18.0.0(stylelint@17.14.0(typescript@5.9.3))
-      stylelint-config-standard:
-        specifier: ^40.0.0
-        version: 40.0.0(stylelint@17.14.0(typescript@5.9.3))
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -4410,12 +4407,6 @@ packages:
 
   stylelint-config-recommended@18.0.0:
     resolution: {integrity: sha512-mxgT2XY6YZ3HWWe3Di8umG6aBmWmHTblTgu/f10rqFXnyWxjKWwNdjSWkgkwCtxIKnqjSJzvFmPT5yabVIRxZg==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      stylelint: ^17.0.0
-
-  stylelint-config-standard@40.0.0:
-    resolution: {integrity: sha512-EznGJxOUhtWck2r6dJpbgAdPATIzvpLdK9+i5qPd4Lx70es66TkBPljSg4wN3Qnc6c4h2n+WbUrUynQ3fanjHw==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^17.0.0
@@ -9694,11 +9685,6 @@ snapshots:
   stylelint-config-recommended@18.0.0(stylelint@17.14.0(typescript@5.9.3)):
     dependencies:
       stylelint: 17.14.0(typescript@5.9.3)
-
-  stylelint-config-standard@40.0.0(stylelint@17.14.0(typescript@5.9.3)):
-    dependencies:
-      stylelint: 17.14.0(typescript@5.9.3)
-      stylelint-config-recommended: 18.0.0(stylelint@17.14.0(typescript@5.9.3))
 
   stylelint-order@7.0.1(stylelint@17.14.0(typescript@5.9.3)):
     dependencies:

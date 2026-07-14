@@ -37,12 +37,12 @@ import imageStyles from 'components/ImageWrapper.module.css';
 // /data-explorer.json static endpoint has no getStaticPaths at all, so it
 // re-renders on every build and stays fresh regardless.)
 export const getStaticPaths = (async () => {
-  const payload = getDataExplorerPayload();
-  return selectPaths('data', LOCALES.map((locale) => ({
-    key: `${locale}/data`,
-    params: { locale },
-    propsData: payload,
-  })));
+    const payload = getDataExplorerPayload();
+    return selectPaths('data', LOCALES.map((locale) => ({
+        key: `${locale}/data`,
+        params: { locale },
+        propsData: payload,
+    })));
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
@@ -62,15 +62,15 @@ const DATA_EXPLORER_JSON_URL = '/data-explorer.json';
 // exact firebase URLs at COVER_WIDTH — pure cache hits).
 const initialProjects = payload.projects.slice(0, PAGE_SIZE);
 const initialImageMap: Record<string, string> = Object.fromEntries(
-  await Promise.all(
-    initialProjects
-      .map((p) => p.image?.file?.url)
-      .filter((url): url is string => Boolean(url))
-      .map(async (url) => {
-        const { src } = await resolveRemoteImage(url, { width: COVER_WIDTH });
-        return [url, src] as const;
-      }),
-  ),
+    await Promise.all(
+        initialProjects
+            .map((p) => p.image?.file?.url)
+            .filter((url): url is string => Boolean(url))
+            .map(async (url) => {
+                const { src } = await resolveRemoteImage(url, { width: COVER_WIDTH });
+                return [url, src] as const;
+            }),
+    ),
 );
 
 // Resolve the `data` namespace for THIS locale into a plain {key:string} dict
@@ -85,175 +85,175 @@ const title = String(t('data-tab-head'));
 // Community stats (static, matching the Next page's statsHeader section).
 const { totalSwipes, totalContributors } = payload;
 const fmt = (n: number | null | undefined) =>
-  (n == null ? '-' : new Intl.NumberFormat('en-US').format(n));
+    (n == null ? '-' : new Intl.NumberFormat('en-US').format(n));
 
 // Static type-explainer cards (mirrors the Next page's type-section: cover
 // image + ProjectTypeIcon + heading + key-point list).
 const typeCards = [
-  { type: 'FIND', coverImageUrl: '/img/find.svg', title: t('type-find-title'), points: [t('type-find-key-point-1'), t('type-find-key-point-2'), t('type-find-key-point-3')] },
-  { type: 'COMPARE', beforeAfter: true, title: t('type-compare-title'), points: [t('type-compare-key-point-1'), t('type-compare-key-point-2'), t('type-compare-key-point-3')] },
-  { type: 'VALIDATE', coverImageUrl: '/img/validate.svg', title: t('type-validate-title'), points: [t('type-validate-key-point-1'), t('type-validate-key-point-2'), t('type-validate-key-point-3')] },
-  { type: 'COMPLETENESS', coverImageUrl: '/img/completeness.png', title: t('type-completeness-title'), points: [t('type-completeness-key-point-1'), t('type-completeness-key-point-2'), t('type-completeness-key-point-3')] },
-  { type: 'VALIDATE_IMAGE', coverImageUrl: '/img/validate_image.png', title: t('type-validate-image-title'), points: [t('type-validate-image-key-point-1'), t('type-validate-image-key-point-2'), t('type-validate-image-key-point-3')] },
-  { type: 'STREET', coverImageUrl: '/img/street_image.png', title: t('type-streets-view-title'), points: [t('type-street-key-point-1'), t('type-street-key-point-2'), t('type-street-key-point-3')] },
-  { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', title: t('type-locate-title'), points: [t('type-locate-key-point-1'), t('type-locate-key-point-2'), t('type-locate-key-point-3')] },
+    { type: 'FIND', coverImageUrl: '/img/find.svg', title: t('type-find-title'), points: [t('type-find-key-point-1'), t('type-find-key-point-2'), t('type-find-key-point-3')] },
+    { type: 'COMPARE', beforeAfter: true, title: t('type-compare-title'), points: [t('type-compare-key-point-1'), t('type-compare-key-point-2'), t('type-compare-key-point-3')] },
+    { type: 'VALIDATE', coverImageUrl: '/img/validate.svg', title: t('type-validate-title'), points: [t('type-validate-key-point-1'), t('type-validate-key-point-2'), t('type-validate-key-point-3')] },
+    { type: 'COMPLETENESS', coverImageUrl: '/img/completeness.png', title: t('type-completeness-title'), points: [t('type-completeness-key-point-1'), t('type-completeness-key-point-2'), t('type-completeness-key-point-3')] },
+    { type: 'VALIDATE_IMAGE', coverImageUrl: '/img/validate_image.png', title: t('type-validate-image-title'), points: [t('type-validate-image-key-point-1'), t('type-validate-image-key-point-2'), t('type-validate-image-key-point-3')] },
+    { type: 'STREET', coverImageUrl: '/img/street_image.png', title: t('type-streets-view-title'), points: [t('type-street-key-point-1'), t('type-street-key-point-2'), t('type-street-key-point-3')] },
+    { type: 'LOCATE', coverImageUrl: '/img/locate_image.svg', title: t('type-locate-title'), points: [t('type-locate-key-point-1'), t('type-locate-key-point-2'), t('type-locate-key-point-3')] },
 ] as const;
 ---
 <BaseLayout locale={locale!} title={title} path="data/" activePath="data" mainClass={styles.data}>
-  {/* Hero */}
-  <div class={heroStyles.hero}>
-    <div class={heroStyles.section}>
-      <div class={heroStyles.mainContent}>
-        <div class={heroStyles.left}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {t('data-page-heading')}
-          </h2>
-          <div class={heroStyles.description}>{t('data-page-description')}</div>
-        </div>
-        <div class={heroStyles.right}>
-          <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-            <img class={imageStyles.image} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
-
-  {/* Community stats (Next: statsHeader Section with circle KeyFigures) */}
-  <section class={sectionStyles.section}>
-    <div class={sectionStyles.container}>
-      <div class={styles.statsHeader}>
-        <div class={styles.leftContent}>
-          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.figure, styles.largeFigure]}>
-            <div class={keyFigureStyles.value}>
-              {fmt(totalSwipes)}
-              <Icon name="plus" class={keyFigureStyles.icon} />
-            </div>
-            <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
-          </div>
-          <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
-            <div class={keyFigureStyles.value}>
-              {fmt(totalContributors)}
-              <Icon name="plus" class={keyFigureStyles.icon} />
-            </div>
-            <div class={keyFigureStyles.label}>{t('contributors')}</div>
-          </div>
-        </div>
-        <div class={styles.rightContent}>
-          <h4 class:list={[headingStyles.heading, headingStyles.medium, styles.heading]}>
-            {t('community-stats-section-heading')}
-          </h4>
-          <div class={styles.sectionDescription}>
-            {t('community-stats-section-description')}
-            <a class:list={[linkStyles.link, linkStyles.underline]} href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
-              {t('community-dashboard-link-label')}
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Project-type explainer cards (static, SSR-only) */}
-  <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.typeSection]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('type-section-heading')}
-        </h4>
-        <div class={sectionStyles.description}>{t('type-section-description')}</div>
-      </div>
-      <div class={styles.typeList}>
-        {typeCards.map((card) => (
-          <article class={cardStyles.card}>
-            {'beforeAfter' in card && card.beforeAfter ? (
-              <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
-                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                  <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+    {/* Hero */}
+    <div class={heroStyles.hero}>
+        <div class={heroStyles.section}>
+            <div class={heroStyles.mainContent}>
+                <div class={heroStyles.left}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {t('data-page-heading')}
+                    </h2>
+                    <div class={heroStyles.description}>{t('data-page-description')}</div>
                 </div>
-                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
-                  <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
-                </div>
-              </div>
-            ) : (
-              <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
-                <img class:list={[imageStyles.image, cardStyles.image]} src={'coverImageUrl' in card ? card.coverImageUrl : ''} alt="card-cover-image" loading="lazy" decoding="async" />
-              </div>
-            )}
-            <div class={cardStyles.cardContent}>
-              <div class={cardStyles.headerWrapper}>
-                <div class={cardStyles.header}>
-                  <div>
-                    <ProjectTypeIcon type={card.type} />
-                  </div>
-                  <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
-                    {card.title}
-                  </h6>
-                </div>
-              </div>
-              <div class:list={[cardStyles.childrenContainer, styles.keyPointList]}>
-                {card.points.map((p) => (
-                  <div class={listItemStyles.listItem}>
-                    <div class={listItemStyles.icon}>
-                      <Icon name="checkmark-circle-outline" />
+                <div class={heroStyles.right}>
+                    <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                        <img class={imageStyles.image} src="/img/data-banner.svg" alt={t('data-banner-image')} loading="lazy" />
                     </div>
-                    <div class={listItemStyles.label}>{p}</div>
-                  </div>
-                ))}
-              </div>
+                </div>
             </div>
-          </article>
-        ))}
-      </div>
+        </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-  </section>
 
-  {/* The ONE interactive island: filters + search + sort + pagination +
+    {/* Community stats (Next: statsHeader Section with circle KeyFigures) */}
+    <section class={sectionStyles.section}>
+        <div class={sectionStyles.container}>
+            <div class={styles.statsHeader}>
+                <div class={styles.leftContent}>
+                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, styles.figure, styles.largeFigure]}>
+                        <div class={keyFigureStyles.value}>
+                            {fmt(totalSwipes)}
+                            <Icon name="plus" class={keyFigureStyles.icon} />
+                        </div>
+                        <div class={keyFigureStyles.label}>{t('total-swipes')}</div>
+                    </div>
+                    <div class:list={[keyFigureStyles.keyFigure, keyFigureStyles.circle, keyFigureStyles.complement, styles.figure]}>
+                        <div class={keyFigureStyles.value}>
+                            {fmt(totalContributors)}
+                            <Icon name="plus" class={keyFigureStyles.icon} />
+                        </div>
+                        <div class={keyFigureStyles.label}>{t('contributors')}</div>
+                    </div>
+                </div>
+                <div class={styles.rightContent}>
+                    <h4 class:list={[headingStyles.heading, headingStyles.medium, styles.heading]}>
+                        {t('community-stats-section-heading')}
+                    </h4>
+                    <div class={styles.sectionDescription}>
+                        {t('community-stats-section-description')}
+                        <a class:list={[linkStyles.link, linkStyles.underline]} href="https://community.mapswipe.org" target="_blank" rel="noreferrer">
+                            {t('community-dashboard-link-label')}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* Project-type explainer cards (static, SSR-only) */}
+    <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground, styles.typeSection]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('type-section-heading')}
+                </h4>
+                <div class={sectionStyles.description}>{t('type-section-description')}</div>
+            </div>
+            <div class={styles.typeList}>
+                {typeCards.map((card) => (
+                    <article class={cardStyles.card}>
+                        {'beforeAfter' in card && card.beforeAfter ? (
+                            <div class:list={[cardStyles.coverImageWrapper, styles.missionImage, styles.beforeAfterContainer]}>
+                                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                                    <img class:list={[imageStyles.image, styles.beforeImage]} src="/img/before.svg" alt="before-image" loading="lazy" decoding="async" />
+                                </div>
+                                <div class:list={[imageStyles.imageWrapper, styles.beforeAfterImageWrapper]}>
+                                    <img class:list={[imageStyles.image, styles.afterImage]} src="/img/after.svg" alt="after-image" loading="lazy" decoding="async" />
+                                </div>
+                            </div>
+                        ) : (
+                            <div class:list={[imageStyles.imageWrapper, cardStyles.coverImageWrapper, styles.missionImage]}>
+                                <img class:list={[imageStyles.image, cardStyles.image]} src={'coverImageUrl' in card ? card.coverImageUrl : ''} alt="card-cover-image" loading="lazy" decoding="async" />
+                            </div>
+                        )}
+                        <div class={cardStyles.cardContent}>
+                            <div class={cardStyles.headerWrapper}>
+                                <div class={cardStyles.header}>
+                                    <div>
+                                        <ProjectTypeIcon type={card.type} />
+                                    </div>
+                                    <h6 class:list={[headingStyles.heading, headingStyles.extraSmall, cardStyles.heading]}>
+                                        {card.title}
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class:list={[cardStyles.childrenContainer, styles.keyPointList]}>
+                                {card.points.map((p) => (
+                                    <div class={listItemStyles.listItem}>
+                                        <div class={listItemStyles.icon}>
+                                            <Icon name="checkmark-circle-outline" />
+                                        </div>
+                                        <div class={listItemStyles.label}>{p}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </article>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    {/* The ONE interactive island: filters + search + sort + pagination +
        card list + map share state. client:load so filters + initial list
        are in the SSR'd HTML; the leaflet map is client-guarded inside.
        Renders the explore + download sections with the same recovered
        CSS-Module classes as the old Next page (it imports this page's
        styles.module.css). */}
-  <DataExplorer
-    client:load
-    dict={dict}
-    imageMap={initialImageMap}
-    initialProjects={initialProjects}
-    totalCount={payload.projects.length}
-    dataUrl={DATA_EXPLORER_JSON_URL}
-    globalExportAssets={payload.globalExportAssets}
-    minArea={payload.minArea}
-    maxArea={payload.maxArea}
-    minContributors={payload.minContributors}
-    maxContributors={payload.maxContributors}
-    buildDate={payload.buildDate}
-  />
+    <DataExplorer
+        client:load
+        dict={dict}
+        imageMap={initialImageMap}
+        initialProjects={initialProjects}
+        totalCount={payload.projects.length}
+        dataUrl={DATA_EXPLORER_JSON_URL}
+        globalExportAssets={payload.globalExportAssets}
+        minArea={payload.minArea}
+        maxArea={payload.maxArea}
+        minContributors={payload.minContributors}
+        maxContributors={payload.maxContributors}
+        buildDate={payload.buildDate}
+    />
 
-  {/* License + contact (static) */}
-  <section class={sectionStyles.section}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('license-section-heading')}
-        </h4>
-        <div class={sectionStyles.description}>{t('license-section-description')}</div>
-      </div>
-    </div>
-  </section>
-  <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground]}>
-    <div class={sectionStyles.container}>
-      <div class={sectionStyles.headingContainer}>
-        <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
-          {t('contact-section-heading')}
-        </h4>
-        <div class={sectionStyles.description}>{t('contact-section-description')}</div>
-      </div>
-      <div class={sectionStyles.actions}>
-        <a class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">
-          {t('contact-link-label')}
-        </a>
-      </div>
-    </div>
-  </section>
+    {/* License + contact (static) */}
+    <section class={sectionStyles.section}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('license-section-heading')}
+                </h4>
+                <div class={sectionStyles.description}>{t('license-section-description')}</div>
+            </div>
+        </div>
+    </section>
+    <section class:list={[sectionStyles.section, sectionStyles.withAlternativeBackground]}>
+        <div class={sectionStyles.container}>
+            <div class={sectionStyles.headingContainer}>
+                <h4 class:list={[headingStyles.heading, headingStyles.medium, sectionStyles.heading]}>
+                    {t('contact-section-heading')}
+                </h4>
+                <div class={sectionStyles.description}>{t('contact-section-description')}</div>
+            </div>
+            <div class={sectionStyles.actions}>
+                <a class:list={[linkStyles.link, linkStyles.button]} href="mailto:info@mapswipe.org" target="_blank">
+                    {t('contact-link-label')}
+                </a>
+            </div>
+        </div>
+    </section>
 </BaseLayout>

@@ -138,9 +138,12 @@
         color: var(--color-text);
     }
 
-    &:hover .languageList,
-    &:focus-within .languageList {
-        display: flex;
-    }
+}
 
+/* State kept un-nested: concentric's order/order wants &:state rules first,
+ * no-descending-specificity wants the base rule first — top-level satisfies
+ * both. */
+.languageWrap:hover .languageList,
+.languageWrap:focus-within .languageList {
+    display: flex;
 }

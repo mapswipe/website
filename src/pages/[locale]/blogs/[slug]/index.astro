@@ -30,26 +30,26 @@ import htmlOutputStyles from 'components/HtmlOutput.module.css';
 // absolute paths). All 6 locale variants of a post share the SAME signature
 // object so it hashes once.
 export const getStaticPaths = (async () => {
-  const entries = await getCollection('blogs');
-  const candidates = entries.flatMap((entry) => {
-    const signature = {
-      id: entry.id,
-      title: entry.data.title ?? null,
-      publishedDate: entry.data.publishedDate?.getTime() ?? null,
-      author: entry.data.author ?? null,
-      description: entry.data.description ?? null,
-      featured: entry.data.featured ?? false,
-      coverImage: entry.data.coverImage?.src ?? null,
-      body: entry.body ?? '',
-    };
-    return LOCALES.map((locale) => ({
-      key: `${locale}/blogs/${entry.id}`,
-      params: { locale, slug: entry.id },
-      props: { entry },
-      propsData: signature,
-    }));
-  });
-  return selectPaths('blogs-detail', candidates);
+    const entries = await getCollection('blogs');
+    const candidates = entries.flatMap((entry) => {
+        const signature = {
+            id: entry.id,
+            title: entry.data.title ?? null,
+            publishedDate: entry.data.publishedDate?.getTime() ?? null,
+            author: entry.data.author ?? null,
+            description: entry.data.description ?? null,
+            featured: entry.data.featured ?? false,
+            coverImage: entry.data.coverImage?.src ?? null,
+            body: entry.body ?? '',
+        };
+        return LOCALES.map((locale) => ({
+            key: `${locale}/blogs/${entry.id}`,
+            params: { locale, slug: entry.id },
+            props: { entry },
+            propsData: signature,
+        }));
+    });
+    return selectPaths('blogs-detail', candidates);
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
@@ -70,55 +70,55 @@ const dateFmt = new Intl.DateTimeFormat(locale!);
 const tabTitle = String(t('blog-tab-head', { blogTitle }));
 ---
 <BlogLayout
-  locale={locale!}
-  title={tabTitle}
-  description={description}
-  path={`blogs/${entry.id}/`}
-  mainClass={styles.blog}
+    locale={locale!}
+    title={tabTitle}
+    description={description}
+    path={`blogs/${entry.id}/`}
+    mainClass={styles.blog}
 >
-  {/* Hero: title + date/author tags left, cover image right */}
-  <div class:list={[heroStyles.hero, styles.hero]}>
-    <div class={heroStyles.section}>
-      <div class:list={[heroStyles.mainContent, styles.heroMainContent]}>
-        <div class:list={[heroStyles.left, styles.heroLeftContent]}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {blogTitle}
-          </h2>
-          <div class={heroStyles.description}>
-            <div class={styles.heroDescription}>
-              {publishedDate && (
-                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
-                  <Icon name="calendar-clear-outline" />
-                  {dateFmt.format(publishedDate)}
-                </span>
-              )}
-              {author && (
-                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
-                  {author}
-                </span>
-              )}
+    {/* Hero: title + date/author tags left, cover image right */}
+    <div class:list={[heroStyles.hero, styles.hero]}>
+        <div class={heroStyles.section}>
+            <div class:list={[heroStyles.mainContent, styles.heroMainContent]}>
+                <div class:list={[heroStyles.left, styles.heroLeftContent]}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {blogTitle}
+                    </h2>
+                    <div class={heroStyles.description}>
+                        <div class={styles.heroDescription}>
+                            {publishedDate && (
+                                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
+                                    <Icon name="calendar-clear-outline" />
+                                    {dateFmt.format(publishedDate)}
+                                </span>
+                            )}
+                            {author && (
+                                <span class:list={[tagStyles.tag, tagStyles.transparent, styles.heroTag]}>
+                                    {author}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div class={heroStyles.right}>
+                    {coverImage ? (
+                        <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
+                            <Image class={imageStyles.image} src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
+                        </div>
+                    ) : (
+                        <div />
+                    )}
+                </div>
             </div>
-          </div>
         </div>
-        <div class={heroStyles.right}>
-          {coverImage ? (
-            <div class:list={[imageStyles.imageWrapper, styles.illustration]}>
-              <Image class={imageStyles.image} src={coverImage} alt={blogTitle} width={800} loading="lazy" decoding="async" />
-            </div>
-          ) : (
-            <div />
-          )}
-        </div>
-      </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
 
-  <section class={sectionStyles.section}>
-    <div class={sectionStyles.container}>
-      <div class={htmlOutputStyles.htmlOutput}>
-        <Content />
-      </div>
-    </div>
-  </section>
+    <section class={sectionStyles.section}>
+        <div class={sectionStyles.container}>
+            <div class={htmlOutputStyles.htmlOutput}>
+                <Content />
+            </div>
+        </div>
+    </section>
 </BlogLayout>

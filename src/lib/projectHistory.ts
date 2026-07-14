@@ -4,57 +4,57 @@
 import Papa from 'papaparse';
 
 interface ProjectHistoryRaw {
-  day: string;
-  cum_progress: string;
+    day: string;
+    cum_progress: string;
 }
 
 function isFalsyString(v: unknown): boolean {
-  return v === undefined || v === null || v === '';
+    return v === undefined || v === null || v === '';
 }
 
 const getProjectHistory = async (projectId: string, exportHistoryUrl?: string) => {
-  if (!exportHistoryUrl) {
+    if (!exportHistoryUrl) {
      
-    console.warn(`No exportHistoryUrl for project ${projectId}`);
-    return [];
-  }
-
-  let csvContent: string;
-  try {
-    const res = await fetch(exportHistoryUrl);
-    if (!res.ok) {
-      throw new Error(`Failed to fetch history: ${res.status}`);
+        console.warn(`No exportHistoryUrl for project ${projectId}`);
+        return [];
     }
-    csvContent = await res.text();
-  } catch {
+
+    let csvContent: string;
+    try {
+        const res = await fetch(exportHistoryUrl);
+        if (!res.ok) {
+            throw new Error(`Failed to fetch history: ${res.status}`);
+        }
+        csvContent = await res.text();
+    } catch {
      
-    console.warn(`Could not fetch history for project ${projectId}.`);
-    return [];
-  }
+        console.warn(`Could not fetch history for project ${projectId}.`);
+        return [];
+    }
 
-  const parsedContent = await new Promise<{ data: ProjectHistoryRaw[] }>((resolve, reject) => {
-    Papa.parse(csvContent?.toString() ?? '', {
-      delimiter: ',',
-      newline: '\n',
-      header: true,
+    const parsedContent = await new Promise<{ data: ProjectHistoryRaw[] }>((resolve, reject) => {
+        Papa.parse(csvContent?.toString() ?? '', {
+            delimiter: ',',
+            newline: '\n',
+            header: true,
        
-      complete: (results: any) => resolve(results),
+            complete: (results: any) => resolve(results),
        
-      error: (error: any) => reject(error),
+            error: (error: any) => reject(error),
+        });
     });
-  });
 
-  const histories = parsedContent.data;
-  return histories
-    .filter((h) => !isFalsyString(h.day))
-    .map((hist) => {
-      if (isFalsyString(hist.cum_progress)) return undefined;
-      return {
-        timestamp: new Date(hist.day).getTime(),
-        progress: Number(hist.cum_progress),
-      };
-    })
-    .filter((x): x is { timestamp: number; progress: number } => x !== undefined);
+    const histories = parsedContent.data;
+    return histories
+        .filter((h) => !isFalsyString(h.day))
+        .map((hist) => {
+            if (isFalsyString(hist.cum_progress)) return undefined;
+            return {
+                timestamp: new Date(hist.day).getTime(),
+                progress: Number(hist.cum_progress),
+            };
+        })
+        .filter((x): x is { timestamp: number; progress: number } => x !== undefined);
 };
 
 export default getProjectHistory;

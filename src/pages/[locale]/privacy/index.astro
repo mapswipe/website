@@ -31,11 +31,11 @@ import htmlOutputStyles from 'components/HtmlOutput.module.css';
 // bumps codeHash → full rebuild, so tracking that content here would be
 // redundant.
 export const getStaticPaths = (async () =>
-  selectPaths('privacy', LOCALES.map((locale) => ({
-    key: `${locale}/privacy`,
-    params: { locale },
-    propsData: { page: 'privacy', locale },
-  })))) satisfies GetStaticPaths;
+    selectPaths('privacy', LOCALES.map((locale) => ({
+        key: `${locale}/privacy`,
+        params: { locale },
+        propsData: { page: 'privacy', locale },
+    })))) satisfies GetStaticPaths;
 
 const { locale } = Astro.params;
 const t = await getT(locale!, 'privacy');
@@ -121,34 +121,34 @@ Our Privacy Notice may change from time to time, so please check this page occas
 `;
 
 const policyHtml = String(
-  await unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .process(policy.replace(/\\n/g, '\n')),
+    await unified()
+        .use(remarkParse)
+        .use(remarkGfm)
+        .use(remarkRehype)
+        .use(rehypeStringify)
+        .process(policy.replace(/\\n/g, '\n')),
 );
 ---
 <BaseLayout locale={locale!} title={title} path="privacy/" mainClass={styles.privacy}>
-  {/* Hero (no right content -> centered) */}
-  <div class:list={[heroStyles.hero, heroStyles.withoutRightContent, styles.hero]}>
-    <div class={heroStyles.section}>
-      <div class={heroStyles.mainContent}>
-        <div class={heroStyles.left}>
-          <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
-            {t('privacy-hero-title')}
-          </h2>
+    {/* Hero (no right content -> centered) */}
+    <div class:list={[heroStyles.hero, heroStyles.withoutRightContent, styles.hero]}>
+        <div class={heroStyles.section}>
+            <div class={heroStyles.mainContent}>
+                <div class={heroStyles.left}>
+                    <h2 class:list={[headingStyles.heading, headingStyles.extraLarge, heroStyles.heading]}>
+                        {t('privacy-hero-title')}
+                    </h2>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class={heroStyles.angledBackground}></div>
     </div>
-    <div class={heroStyles.angledBackground}></div>
-  </div>
 
-  <section class={sectionStyles.section}>
-    <div class={sectionStyles.container}>
-      <div class={styles.content}>
-        <div class={htmlOutputStyles.htmlOutput} set:html={policyHtml} />
-      </div>
-    </div>
-  </section>
+    <section class={sectionStyles.section}>
+        <div class={sectionStyles.container}>
+            <div class={styles.content}>
+                <div class={htmlOutputStyles.htmlOutput} set:html={policyHtml} />
+            </div>
+        </div>
+    </section>
 </BaseLayout>
