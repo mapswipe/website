@@ -45,6 +45,9 @@ function shortClassName(name, filename) {
 }
 
 export default defineConfig({
+    // All build artifacts live under build/ (out + incremental state +
+    // image cache) so CI caches one tree.
+    outDir: './build/out',
     site: SITE,
     vite: {
         css: {

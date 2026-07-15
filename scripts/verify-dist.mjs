@@ -4,14 +4,14 @@ import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
 
-const DIST = 'dist';
+const DIST = 'build/out';
 const failures = [];
 const check = (name, ok, detail = '') => {
     console.log(`${ok ? '  ok ' : 'FAIL '} ${name}${detail ? ` — ${detail}` : ''}`);
     if (!ok) failures.push(name);
 };
 
-const data = JSON.parse(readFileSync('fullData/staticData.json', 'utf8'));
+const data = JSON.parse(readFileSync('full-data/staticData.json', 'utf8'));
 const projects = data.publicProjects.results.length;
 const locales = ['en', 'ne', 'hu', 'de', 'cs', 'pt'];
 

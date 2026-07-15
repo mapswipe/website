@@ -1,6 +1,6 @@
 // Concurrent image-prefetch step — thin wrapper over the app's configured
 // astro-remote-images instance. Runs BEFORE `astro build` (see the npm
-// `build` script) to warm the on-disk .image-cache/ with a bounded pool, so
+// `build` script) to warm the on-disk build/image-cache/ with a bounded pool, so
 // the per-page render pass hits pure cache and does NOT serialize thousands
 // of remote fetches.
 //
@@ -17,7 +17,7 @@ const require = createRequire(import.meta.url);
 // src/lib/data.ts (same staticData path + same BAD_IMAGE_TEST / SLICE_LIMIT
 // knobs) so the warmed set matches the render set exactly.
 function collectCoverUrls() {
-    const data = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'fullData', 'staticData.json'));
+    const data = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'full-data', 'staticData.json'));
     let projects = (data?.publicProjects?.results ?? []);
 
     const limit = Number(process.env.SLICE_LIMIT ?? 0);

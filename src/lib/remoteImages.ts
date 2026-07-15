@@ -15,7 +15,8 @@ export const remoteImages = createRemoteImages({
     width: COVER_WIDTH,
     quality: 80,
     format: 'webp',
-    cacheDir: '.image-cache', // persisted in CI so warm builds reuse encodes
+    cacheDir: 'build/image-cache', // persisted in CI so warm builds reuse encodes
+    distDir: 'build/out', // must track astro.config's outDir
     publicPrefix: '/_img',
     // Fetch-bound work: ~24 in-flight fetches saturates the link without
     // exhausting sockets/RAM. Tunable via env for measurement.

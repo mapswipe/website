@@ -1,4 +1,4 @@
-// Build-time data loader. Reads the same fullData/staticData.json the Next app
+// Build-time data loader. Reads the same full-data/staticData.json the Next app
 // reads (symlinked into the worktree). publicProjects.results[] is the project
 // array.
 import { createRequire } from 'node:module';
@@ -8,11 +8,11 @@ const require = createRequire(import.meta.url);
 // Anchor at the build's working directory (repo root) rather than
 // import.meta.url: after Vite bundles this module into dist/, a relative
 // specifier resolves from the emitted file's location (dist/pages/...) and
-// breaks. cwd is stable across dev + bundled build -> fullData/staticData.json.
+// breaks. cwd is stable across dev + bundled build -> full-data/staticData.json.
 // MAPSWIPE_DATA_FILE overrides the path (used by the incremental data-change
 // benchmark to point at a perturbed copy without touching the shared symlink).
  
-const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'fullData', 'staticData.json'));
+const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'full-data', 'staticData.json'));
 
 // Fail fast on backend schema drift: without this, a renamed/dropped field
 // surfaces as silently-empty content on 14k rendered pages. Only load-bearing

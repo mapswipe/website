@@ -10,9 +10,11 @@
 import { runIncrementalBuild } from '../packages/astro-incremental-static/src/runner.ts';
 
 runIncrementalBuild({
+    distDir: 'build/out',
+    stateDir: 'build/incremental',
     codeHash: {
         // Everything that affects rendered output EXCEPT the data axis
-        // (fullData/ + blogs/ are tracked per page via propsHash) and build
+        // (full-data/ + blogs/ are tracked per page via propsHash) and build
         // artifacts. Repo-root locales/ is read by src/i18n's glob.
         include: [
             'src/**',

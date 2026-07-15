@@ -13,7 +13,7 @@ import type {
     RestDataQuery,
 } from '../generated/types';
 
-const datadir = path.join(import.meta.dirname, '../fullData');
+const datadir = path.join(import.meta.dirname, '../full-data');
 const outputPath = path.join(datadir, 'staticData.json');
 const baseUrl = process.env.MAPSWIPE_API_ENDPOINT || 'http://localhost:8000/';
 const GRAPHQL_ENDPOINT = `${baseUrl}graphql/`;

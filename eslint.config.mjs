@@ -6,7 +6,7 @@ import globals from 'globals';
 import stylistic from '@stylistic/eslint-plugin';
 
 export default tseslint.config(
-    { ignores: ['dist/', '.astro/', 'node_modules/', 'generated/', 'public/', 'docs/'] },
+    { ignores: ['build/', '.astro/', 'node_modules/', 'generated/', 'public/', 'docs/'] },
     js.configs.recommended,
     ...tseslint.configs.recommended,
     ...astro.configs.recommended,

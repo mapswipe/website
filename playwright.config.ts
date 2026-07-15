@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 
-// Island smoke tests against the built site (`astro preview` over dist/).
+// Island smoke tests against the built site (`astro preview` over build/out/).
 // Run a full build first; CI wires this after verify-dist.
 export default defineConfig({
     testDir: 'tests/e2e',

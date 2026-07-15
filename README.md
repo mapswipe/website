@@ -54,19 +54,19 @@ pnpm lint
 pnpm css-lint
 pnpm typecheck
 pnpm check-unused
-pnpm test:e2e   # needs a built dist/ (see Building)
+pnpm test:e2e   # needs a built build/out/ (see Building)
 ```
 
 ### Building
 
 ```bash
-pnpm build         # full static build -> dist/
+pnpm build         # full static build -> build/out/
 pnpm verify-dist   # post-build invariant checks
 ```
 
 For data-only refreshes there is also `pnpm build:incremental`, which
 re-renders just the pages whose data changed and merges the rest from the
-previous `dist/` (see packages/astro-incremental-static).
+previous `build/out/` (see packages/astro-incremental-static).
 
 ### Staging Deployment
 
@@ -201,9 +201,9 @@ News & Updates section of home page
 
 | Cache / state (gitignored) | What | Cold cost if lost |
 | --- | --- | --- |
-| `.image-cache/` | optimized remote project covers + negative cache | ~70 s refetch/re-encode |
-| `fullData/staticData.json` | site data AND the incremental-fetch cache | ~50 s full refetch |
-| `.astro-incremental/` | manifest for `pnpm build:incremental` | one full render |
+| `build/image-cache/` | optimized remote project covers + negative cache | ~70 s refetch/re-encode |
+| `full-data/staticData.json` | site data AND the incremental-fetch cache | ~50 s full refetch |
+| `build/incremental/` | manifest for `pnpm build:incremental` (cache with `build/out/`) | one full render |
 
 | Env knob | Effect |
 | --- | --- |

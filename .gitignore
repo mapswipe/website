@@ -2,24 +2,20 @@
 node_modules/
 
 # site data (fetched via `npm run fetch-data`; also the incremental-fetch cache)
-fullData/
+full-data/
 
-# build output
-dist/
-dist-cache/
+# all build artifacts:
+#   build/out          — the site (astro outDir; merged tree on incremental runs)
+#   build/out-cache    — incremental merge staging (transient)
+#   build/incremental  — incremental state (code-hash, manifest, shards)
+#   build/image-cache  — remote-image webp encodes
+# In CI, restore/save build/out + build/incremental as ONE cache entry (the
+# manifest describes that exact tree) and build/image-cache as another.
+build/
 .astro/
 
-# incremental build state (code-hash, manifest, per-page shards).
-# In CI, restore/save this dir alongside dist/ so warm builds skip unchanged pages.
-.astro-incremental/
-
-# generated optimized images (emitted into dist/ at build time)
+# generated optimized images (emitted into build/out at build time)
 public/_img/
-
-# persistent build-time image optimization cache.
-# In CI, restore/save this dir as a build cache so warm builds reuse the
-# webp encodes instead of refetching + re-encoding every remote image.
-.image-cache/
 
 # scratch build logs / measurements
 build*.log
