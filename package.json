@@ -5,7 +5,7 @@
     "version": "0.0.1",
     "scripts": {
         "dev": "astro dev",
-        "build": "node scripts/prefetch-images.mjs && astro build",
+        "build": "node scripts/prefetch-images.mjs && astro build && node scripts/sweep-dist.mjs",
         "build:incremental": "node scripts/incremental-build.mjs",
         "prefetch": "node scripts/prefetch-images.mjs",
         "preview": "astro preview",

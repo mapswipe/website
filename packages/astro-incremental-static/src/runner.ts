@@ -53,6 +53,10 @@ import {
     sep,
 } from 'node:path';
 
+// Relative (not aliased) so this file stays loadable by plain node — the
+// runner is executed by scripts/incremental-build.mjs, outside vite.
+import { sweepSupersededAssets } from '../../astro-dist-sweep/src/index.ts';
+
 export interface CommandSpec {
     cmd: string;
     args: string[];
@@ -418,77 +422,6 @@ export function runIncrementalBuild(config: IncrementalBuildConfig): void {
     }
 
     // -----------------------------------------------------------------------
-    // superseded-asset sweep
-    //
-    // Two things leave unreferenced files under _astro/:
-    //   - astro:assets emits the ORIGINAL of every processed image whose
-    //     `src` is touched at build time (the propsData change-detection
-    //     signatures do exactly that) — pages only reference the derived
-    //     variants, so the originals ship as dead weight in EVERY build;
-    //   - on the merge path, a rebuilt page can reference newly-hashed
-    //     variants while the merge keeps the superseded ones from the
-    //     cached tree.
-    // Mark-and-sweep over the final tree: roots are all text files outside
-    // _astro/ (absolute /_astro/<name> references — page HTML, astro-island
-    // props, JSON endpoints); marked js/css files are scanned transitively
-    // for the relative specifiers vite emits between chunks ("./chunk-x.js")
-    // and inside css url()s. Anything in _astro/ never marked is deleted.
-    // -----------------------------------------------------------------------
-
-    const TEXT_ROOT = /\.(html|css|js|mjs|json|xml|svg|txt|webmanifest)$/;
-    const ABS_REF = /\/_astro\/([\w.@~-]+\.\w+)/g;
-    const REL_REF = /["'(]\.\/([\w.@~-]+\.\w+)/g;
-
-    function sweepSupersededAssets(): { removed: number; bytes: number } {
-        const astroDir = join(DIST, '_astro');
-        if (!isDir(astroDir)) {
-            return { removed: 0, bytes: 0 };
-        }
-        const assets = new Set(
-            readdirSync(astroDir).filter((name) => !isDir(join(astroDir, name))),
-        );
-        const referenced = new Set<string>();
-        const queue: string[] = [];
-        const mark = (name: string) => {
-            if (assets.has(name) && !referenced.has(name)) {
-                referenced.add(name);
-                queue.push(name);
-            }
-        };
-        for (const file of collectFiles(DIST, [])) {
-            if (toPosix(file).includes('/_astro/') || !TEXT_ROOT.test(file)) {
-                continue;
-            }
-            for (const m of readFileSync(file, 'utf8').matchAll(ABS_REF)) {
-                mark(m[1]);
-            }
-        }
-        while (queue.length > 0) {
-            const name = queue.pop()!;
-            if (!/\.(js|mjs|css)$/.test(name)) {
-                continue;
-            }
-            const text = readFileSync(join(astroDir, name), 'utf8');
-            for (const m of text.matchAll(ABS_REF)) {
-                mark(m[1]);
-            }
-            for (const m of text.matchAll(REL_REF)) {
-                mark(m[1]);
-            }
-        }
-        let removed = 0;
-        let bytes = 0;
-        for (const name of assets) {
-            if (!referenced.has(name)) {
-                bytes += statSync(join(astroDir, name)).size;
-                rmSync(join(astroDir, name), { force: true });
-                removed += 1;
-            }
-        }
-        return { removed, bytes };
-    }
-
-    // -----------------------------------------------------------------------
     // main
     // -----------------------------------------------------------------------
 
@@ -561,7 +494,7 @@ export function runIncrementalBuild(config: IncrementalBuildConfig): void {
 
     // 7. Sweep _astro files nothing references — on every path: even a fresh
     //    full build carries the always-emitted image originals.
-    const swept = sweepSupersededAssets();
+    const swept = sweepSupersededAssets(DIST);
     log(`swept ${swept.removed} unreferenced _astro asset(s) (${(swept.bytes / 1e6).toFixed(1)} MB)`);
 
     // 8. Persist the new manifest for the next run.

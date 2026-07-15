@@ -128,10 +128,9 @@ contract from the original in-app implementation.
    Otherwise merge: copy the small fresh tree over the cached full tree.
 5. Prune deleted record dirs (`prune.routes` minus manifest keys).
 6. Regenerate the sitemap over the merged tree.
-7. Sweep `_astro/` files nothing in the final tree references (mark-and-sweep
-   from all text files, following vite's inter-chunk imports) — astro:assets
-   emits the *original* of every processed image whose `src` the propsData
-   signatures touch, and the merge can retain superseded hashed variants.
+7. Sweep `_astro/` files nothing in the final tree references (delegated to
+   the sibling `astro-dist-sweep` package — see its README for what
+   accumulates and how the mark-and-sweep works).
 8. Persist the merged manifest for the next run.
 
 Routes *without* a `selectPaths`-wired `getStaticPaths` (the 404, static file

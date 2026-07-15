@@ -1,0 +1,24 @@
+{
+    "name": "astro-dist-sweep",
+    "version": "0.1.0",
+    "description": "Mark-and-sweep for Astro static builds: deletes hashed assets in the output dir that nothing in the final tree references (always-emitted image originals, superseded variants in merged incremental trees).",
+    "type": "module",
+    "private": true,
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "files": [
+        "src",
+        "README.md"
+    ],
+    "keywords": [
+        "astro",
+        "static",
+        "assets",
+        "sweep",
+        "cleanup"
+    ],
+    "engines": {
+        "node": ">=22.18"
+    }
+}
