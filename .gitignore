@@ -19,6 +19,10 @@ public/_img/
 build*.log
 measure_*.txt
 
+# core dumps (a crashed dev-server node once dumped 9.7 GiB of these into
+# two commits — root-anchored so a hypothetical src core.* file stays safe)
+/core.[0-9]*
+
 # misc
 .DS_Store
 .env
