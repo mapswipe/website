@@ -66,6 +66,11 @@ export default defineConfig({
     trailingSlash: 'always',
     build: {
         format: 'directory',
+        // Pages rendered concurrently. Rendering is single-threaded JS —
+        // concurrency only overlaps the async waits — so gains saturate
+        // fast: measured 55s/48s/45s at 1/4/8 (peak RSS 1.8/2.0/2.4 GiB),
+        // byte-identical output. 4 is the balance; override per-run via env.
+        concurrency: Number(process.env.ASTRO_BUILD_CONCURRENCY ?? 4),
         // 'auto' inlines small stylesheets into EVERY page — ~10 KB of
         // identical CSS duplicated across 14.6k pages (~150 MB of dist).
         // External files are fetched once and cached.
