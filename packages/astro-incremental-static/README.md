@@ -2,8 +2,9 @@
 
 Incremental static builds for Astro (`output: 'static'`): a per-page
 `propsHash` **render-skip** wired into `getStaticPaths`, plus a build
-orchestration that merges the previous `dist`, prunes deleted pages, and
-regenerates the sitemap over the merged tree.
+orchestration that merges the previous `dist`, prunes deleted pages,
+regenerates the sitemap over the merged tree, and sweeps `_astro/` assets
+nothing references.
 
 Nothing in the ecosystem does render-skip: Astro re-renders every page every
 build (so do Next stable and canary — measured). On a ~14.7k-page site this
@@ -127,7 +128,11 @@ contract from the original in-app implementation.
    Otherwise merge: copy the small fresh tree over the cached full tree.
 5. Prune deleted record dirs (`prune.routes` minus manifest keys).
 6. Regenerate the sitemap over the merged tree.
-7. Persist the merged manifest for the next run.
+7. Sweep `_astro/` files nothing in the final tree references (mark-and-sweep
+   from all text files, following vite's inter-chunk imports) — astro:assets
+   emits the *original* of every processed image whose `src` the propsData
+   signatures touch, and the merge can retain superseded hashed variants.
+8. Persist the merged manifest for the next run.
 
 Routes *without* a `selectPaths`-wired `getStaticPaths` (the 404, static file
 endpoints, redirect stubs) are cheaply re-emitted every run and therefore
