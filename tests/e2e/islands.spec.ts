@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
-const data = JSON.parse(readFileSync('full-data/staticData.json', 'utf8'));
+const data = JSON.parse(readFileSync('build/full-data/staticData.json', 'utf8'));
 const project = data.publicProjects.results[0];
 const projectPath = `/en/projects/${project.firebaseId}/`;
 

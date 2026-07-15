@@ -1,14 +1,12 @@
 # deps
 node_modules/
 
-# site data (fetched via `npm run fetch-data`; also the incremental-fetch cache)
-full-data/
-
 # all build artifacts:
 #   build/out          — the site (astro outDir; merged tree on incremental runs)
 #   build/out-cache    — incremental merge staging (transient)
 #   build/incremental  — incremental state (code-hash, manifest, shards)
 #   build/image-cache  — remote-image webp encodes
+#   build/full-data    — site data from `pnpm fetch-data` (also the incremental-fetch cache)
 # In CI, restore/save build/out + build/incremental as ONE cache entry (the
 # manifest describes that exact tree) and build/image-cache as another.
 build/

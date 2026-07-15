@@ -14,7 +14,7 @@ runIncrementalBuild({
     stateDir: 'build/incremental',
     codeHash: {
         // Everything that affects rendered output EXCEPT the data axis
-        // (full-data/ + blogs/ are tracked per page via propsHash) and build
+        // (build/full-data/ + blogs/ are tracked per page via propsHash) and build
         // artifacts. Repo-root locales/ is read by src/i18n's glob.
         include: [
             'src/**',

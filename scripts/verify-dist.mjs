@@ -11,7 +11,7 @@ const check = (name, ok, detail = '') => {
     if (!ok) failures.push(name);
 };
 
-const data = JSON.parse(readFileSync('full-data/staticData.json', 'utf8'));
+const data = JSON.parse(readFileSync('build/full-data/staticData.json', 'utf8'));
 const projects = data.publicProjects.results.length;
 const locales = ['en', 'ne', 'hu', 'de', 'cs', 'pt'];
 

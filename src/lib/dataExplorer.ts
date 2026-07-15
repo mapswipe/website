@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 // Same anchor as src/lib/data.ts (cwd = repo root), stable after Vite bundling.
 // MAPSWIPE_DATA_FILE overrides the path (incremental data-change benchmark).
  
-const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'full-data', 'staticData.json'));
+const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'build', 'full-data', 'staticData.json'));
 
 export interface MiniProject {
     id: string;

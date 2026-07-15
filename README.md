@@ -202,7 +202,7 @@ News & Updates section of home page
 | Cache / state (gitignored) | What | Cold cost if lost |
 | --- | --- | --- |
 | `build/image-cache/` | optimized remote project covers + negative cache | ~70 s refetch/re-encode |
-| `full-data/staticData.json` | site data AND the incremental-fetch cache | ~50 s full refetch |
+| `build/full-data/staticData.json` | site data AND the incremental-fetch cache | ~50 s full refetch |
 | `build/incremental/` | manifest for `pnpm build:incremental` (cache with `build/out/`) | one full render |
 
 | Env knob | Effect |
