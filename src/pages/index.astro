@@ -1,5 +1,35 @@
 ---
-// Root index. Redirects to the default-locale home (parity with the Next app's
-// locale-prefixed routing). Astro's i18n requires this to exist.
-return Astro.redirect('/en/');
+import { DEFAULT_LOCALE, LOCALES } from '../i18n';
+
+// Root index: send / to the remembered locale's home (the Navbar switcher
+// persists an explicit choice), falling back to the default locale — the
+// meta refresh covers JS-less visitors. A real page (not Astro.redirect) so
+// the redirect target can be picked client-side; the sitemap treatment is
+// unchanged (the root is included either way).
+const site = 'https://mapswipe.org';
 ---
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+    <head>
+        <meta charset="utf-8" />
+        <title>{`Redirecting to: /${DEFAULT_LOCALE}/`}</title>
+        <meta http-equiv="refresh" content={`2;url=/${DEFAULT_LOCALE}/`} />
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href={`${site}/${DEFAULT_LOCALE}/`} />
+        <script is:inline define:vars={{ locales: LOCALES, fallback: DEFAULT_LOCALE }}>
+            let locale = fallback;
+            try {
+                const stored = localStorage.getItem('mapswipe-locale');
+                if (locales.indexOf(stored) !== -1) {
+                    locale = stored;
+                }
+            } catch {
+                // storage unavailable — fall back
+            }
+            location.replace(`/${locale}/`);
+        </script>
+    </head>
+    <body>
+        <a href={`/${DEFAULT_LOCALE}/`}>{`Redirecting from / to /${DEFAULT_LOCALE}/`}</a>
+    </body>
+</html>

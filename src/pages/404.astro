@@ -3,7 +3,7 @@ import BaseLayout from 'layouts/BaseLayout.astro';
 import Heading from 'components/Heading/index.astro';
 import Link from 'components/Link/index.astro';
 import ImageWrapper from 'components/ImageWrapper/index.astro';
-import { DEFAULT_LOCALE } from '../i18n';
+import { DEFAULT_LOCALE, LOCALES } from '../i18n';
 // Page module recovered from the Next app (pages/404/styles.module.css,
 // co-located here as 404.module.css); chrome via shared components.
 import styles from './404.module.css';
@@ -19,6 +19,29 @@ import styles from './404.module.css';
     path="404/"
     hreflang={false}
 >
+    {/* GH Pages serves this page for ANY unknown path — including locale-less
+        deep links like /projects/<id>/. Those aren't 404s: forward them into
+        the remembered locale (Navbar choice) or the default. A path whose
+        first segment IS a locale is a genuine 404 and renders below (the
+        rewritten URL always has a locale prefix, so this cannot loop). */}
+    <script is:inline define:vars={{ locales: LOCALES, fallback: DEFAULT_LOCALE }}>
+        (function () {
+            const seg = location.pathname.split('/')[1];
+            if (locales.indexOf(seg) !== -1) {
+                return;
+            }
+            let locale = fallback;
+            try {
+                const stored = localStorage.getItem('mapswipe-locale');
+                if (locales.indexOf(stored) !== -1) {
+                    locale = stored;
+                }
+            } catch {
+                // storage unavailable — fall back
+            }
+            location.replace(`/${locale}${location.pathname}${location.search}${location.hash}`);
+        })();
+    </script>
     <div class={styles.fourHundredFour}>
         <div class={styles.leftContent}>
             <div class={styles.headingContainer}>

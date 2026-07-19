@@ -9,9 +9,9 @@ import { getT, LOCALES } from '../../i18n';
 // toggle; see the adaptation notes in Navbar.module.css).
 import styles from './styles.module.css';
 
-// Ported from the Next app's components/Navbar. Static, zero-JS. `activePath`
-// highlights the current route link, matching Next's router.pathname ===
-// '/[locale]/...' check.
+// Ported from the Next app's components/Navbar. `activePath` highlights the
+// current route link, matching Next's router.pathname === '/[locale]/...'
+// check. The only JS is the language-choice persistence below.
 interface Props {
     locale: string;
     activePath?: string; // e.g. 'get-involved' | 'data'
@@ -83,6 +83,7 @@ const localelessPath = activePath ? `${activePath}/` : '';
                         <Link
                             class={[styles.language, l === locale && styles.activeLanguage]}
                             href={`/${l}/${localelessPath}`}
+                            data-language-choice={l}
                         >
                             {languageTitleMap[l]?.label ?? l}
                         </Link>
@@ -98,3 +99,20 @@ const localelessPath = activePath ? `${activePath}/` : '';
         </div>
     </div>
 </div>
+
+{/* Remember an EXPLICIT language choice (switcher click only — merely
+    visiting a locale page must not overwrite it). The 404 page and the root
+    redirect send locale-less URLs to this locale. is:inline (classic script)
+    so the hydration-dedup integration externalizes the identical block into
+    one shared cached file instead of shipping a module per page. */}
+<script is:inline>
+    document.querySelectorAll('[data-language-choice]').forEach((el) => {
+        el.addEventListener('click', () => {
+            try {
+                localStorage.setItem('mapswipe-locale', el.getAttribute('data-language-choice') || '');
+            } catch {
+                // storage unavailable (private mode) — redirects fall back
+            }
+        });
+    });
+</script>

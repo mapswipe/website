@@ -152,6 +152,9 @@ interface DataExplorerDataset {
 
 interface Props {
     dict: Dict;
+    // Locale of the page rendering this island — project links carry it
+    // (parity with Next's /[locale]/projects/<id> links).
+    locale: string;
     // {originalCoverUrl -> optimized (or passthrough) src} for the INITIAL slice
     // only, resolved at build time by the fail-soft optimizer; the full map
     // arrives with the fetched dataset.
@@ -174,6 +177,7 @@ interface Props {
 export default function DataExplorer(props: Props) {
     const {
         dict,
+        locale,
         imageMap: initialImageMap,
         initialProjects,
         totalCount,
@@ -504,6 +508,7 @@ export default function DataExplorer(props: Props) {
                             <Suspense fallback={mapPlaceholder}>
                                 <ProjectsMapIsland
                                     className={styles.projectsMap}
+                                    locale={locale}
                                     projects={visibleProjects}
                                     radiusSelector={radiusSelector}
                                     typeLabels={typeLabels}
@@ -560,7 +565,7 @@ export default function DataExplorer(props: Props) {
                         <Link
                             key={project.id}
                             className={styles.cardLink}
-                            href={`/projects/${project.firebaseId}/`}
+                            href={`/${locale}/projects/${project.firebaseId}/`}
                         >
                             {/* `de-card` is a stable, hash-free hook kept for the e2e
                       tests (tests/e2e/islands.spec.ts selects article.de-card). */}

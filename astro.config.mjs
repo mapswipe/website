@@ -116,7 +116,9 @@ export default defineConfig({
     i18n: {
         defaultLocale: 'en',
         locales: ['en', 'ne', 'hu', 'de', 'cs', 'pt'],
-        routing: { prefixDefaultLocale: true },
+        // redirectToDefaultLocale off: src/pages/index.astro owns the root
+        // redirect (remembered-locale aware); astro's auto-stub would shadow it.
+        routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
     },
     // NOTE: Remote project cover images are optimized by our build-time,
     // fail-soft resolver (the astro-remote-images workspace package, configured

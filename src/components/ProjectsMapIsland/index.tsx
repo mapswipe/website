@@ -30,6 +30,7 @@ function isDefined<T>(v: T | null | undefined): v is T {
 
 interface Props {
     className?: string;
+    locale: string;
     projects: MiniProject[];
     radiusSelector: (p: MiniProject) => number;
     typeLabels: Record<string, string>;
@@ -37,7 +38,7 @@ interface Props {
 }
 
 export default function ProjectsMapIsland(props: Props) {
-    const { className, projects, radiusSelector, typeLabels, statusLabels } = props;
+    const { className, locale, projects, radiusSelector, typeLabels, statusLabels } = props;
 
     const sanitized = useMemo(
         () =>
@@ -77,7 +78,7 @@ export default function ProjectsMapIsland(props: Props) {
                     <Popup>
                         <a
                             className={styles.cardLink}
-                            href={`/projects/${project.firebaseId}/`}
+                            href={`/${locale}/projects/${project.firebaseId}/`}
                         >
                             <strong>{project.name}</strong>
                             <div className={styles.types}>

@@ -41,6 +41,11 @@ test('data explorer: SSR cards visible, search filters the list', async ({ page 
     const cards = page.locator('article.de-card');
     await expect(cards.first()).toBeVisible();
 
+    // card links carry the rendering page's locale (regression: the island
+    // once emitted locale-less /projects/<id>/ links)
+    const firstHref = await cards.first().locator('xpath=ancestor::a').getAttribute('href');
+    expect(firstHref).toMatch(/^\/en\/projects\//);
+
     // hydration + dataset fetch: search narrows the list to a known project
     const search = page.getByPlaceholder(/search/i).first();
     await expect(search).toBeEnabled({ timeout: 15_000 });
@@ -67,4 +72,24 @@ test('blog post: optimized images load', async ({ page }) => {
             .poll(async () => imgs.nth(i).evaluate((el: HTMLImageElement) => el.naturalWidth))
             .toBeGreaterThan(0);
     }
+});
+
+test('locale-less URLs forward to the remembered locale (404 redirect)', async ({ page }) => {
+    // no stored choice -> default locale
+    await page.goto(`/projects/${project.firebaseId}/`);
+    await page.waitForURL(`/en/projects/${project.firebaseId}/`);
+
+    // explicit switcher choice is remembered and wins
+    await page.evaluate(() => localStorage.setItem('mapswipe-locale', 'de'));
+    await page.goto(`/projects/${project.firebaseId}/`);
+    await page.waitForURL(`/de/projects/${project.firebaseId}/`);
+
+    // the root stub honors the remembered choice too
+    await page.goto('/');
+    await page.waitForURL('/de/');
+
+    // a locale-prefixed miss is a genuine 404 (no redirect loop)
+    const res = await page.goto('/en/no-such-page/');
+    expect(res?.status()).toBe(404);
+    await expect(page.getByText('This area has not been swiped yet!')).toBeVisible();
 });
