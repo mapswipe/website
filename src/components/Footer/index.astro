@@ -2,6 +2,7 @@
 import Icon from '../Icon.astro';
 import Heading from '../Heading/index.astro';
 import Link from '../Link/index.astro';
+import ImageWrapper from '../ImageWrapper/index.astro';
 import { getT } from '../../i18n';
 // CSS Modules recovered from the Next app (components/Footer +
 // components/Link).
@@ -79,7 +80,7 @@ const socialLinks: { href: string; title: string; icon: IconName; rel?: string }
                     href="https://uptimerobot.com/"
                     target="_blank"
                 >
-                    <img
+                    <ImageWrapper
                         class={styles.partnerLogo}
                         src="/img/uptime.png"
                         alt="Uptime Robot"

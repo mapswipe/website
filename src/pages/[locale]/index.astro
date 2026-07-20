@@ -259,8 +259,8 @@ const title = String(t('home-tab-head'));
                         href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
                         target="_blank"
                     >
-                        <img
-                            class:list={[imageStyles.image, styles.image]}
+                        <ImageWrapper
+                            imageClass={styles.image}
                             src="/img/playstore.png"
                             alt={t('download-playstore')}
                             loading="lazy"
@@ -271,8 +271,8 @@ const title = String(t('home-tab-head'));
                         href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
                         target="_blank"
                     >
-                        <img
-                            class:list={[imageStyles.image, styles.image]}
+                        <ImageWrapper
+                            imageClass={styles.image}
                             src="/img/apple.png"
                             alt={t('download-apple-store')}
                             loading="lazy"

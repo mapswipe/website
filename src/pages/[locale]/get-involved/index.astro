@@ -9,10 +9,8 @@ import Link from 'components/Link/index.astro';
 import ImageWrapper from 'components/ImageWrapper/index.astro';
 import { getT, LOCALES } from '../../../i18n';
 import { selectPaths } from 'packages/astro-incremental-static/src/index.ts';
-// Page module + the Link/ImageWrapper CSS Modules recovered from the Next
-// app; the chrome comes from the shared Hero/Section/CenteredCard components.
+// Page module recovered from the Next app; the chrome comes from the shared Hero/Section/CenteredCard components.
 import styles from './styles.module.css';
-import imageStyles from 'components/ImageWrapper/styles.module.css';
 
 // Get-involved page. One static, translated variant per locale —
 // /<locale>/get-involved/ — faithful to the Next Pages-Router page. Uses shared
@@ -73,8 +71,8 @@ const title = String(t('get-involved-tab-head'));
                 href="https://play.google.com/store/apps/details?id=org.missingmaps.mapswipe"
                 target="_blank"
             >
-                <img
-                    class:list={[imageStyles.image, styles.image]}
+                <ImageWrapper
+                    imageClass={styles.image}
                     src="/img/playstore.png"
                     alt={t('download-on-playstore')}
                     loading="lazy"
@@ -85,8 +83,8 @@ const title = String(t('get-involved-tab-head'));
                 href="https://apps.apple.com/us/app/mapswipe/id1133855392?ls=1"
                 target="_blank"
             >
-                <img
-                    class:list={[imageStyles.image, styles.image]}
+                <ImageWrapper
+                    imageClass={styles.image}
                     src="/img/apple.png"
                     alt={t('download-on-apple-store')}
                     loading="lazy"
