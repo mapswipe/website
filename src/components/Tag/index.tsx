@@ -24,7 +24,7 @@ const spacingMap: Record<Spacing, string> = {
 interface Props {
     as?: 'div' | 'span';
     variant?: Variant;
-    spacing?: Spacing;
+    spacing?: Spacing | 'none';
     className?: string;
     title?: string;
     children?: React.ReactNode;
@@ -34,14 +34,16 @@ function Tag(props: Props) {
     const {
         as: Element = 'div',
         variant = 'primary',
-        spacing,
+        // medium default: parity with the Next Tag, which applied its
+        // spacing map unconditionally
+        spacing = 'medium',
         className,
         title,
         children,
     } = props;
     return (
         <Element
-            className={cs(styles.tag, variantMap[variant], spacing && spacingMap[spacing], className)}
+            className={cs(styles.tag, variantMap[variant], spacing !== 'none' && spacingMap[spacing as Spacing], className)}
             title={title}
         >
             {children}

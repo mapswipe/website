@@ -12,6 +12,8 @@
 interface Props {
     name:
     | 'calendar-clear-outline'
+    | 'location-outline'
+    | 'flag'
     | 'arrow-forward-sharp'
     | 'menu'
     | 'earth-sharp'
@@ -32,6 +34,8 @@ const { name, class: className, size = '1em' } = Astro.props;
 // matches the original inline icons (most are 512x512, but a few differ).
 const viewBoxForName: Record<Props['name'], string> = {
     'calendar-clear-outline': '0 0 512 512',
+    'location-outline': '0 0 512 512',
+    flag: '0 0 512 512',
     'arrow-forward-sharp': '0 0 512 512',
     menu: '0 0 24 24',
     'earth-sharp': '0 0 512 512',

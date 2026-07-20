@@ -74,6 +74,14 @@
             grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
             gap: var(--spacing-extra-large);
 
+            @media screen and (width <= 36rem) {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+
+            @media screen and (width <= 30rem) {
+                grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            }
+
             .stats {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));

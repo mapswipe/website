@@ -1,6 +1,6 @@
 ---
-// No default spacing: the pages this replaces only set a spacing class where
-// the Next pages passed one.
+// spacing defaults to medium like the Next Tag — it applied its spacing map
+// unconditionally, so every rendered tag carried a spacing class.
 import styles from 'components/Tag/styles.module.css';
 
 type Variant = 'primary' | 'transparent' | 'border' | 'icon';
@@ -8,14 +8,14 @@ type Spacing = 'small' | 'medium' | 'large';
 
 interface Props {
     variant?: Variant;
-    spacing?: Spacing;
+    spacing?: Spacing | 'none';
     class?: string;
     title?: string;
 }
 
 const {
     variant = 'primary',
-    spacing,
+    spacing = 'medium',
     class: className,
     title,
 } = Astro.props;
@@ -33,6 +33,6 @@ const spacingMap: Record<Spacing, string> = {
 };
 ---
 <span
-    class:list={[styles.tag, variantMap[variant], spacing && spacingMap[spacing], className]}
+    class:list={[styles.tag, variantMap[variant], spacing !== 'none' && spacingMap[spacing], className]}
     title={title}
 ><slot /></span>

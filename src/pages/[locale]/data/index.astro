@@ -84,8 +84,9 @@ const title = String(t('data-tab-head'));
 
 // Community stats (static, matching the Next page's statsHeader section).
 const { totalSwipes, totalContributors } = payload;
+// Compact ("217M", "137K") — parity with Next's <NumberOutput normal />.
 const fmt = (n: number | null | undefined) =>
-    (n == null ? '-' : new Intl.NumberFormat('en-US').format(n));
+    (n == null ? '-' : new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(n));
 
 // Static type-explainer cards (mirrors the Next page's type-section: cover
 // image + ProjectTypeIcon + heading + key-point list).
