@@ -4,14 +4,16 @@
 // export assets, and community stats. Locale-independent (numbers/ids only) —
 // the createdAt/modifiedAt strings are locale-neutral toLocaleDateString output
 // exactly as the Next page produced them.
+import { statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 
 const require = createRequire(import.meta.url);
 // Same anchor as src/lib/data.ts (cwd = repo root), stable after Vite bundling.
 // MAPSWIPE_DATA_FILE overrides the path (incremental data-change benchmark).
+const DATA_FILE = process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'build', 'full-data', 'staticData.json');
  
-const data: any = require(process.env.MAPSWIPE_DATA_FILE ?? join(process.cwd(), 'build', 'full-data', 'staticData.json'));
+const data: any = require(DATA_FILE);
 
 export interface MiniProject {
     id: string;
@@ -84,7 +86,10 @@ function formatDate(value: string | null | undefined): string | null {
 }
 
 export function getDataExplorerPayload(): DataExplorerPayload {
-    const buildDate = process.env.MAPSWIPE_BUILD_DATE ?? null;
+    // "Last updated": the data file's mtime — the moment fetch-data last
+    // wrote it (in CI that's the current pipeline run, i.e. the build time).
+    // statSync follows the local symlink to the real file. No env hand-off.
+    const buildDate = String(Math.trunc(statSync(DATA_FILE).mtimeMs));
 
     const { communityStats, publicOrganizations, globalExportAssets } = data ?? {};
     const { totalContributors = null, totalSwipes = null } = communityStats ?? {};
