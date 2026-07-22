@@ -22,6 +22,10 @@ const languageTitleMap: Record<string, {
         abbreviation: 'CS',
         label: 'Čeština',
     },
+    es: {
+        abbreviation: 'ES',
+        label: 'Español',
+    },
     pt: {
         abbreviation: 'PT',
         label: 'Português',
