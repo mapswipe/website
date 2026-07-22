@@ -7,9 +7,9 @@
   "build-area": "Hledat",
   "footprint": "Validovat",
   "change-detection": "Porovnat",
-  "completeness": "",
-  "validate-image": "",
-  "street": "",
-  "published": "",
-  "withdrawn": ""
+  "completeness": "Zkontrolujte úplnost",
+  "validate-image": "Posuzujte obrázky",
+  "street": "Zobrazit ulice",
+  "published": "Publikováno",
+  "withdrawn": "Zrušeno"
 }
