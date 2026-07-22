@@ -145,7 +145,12 @@ function Footer(props: Props) {
                         {t('copyright', { year: currentYear })}
                     </div>
                     <div className={styles.midContainer}>
-                        {t('uptime-pretext')}
+                        <Link
+                            href="https://status.mapswipe.org/"
+                            target="_blank"
+                        >
+                            {t('uptime-pretext')}
+                        </Link>
                         <Link
                             href="https://uptimerobot.com/"
                             target="_blank"
