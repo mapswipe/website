@@ -24,6 +24,9 @@ export const enumsQuery = gql`
 // FIXME: Find the value of supported project type
 export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
 
+const cartoKey = process.env.NEXT_PUBLIC_CARTO_BASEMAP_KEY;
+export const baseMapUrl = `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png${cartoKey ? `?key=${cartoKey}` : ''}`;
+
 export interface Stats {
     communityStats: {
         totalContributors: number | null | undefined;
