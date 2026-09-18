@@ -23,6 +23,7 @@ APP_ENVIRONMENT=PROD  # Use DEV if you are running your own server instance
 MAPSWIPE_API_ENDPOINT=https://backend.mapswipe.org/
 NEXT_PUBLIC_POSTHOG_KEY=<posthog-key>
 NEXT_PUBLIC_POSTHOG_HOST_API=<posthog-host-api>
+NEXT_PUBLIC_CARTO_BASEMAP_KEY=<carto-basemap-key>
 ```
 
 ### Running
