@@ -713,7 +713,8 @@ function Data(props: Props) {
                         {t('data-last-fetched', {
                             date: (new Date(Number(buildDate))),
                             dateStyle: 'medium',
-                            timeStyle: 'medium',
+                            timeStyle: 'long',
+                            timeZone: 'UTC',
                         })}
                         <br />
                         {t('explore-section-heading-description')}
