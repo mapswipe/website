@@ -31,7 +31,7 @@ const dummyData: FetchedData = {
     globalExportAssets: [],
 };
 
-const PROJECT_PAGE_SIZE = 500;
+const PROJECT_PAGE_SIZE = 100;
 
 const projectsQuery = gql`
     query ProjectsPage($limit: Int!, $offset: Int!) {
@@ -212,7 +212,6 @@ async function getCsrfTokenValue() {
     const healthcheckUrl = `${baseUrl}health-check/?format=json`;
     try {
         const healthcheckData = await fetch(healthcheckUrl, { credentials: 'include' });
-
         const cookiesToSet = (
             healthcheckData.headers as (Headers & { getSetCookie: () => string[] })
         ).getSetCookie();
@@ -266,9 +265,9 @@ async function fetchAndWriteData() {
         console.log('Fetching data from GraphQL endpoint from ', GRAPHQL_ENDPOINT);
 
         const csrfTokenValue = await getCsrfTokenValue();
+
         if (!csrfTokenValue) {
-            console.error('Could not fetch crsf token');
-            return;
+            throw new Error('Could not fetch csrf token');
         }
         const referer = process.env.MAPSWIPE_REFERER_ENDPOINT ?? baseUrl;
 
@@ -280,22 +279,45 @@ async function fetchAndWriteData() {
         graphQLClient.setHeader('Referer', referer);
 
         const staticData = (await requestWithRetry(() => graphQLClient.request(staticQuery))) as Pick<
-            FetchedData,
-            'communityStats' | 'publicOrganizations' | 'globalExportAssets'
+        FetchedData,
+        'communityStats' | 'publicOrganizations' | 'globalExportAssets'
         >;
 
         const allProjects: FetchedData['publicProjects']['results'] = [];
         let totalCount = Infinity;
-        // eslint-disable-next-line no-await-in-loop
-        for (let offset = 0; offset < totalCount; offset += PROJECT_PAGE_SIZE) {
+        let offset = 0;
+        let pageNumber = 0;
+        while (offset < totalCount) {
+            const currentOffset = offset;
+            pageNumber += 1;
             // eslint-disable-next-line no-await-in-loop
             const page = (await requestWithRetry(() => graphQLClient.request(projectsQuery, {
                 limit: PROJECT_PAGE_SIZE,
-                offset,
+                offset: currentOffset,
             }))) as Pick<FetchedData, 'publicProjects'>;
-            allProjects.push(...page.publicProjects.results);
-            totalCount = page.publicProjects.totalCount;
-            console.log(`Fetched ${allProjects.length}/${totalCount} projects`);
+
+            const { results, totalCount: pageTotalCount } = page.publicProjects;
+            totalCount = pageTotalCount;
+
+            if (results.length === 0) {
+                console.log(`Server returned an empty page at offset ${currentOffset};`
+                    + ` stopping with ${allProjects.length}/${totalCount} projects`);
+                break;
+            }
+
+            allProjects.push(...results);
+            offset += results.length;
+
+            const fetched = allProjects.length;
+            const percent = Math.round((fetched / totalCount) * 100);
+            console.log(
+                `Projects: page ${pageNumber} (+${results.length}) `
+                + `-> ${fetched}/${totalCount} (${percent}%)`,
+            );
+        }
+
+        if (allProjects.length < totalCount) {
+            throw new Error(`Expected ${totalCount} projects but only fetched ${allProjects.length}`);
         }
 
         data = {
@@ -329,4 +351,8 @@ async function fetchAndWriteData() {
     }
 }
 
-fetchAndWriteData();
+fetchAndWriteData().catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error('Failed to fetch data', err);
+    process.exit(1);
+});
