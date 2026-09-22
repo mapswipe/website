@@ -2,7 +2,7 @@
 title: Swiping to Search for Returnees in Syria 
 publishedDate: 2026-09-22
 author: Maria Longley, Jana Bauerová
-description: MSF tests an innovative approach to scan satellite imagery for signs of life with help of volunteers
+description: MSF tests an innovative approach to scan satellite imagery for signs of life with help of volunteers.
 coverImage: /img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-cover.webp
 featured: true
 ---
