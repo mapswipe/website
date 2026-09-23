@@ -3,7 +3,7 @@ title: Swiping to Search for Returnees in Syria
 publishedDate: 2026-09-22
 author: Maria Longley, Jana Bauerová
 description: MSF tests an innovative approach to scan satellite imagery for signs of life with help of volunteers.
-coverImage: /img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-cover.webp
+coverImage: /img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-cover.jpg
 featured: true
 ---
 
@@ -18,7 +18,7 @@ Another option was to manually go through the satellite imagery of the area of i
 The next question was: “Can MapSwipe volunteers find them?”
 
 <figure>
-<img src="/img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-1.webp">
+<img src="/img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-1.jpg">
 <p class="caption">A displaced Syrian using a water tank and a solar panel /MSF
 </p>
 </figure>
@@ -40,7 +40,7 @@ We asked volunteers to go through high resolution (30 cm) satellite imagery and 
 We invited a group of experienced volunteer mappers to do this project as they all had participated on several MapSwipe projects before and seen multiple types of satellite imagery. Over a two-hour period, the volunteers managed to look at the imagery for the whole project area. They did a great job in spotting the red water tanks and solar panels among the shadows on the roofs of the buildings!
 
 <figure>
-<img src="/img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-3.webp">
+<img src="/img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-3.jpg">
 <p class="caption">You can see the red water tanks and solar panels on the roofs of partially constructed buildings /MSF 
 </p>
 </figure>
