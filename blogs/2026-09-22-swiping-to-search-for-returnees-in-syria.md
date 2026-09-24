@@ -32,8 +32,8 @@ Since it was important to pay attention to the size and shapes of those objects,
 We asked volunteers to go through high resolution (30 cm) satellite imagery and instructed them to mark areas as ‘yes,’ if they could see either a water tank or a solar panel in it. Volunteers could also mark an area as ‘uncertain,’ if they were not sure. As in any other MapSwipe project, all areas would be seen by more than one volunteer, and the output data would be an aggregation of these votes.   
 
 <figure>
-<img src="/img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-2.webp">
-<p class="caption">A task square that contains solar panels and water tanks
+<img src="/img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-2.jpg">
+<p class="caption">A task square that contains solar panels and water tanks / Airbus DS (2024), provided by the Airbus Foundation
 </p>
 </figure>
 
