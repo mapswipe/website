@@ -54,10 +54,10 @@ In parallel to this MapSwipe project, a similar project was done by analysts of 
 </p>
 </figure>
 
-#In comparing the two result data sets with each other, we concluded that the accuracy of the MapSwipe volunteers was very high and the results were comparable to the analysts’ work. Using the power of crowdsourcing with MapSwipe also meant that this project was done much faster than when MSF staff did it, which was another exciting result. Both the accuracy of the swiping and the speed of the project completion mean that this innovative new use of MapSwipe is a viable option to meet MSF’s mapping needs in similar contexts in the future. 
+In comparing the two result data sets with each other, we concluded that the accuracy of the MapSwipe volunteers was very high and the results were comparable to the analysts’ work. Using the power of crowdsourcing with MapSwipe also meant that this project was done much faster than when MSF staff did it, which was another exciting result. Both the accuracy of the swiping and the speed of the project completion mean that this innovative new use of MapSwipe is a viable option to meet MSF’s mapping needs in similar contexts in the future. 
 
 With this success under our belts, we have already done another MapSwipe project to map out the distribution of a population in a war-damaged neighbourhoods by searching for signs of life, these red water tanks and solar panels. 
 
-Thank you to the volunteers who were willing to trial a new project with us and gave their time and feedback. Thank you to the MSF Earth Observation team who shared their results with us and supported the comparative analysis. Thank you to the MSF team in Syria who initially asked us a question that led us to this experiment. If you are interested in how you could use MapSwipe for your organization or a similar project, do not hesitate to contact the MapSwipe team on info@mapswipe.org. 
+_Thank you to the volunteers who were willing to trial a new project with us and gave their time and feedback. Thank you to the MSF Earth Observation team who shared their results with us and supported the comparative analysis. Thank you to the MSF team in Syria who initially asked us a question that led us to this experiment. If you are interested in how you could use MapSwipe for your organization or a similar project, do not hesitate to contact the MapSwipe team on info@mapswipe.org. _
 
 
