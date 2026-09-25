@@ -58,6 +58,6 @@ In comparing the two result data sets with each other, we concluded that the acc
 
 With this success under our belts, we have already done another MapSwipe project to map out the distribution of a population in a war-damaged neighbourhoods by searching for signs of life, these red water tanks and solar panels. 
 
-_Thank you to the volunteers who were willing to trial a new project with us and gave their time and feedback. Thank you to the MSF Earth Observation team who shared their results with us and supported the comparative analysis. Thank you to the MSF team in Syria who initially asked us a question that led us to this experiment. If you are interested in how you could use MapSwipe for your organization or a similar project, do not hesitate to contact the MapSwipe team on info@mapswipe.org. _
+*Thank you to the volunteers who were willing to trial a new project with us and gave their time and feedback. Thank you to the MSF Earth Observation team who shared their results with us and supported the comparative analysis. Thank you to the MSF team in Syria who initially asked us a question that led us to this experiment. If you are interested in how you could use MapSwipe for your organization or a similar project, do not hesitate to contact the MapSwipe team on info@mapswipe.org.*
 
 
