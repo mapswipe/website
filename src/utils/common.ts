@@ -21,6 +21,8 @@ export const enumsQuery = gql`
     }
 `;
 
+export const MAPSWIPE_DOCS_URL = 'https://docs.mapswipe.org';
+
 // FIXME: Find the value of supported project type
 export const supportedProjectTypes = [1, 2, 3, 4, 10, 7];
 

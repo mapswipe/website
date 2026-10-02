@@ -23,6 +23,7 @@
   "aggregated-results-description": "Aggregated Results. This gives you the unfiltered MapSwipe results aggregated on the task level. This is most suited if you want to apply some custom data processing with the MapSwipe data, e.g. select only specific tasks. Check our documentation for more details. (Note that you need to unzip this .gz file before you can use it.)",
   "download-size": "{{size, number}}",
   "download": "Download",
+  "documentation": "Docs",
   "aggregated-results-with-geometry-title": "Aggregated Results (with Geometry)",
   "aggregated-results-with-geometry-description": "Aggregated Results. This gives you the unfiltered MapSwipe results aggregated on the task level. This is most suited if you want to apply some custom data processing with the MapSwipe data, e.g. select only specific tasks. Check our documentation for more details. (Note that you need to unzip this .gz file before you can use it.)",
   "groups-title": "Groups",
