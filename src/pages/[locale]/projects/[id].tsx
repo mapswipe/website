@@ -19,6 +19,7 @@ import {
     IoFlag,
     IoCalendarClearOutline,
     IoLocationOutline,
+    IoOpenOutline,
     IoStatsChartSharp,
 } from 'react-icons/io5';
 
@@ -44,6 +45,7 @@ import {
     ProjectTypeOption,
     ProjectType,
     getFileSizeProperties,
+    MAPSWIPE_DATA_DOCUMENTATION_URL,
 } from 'utils/common';
 import {
     getBounds,
@@ -639,6 +641,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAggregatedResults?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/aggregated_results/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportAggregatedResults?.file?.url}
@@ -670,6 +683,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportAggregatedResultsWithGeometry?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/aggregated_results_with_geometry/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportAggregatedResultsWithGeometry?.file?.url}
@@ -699,6 +723,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportGroups?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/groups/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportGroups?.file.url}
@@ -728,6 +763,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportHistory?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/history/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportHistory?.file.url}
@@ -757,6 +803,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportResults?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/results/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportResults?.file.url}
@@ -786,6 +843,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportTasks?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/tasks/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportTasks?.file.url}
@@ -815,6 +883,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportUsers?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/users/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportUsers?.file.url}
@@ -845,6 +924,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(aoiDownload.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/area_of_interest/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={aoiDownload.url}
@@ -881,6 +971,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportHotTaskingManagerGeometries?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/hot_tm/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportHotTaskingManagerGeometries?.file.url}
@@ -912,6 +1013,17 @@ function Project(props: Props) {
                                     formatParams: { size: { style: 'unit', unit: getFileSizeProperties(exportModerateToHighAgreementYesMaybeGeometries?.fileSize).unit, maximumFractionDigits: 1 } },
                                 })}
                             </div>
+                            <Link
+                                href={`${MAPSWIPE_DATA_DOCUMENTATION_URL}/yes_maybe/`}
+                                variant="underline"
+                                className={styles.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={t('documentation')}
+                            >
+                                {t('documentation')}
+                                <IoOpenOutline />
+                            </Link>
                         </div>
                         <Link
                             href={exportModerateToHighAgreementYesMaybeGeometries?.file.url}

@@ -6,8 +6,8 @@ on:
     branches:
       - deploy-prod
   schedule:
-    # Runs "At 00:01. every day" (see https://crontab.guru)
-    - cron: '1 0 * * *'
+    # Runs "At minute 1 past every 6th hour" (see https://crontab.guru)
+    - cron: '1 */6 * * *'
   workflow_dispatch:
 
 jobs:
