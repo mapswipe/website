@@ -1,0 +1,11 @@
+{
+  "ready-to-process": "Gotowe do przetworzenia",
+  "draft": "Wersja robocza",
+  "discarded": "Odrzucone",
+  "processing-failed": "Przetwarzanie nie powiodło się",
+  "processed": "Przetworzone",
+  "ready-to-published": "Gotowe do publikacji",
+  "publishing-failed": "Publikacja nie powiodła się",
+  "paused": "Wstrzymane",
+  "download-projects-with-geometry-heading": "Projekty z geometrią"
+}
