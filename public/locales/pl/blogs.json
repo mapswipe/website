@@ -1,0 +1,8 @@
+{
+  "blogs-tab-head": "Blogi | Mapswipe",
+  "blogs-hero-title": "Blogi",
+  "featured-posts": "Polecane",
+  "date": "{{date, datetime}}",
+  "read-more": "Czytaj dalej",
+  "other-posts": "Inne"
+}
