@@ -1,0 +1,15 @@
+{
+  "users-title": "Użytkownicy",
+  "users-description": "Ten zbiór danych zawiera informacje na temat indywidualnych wkładów poszczególnych użytkowników. Dzięki temu można na przykład sprawdzić, którzy użytkownicy są najbardziej aktywni w ramach tego projektu. (Należy pamiętać, że przed użyciem tego pliku .gz należy go rozpakować.)",
+  "date": "{{date, datetime}}",
+  "active-projects": "Aktywny",
+  "finished-projects": "Ukończony",
+  "build-area": "Zobacz funkcje",
+  "footprint": "Sprawdź ślady",
+  "change-detection": "Porównaj daty",
+  "completeness": "Sprawdź kompletność",
+  "validate-image": "Dostęp do obrazów",
+  "street": "Zobacz ulice",
+  "published": "Opublikowano",
+  "withdrawn": "Wycofane"
+}
