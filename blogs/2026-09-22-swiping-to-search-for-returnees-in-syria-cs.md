@@ -1,7 +1,7 @@
 ---
 title: Jak vyčíst přítomnost obyvatel v Sýrii ze satelitních snímků 
 publishedDate: 2026-10-09
-author: Maria Longley, Jana Bauerová, *Lékaři bez hranic*
+author: Maria Longley, Jana Bauerová / Lékaři bez hranic
 description: Šlo o inovátorskou, a přitom jednoduchou myšlenku, její exekuce přes mobilní aplikaci však nebyla snadná.
 coverImage: /img/blogImages/2026-09-22-swiping-to-search-for-returnees-in-syria-cover.jpg
 featured: false
