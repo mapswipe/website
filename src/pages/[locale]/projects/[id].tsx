@@ -20,6 +20,7 @@ import {
     IoCalendarClearOutline,
     IoLocationOutline,
     IoStatsChartSharp,
+    IoInformationCircleOutline,
 } from 'react-icons/io5';
 
 import OgMeta from 'components/OgMeta';
@@ -44,6 +45,7 @@ import {
     ProjectTypeOption,
     ProjectType,
     getFileSizeProperties,
+    MAPSWIPE_DOCS_URL,
 } from 'utils/common';
 import {
     getBounds,
@@ -649,6 +651,17 @@ function Project(props: Props) {
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/aggregated_results/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
+                        </Link>
                     </Card>
                 )}
                 {exportAggregatedResultsWithGeometry && (
@@ -680,6 +693,17 @@ function Project(props: Props) {
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/aggregated_results_with_geometry/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
+                        </Link>
                     </Card>
                 )}
                 {exportGroups && (
@@ -708,6 +732,17 @@ function Project(props: Props) {
                         >
                             <IoDownloadOutline />
                             {t('download')}
+                        </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/groups/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
                         </Link>
                     </Card>
                 )}
@@ -738,6 +773,17 @@ function Project(props: Props) {
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/history/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
+                        </Link>
                     </Card>
                 )}
                 {exportResults && (
@@ -766,6 +812,17 @@ function Project(props: Props) {
                         >
                             <IoDownloadOutline />
                             {t('download')}
+                        </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/results/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
                         </Link>
                     </Card>
                 )}
@@ -796,6 +853,17 @@ function Project(props: Props) {
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/tasks/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
+                        </Link>
                     </Card>
                 )}
                 {exportUsers && (
@@ -824,6 +892,17 @@ function Project(props: Props) {
                         >
                             <IoDownloadOutline />
                             {t('download')}
+                        </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/users/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
                         </Link>
                     </Card>
                 )}
@@ -860,6 +939,17 @@ function Project(props: Props) {
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/area_of_interest/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
+                        </Link>
                     </Card>
                 )}
                 {exportHotTaskingManagerGeometries && (
@@ -891,6 +981,17 @@ function Project(props: Props) {
                             <IoDownloadOutline />
                             {t('download')}
                         </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/hot_tm/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
+                        </Link>
                     </Card>
                 )}
                 {exportModerateToHighAgreementYesMaybeGeometries && (
@@ -921,6 +1022,17 @@ function Project(props: Props) {
                         >
                             <IoDownloadOutline />
                             {t('download')}
+                        </Link>
+                        <Link
+                            href={`${MAPSWIPE_DOCS_URL}/docs/about_data/yes_maybe/`}
+                            variant="buttonTransparent"
+                            className={styles.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={t('documentation')}
+                        >
+                            <IoInformationCircleOutline />
+                            {t('documentation')}
                         </Link>
                     </Card>
                 )}
